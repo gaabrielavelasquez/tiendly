@@ -119,6 +119,7 @@
   --tl-bg-inverse: var(--tl-color-neutral-1000);
   --tl-bg-inverse-hover: var(--tl-color-neutral-800);
   --tl-bg-scrim: var(--tl-color-scrim-50);
+  --tl-bg-skeleton: var(--tl-color-neutral-200);
   --tl-border-subtle: var(--tl-color-neutral-200);
   --tl-border-default: var(--tl-color-neutral-300);
   --tl-border-strong: var(--tl-color-neutral-500);
@@ -362,6 +363,7 @@
   --tl-bg-inverse: var(--tl-color-neutral-100);
   --tl-bg-inverse-hover: var(--tl-color-neutral-300);
   --tl-bg-scrim: var(--tl-color-scrim-65);
+  --tl-bg-skeleton: var(--tl-color-neutral-800);
   --tl-border-subtle: var(--tl-color-neutral-800);
   --tl-border-default: var(--tl-color-neutral-700);
   --tl-border-strong: var(--tl-color-neutral-600);

@@ -148,6 +148,7 @@ La identidad visual de Tiendly combina **velocidad ultra limpia**, **lenguaje mo
 | `color.surface.background` | `bg/page` | `#F8F9FA` |
 | `color.surface.card` | `bg/surface` | `#FFFFFF` |
 | `color.surface.muted` | `bg/sunken` | `#F3F4F6` |
+| Esqueleto de carga | `bg/skeleton` | `#E5E7EB` (se distingue sobre blanco) |
 | `color.text.primary` | `text/primary` | `#1A1A1A` |
 | `color.text.secondary` | `text/secondary` | `#666D7A` (ajustado de `#6B7280` por contraste, 0016) |
 | `color.text.on-brand` | `accent/contrast` | `#FFFFFF` |

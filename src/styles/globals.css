@@ -22,6 +22,7 @@
   --color-sunken: var(--tl-bg-sunken);
   --color-inverse: var(--tl-bg-inverse);
   --color-scrim: var(--tl-bg-scrim);
+  --color-skeleton: var(--tl-bg-skeleton);
   --color-transparent: transparent;
 
   /* Texto e íconos */

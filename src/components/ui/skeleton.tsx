@@ -10,5 +10,5 @@ const shapes = {
 
 /** Estado de carga (CLAUDE.md §5). Respeta "reducir movimiento". */
 export function Skeleton({ shape = "line", className }: SkeletonProps) {
-  return <div aria-hidden className={cn("bg-sunken motion-safe:animate-pulse", shapes[shape], className)} />;
+  return <div aria-hidden className={cn("bg-skeleton motion-safe:animate-pulse", shapes[shape], className)} />;
 }
