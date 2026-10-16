@@ -20,7 +20,7 @@ export function Miniatura({ categoria, imagen, className }: MiniaturaProps) {
   return (
     <span
       aria-hidden
-      className={cn("relative flex size-12 shrink-0 items-center justify-center overflow-hidden rounded-sm border border-line-subtle bg-sunken", className)}
+      className={cn("relative flex size-12 shrink-0 items-center justify-center overflow-hidden rounded-theme border border-line-subtle bg-sunken", className)}
     >
       {imagen && !fallo ? (
         <Image src={imagen} alt="" fill sizes="48px" className="object-cover" onError={() => setFallo(true)} />

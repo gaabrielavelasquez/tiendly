@@ -53,7 +53,7 @@ export function EditorDescripcion({ valor, onCambio }: EditorProps) {
               aria-label={f.label}
               title={f.label}
               onClick={() => aplicar(f)}
-              className="flex size-8 items-center justify-center rounded-sm text-icon transition-colors hover:bg-surface hover:text-fg"
+              className="flex size-8 items-center justify-center rounded-theme text-icon transition-colors hover:bg-surface hover:text-fg"
             >
               <f.icono aria-hidden strokeWidth={1.8} className="size-4" />
             </button>

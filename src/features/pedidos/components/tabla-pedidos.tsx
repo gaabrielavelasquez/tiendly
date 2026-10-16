@@ -8,7 +8,7 @@ import { AccionWhatsApp } from "./accion-whatsapp";
 import { CeldaCliente, CeldaEntrega, CeldaPago, CeldaPedido, CeldaTotal } from "./celdas";
 
 const ease = [...motionTokens.easing] as [number, number, number, number];
-const th = "px-4 py-3 text-left font-display-title text-caption text-fg-secondary";
+const th = "px-4 py-3 text-left encabezado-columna text-fg-secondary";
 
 /**
  * Tabla de desktop con doble estado (pago y entrega): datos en Inter, encabezados en Outfit SemiBold,

@@ -4,7 +4,7 @@ import { filasVariantes, precioVarianteInvalido, skuSugerido, stockTotal, VARIAN
 
 type TablaProps = { form: FormProducto; error?: string; onCambio: (clave: string, campo: keyof VarianteForm, v: string) => void };
 
-const th = "px-3 py-2.5 text-left font-display-title text-caption text-fg-secondary";
+const th = "px-3 py-2.5 text-left encabezado-columna text-fg-secondary";
 const input =
   "h-9 w-full rounded-button border border-line-strong bg-surface px-2.5 text-body text-fg tabular-nums outline-none transition placeholder:text-fg-tertiary focus:outline-2 focus:outline-offset-2 focus:outline-focus";
 /** Etiqueta visible solo en móvil (en desktop la da el encabezado de la columna). */
@@ -19,7 +19,7 @@ export function TablaVariantes({ form, error, onCambio }: TablaProps) {
   const base = form.precio || "0.00";
   return (
     <div className="flex flex-col gap-2">
-      <div className="overflow-hidden rounded-sm border border-line-subtle">
+      <div className="overflow-hidden rounded-theme border border-line-subtle">
         <table className="w-full border-collapse">
           <caption className="sr-only">Variantes del producto</caption>
           <thead className="sr-only bg-sunken/60 sm:not-sr-only sm:table-header-group">

@@ -24,7 +24,7 @@ export function SemanaCard({ total, pedidos, comparacion, dias, hoy }: SemanaCar
     <Card as="section" aria-labelledby="semana-titulo" className="flex flex-col gap-3">
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div className="flex flex-col gap-1">
-          <h2 id="semana-titulo" className="text-body font-bold text-fg">
+          <h2 id="semana-titulo" className="encabezado-seccion text-fg">
             Esta semana
           </h2>
           <p className="flex items-baseline gap-2">

@@ -29,7 +29,7 @@ export function AvisoDeshacer({ archivado, onDeshacer }: { archivado: Archivado 
             <button
               type="button"
               onClick={onDeshacer}
-              className="h-9 shrink-0 rounded-sm px-3 font-semibold text-fg-inverse transition-colors hover:bg-fg-inverse/10"
+              className="h-9 shrink-0 rounded-theme px-3 font-semibold text-fg-inverse transition-colors hover:bg-fg-inverse/10"
             >
               Deshacer
             </button>

@@ -16,7 +16,7 @@ export function Switch({ checked, onChange, id, children, ...rest }: SwitchProps
       role="switch"
       aria-checked={checked}
       onClick={() => onChange(!checked)}
-      className="group flex min-h-11 w-full items-center justify-between gap-3 rounded-sm text-left"
+      className="group flex min-h-11 w-full items-center justify-between gap-3 rounded-theme text-left"
       {...rest}
     >
       <span className="text-body-sm font-semibold text-fg">{children}</span>

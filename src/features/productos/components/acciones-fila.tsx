@@ -8,7 +8,7 @@ import { cn } from "@/lib/cn";
 type AccionesFilaProps = { id: string; nombre: string; onDuplicar: () => void; onArchivar: () => void; className?: string };
 
 const boton =
-  "relative flex size-9 items-center justify-center rounded-sm text-icon transition-colors hover:bg-sunken hover:text-fg after:absolute after:-inset-1 after:content-['']";
+  "relative flex size-9 items-center justify-center rounded-theme text-icon transition-colors hover:bg-sunken hover:text-fg after:absolute after:-inset-1 after:content-['']";
 
 /**
  * Acciones secundarias de la fila (editar, duplicar, archivar). Con mouse aparecen al pasar por la

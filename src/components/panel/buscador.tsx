@@ -45,12 +45,12 @@ export function Buscador({ id, etiqueta, placeholder, valor, onCambio, className
           type="button"
           aria-label="Borrar búsqueda"
           onClick={() => onCambio("")}
-          className="relative flex size-6 items-center justify-center rounded-sm text-icon hover:bg-sunken after:absolute after:-inset-2.5 after:content-['']"
+          className="relative flex size-6 items-center justify-center rounded-theme text-icon hover:bg-sunken after:absolute after:-inset-2.5 after:content-['']"
         >
           <X aria-hidden strokeWidth={1.6} className="size-4" />
         </button>
       ) : (
-        <kbd className="hidden h-6 items-center rounded-sm border border-line-subtle bg-sunken px-1.5 font-body text-label text-fg-secondary lg:flex">
+        <kbd className="hidden h-6 items-center rounded-theme border border-line-subtle bg-sunken px-1.5 font-body text-label text-fg-secondary lg:flex">
           {pista}
         </kbd>
       )}

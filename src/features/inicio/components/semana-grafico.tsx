@@ -37,10 +37,10 @@ export function SemanaGrafico({ dias, hoy }: SemanaGraficoProps) {
               aria-label={`${fechaDia(d.fecha, true)}${esHoy ? " (hoy)" : ""}: ${detalle}.`}
               className="group relative flex h-32 w-full justify-center rounded-theme lg:h-48"
             >
-              <div className="relative h-full w-6 overflow-hidden rounded-sm bg-sunken lg:w-8">
+              <div className="relative h-full w-6 overflow-hidden rounded-theme bg-sunken lg:w-8">
                 {alto > 0 && (
                   <motion.div
-                    className={cn("absolute inset-x-0 bottom-0 rounded-sm", esHoy ? "bg-bar-today shadow-float" : "bg-bar")}
+                    className={cn("absolute inset-x-0 bottom-0 rounded-theme", esHoy ? "bg-bar-today shadow-float" : "bg-bar")}
                     style={{ height: `${alto}%`, originY: 1 }}
                     initial={reduce ? false : { scaleY: 0 }}
                     animate={{ scaleY: 1 }}
@@ -51,7 +51,7 @@ export function SemanaGrafico({ dias, hoy }: SemanaGraficoProps) {
               <span
                 aria-hidden
                 style={{ bottom: `calc(${alto}% + var(--tl-space-2))` }}
-                className="pointer-events-none absolute left-1/2 z-10 hidden -translate-x-1/2 rounded-sm bg-inverse px-2.5 py-1.5 text-label font-semibold whitespace-nowrap text-fg-inverse shadow-float group-focus-visible:block lg:group-hover:block"
+                className="pointer-events-none absolute left-1/2 z-10 hidden -translate-x-1/2 rounded-theme bg-inverse px-2.5 py-1.5 text-label font-semibold whitespace-nowrap text-fg-inverse shadow-float group-focus-visible:block lg:group-hover:block"
               >
                 {fechaDia(d.fecha)} · {detalle}
               </span>

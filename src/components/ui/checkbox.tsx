@@ -20,7 +20,7 @@ export function Checkbox({ indeterminate = false, className, ...rest }: Checkbox
     if (ref.current) ref.current.indeterminate = indeterminate;
   }, [indeterminate]);
   return (
-    <label className={cn("relative flex size-9 shrink-0 cursor-pointer items-center justify-center rounded-sm hover:bg-sunken", className)}>
+    <label className={cn("relative flex size-9 shrink-0 cursor-pointer items-center justify-center rounded-theme hover:bg-sunken", className)}>
       <input ref={ref} type="checkbox" className="size-4 cursor-pointer accent-selected" {...rest} />
     </label>
   );

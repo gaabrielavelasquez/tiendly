@@ -11,7 +11,7 @@ export default function EditarProductoLoading() {
           {["h-48", "h-40", "h-28", "h-64"].map((h) => (
             <Card key={h} className="flex flex-col gap-4">
               <Skeleton className="w-1/4" />
-              <Skeleton shape="block" className={`${h} rounded-sm`} />
+              <Skeleton shape="block" className={`${h} rounded-theme`} />
             </Card>
           ))}
         </div>
@@ -19,7 +19,7 @@ export default function EditarProductoLoading() {
           {["h-16", "h-24"].map((h) => (
             <Card key={h} className="flex flex-col gap-4">
               <Skeleton className="w-1/3" />
-              <Skeleton shape="block" className={`${h} rounded-sm`} />
+              <Skeleton shape="block" className={`${h} rounded-theme`} />
             </Card>
           ))}
         </div>

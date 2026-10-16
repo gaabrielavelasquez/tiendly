@@ -19,7 +19,7 @@ export function ProductosSkeleton() {
         </div>
         {[0, 1, 2, 3, 4, 5].map((i) => (
           <div key={i} className="flex items-center gap-3 border-b border-line-subtle px-4 py-4 last:border-b-0 lg:px-6">
-            <Skeleton shape="block" className="size-12 rounded-sm" />
+            <Skeleton shape="block" className="size-12 rounded-theme" />
             <div className="flex flex-1 flex-col gap-2">
               <Skeleton className="w-1/2 lg:w-1/4" />
               <Skeleton className="w-1/3 lg:w-1/6" />

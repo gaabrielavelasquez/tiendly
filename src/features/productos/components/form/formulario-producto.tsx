@@ -39,7 +39,7 @@ export function FormularioProducto({ titulo, inicial }: FormularioProps) {
     <form onSubmit={enviar} noValidate className="flex flex-col gap-6 pb-24 lg:pb-0">
       <BarraAcciones titulo={titulo} sinGuardar={f.sinGuardar} guardando={f.guardando} />
       {resumen && Object.keys(f.errores).length > 0 && (
-        <p role="alert" className="rounded-sm border border-error-border bg-error-surface px-4 py-3 text-body-sm text-error">
+        <p role="alert" className="rounded-theme border border-error-border bg-error-surface px-4 py-3 text-body-sm text-error">
           {resumen}
         </p>
       )}
@@ -79,7 +79,7 @@ export function FormularioProducto({ titulo, inicial }: FormularioProps) {
             >
               <CircleCheck aria-hidden strokeWidth={1.8} className="size-4 shrink-0" />
               <span className="flex-1 truncate">{f.form.nombre} se guardó.</span>
-              <Link href="/panel/productos" className="h-9 shrink-0 rounded-sm px-3 py-2 font-semibold hover:bg-fg-inverse/10">
+              <Link href="/panel/productos" className="h-9 shrink-0 rounded-theme px-3 py-2 font-semibold hover:bg-fg-inverse/10">
                 Ver productos
               </Link>
             </motion.div>

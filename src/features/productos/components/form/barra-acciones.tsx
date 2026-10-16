@@ -20,7 +20,7 @@ export function BarraAcciones({ titulo, sinGuardar, guardando }: BarraProps) {
   return (
     <>
       <div className="sticky top-0 z-20 -mx-4 hidden items-center gap-4 border-b border-line-subtle bg-surface/80 px-4 py-3 backdrop-blur-md lg:-mx-12 lg:flex lg:px-12">
-        <Link href="/panel/productos" aria-label="Volver a Productos" className="flex size-9 items-center justify-center rounded-sm text-icon transition-colors hover:bg-sunken">
+        <Link href="/panel/productos" aria-label="Volver a Productos" className="flex size-9 items-center justify-center rounded-theme text-icon transition-colors hover:bg-sunken">
           <ArrowLeft aria-hidden strokeWidth={1.6} className="size-5" />
         </Link>
         <h1 className="font-display-title text-h3 tracking-tight text-fg">{titulo}</h1>
@@ -39,7 +39,7 @@ export function BarraAcciones({ titulo, sinGuardar, guardando }: BarraProps) {
       </div>
 
       <header className="flex items-center gap-2 lg:hidden">
-        <Link href="/panel/productos" aria-label="Volver a Productos" className="-ml-2 flex size-11 items-center justify-center rounded-sm text-icon">
+        <Link href="/panel/productos" aria-label="Volver a Productos" className="-ml-2 flex size-11 items-center justify-center rounded-theme text-icon">
           <ArrowLeft aria-hidden strokeWidth={1.6} className="size-5" />
         </Link>
         <div className="flex flex-col">

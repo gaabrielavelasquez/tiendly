@@ -28,6 +28,7 @@
   --color-surface: var(--tl-bg-surface);
   --color-sunken: var(--tl-bg-sunken);
   --color-inverse: var(--tl-bg-inverse);
+  --color-inverse-hover: var(--tl-bg-inverse-hover);
   --color-scrim: var(--tl-bg-scrim);
   --color-skeleton: var(--tl-bg-skeleton);
   --color-transparent: transparent;
@@ -256,4 +257,24 @@
 }
 @utility animate-spark {
   animation: spark-ping 1.6s var(--tl-motion-easing-standard) 3;
+}
+
+/*
+  Editorial (decisión 0023): encabezados de sección y de columnas en mayúsculas, negrita y
+  tracking amplio, como una ficha técnica. Los títulos de página (H1) siguen en tipo oración.
+*/
+@utility encabezado-seccion {
+  font-family: var(--tl-font-display);
+  font-size: var(--tl-font-size-caption);
+  font-weight: 700;
+  line-height: 1.4;
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-widest);
+}
+@utility encabezado-columna {
+  font-family: var(--tl-font-display);
+  font-size: var(--tl-font-size-label);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-wider);
 }

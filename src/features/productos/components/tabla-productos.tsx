@@ -10,7 +10,7 @@ import { AccionesFila } from "./acciones-fila";
 import { CeldaEstado, CeldaInventario, CeldaPrecio, CeldaProducto } from "./celdas";
 
 const ease = [...motionTokens.easing] as [number, number, number, number];
-const th = "px-4 py-3 text-left font-display-title text-caption text-fg-secondary";
+const th = "px-4 py-3 text-left encabezado-columna text-fg-secondary";
 
 type TablaProps = {
   productos: Producto[];

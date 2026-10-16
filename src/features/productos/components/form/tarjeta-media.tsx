@@ -60,7 +60,7 @@ export function TarjetaMedia({ imagenes, onAgregar, onQuitar }: MediaProps) {
       {imagenes.length > 0 && (
         <ul className="grid grid-cols-3 gap-3 sm:grid-cols-4 lg:grid-cols-5">
           {imagenes.map((img, i) => (
-            <li key={img.id} className="group relative aspect-square overflow-hidden rounded-sm border border-line-subtle bg-sunken">
+            <li key={img.id} className="group relative aspect-square overflow-hidden rounded-theme border border-line-subtle bg-sunken">
               <Image src={img.url} alt={img.nombre} fill sizes="120px" className="object-cover" unoptimized={img.url.startsWith("blob:")} />
               {i === 0 && <Badge className="absolute bottom-1.5 left-1.5 shadow-card">Principal</Badge>}
               <button
