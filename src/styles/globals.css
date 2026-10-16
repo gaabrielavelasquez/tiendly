@@ -228,3 +228,11 @@
 @utility bg-bar-today {
   background-image: linear-gradient(to top, var(--tl-indicator-fill), color-mix(in srgb, var(--tl-indicator-fill) 70%, var(--tl-bg-surface)));
 }
+
+/*
+  Sombra de tarjeta ultra suave: dos capas con desplazamiento vertical (contacto + ambiente),
+  armada con shadow/soft y la escala de espacio. Proponer en Figma como elevation/soft.
+*/
+@utility shadow-soft {
+  box-shadow: 0 var(--tl-stroke-thin) var(--tl-space-1) var(--tl-shadow-soft), 0 var(--tl-space-2) var(--tl-space-8) var(--tl-shadow-soft);
+}
