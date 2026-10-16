@@ -14,7 +14,7 @@
 | Parcial | 5 Home y Producto · 6 Pedidos · 7 Productos |
 | Falta | 2 Métodos de pago y Entregas · 3 Cupones · 4 Afiliación · 9 Mi tienda |
 
-El Core Loop **no se puede cerrar todavía**: sin carrito y checkout (módulo 1) 
+El Core Loop **no se puede cerrar todavía**: ya se puede comprar (módulo 1), pero sin Métodos de pago y Entregas (módulo 2) la tienda no puede configurar cómo cobra ni cómo envía; hoy eso vive en `checkout/lib/config.ts`.
 
 ## Por módulo
 
