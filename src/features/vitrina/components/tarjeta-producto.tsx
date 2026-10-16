@@ -3,18 +3,17 @@ import Link from "next/link";
 import { formatoSoles } from "@/lib/formato";
 import { cn } from "@/lib/cn";
 import type { ProductoVitrina } from "../lib/vitrina";
-import { Muestras } from "./muestras";
 
 type TarjetaProps = { p: ProductoVitrina; tienda: string; prioridad?: boolean };
 
 /**
- * Tarjeta de producto (Figma, tema Editorial): foto sobre blanco con borde de 1 px y esquinas del
- * tema, nombre, precio y muestras de color. Toda la tarjeta es el link; sin botón de agregar.
+ * Tarjeta editorial (como una página de revista): foto al ras, sin borde, sin esquinas y sin sombra;
+ * debajo, el nombre en serif y el precio en Inter. Toda la tarjeta es el link a la página del producto.
  */
 export function TarjetaProducto({ p, tienda, prioridad = false }: TarjetaProps) {
   return (
-    <Link href={`/${tienda}/${p.slug}`} className="group flex flex-col gap-2.5 rounded-card outline-offset-4">
-      <div className="relative aspect-4/5 overflow-hidden rounded-card border border-line-subtle bg-surface">
+    <Link href={`/${tienda}/${p.slug}`} className="group flex flex-col gap-3 outline-offset-4">
+      <div className="relative aspect-4/5 overflow-hidden bg-surface">
         {p.imagen && (
           <Image
             src={p.imagen}
@@ -30,9 +29,9 @@ export function TarjetaProducto({ p, tienda, prioridad = false }: TarjetaProps) 
         )}
       </div>
       <div className="flex flex-col gap-1">
-        <span className="truncate text-body-sm text-fg">{p.nombre}</span>
+        <span className="truncate font-display-hero text-body-lg leading-tight text-fg">{p.nombre}</span>
         <span className="flex items-baseline gap-1.5 tabular-nums">
-          <span className="text-body-sm font-semibold text-fg">{formatoSoles(p.precio)}</span>
+          <span className="font-body text-body-sm text-fg">{formatoSoles(p.precio)}</span>
           {p.precioAntes && (
             <span className="text-caption text-fg-tertiary line-through">
               <span className="sr-only">Antes: </span>
@@ -40,7 +39,6 @@ export function TarjetaProducto({ p, tienda, prioridad = false }: TarjetaProps) 
             </span>
           )}
         </span>
-        {p.colores.length > 1 && <Muestras colores={p.colores} />}
       </div>
     </Link>
   );

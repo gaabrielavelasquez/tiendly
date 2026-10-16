@@ -8,6 +8,7 @@ import type { Vitrina as DatosVitrina } from "../lib/vitrina";
 import { CabeceraTienda } from "./cabecera-tienda";
 import { CategoriasTienda } from "./categorias-tienda";
 import { PieTienda } from "./pie-tienda";
+import { Portada } from "./portada";
 import { TarjetaProducto } from "./tarjeta-producto";
 
 type VitrinaProps = { datos: DatosVitrina; categoriaInicial: Categoria | "todos" };
@@ -34,13 +35,18 @@ export function Vitrina({ datos, categoriaInicial }: VitrinaProps) {
   return (
     <div className="flex min-h-dvh flex-col">
       <CabeceraTienda nombre={datos.tienda.nombre} logo={datos.tienda.logo} slug={datos.tienda.slug} categorias={datos.categorias} activa={categoria} onCategoria={setCategoria} />
-      <main className="mx-auto flex w-full max-w-6xl flex-1 flex-col px-4 pb-10">
+      <main className="mx-auto flex w-full max-w-6xl flex-1 flex-col px-4 pb-16">
         {datos.productos.length === 0 ? (
           <EmptyState icon={PackageOpen} title="Muy pronto" description={`${datos.tienda.nombre} está preparando su catálogo. Vuelve en unos días.`} />
         ) : (
           <>
-            {datos.categorias.length > 1 && <CategoriasTienda categorias={datos.categorias} valor={categoria} onCambio={setCategoria} />}
-            <h1 className="sr-only">Productos de {datos.tienda.nombre}</h1>
+            <div className="pt-0 lg:pt-8">
+              <Portada />
+            </div>
+            <h2 className="sr-only">Productos</h2>
+            <div className="sticky top-16 z-10 -mx-4 mt-10 bg-page/90 px-4 py-3 backdrop-blur-md lg:mx-0 lg:mt-14 lg:px-0">
+              {datos.categorias.length > 1 && <CategoriasTienda categorias={datos.categorias} valor={categoria} onCambio={setCategoria} />}
+            </div>
             {visibles.length === 0 ? (
               <EmptyState
                 icon={PackageOpen}
@@ -49,7 +55,7 @@ export function Vitrina({ datos, categoriaInicial }: VitrinaProps) {
                 action={<Button variant="secondary" onClick={() => setCategoria("todos")}>Ver todos</Button>}
               />
             ) : (
-              <ul className="grid grid-cols-2 gap-x-3 gap-y-8 pt-5 sm:grid-cols-3 lg:grid-cols-4 lg:gap-x-6 lg:gap-y-12 lg:pt-10">
+              <ul className="grid grid-cols-2 gap-x-3 gap-y-10 pt-6 lg:grid-cols-4 lg:gap-x-6 lg:gap-y-14 lg:pt-8">
                 {visibles.map((p, i) => (
                   <li key={p.id}>
                     <TarjetaProducto p={p} tienda={datos.tienda.slug} prioridad={i < 4} />
