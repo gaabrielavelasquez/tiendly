@@ -10,7 +10,8 @@ export type Producto = {
   id: string;
   nombre: string;
   sku: string;
-  categoria: Categoria;
+  /** Una o varias; la primera define el ícono de respaldo. */
+  categorias: Categoria[];
   estado: "activo" | "borrador" | "archivado";
   precio: number;
   /** Precio antes de la rebaja, si hay. */

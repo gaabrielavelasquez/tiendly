@@ -7,3 +7,4 @@ export { Chip } from "./chip";
 export { EmptyState } from "./empty-state";
 export { Field } from "./field";
 export { Skeleton } from "./skeleton";
+export { Switch } from "./switch";
