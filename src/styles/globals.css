@@ -260,21 +260,19 @@
 }
 
 /*
-  Editorial (decisión 0023): encabezados de sección y de columnas en mayúsculas, negrita y
-  tracking amplio, como una ficha técnica. Los títulos de página (H1) siguen en tipo oración.
+  Encabezados (decisión 0024 · Calibrado): Outfit SemiBold en tipo oración con tracking-tight.
+  Sección = título de tarjeta (16 px); columna = encabezado de tabla (13 px, atenuado).
 */
 @utility encabezado-seccion {
   font-family: var(--tl-font-display);
-  font-size: var(--tl-font-size-caption);
-  font-weight: 700;
+  font-size: var(--tl-font-size-body);
+  font-weight: var(--tl-font-display-style);
   line-height: 1.4;
-  text-transform: uppercase;
-  letter-spacing: var(--tracking-widest);
+  letter-spacing: var(--tracking-tight);
 }
 @utility encabezado-columna {
   font-family: var(--tl-font-display);
-  font-size: var(--tl-font-size-label);
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: var(--tracking-wider);
+  font-size: var(--tl-font-size-caption);
+  font-weight: var(--tl-font-display-style);
+  letter-spacing: var(--tracking-tight);
 }

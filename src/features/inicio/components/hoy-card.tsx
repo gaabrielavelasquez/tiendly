@@ -16,7 +16,7 @@ export function HoyCard({ ventas, pedidos, corte, className }: HoyCardProps) {
     <Card
       as="section"
       aria-labelledby="hoy-titulo"
-      className={cn("relative flex flex-col gap-5 border-transparent bg-hero text-fg-inverse ring-1 ring-fg-inverse/15 ring-inset", className)}
+      className={cn("relative flex flex-col gap-5 border-transparent bg-hero text-fg-inverse shadow-card ring-1 ring-fg-inverse/15 ring-inset", className)}
     >
       <div className="flex items-center justify-between gap-3">
         <h2 id="hoy-titulo" className="text-label font-bold tracking-widest text-fg-inverse/70 uppercase">

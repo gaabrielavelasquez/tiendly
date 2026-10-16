@@ -11,6 +11,7 @@ type ButtonProps = Omit<HTMLMotionProps<"button">, "children"> &
   VariantProps<typeof buttonVariants> & { loading?: boolean; children: React.ReactNode };
 
 export function Button({ variant, size, block, loading, disabled, className, children, ...rest }: ButtonProps) {
+  const isPrimary = (variant ?? "primary") === "primary";
   return (
     <Pressable
       className={cn(buttonVariants({ variant, size, block }), className)}
@@ -19,6 +20,10 @@ export function Button({ variant, size, block, loading, disabled, className, chi
       aria-disabled={loading || undefined}
       {...rest}
     >
+      {isPrimary && !disabled && (
+        // Capa de hover: CSS no anima degradados, así que se funde una segunda capa.
+        <span aria-hidden className="absolute inset-0 -z-10 rounded-[inherit] bg-cta-hover opacity-0 transition-opacity group-hover:opacity-100" />
+      )}
       {loading && <LoaderCircle aria-hidden className="size-5 motion-safe:animate-spin" />}
       <span>{children}</span>
     </Pressable>

@@ -46,13 +46,13 @@ La identidad visual de Tiendly combina **velocidad ultra limpia**, **lenguaje mo
 
 ## 4. Arquitectura de Componentes
 
-> **Vigente desde el 16-oct-2026 · Decisión 0023 · Editorial (alto contraste).** Reemplaza lo que se contradiga más abajo:
-> - **Radios:** tarjetas a 0 (`radius/card`); botones, campos, chips y badges a 2 px (`radius/button`, `radius/chip`, `radius/base` → `radius/xs`). Círculos solo donde la forma es el dato (avatares, puntos, interruptor).
-> - **Lienzo:** blanco cálido `#F4F4F3` (`bg/page` → `color.paper.100`); hundido `#F0EFED` (`bg/sunken`), elegido para que `#666D7A` siga en 4.5:1.
-> - **Tarjetas:** blanco `#FFFFFF` planas, con borde de 1 px negro al 10 % (`border/subtle` → `color.ink.10`) y **sin sombra**. Las sombras quedan para lo que flota (avisos, menú, diálogos).
-> - **CTA:** negro sólido (`bg/inverse`, hover `bg/inverse-hover`), texto blanco en mayúsculas, negrita y tracking amplio. Reemplaza el degradado cobalto del CTA (0017/0019).
-> - **Encabezados:** los de sección y de columnas en mayúsculas, negrita y tracking amplio (`encabezado-seccion`, `encabezado-columna`). Los títulos de página (H1) siguen en tipo oración.
-> - **El cobalto se queda** como identidad: wordmark, links (`accent/text`), la tarjeta protagonista (`gradient/hero`) y la barra de hoy del gráfico. Spark (0022) no cambia.
+> **Vigente desde el 16-oct-2026 · Decisión 0024 · Calibrado (SaaS moderno, estilo Stripe / Vercel).** Reemplaza a 0023 · Editorial, que se sentía plana y "de planilla". Manda sobre lo que se contradiga más abajo:
+> - **Radios:** tarjetas de 8 px (`radius/card` → `radius/sm`); botones, campos, chips y badges de 6 px (`radius/button`, `radius/chip`, `radius/base` → `radius/xs`). Ni redondo de juguete ni bloque.
+> - **Profundidad:** tarjetas blancas con borde de 1 px `#E5E7EB` (`border/subtle`) y sombra nítida de dos capas `elevation/card` (0 1 2 + 0 2 8, negro al 4 %). Sin halos ni nubes.
+> - **Lienzo (se mantiene de 0023):** blanco cálido `#F4F4F3` (`bg/page`) y hundido `#F0EFED` (`bg/sunken`); `#666D7A` sigue en ≥ 4.5:1.
+> - **CTA:** vuelve el degradado cobalto → marino (`gradient/primary`), en tipo oración. Es el único elemento con degradado cobalto junto a la tarjeta protagonista.
+> - **Encabezados:** de sección y de columnas en Outfit SemiBold, tipo oración y `tracking-tight` (`encabezado-seccion`, `encabezado-columna`). Las mayúsculas quedan solo para etiquetas chicas de contexto ("HOY").
+> - **Sin cambios:** spark (0022), selección en carbón (0019), métricas (0021).
 
 ### Tarjetas (Cards)
 - Fondo blanco puro (`#FFFFFF`) sobre superficie neutra.
@@ -182,13 +182,13 @@ La identidad visual de Tiendly combina **velocidad ultra limpia**, **lenguaje mo
 | `radii.button` | `radius/button` | 8 en Tiendly (botones y campos) |
 | `radii.card` | `radius/card` | 12 en Tiendly |
 | `radii.pill` | `radius/full` | 9999 |
-| Sombra de tarjeta | `elevation.card` (0021) | 0 1 3 + 0 4 10, negro 4 % |
+| Sombra de tarjeta | `elevation.card` (0024) | 0 1 2 + 0 2 8, negro 4 % |
 | Sombra suave de vidrio y avisos | estilo `Sombra/Baja` (`elevation.low`) | 0 4 20 negro 4 % + halo cálido 0 12 40 |
 | Cifras grandes | `font/metric-style` (0021) | Outfit SemiBold (600), tracking-tight, tabulares |
 | `color.brand.spark` | `spark/base` · `spark/subtle` · `spark/text` (0022) | `#EA580C` · `#FFF7ED` · `#C2410C` |
 | Celebración | estilo `Halo/Cálido` (`elevation.celebration`) | halo cálido + glow celeste |
 | Tarjeta protagonista | `gradient/hero` | cobalto → azul medianoche, 135° (0020) |
-| Editorial (0023) | `bg/page` · `bg/sunken` · `border/subtle` · `radius/xs` | `#F4F4F3` · `#F0EFED` · negro 10 % · 2 px |
+| Calibrado (0024) | `bg/page` · `bg/sunken` · `border/subtle` · `radius/sm` · `radius/xs` | `#F4F4F3` · `#F0EFED` · `#E5E7EB` · 8 px · 6 px |
 | Tipografía de cuerpo | `font/body` | Inter |
 | Tipografía de titulares | `font/display` + `font/display-style` / `font/hero-style` (modo Tiendly) | Outfit SemiBold (600) en Display y H1–H3 (0020) |
 | Estado informativo | `feedback/info/*` | teal: `#0D9488` en rellenos e íconos, `#0F766E` en texto (0016) |
@@ -198,5 +198,5 @@ La identidad visual de Tiendly combina **velocidad ultra limpia**, **lenguaje mo
 - **Temas de la tienda:** Neutral, Editorial y Suave mantienen su propio acento. El cobalto es de Tiendly (panel, onboarding, marca) y del crédito "Powered by Tiendly".
 
 - **Pro (V1.1):** componentes base en Figma → Components → "Pro · V1.1": Sello de producto, Banner de portada y Mensaje de WhatsApp · vista previa. Las pantallas de configuración se diseñan después del lanzamiento del Core Loop.
-- **Prioridad ante diferencias con CLAUDE.md:** manda este documento. Vigente desde el 16-oct (decisión 0023 · Editorial): tarjetas a 0 y planas con borde de 1 px; botones, campos, chips y badges a 2 px; CTA negro sólido en mayúsculas; lienzo `#F4F4F3`; titulares en Outfit SemiBold; escala `0.98` al presionar.
+- **Prioridad ante diferencias con CLAUDE.md:** manda este documento. Vigente desde el 16-oct (decisión 0024 · Calibrado): tarjetas de 8 px con borde y sombra nítida; botones, campos, chips y badges de 6 px; CTA con degradado cobalto; lienzo `#F4F4F3`; titulares en Outfit SemiBold; escala `0.98` al presionar.
 - **Banner Pro (V1.1):** el overlay `overlay/hero` se valida con fotos claras reales antes de lanzar, para que el texto blanco se lea.

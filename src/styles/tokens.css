@@ -108,14 +108,14 @@
   --tl-space-24: 96px;
   --tl-space-32: 128px;
   --tl-radius-none: 0px;
-  --tl-radius-xs: 2px;
+  --tl-radius-xs: 6px;
   --tl-radius-sm: 8px;
   --tl-radius-md: 12px;
   --tl-radius-lg: 16px;
   --tl-radius-xl: 20px;
   --tl-radius-full: 9999px;
   --tl-radius-base: var(--tl-radius-xs);
-  --tl-radius-card: var(--tl-radius-none);
+  --tl-radius-card: var(--tl-radius-sm);
   --tl-radius-button: var(--tl-radius-xs);
   --tl-radius-chip: var(--tl-radius-xs);
   --tl-stroke-thin: 1px;
@@ -127,7 +127,7 @@
   --tl-bg-inverse-hover: var(--tl-color-neutral-800);
   --tl-bg-scrim: var(--tl-color-scrim-50);
   --tl-bg-skeleton: var(--tl-color-neutral-200);
-  --tl-border-subtle: var(--tl-color-ink-10);
+  --tl-border-subtle: var(--tl-color-neutral-200);
   --tl-border-default: var(--tl-color-neutral-300);
   --tl-border-strong: var(--tl-color-neutral-500);
   --tl-text-primary: var(--tl-color-neutral-1000);
@@ -223,7 +223,7 @@
   --tl-layout-section-gap: 48px;
   --tl-layout-block-gap: 24px;
   --tl-layout-columns: 4;
-  --tl-elevation-card: 0px 1px 3px 0px var(--tl-shadow-soft), 0px 4px 10px 0px var(--tl-shadow-soft);
+  --tl-elevation-card: 0px 1px 2px 0px var(--tl-shadow-soft), 0px 2px 8px 0px var(--tl-shadow-soft);
   --tl-elevation-low: 0px 4px 20px 0px var(--tl-shadow-soft), 0px 12px 40px 0px var(--tl-glow-warm);
   --tl-elevation-celebration: 0px 0px 64px 8px var(--tl-glow-warm), 0px 16px 48px -8px var(--tl-glow-sky-from);
   --tl-elevation-medium: 0px 4px 12px -2px var(--tl-shadow-strong);

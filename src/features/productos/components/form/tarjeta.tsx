@@ -4,7 +4,7 @@ import { cn } from "@/lib/cn";
 
 type TarjetaProps = { titulo: string; descripcion?: string; className?: string; children: React.ReactNode };
 
-/** Sección del formulario: tarjeta plana (borde de 1 px, editorial 0023) con título en mayúsculas y ayuda opcional. */
+/** Sección del formulario: tarjeta (8 px, borde y sombra nítida, 0024) con título en Outfit SemiBold y ayuda opcional. */
 export function Tarjeta({ titulo, descripcion, className, children }: TarjetaProps) {
   const id = useId();
   return (
