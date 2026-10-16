@@ -6,10 +6,10 @@ import { ChipsOpciones } from "./chips-opciones";
 import { TarjetaSeccion as Tarjeta } from "@/components/panel";
 
 const CATEGORIAS: { id: Categoria; label: string }[] = [
-  { id: "ropa", label: "Ropa" },
-  { id: "calzado", label: "Calzado" },
-  { id: "accesorios", label: "Accesorios" },
-  { id: "joyeria", label: "Joyería" },
+  { id: "balerinas", label: "Balerinas" },
+  { id: "tacos", label: "Tacos" },
+  { id: "botas", label: "Botas" },
+  { id: "plataformas", label: "Plataformas" },
 ];
 
 type EstadoProps = { estado: "activo" | "borrador"; onCambio: (e: "activo" | "borrador") => void };

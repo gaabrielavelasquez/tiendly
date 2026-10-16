@@ -33,7 +33,7 @@ export function Vitrina({ datos, categoriaInicial }: VitrinaProps) {
 
   return (
     <div className="flex min-h-dvh flex-col">
-      <CabeceraTienda nombre={datos.tienda.nombre} slug={datos.tienda.slug} categorias={datos.categorias} activa={categoria} onCategoria={setCategoria} />
+      <CabeceraTienda nombre={datos.tienda.nombre} logo={datos.tienda.logo} slug={datos.tienda.slug} categorias={datos.categorias} activa={categoria} onCategoria={setCategoria} />
       <main className="mx-auto flex w-full max-w-6xl flex-1 flex-col px-4 pb-10">
         {datos.productos.length === 0 ? (
           <EmptyState icon={PackageOpen} title="Muy pronto" description={`${datos.tienda.nombre} está preparando su catálogo. Vuelve en unos días.`} />
@@ -60,7 +60,7 @@ export function Vitrina({ datos, categoriaInicial }: VitrinaProps) {
           </>
         )}
       </main>
-      <PieTienda nombre={datos.tienda.nombre} slug={datos.tienda.slug} celular={datos.tienda.celular} categorias={datos.categorias} />
+      <PieTienda nombre={datos.tienda.nombre} logo={datos.tienda.logo} slug={datos.tienda.slug} celular={datos.tienda.celular} categorias={datos.categorias} />
     </div>
   );
 }

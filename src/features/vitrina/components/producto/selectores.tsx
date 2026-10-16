@@ -41,7 +41,7 @@ export function SelectorTalla({ tallas, valor, agotadas, error, onCambio }: Tall
   return (
     <fieldset className="flex flex-col gap-3" aria-describedby={error ? "error-talla" : undefined}>
       <legend className={etiqueta}>Talla</legend>
-      <div role="radiogroup" aria-label="Talla" className="grid grid-cols-5 gap-2 pt-3">
+      <div role="radiogroup" aria-label="Talla" className={cn("grid gap-2 pt-3", tallas.length > 5 ? "grid-cols-6" : "grid-cols-5")}>
         {tallas.map((t, i) => {
           const agotada = agotadas.has(t);
           return (

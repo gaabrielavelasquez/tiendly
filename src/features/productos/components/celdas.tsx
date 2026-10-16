@@ -10,7 +10,7 @@ import { Miniatura } from "./miniatura";
 export function CeldaProducto({ p }: { p: Producto }) {
   return (
     <div className="flex min-w-0 items-center gap-3">
-      <Miniatura categoria={p.categorias[0] ?? "ropa"} imagen={p.imagen} />
+      <Miniatura categoria={p.categorias[0] ?? "balerinas"} imagen={p.imagen} />
       <div className="flex min-w-0 flex-col gap-0.5">
         <Link href={`/panel/productos/${p.id}`} className="truncate text-body-sm font-semibold text-fg hover:underline">
           {p.nombre}

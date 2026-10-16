@@ -21,17 +21,17 @@ export type ProductoVitrina = {
 };
 
 /** Lo que agrega la página de producto. */
-export type FichaProducto = ProductoVitrina & { variantes: Variante[]; tallas: string[]; corto?: string; sobre?: string };
+export type FichaProducto = ProductoVitrina & { variantes: Variante[]; tallas: string[]; fotos: Record<string, string[]>; corto?: string; sobre?: string };
 
-export type Vitrina = { tienda: { nombre: string; slug: string; celular: string }; productos: ProductoVitrina[]; categorias: { id: Categoria; label: string }[] };
+export type Vitrina = { tienda: { nombre: string; slug: string; celular: string; logo?: string }; productos: ProductoVitrina[]; categorias: { id: Categoria; label: string }[] };
 
-export const LABEL: Record<Categoria, string> = { ropa: "Ropa", calzado: "Calzado", accesorios: "Accesorios", joyeria: "Joyería" };
+export const LABEL: Record<Categoria, string> = { balerinas: "Balerinas", tacos: "Tacos", botas: "Botas", plataformas: "Plataformas" };
 
 /** "Vestido Chloé" → "vestido-chloe" (para el link del producto). */
 export const slugProducto = (nombre: string) =>
   nombre.normalize("NFD").replace(/\p{Diacritic}/gu, "").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
 
-/** La foto del panel viene en 160 × 160; la vitrina la pide en 4:5 y más grande. */
+/** Las fotos de Pexels venían en 160 × 160 para el panel; la vitrina las pide en 4:5. Las locales pasan igual. */
 const fotoVitrina = (url?: string) => url?.replace(/w=\d+&h=\d+/, "w=640&h=800");
 
 const aVitrina = (p: Producto): ProductoVitrina => ({
@@ -51,6 +51,7 @@ const aFicha = (p: Producto): FichaProducto => ({
   ...aVitrina(p),
   variantes: p.variantes,
   tallas: [...new Set(p.variantes.map((x) => x.talla))],
+  fotos: p.fotos ?? (p.imagen ? { [p.variantes[0]?.color ?? ""]: [p.imagen] } : {}),
   corto: DETALLE[p.id]?.corto,
   sobre: DETALLE[p.id]?.sobre,
 });
@@ -83,7 +84,7 @@ export async function obtenerVitrina(slug: string): Promise<Vitrina | null> {
     .sort((a, b) => Number(a.agotado) - Number(b.agotado));
   const presentes = new Set(productos.flatMap((p) => p.categorias));
   const categorias = (Object.keys(LABEL) as Categoria[]).filter((c) => presentes.has(c)).map((id) => ({ id, label: LABEL[id] }));
-  return { tienda: { nombre: tiendaActual.nombre, slug, celular: tiendaActual.celularVentas }, productos, categorias };
+  return { tienda: { nombre: tiendaActual.nombre, slug, celular: tiendaActual.celularVentas, logo: tiendaActual.logo }, productos, categorias };
 }
 
 export const leerCategoria = (v: string | string[] | undefined, validas: Categoria[]): Categoria | "todos" => {

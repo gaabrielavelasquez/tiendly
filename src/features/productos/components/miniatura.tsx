@@ -1,12 +1,12 @@
 "use client";
 
-import { Footprints, Gem, ShoppingBag, Shirt, type LucideIcon } from "lucide-react";
+import { Footprints, type LucideIcon } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
 import { cn } from "@/lib/cn";
 import type { Categoria } from "../types";
 
-const ICONO: Record<Categoria, LucideIcon> = { ropa: Shirt, calzado: Footprints, accesorios: ShoppingBag, joyeria: Gem };
+const ICONO: Record<Categoria, LucideIcon> = { balerinas: Footprints, tacos: Footprints, botas: Footprints, plataformas: Footprints };
 
 type MiniaturaProps = { categoria: Categoria; imagen?: string; className?: string };
 

@@ -25,10 +25,10 @@ const pasos = (hechos: number): Paso[] =>
   ].map((p, i) => ({ ...p, id: p.id as Paso["id"], hecho: i < hechos }));
 
 const SEMANA = [
-  { fecha: "2026-10-12", monto: 1200, pedidos: 4 },
-  { fecha: "2026-10-13", monto: 1760, pedidos: 6 },
-  { fecha: "2026-10-14", monto: 1200, pedidos: 4 },
-  { fecha: "2026-10-15", monto: 1320, pedidos: 4 },
+  { fecha: "2026-10-12", monto: 1450, pedidos: 4 },
+  { fecha: "2026-10-13", monto: 2210, pedidos: 6 },
+  { fecha: "2026-10-14", monto: 1700, pedidos: 4 },
+  { fecha: "2026-10-15", monto: 1816, pedidos: 4 },
   { fecha: "2026-10-16", monto: null, pedidos: 0 },
   { fecha: "2026-10-17", monto: null, pedidos: 0 },
   { fecha: "2026-10-18", monto: null, pedidos: 0 },
@@ -39,11 +39,11 @@ const ACTIVIDAD: InicioData = {
   ahora: AHORA,
   // El último no está pagado: no suma en "Hoy".
   pedidosHoy: [
-    { monto: 420, pagado: true, entrega: "delivery", enviado: false },
-    { monto: 380, pagado: true, entrega: "delivery", enviado: false },
-    { monto: 288, pagado: true, entrega: "recojo", enviado: false },
-    { monto: 230, pagado: true, entrega: "delivery", enviado: true },
-    { monto: 310, pagado: false, entrega: "delivery", enviado: false },
+    { monto: 712, pagado: true, entrega: "delivery", enviado: false },
+    { monto: 382, pagado: true, entrega: "delivery", enviado: false },
+    { monto: 330, pagado: true, entrega: "recojo", enviado: false },
+    { monto: 392, pagado: true, entrega: "delivery", enviado: true },
+    { monto: 422, pagado: false, entrega: "delivery", enviado: false },
   ],
   reservas: [{ venceEl: "2026-10-15T20:10:00-05:00" }, { venceEl: "2026-10-15T22:45:00-05:00" }, { venceEl: "2026-10-16T11:00:00-05:00" }],
   productos: [
@@ -51,7 +51,7 @@ const ACTIVIDAD: InicioData = {
     { nombre: "Botines Sophie", stock: 0 },
   ],
   semana: SEMANA,
-  semanaPasadaTotal: 4890,
+  semanaPasadaTotal: 6410,
   pasos: pasos(4),
 };
 

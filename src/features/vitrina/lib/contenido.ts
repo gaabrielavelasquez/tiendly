@@ -1,5 +1,5 @@
 // Contenido de la vitrina que el panel todavía no captura (hasta tener backend): colores de las
-// muestras, una línea corta y la descripción de cada modelo.
+// muestras, una línea corta y la descripción de cada modelo de Heather.
 
 /**
  * Color de cada muestra. Son DATOS del producto (los elige la tienda), no estilos del sistema:
@@ -7,38 +7,26 @@
  */
 export const HEX_COLOR: Record<string, string> = {
   Negro: "#1A1A1A", // hardcode-ok: dato del producto
-  Arena: "#D8C3A5", // hardcode-ok: dato del producto
+  Plata: "#C9CCCF", // hardcode-ok: dato del producto
+  Burdeos: "#5E1A24", // hardcode-ok: dato del producto
+  Vainilla: "#E9DFC9", // hardcode-ok: dato del producto
+  Choco: "#5A4033", // hardcode-ok: dato del producto
   Camel: "#B88A5A", // hardcode-ok: dato del producto
-  Crudo: "#EFE8DC", // hardcode-ok: dato del producto
   Blanco: "#FFFFFF", // hardcode-ok: dato del producto
-  Gris: "#9CA3AF", // hardcode-ok: dato del producto
-  "Azul claro": "#9DB7D5", // hardcode-ok: dato del producto
-  "Azul oscuro": "#2F4A6D", // hardcode-ok: dato del producto
-  Dorado: "#C9A45C", // hardcode-ok: dato del producto
-  Chocolate: "#5A3A29", // hardcode-ok: dato del producto
-  Plata: "#C0C4C8", // hardcode-ok: dato del producto
-  Oro: "#D4AF37", // hardcode-ok: dato del producto
-  Índigo: "#3B4A7A", // hardcode-ok: dato del producto
-  "Verde oliva": "#6B6B3A", // hardcode-ok: dato del producto
-  Estampado: "#C98B9A", // hardcode-ok: dato del producto
 };
 
 export const DETALLE: Record<string, { corto: string; sobre: string }> = {
-  p1: { corto: "Crepé fluido · Forro interior", sobre: "Un vestido midi de crepé que cae suelto y se mueve bien. Tiene forro interior y cierre invisible en la espalda. Va igual de bien con zapatillas que con tacos." },
-  p2: { corto: "Cuero natural · Hecho a mano en Lima", sobre: "Botines de cuero natural con taco bajo y cierre lateral. Los hacemos a mano en el taller: el cuero se amolda al pie con el uso." },
-  p3: { corto: "Lino y viscosa · Corte recto", sobre: "Un blazer de corte recto en lino y viscosa, sin hombreras. Liviano para el día a día y con forro solo en las mangas para que respire." },
-  p4: { corto: "Algodón peinado · Corte amplio", sobre: "El polo de todos los días: algodón peinado de 220 g, cuello reforzado y corte amplio que no se deforma con el lavado." },
-  p5: { corto: "Denim 100 % algodón · Tiro alto", sobre: "Jean de tiro alto y pierna recta que se afina al tobillo. Denim rígido 100 % algodón: al principio ajusta y con el uso queda a tu medida." },
-  p6: { corto: "Cuero metalizado · Plantilla acolchada", sobre: "Sandalias de tiras cruzadas en cuero metalizado, con plantilla acolchada. Planas y cómodas para todo el día." },
-  p7: { corto: "Cuero vacuno · Correa regulable", sobre: "Cartera mediana de cuero vacuno con correa regulable y bolsillo interior con cierre. Entra todo lo del día y un libro." },
-  p8: { corto: "Plata 925 · Baño de oro opcional", sobre: "Aretes de argolla en plata 925, livianos para usarlos todo el día. La versión Oro tiene baño de oro de 18 k." },
-  p9: { corto: "Denim rígido · Lavado oscuro", sobre: "Casaca de denim rígido en lavado índigo, con bolsillos de parche. Se usa abierta sobre un vestido o cerrada con jean." },
-  p10: { corto: "Plisado permanente · Cintura elástica", sobre: "Falda midi con plisado permanente y cintura elástica. No se arruga en la maleta y se lava en casa." },
-  p12: { corto: "Tejido transpirable · Suela liviana", sobre: "Zapatillas de tejido transpirable con suela liviana de caucho. Para caminar la ciudad todo el día." },
+  p1: { corto: "Cuero natural · Hecho a mano en Lima", sobre: "Una ballerina de punta dividida en cuero natural, con moño al frente. La hacemos a mano en el taller y toma alrededor de dos semanas. El cuero se amolda al pie con el uso: al principio va ajustado y después queda hecho a tu medida." },
+  p2: { corto: "Cuero vainilla · Hecho a mano en Lima", sobre: "La versión clara de la Chloé, en cuero vainilla con moño anudado. Ligera, flexible y lista para todo el día." },
+  p3: { corto: "Taco de madera · 5 cm", sobre: "Un salón de punta redonda con taco de madera de 5 cm y moño de cuero. Alto justo para la oficina y cómodo para estar de pie todo el día." },
+  p4: { corto: "Bota alta · Plataforma de 6 cm", sobre: "Bota alta de cuero con plataforma de 6 cm y cierre interior. Se ve robusta pero pesa poco: la suela es de caucho liviano." },
+  p5: { corto: "Punta dividida · Taco de 6 cm", sobre: "La Amelie lleva la punta dividida de la casa sobre un taco cuadrado de 6 cm, con moño al frente. Estable para caminar la ciudad." },
+  p6: { corto: "Botín de cuero · Taco cuadrado", sobre: "Botín de punta dividida en cuero liso, con taco cuadrado y cierre lateral. Va con todo, de jean a vestido." },
+  p7: { corto: "Charol · Tira al tobillo", sobre: "Sandalia de charol con punta dividida y tira al tobillo con hebilla. Cómoda y con un brillo que no pasa de moda." },
+  p8: { corto: "Plataforma de 10 cm · Cuero napa", sobre: "Mule de plataforma de 10 cm en cuero napa. Alta pero estable: el peso se reparte en toda la suela." },
 };
 
-/** Tabla de tallas orientativa (calzado en cm de largo de pie; ropa en cm de contorno de busto). */
+/** Tabla de tallas orientativa: largo del pie en cm. */
 export const TALLAS_CM: Record<string, string> = {
   "35": "22.5 cm", "36": "23 cm", "37": "23.5 cm", "38": "24 cm", "39": "24.5 cm", "40": "25 cm",
-  XS: "80–84 cm", S: "84–88 cm", M: "88–92 cm", L: "92–98 cm", XL: "98–104 cm",
 };

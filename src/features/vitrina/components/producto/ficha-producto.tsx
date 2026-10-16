@@ -1,7 +1,6 @@
 "use client";
 
 import { ShoppingBag } from "lucide-react";
-import Image from "next/image";
 import { useMemo, useState } from "react";
 import { Badge, Button, buttonVariants } from "@/components/ui";
 import { formatoSoles } from "@/lib/formato";
@@ -9,6 +8,7 @@ import { cn } from "@/lib/cn";
 import { agregarAlCarrito } from "../../lib/carrito";
 import type { FichaProducto as Ficha } from "../../lib/vitrina";
 import { Beneficios } from "./beneficios";
+import { Galeria } from "./galeria";
 import { SelectorColor, SelectorTalla } from "./selectores";
 
 type FichaProps = { p: Ficha; tienda: string; celular: string };
@@ -46,9 +46,7 @@ export function FichaProducto({ p, tienda, celular }: FichaProps) {
 
   return (
     <div className="grid gap-8 lg:grid-cols-2 lg:gap-14">
-      <div className="relative aspect-4/5 overflow-hidden rounded-card border border-line-subtle bg-surface lg:sticky lg:top-24 lg:self-start">
-        {p.imagen && <Image src={p.imagen} alt={p.nombre} fill priority sizes="(min-width: 64rem) 50vw, 100vw" className="object-cover" />}
-      </div>
+      <Galeria key={color} fotos={p.fotos[color] ?? (p.imagen ? [p.imagen] : [])} nombre={p.nombre} color={color} />
       <div className="flex flex-col gap-6">
         <div className="flex flex-col gap-2">
           {p.agotado ? (

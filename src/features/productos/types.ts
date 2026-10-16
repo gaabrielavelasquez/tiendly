@@ -1,6 +1,7 @@
 export type Escenario = "catalogo" | "vacio" | "error";
 
-export type Categoria = "ropa" | "calzado" | "accesorios" | "joyeria";
+/** Heather es una marca de calzado hecho a mano. */
+export type Categoria = "balerinas" | "tacos" | "botas" | "plataformas";
 
 /** Una combinación de colorway y talla, con su propio stock. */
 export type Variante = { color: string; talla: string; stock: number };
@@ -19,6 +20,8 @@ export type Producto = {
   variantes: Variante[];
   /** Foto principal (URL). Sin foto, la miniatura muestra el ícono de la categoría. */
   imagen?: string;
+  /** Fotos por color, en orden (la primera de cada color es la principal de ese color). */
+  fotos?: Record<string, string[]>;
 };
 
 export type Filtro = "todos" | "activos" | "bajo-stock" | "agotados";

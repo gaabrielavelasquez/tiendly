@@ -24,7 +24,7 @@ export type FormProducto = {
 
 export type Errores = Partial<Record<"nombre" | "precio" | "precioAntes" | "variantes", string>>;
 
-export const COLORES_SUGERIDOS = ["Negro", "Blanco", "Vainilla", "Camel", "Chocolate", "Azul marino", "Rojo", "Verde oliva"];
+export const COLORES_SUGERIDOS = ["Negro", "Plata", "Burdeos", "Vainilla", "Choco", "Camel", "Blanco"];
 export const TALLAS_ROPA = ["XS", "S", "M", "L", "XL"];
 export const TALLAS_CALZADO = ["35", "36", "37", "38", "39", "40"];
 export const TALLA_UNICA = "Única";
@@ -75,7 +75,8 @@ export function desdeProducto(p: Producto): FormProducto {
     variantes: Object.fromEntries(p.variantes.map((v) => [clave(v.color, v.talla), { ...VARIANTE_VACIA, stock: String(v.stock) }])),
     estado: p.estado === "borrador" ? "borrador" : "activo",
     categorias: p.categorias,
-    imagenes: p.imagen ? [{ id: "actual", url: p.imagen, nombre: p.nombre }] : [],
+    // Todas las fotos del producto (de todos los colores), sin repetir.
+    imagenes: [...new Set(Object.values(p.fotos ?? {}).flat().concat(p.imagen ? [p.imagen] : []))].map((url, i) => ({ id: `actual-${i}`, url, nombre: p.nombre })),
   };
 }
 
