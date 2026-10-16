@@ -1,9 +1,8 @@
-// Placeholder: Onboarding O1–O4 (decisión 0013).
+import type { Metadata } from "next";
+import { OnboardingFlow } from "@/features/onboarding/components/onboarding-flow";
+
+export const metadata: Metadata = { title: "Crea tu tienda · Tiendly" };
+
 export default function Registro() {
-  return (
-    <main className="mx-auto max-w-md px-4 py-12">
-      <h1 className="font-display-hero text-h1">Crea tu tienda</h1>
-      <p className="text-body text-fg-secondary">Empieza con tu número de WhatsApp.</p>
-    </main>
-  );
+  return <OnboardingFlow />;
 }

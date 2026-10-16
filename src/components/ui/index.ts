@@ -3,4 +3,5 @@ export { Button } from "./button";
 export { Card } from "./card";
 export { Chip } from "./chip";
 export { EmptyState } from "./empty-state";
+export { Field } from "./field";
 export { Skeleton } from "./skeleton";
