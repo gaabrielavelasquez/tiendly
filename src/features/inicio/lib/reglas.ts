@@ -63,7 +63,7 @@ export function pendientes(d: InicioData): Pendiente[] {
       tono: "error",
       titulo: plural(agotados.length, "producto agotado", "productos agotados"),
       detalle: resto.length ? `${primero.nombre} y ${resto.length} más.` : `${primero.nombre} · 0 en stock.`,
-      href: "/panel/productos?stock=agotados",
+      href: "/panel/productos?estado=agotados",
     });
   }
   return filas;

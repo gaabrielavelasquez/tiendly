@@ -1,8 +1,7 @@
 // Formatos de Perú, siempre en hora de Lima para que servidor y navegador muestren lo mismo.
 const ZONA = "America/Lima";
 
-const soles = new Intl.NumberFormat("es-PE", { style: "currency", currency: "PEN", maximumFractionDigits: 0 });
-export const formatoSoles = (n: number) => soles.format(n);
+export { formatoSoles } from "@/lib/formato";
 
 const mayuscula = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
 

@@ -1,6 +1,4 @@
-import { Plus } from "lucide-react";
-import Link from "next/link";
-import { buttonVariants } from "@/components/ui";
+import { NuevoProducto } from "@/components/panel";
 import { cn } from "@/lib/cn";
 import { CompartirWhatsApp } from "./compartir-whatsapp";
 
@@ -14,13 +12,7 @@ export function AccionesRapidas({ slug, className }: AccionesRapidasProps) {
   return (
     <div className={cn("flex flex-col-reverse gap-2 lg:flex-row lg:items-center", className)}>
       <CompartirWhatsApp slug={slug} className="w-full lg:w-auto" />
-      <Link
-        href="/panel/productos/nuevo"
-        className={cn(buttonVariants({ variant: "primary" }), "w-full transition hover:bg-cta-hover active:scale-98 lg:w-auto")}
-      >
-        <Plus aria-hidden strokeWidth={2} className="size-4" />
-        <span>Nuevo producto</span>
-      </Link>
+      <NuevoProducto className="w-full lg:w-auto" />
     </div>
   );
 }

@@ -1,8 +1,9 @@
+import { tiendaActual } from "@/lib/sesion";
 import type { Escenario, InicioData, Paso } from "../types";
 
 // Datos simulados hasta tener backend. Se elige el escenario con ?escenario= en /panel.
 
-const TIENDA = { nombre: "Heather", slug: "heather", duena: "Cecilia" };
+const TIENDA = tiendaActual;
 const AHORA = "2026-10-15T18:30:00-05:00";
 
 const pasos = (hechos: number): Paso[] =>
@@ -86,7 +87,3 @@ export async function obtenerInicio(escenario: Escenario): Promise<InicioData> {
   return ESCENARIOS[escenario];
 }
 
-export const tiendaActual = TIENDA;
-
-/** Avisos sin leer del panel (simulado). */
-export const avisosSinLeer = 2;

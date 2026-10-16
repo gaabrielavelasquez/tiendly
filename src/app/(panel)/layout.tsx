@@ -1,5 +1,5 @@
 import { MobileTopbar, Sidebar } from "@/components/panel";
-import { avisosSinLeer, tiendaActual } from "@/features/inicio/lib/mock";
+import { avisosSinLeer, tiendaActual } from "@/lib/sesion";
 
 /**
  * Panel de la tienda (tema Tiendly, valores de :root). Desktop: barra lateral; la zona de cuenta va en la
