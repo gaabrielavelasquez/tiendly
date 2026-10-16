@@ -7,6 +7,7 @@ import { leerFiltro } from "@/features/productos/lib/reglas";
 export const metadata: Metadata = { title: "Productos · Tiendly" };
 
 type PageProps = { searchParams: Promise<Record<string, string | string[] | undefined>> };
+import { herramientasDev } from "@/lib/entorno";
 
 /**
  * Productos (decisión 0011). Datos simulados: ?escenario=catalogo (por defecto), vacio o error.
@@ -14,7 +15,7 @@ type PageProps = { searchParams: Promise<Record<string, string | string[] | unde
  */
 export default async function PanelProductos({ searchParams }: PageProps) {
   const { escenario, estado } = await searchParams;
-  const productos = await obtenerProductos(leerEscenario(escenario));
+  const productos = await obtenerProductos(leerEscenario(herramientasDev ? escenario : undefined));
   return (
     <PanelMain>
       <ProductosVista productos={productos} filtroInicial={leerFiltro(Array.isArray(estado) ? estado[0] : estado)} />

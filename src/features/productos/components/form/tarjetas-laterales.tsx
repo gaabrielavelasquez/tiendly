@@ -12,19 +12,19 @@ const CATEGORIAS: { id: Categoria; label: string }[] = [
   { id: "plataformas", label: "Plataformas" },
 ];
 
-type EstadoProps = { estado: "activo" | "borrador"; onCambio: (e: "activo" | "borrador") => void };
+type EstadoProps = { estado: "activo" | "pausado"; onCambio: (e: "activo" | "pausado") => void };
 
-/** Estado: interruptor Activo / Borrador, con qué significa cada uno para el cliente. */
+/** Estado: un solo interruptor Activo / Pausado (decisiones 0011 y 0027), con qué significa para el cliente. */
 export function TarjetaEstado({ estado, onCambio }: EstadoProps) {
   const activo = estado === "activo";
   return (
     <Tarjeta titulo="Estado">
       <div className="flex flex-col gap-1">
-        <Switch checked={activo} onChange={(v) => onCambio(v ? "activo" : "borrador")} aria-describedby="ayuda-estado">
-          {activo ? "Activo" : "Borrador"}
+        <Switch checked={activo} onChange={(v) => onCambio(v ? "activo" : "pausado")} aria-describedby="ayuda-estado">
+          {activo ? "Activo" : "Pausado"}
         </Switch>
         <p id="ayuda-estado" className="text-caption text-fg-secondary">
-          {activo ? "Tus clientes lo ven y lo pueden comprar en tu tienda." : "Solo tú lo ves. Actívalo cuando esté listo para vender."}
+          {activo ? "Tus clientes lo ven y lo pueden comprar en tu tienda." : "No se ve en tu tienda. Actívalo cuando esté listo para vender."}
         </p>
       </div>
     </Tarjeta>

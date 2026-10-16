@@ -1,8 +1,9 @@
 "use client";
 
-import { ShoppingBag } from "lucide-react";
+import { Menu, ShoppingBag, X } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { useState } from "react";
 import { cn } from "@/lib/cn";
 import type { Categoria } from "@/features/productos/types";
 import { useCantidadCarrito } from "../hooks/use-carrito";
@@ -19,15 +20,39 @@ type CabeceraProps = {
 };
 
 /**
- * Cabecera de la vitrina (Figma, tema Editorial): logo a la izquierda en serif, categorías al centro
- * en desktop y carrito a la derecha con punto spark si hay productos (regla del 1 %, decisión 0022).
+ * Cabecera de la vitrina (Figma, Home; decisión 0027). Móvil: menú a la izquierda, logo al centro y
+ * carrito a la derecha. Desktop: logo a la izquierda, categorías al centro y carrito a la derecha.
+ * El carrito lleva punto spark si hay productos (regla del 1 %, decisión 0022).
  */
 export function CabeceraTienda({ nombre, logo, slug, categorias, activa, onCategoria }: CabeceraProps) {
   const cantidad = useCantidadCarrito(slug);
+  const [menu, setMenu] = useState(false);
+  const enlaces = (clase: (activo: boolean) => string) =>
+    categorias.map((c) =>
+      onCategoria ? (
+        <button key={c.id} type="button" onClick={() => (onCategoria(c.id), setMenu(false))} aria-pressed={activa === c.id} className={clase(activa === c.id)}>
+          {c.label}
+        </button>
+      ) : (
+        <Link key={c.id} href={`/${slug}?categoria=${c.id}`} className={clase(activa === c.id)}>
+          {c.label}
+        </Link>
+      ),
+    );
   return (
     <header className="sticky top-0 z-20 border-b border-line-subtle bg-page/90 backdrop-blur-md">
-      <div className="mx-auto flex h-16 max-w-6xl items-center gap-6 px-4 lg:grid lg:grid-cols-[1fr_auto_1fr]">
-        <Link href={`/${slug}`} aria-label={`${nombre}, inicio de la tienda`} className="font-display-hero text-h2 tracking-wide text-fg uppercase">
+      <div className="mx-auto grid h-16 max-w-6xl grid-cols-[1fr_auto_1fr] items-center gap-6 px-2 lg:px-4">
+        <button
+          type="button"
+          aria-label={menu ? "Cerrar menú" : "Abrir menú"}
+          aria-expanded={menu}
+          aria-controls="menu-tienda"
+          onClick={() => setMenu((v) => !v)}
+          className="flex size-11 items-center justify-center rounded-theme text-icon transition-colors hover:bg-sunken lg:hidden"
+        >
+          {menu ? <X aria-hidden strokeWidth={1.4} className="size-5" /> : <Menu aria-hidden strokeWidth={1.4} className="size-5" />}
+        </button>
+        <Link href={`/${slug}`} aria-label={`${nombre}, inicio de la tienda`} className="justify-self-center font-display-hero text-h2 tracking-wide text-fg uppercase lg:col-start-1 lg:row-start-1 lg:justify-self-start">
           {logo ? (
             // El archivo tiene aire alrededor del wordmark (la caja ancha y object-cover lo recortan) y fondo
             // blanco opaco: multiply lo funde con el lienzo sin tocar la imagen.
@@ -39,23 +64,12 @@ export function CabeceraTienda({ nombre, logo, slug, categorias, activa, onCateg
           )}
         </Link>
         <nav aria-label="Categorías" className="hidden items-center gap-8 lg:flex">
-          {categorias.map((c) => {
-            const clase = cn("text-body-sm transition-colors hover:text-fg", activa === c.id ? "text-fg underline underline-offset-8" : "text-fg-secondary");
-            return onCategoria ? (
-              <button key={c.id} type="button" onClick={() => onCategoria(c.id)} aria-pressed={activa === c.id} className={clase}>
-                {c.label}
-              </button>
-            ) : (
-              <Link key={c.id} href={`/${slug}?categoria=${c.id}`} className={clase}>
-                {c.label}
-              </Link>
-            );
-          })}
+          {enlaces((a) => cn("text-body-sm transition-colors hover:text-fg", a ? "text-fg underline underline-offset-8" : "text-fg-secondary"))}
         </nav>
         <Link
           href={`/${slug}/carrito`}
           aria-label={cantidad ? `Carrito: ${cantidad} ${cantidad === 1 ? "producto" : "productos"}` : "Carrito vacío"}
-          className="relative ml-auto flex size-11 items-center justify-center rounded-theme text-icon transition-colors hover:bg-sunken lg:justify-self-end"
+          className="relative flex size-11 items-center justify-center justify-self-end rounded-theme text-icon transition-colors hover:bg-sunken"
         >
           <ShoppingBag aria-hidden strokeWidth={1.4} className="size-5" />
           {cantidad > 0 && (
@@ -66,6 +80,11 @@ export function CabeceraTienda({ nombre, logo, slug, categorias, activa, onCateg
           )}
         </Link>
       </div>
+      {menu && (
+        <nav id="menu-tienda" aria-label="Menú de la tienda" className="flex flex-col border-t border-line-subtle px-4 py-2 lg:hidden">
+          {enlaces((a) => cn("flex min-h-12 items-center text-body text-left", a ? "font-semibold text-fg" : "text-fg-secondary"))}
+        </nav>
+      )}
     </header>
   );
 }

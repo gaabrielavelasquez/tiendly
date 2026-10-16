@@ -1,10 +1,10 @@
 "use client";
 
-import { Check, Clock3, PackageX, Truck, type LucideIcon } from "lucide-react";
+import { Check, ChevronRight, Clock3, PackageX, Truck, type LucideIcon } from "lucide-react";
 import { motion } from "motion/react";
 import { useReducedMotion } from "@/components/motion/use-reduced-motion";
 import Link from "next/link";
-import { Badge, buttonVariants, Card } from "@/components/ui";
+import { Badge, Card } from "@/components/ui";
 import { cn } from "@/lib/cn";
 import { ESCALON, rapido } from "../lib/motion";
 import type { Pendiente } from "../lib/reglas";
@@ -20,8 +20,8 @@ const TILE: Record<Pendiente["tono"], string> = {
 type AtenderCardProps = { filas: Pendiente[]; className?: string };
 
 /**
- * "Para atender hoy": atajos a las listas ya filtradas, con ícono por tipo y acción explícita
- * "Ver detalle". Toda la fila sigue siendo tocable: el link se estira con ::after.
+ * "Para atender hoy": atajos a las listas ya filtradas, con ícono por tipo y chevron (Figma I1).
+ * Toda la fila es el link (decisión 0027).
  * Entrada escalonada (fade + y).
  */
 export function AtenderCard({ filas, className }: AtenderCardProps) {
@@ -51,7 +51,7 @@ export function AtenderCard({ filas, className }: AtenderCardProps) {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ ...rapido, delay: i * ESCALON }}
               >
-                <div className="relative -mx-2 flex min-h-16 flex-wrap items-center gap-x-3 gap-y-1 rounded-theme px-2 py-2.5 transition-colors hover:bg-sunken lg:flex-nowrap">
+                <Link href={f.href} className="group -mx-2 flex min-h-16 items-center gap-3 rounded-theme px-2 py-2.5 transition-colors hover:bg-sunken">
                   <span className={cn("flex size-9 shrink-0 items-center justify-center rounded-theme border", TILE[f.tono])}>
                     <Icono aria-hidden strokeWidth={1.8} className="size-5" />
                   </span>
@@ -62,19 +62,8 @@ export function AtenderCard({ filas, className }: AtenderCardProps) {
                     </span>
                     <span className="text-caption text-fg-secondary">{f.detalle}</span>
                   </span>
-                  {/* Móvil: la acción baja debajo del texto (alineada con él) para no apretarlo. */}
-                  <div className="basis-full pl-9 lg:basis-auto lg:pl-0">
-                    <Link
-                      href={f.href}
-                      className={cn(
-                        buttonVariants({ variant: "ghost", size: "sm" }),
-                        "static px-3 transition after:absolute after:inset-0 after:content-[''] active:scale-98",
-                      )}
-                    >
-                      Ver detalle<span className="sr-only">: {f.titulo}</span>
-                    </Link>
-                  </div>
-                </div>
+                  <ChevronRight aria-hidden strokeWidth={1.6} className="size-6 shrink-0 text-icon transition-transform group-hover:translate-x-0.5" />
+                </Link>
               </motion.li>
             );
           })}

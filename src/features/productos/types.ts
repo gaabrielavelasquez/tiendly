@@ -10,10 +10,12 @@ export type Variante = { color: string; talla: string; stock: number };
 export type Producto = {
   id: string;
   nombre: string;
-  sku: string;
+  /** Opcional (decisión 0027): se carga en "Más opciones". */
+  sku?: string;
   /** Una o varias; la primera define el ícono de respaldo. */
   categorias: Categoria[];
-  estado: "activo" | "borrador" | "archivado";
+  /** Un solo interruptor (decisiones 0011 y 0027): pausado no se ve en la tienda. */
+  estado: "activo" | "pausado";
   precio: number;
   /** Precio antes de la rebaja, si hay. */
   precioAntes?: number;
@@ -24,6 +26,6 @@ export type Producto = {
   fotos?: Record<string, string[]>;
 };
 
-export type Filtro = "todos" | "activos" | "bajo-stock" | "agotados";
+export type Filtro = "todos" | "activos" | "bajo-stock" | "agotados" | "pausados";
 
 export type NivelStock = "en-stock" | "bajo-stock" | "agotado";

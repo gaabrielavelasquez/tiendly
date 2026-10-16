@@ -34,24 +34,17 @@ export const textoStock = (p: Producto) => plural(stockTotal(p), "unidad", "unid
 
 export const textoPrecio = (p: Producto) => formatoSoles(p.precio);
 
-/** Los archivados no aparecen en ninguna pestaña. */
-const visibles = (lista: Producto[]) => lista.filter((p) => p.estado !== "archivado");
-
 const CUMPLE: Record<Filtro, (p: Producto) => boolean> = {
   todos: () => true,
   activos: (p) => p.estado === "activo",
   "bajo-stock": (p) => nivelStock(p) === "bajo-stock",
   agotados: (p) => nivelStock(p) === "agotado",
+  pausados: (p) => p.estado === "pausado",
 };
 
 export function contarPorFiltro(lista: Producto[]): Record<Filtro, number> {
-  const v = visibles(lista);
-  return {
-    todos: v.length,
-    activos: v.filter(CUMPLE.activos).length,
-    "bajo-stock": v.filter(CUMPLE["bajo-stock"]).length,
-    agotados: v.filter(CUMPLE.agotados).length,
-  };
+  const contar = (f: Filtro) => lista.filter(CUMPLE[f]).length;
+  return { todos: lista.length, activos: contar("activos"), "bajo-stock": contar("bajo-stock"), agotados: contar("agotados"), pausados: contar("pausados") };
 }
 
 /** Busca por nombre o SKU, sin distinguir mayúsculas ni tildes. */
@@ -59,21 +52,21 @@ const normalizar = (s: string) => s.normalize("NFD").replace(/\p{Diacritic}/gu, 
 
 export function filtrarProductos(lista: Producto[], filtro: Filtro, busqueda: string) {
   const q = normalizar(busqueda);
-  return visibles(lista).filter((p) => CUMPLE[filtro](p) && (!q || normalizar(p.nombre).includes(q) || normalizar(p.sku).includes(q)));
+  return lista.filter((p) => CUMPLE[filtro](p) && (!q || normalizar(p.nombre).includes(q) || normalizar(p.sku ?? "").includes(q)));
 }
 
 export function leerFiltro(valor: string | null | undefined): Filtro {
-  return valor === "activos" || valor === "bajo-stock" || valor === "agotados" ? valor : "todos";
+  return valor === "activos" || valor === "bajo-stock" || valor === "agotados" || valor === "pausados" ? valor : "todos";
 }
 
-/** Copia como borrador y sin stock: duplicar un modelo no duplica su inventario. */
+/** Copia pausada y sin stock: duplicar un modelo no duplica su inventario ni lo publica. */
 export function duplicar(p: Producto): Producto {
   return {
     ...p,
     id: `${p.id}-copia-${Date.now()}`,
     nombre: `Copia de ${p.nombre}`,
-    sku: `${p.sku}-C`,
-    estado: "borrador",
+    sku: p.sku && `${p.sku}-C`,
+    estado: "pausado",
     variantes: p.variantes.map((v) => ({ ...v, stock: 0 })),
   };
 }

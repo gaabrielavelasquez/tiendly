@@ -28,7 +28,8 @@ export function PedidosVista({ pedidos, ahora, filtroInicial }: VistaProps) {
     : "Aquí vas a ver los pedidos que te hagan por tu tienda y por WhatsApp.";
 
   const exportar = (
-    <Button variant="secondary" onClick={v.exportar} disabled={v.visibles.length === 0}>
+    // Solo desktop (decisión 0027): una planilla no se trabaja en el celular.
+    <Button variant="secondary" onClick={v.exportar} disabled={v.visibles.length === 0} className="hidden lg:inline-flex">
       <span className="flex items-center gap-2">
         <Download aria-hidden strokeWidth={1.6} className="size-4" />
         Exportar
@@ -39,7 +40,6 @@ export function PedidosVista({ pedidos, ahora, filtroInicial }: VistaProps) {
   return (
     <>
       <PanelHeader titulo="Pedidos" subtitulo={subtitulo} accion={v.total ? exportar : undefined} />
-      {v.total > 0 && <div className="lg:hidden [&>button]:w-full">{exportar}</div>}
 
       {v.total === 0 ? (
         <Card>

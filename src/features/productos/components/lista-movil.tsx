@@ -2,7 +2,6 @@
 
 import { AnimatePresence, motion } from "motion/react";
 import { useReducedMotion } from "@/components/motion/use-reduced-motion";
-import { Checkbox } from "@/components/ui";
 import type { Producto } from "../types";
 import { motionTokens } from "@/styles/tokens";
 import { AccionesFila } from "./acciones-fila";
@@ -12,14 +11,11 @@ const ease = [...motionTokens.easing] as [number, number, number, number];
 
 type ListaProps = {
   productos: Producto[];
-  seleccion: Set<string>;
-  onAlternar: (id: string) => void;
   onDuplicar: (id: string) => void;
-  onArchivar: (id: string) => void;
 };
 
-/** Móvil: una tarjeta compacta por producto (una tabla de 6 columnas no entra en 390 px). */
-export function ListaMovil({ productos, seleccion, onAlternar, onDuplicar, onArchivar }: ListaProps) {
+/** Móvil: una tarjeta compacta por producto (una tabla de 6 columnas no entra en 390 px). Sin selección masiva (decisión 0027). */
+export function ListaMovil({ productos, onDuplicar }: ListaProps) {
   const reduce = useReducedMotion();
   return (
     <ul className="flex flex-col divide-y divide-line-subtle">
@@ -32,9 +28,8 @@ export function ListaMovil({ productos, seleccion, onAlternar, onDuplicar, onArc
             animate={{ opacity: 1, y: 0 }}
             exit={reduce ? undefined : { opacity: 0 }}
             transition={{ duration: motionTokens.durationFast * 2, ease, delay: reduce ? 0 : Math.min(i, 10) * 0.03 }}
-            className="group flex gap-1 py-4 pr-4 pl-2"
+            className="group flex px-4 py-4"
           >
-            <Checkbox aria-label={`Seleccionar ${p.nombre}`} checked={seleccion.has(p.id)} onChange={() => onAlternar(p.id)} className="mt-1.5" />
             <div className="flex min-w-0 flex-1 flex-col gap-3">
               <div className="flex items-start justify-between gap-3">
                 <CeldaProducto p={p} />
@@ -46,7 +41,7 @@ export function ListaMovil({ productos, seleccion, onAlternar, onDuplicar, onArc
                   <CeldaEstado p={p} />
                   <TextoInventario p={p} />
                 </div>
-                <AccionesFila id={p.id} nombre={p.nombre} onDuplicar={() => onDuplicar(p.id)} onArchivar={() => onArchivar(p.id)} />
+                <AccionesFila id={p.id} nombre={p.nombre} onDuplicar={() => onDuplicar(p.id)} />
               </div>
             </div>
           </motion.li>

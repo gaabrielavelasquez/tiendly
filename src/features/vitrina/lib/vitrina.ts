@@ -23,7 +23,7 @@ export type ProductoVitrina = {
 /** Lo que agrega la página de producto. */
 export type FichaProducto = ProductoVitrina & { variantes: Variante[]; tallas: string[]; fotos: Record<string, string[]>; corto?: string; sobre?: string };
 
-export type Vitrina = { tienda: { nombre: string; slug: string; celular: string; logo?: string }; productos: ProductoVitrina[]; categorias: { id: Categoria; label: string }[] };
+export type Vitrina = { tienda: { nombre: string; slug: string; celular: string; logo?: string; plan: "free" | "pro" }; productos: ProductoVitrina[]; categorias: { id: Categoria; label: string }[] };
 
 export const LABEL: Record<Categoria, string> = { balerinas: "Balerinas", tacos: "Tacos", botas: "Botas", plataformas: "Plataformas" };
 
@@ -73,7 +73,7 @@ export async function obtenerFicha(tienda: string, slug: string) {
 
 /**
  * Datos de la vitrina de una tienda. `null` si la tienda no existe (404).
- * Solo productos activos: los borradores y archivados no se publican. Los agotados se muestran
+ * Solo productos activos: los pausados no se publican. Los agotados se muestran
  * (con su etiqueta) al final, para que la tienda no se vea vacía y el cliente sepa que vuelven.
  */
 export async function obtenerVitrina(slug: string): Promise<Vitrina | null> {
@@ -84,7 +84,7 @@ export async function obtenerVitrina(slug: string): Promise<Vitrina | null> {
     .sort((a, b) => Number(a.agotado) - Number(b.agotado));
   const presentes = new Set(productos.flatMap((p) => p.categorias));
   const categorias = (Object.keys(LABEL) as Categoria[]).filter((c) => presentes.has(c)).map((id) => ({ id, label: LABEL[id] }));
-  return { tienda: { nombre: tiendaActual.nombre, slug, celular: tiendaActual.celularVentas, logo: tiendaActual.logo }, productos, categorias };
+  return { tienda: { nombre: tiendaActual.nombre, slug, celular: tiendaActual.celularVentas, logo: tiendaActual.logo, plan: tiendaActual.plan }, productos, categorias };
 }
 
 export const leerCategoria = (v: string | string[] | undefined, validas: Categoria[]): Categoria | "todos" => {

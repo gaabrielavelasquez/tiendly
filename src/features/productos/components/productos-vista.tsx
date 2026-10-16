@@ -16,6 +16,7 @@ const FILTROS: OpcionFiltro<Filtro>[] = [
   { id: "activos", label: "Activos" },
   { id: "bajo-stock", label: "Bajo stock" },
   { id: "agotados", label: "Agotados" },
+  { id: "pausados", label: "Pausados" },
 ];
 
 type VistaProps = { productos: Producto[]; filtroInicial: Filtro };
@@ -56,7 +57,9 @@ export function ProductosVista({ productos, filtroInicial }: VistaProps) {
             />
             <FiltrosRapidos etiqueta="Filtrar productos" opciones={FILTROS} valor={c.filtro} conteos={c.conteos} onCambio={c.setFiltro} />
           </div>
-          <BarraSeleccion cantidad={c.seleccionVisible.length} onArchivar={() => c.archivar(c.seleccionVisible)} onLimpiar={c.limpiarSeleccion} />
+          <div className="hidden lg:block">
+            <BarraSeleccion cantidad={c.seleccionVisible.length} onPausar={() => c.pausar(c.seleccionVisible)} onLimpiar={c.limpiarSeleccion} />
+          </div>
           {c.visibles.length === 0 ? (
             <EmptyState
               icon={SearchX}
@@ -77,23 +80,16 @@ export function ProductosVista({ productos, filtroInicial }: VistaProps) {
                   onAlternar={c.alternar}
                   onAlternarTodos={c.alternarTodos}
                   onDuplicar={c.duplicar}
-                  onArchivar={(id) => c.archivar([id])}
                 />
               </div>
               <div className="lg:hidden">
-                <ListaMovil
-                  productos={c.visibles}
-                  seleccion={c.seleccion}
-                  onAlternar={c.alternar}
-                  onDuplicar={c.duplicar}
-                  onArchivar={(id) => c.archivar([id])}
-                />
+                <ListaMovil productos={c.visibles} onDuplicar={c.duplicar} />
               </div>
             </>
           )}
         </Card>
       )}
-      <AvisoDeshacer archivado={c.archivado} onDeshacer={c.deshacer} />
+      <AvisoDeshacer pausado={c.pausado} onDeshacer={c.deshacer} />
     </>
   );
 }

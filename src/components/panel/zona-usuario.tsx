@@ -1,36 +1,22 @@
-import { Bell } from "lucide-react";
 import Link from "next/link";
 import { cn } from "@/lib/cn";
 
-type ZonaUsuarioProps = { nombre: string; avisos: number; className?: string };
-
-const tocable = "relative flex size-12 items-center justify-center rounded-button transition-colors hover:bg-sunken active:scale-98";
+type ZonaUsuarioProps = { nombre: string; className?: string };
 
 /**
- * Zona de cuenta: avisos + avatar. Cada uno ocupa 48 × 48 aunque el ícono sea chico (Botón ícono).
- * El punto de avisos va en spark (regla del 1 %, decisión 0022) con un destello breve, y siempre
- * acompañado de texto para lector de pantalla.
+ * Zona de cuenta: el avatar lleva a Configuración (Pagos, Entregas y Cuenta). Ocupa 48 × 48 aunque
+ * el círculo sea chico (Botón ícono). Sin campana de avisos (decisión 0027).
  */
-export function ZonaUsuario({ nombre, avisos, className }: ZonaUsuarioProps) {
+export function ZonaUsuario({ nombre, className }: ZonaUsuarioProps) {
   return (
-    <div className={cn("flex items-center gap-1", className)}>
-      <Link href="/panel/avisos" className={tocable} aria-label={avisos ? `Avisos: ${avisos} sin leer` : "Avisos"}>
-        <Bell aria-hidden strokeWidth={1.6} className="size-6 text-icon" />
-        {avisos > 0 && (
-          <span aria-hidden className="absolute top-3 right-3 flex size-2">
-            <span className="absolute inset-0 rounded-full bg-spark motion-safe:animate-spark" />
-            <span className="relative size-2 rounded-full bg-spark ring-2 ring-surface" />
-          </span>
-        )}
-      </Link>
-      <Link href="/panel/configuracion" className={tocable} aria-label={`Tu cuenta, ${nombre}`}>
-        <span
-          aria-hidden
-          className="flex size-9 items-center justify-center rounded-full bg-selected font-display-title text-body-sm text-on-selected shadow-card"
-        >
-          {nombre.charAt(0).toUpperCase()}
-        </span>
-      </Link>
-    </div>
+    <Link
+      href="/panel/configuracion"
+      aria-label={`Tu cuenta, ${nombre}`}
+      className={cn("relative flex size-12 items-center justify-center rounded-button transition-colors hover:bg-sunken active:scale-98", className)}
+    >
+      <span aria-hidden className="flex size-9 items-center justify-center rounded-full bg-selected font-display-title text-body-sm text-on-selected shadow-card">
+        {nombre.charAt(0).toUpperCase()}
+      </span>
+    </Link>
   );
 }

@@ -12,5 +12,6 @@ Una decisión por archivo: contexto, decisión y consecuencias. Las anteriores a
 | 0024 | [Calibrado: radios de 6–8 px, sombra nítida y CTA cobalto](0024-calibrado.md) | **Estándar del panel** |
 | 0025 | [Tema Neutral: Outfit y radios de 6–8 px](0025-tema-neutral.md) | Vigente |
 | 0026 | [El código es la fuente de verdad](0026-el-codigo-manda.md) | Vigente |
+| 0027 | [Limpieza del Core Loop: qué se queda, qué se va y qué se ajusta](0027-limpieza-core-loop.md) | Vigente |
 
 Para una decisión nueva: copia la estructura de 0026, usa el número siguiente y súmala a esta tabla.

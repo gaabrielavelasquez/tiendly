@@ -12,10 +12,10 @@ import { ZonaUsuario } from "./zona-usuario";
 const transicion = { duration: motionTokens.durationFast, ease: [...motionTokens.easing] as [number, number, number, number] };
 const iconButton = "flex size-12 items-center justify-center rounded-button text-icon transition-colors hover:bg-sunken";
 
-type MobileTopbarProps = { nombreTienda: string; duena: string; avisos: number };
+type MobileTopbarProps = { nombreTienda: string; duena: string };
 
 /** Barra superior del panel en móvil: menú, nombre de la tienda y zona de cuenta. El menú se abre como panel lateral. */
-export function MobileTopbar({ nombreTienda, duena, avisos }: MobileTopbarProps) {
+export function MobileTopbar({ nombreTienda, duena }: MobileTopbarProps) {
   const [abierto, setAbierto] = useState(false);
   const reduce = useReducedMotion();
   const cerrar = () => setAbierto(false);
@@ -34,7 +34,7 @@ export function MobileTopbar({ nombreTienda, duena, avisos }: MobileTopbarProps)
           <Menu aria-hidden strokeWidth={1.6} className="size-6" />
         </Pressable>
         <p className="flex-1 truncate text-body font-bold text-fg">{nombreTienda}</p>
-        <ZonaUsuario nombre={duena} avisos={avisos} />
+        <ZonaUsuario nombre={duena} />
       </header>
 
       <AnimatePresence>
