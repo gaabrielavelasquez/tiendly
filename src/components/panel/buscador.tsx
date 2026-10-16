@@ -2,12 +2,20 @@
 
 import { Search, X } from "lucide-react";
 import { cn } from "@/lib/cn";
-import { useAtajoBusqueda } from "../hooks/use-atajo-busqueda";
+import { useAtajoBusqueda } from "./use-atajo-busqueda";
 
-type BuscadorProps = { valor: string; onCambio: (v: string) => void; className?: string };
+type BuscadorProps = {
+  id: string;
+  /** Etiqueta para lector de pantalla (termina sin punto: es un nombre). */
+  etiqueta: string;
+  placeholder: string;
+  valor: string;
+  onCambio: (v: string) => void;
+  className?: string;
+};
 
-/** Buscador por nombre o SKU. ⌘K / Ctrl K lo enfoca desde cualquier parte de la página. */
-export function Buscador({ valor, onCambio, className }: BuscadorProps) {
+/** Buscador de listas del panel. ⌘K / Ctrl K lo enfoca desde cualquier parte de la página. */
+export function Buscador({ id, etiqueta, placeholder, valor, onCambio, className }: BuscadorProps) {
   const { ref, pista } = useAtajoBusqueda<HTMLInputElement>();
   return (
     <div
@@ -18,17 +26,17 @@ export function Buscador({ valor, onCambio, className }: BuscadorProps) {
       )}
     >
       <Search aria-hidden strokeWidth={1.6} className="size-4 shrink-0 text-icon" />
-      <label htmlFor="buscar-productos" className="sr-only">
-        Buscar productos por nombre o SKU
+      <label htmlFor={id} className="sr-only">
+        {etiqueta}
       </label>
       <input
         ref={ref}
-        id="buscar-productos"
+        id={id}
         type="search"
         value={valor}
         onChange={(e) => onCambio(e.target.value)}
         onKeyDown={(e) => e.key === "Escape" && onCambio("")}
-        placeholder="Buscar por nombre o SKU"
+        placeholder={placeholder}
         autoComplete="off"
         className="h-full min-w-0 flex-1 bg-transparent text-body text-fg outline-none placeholder:text-fg-tertiary [&::-webkit-search-cancel-button]:hidden"
       />

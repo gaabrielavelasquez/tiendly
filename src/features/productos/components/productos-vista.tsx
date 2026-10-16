@@ -1,17 +1,22 @@
 "use client";
 
 import { PackageOpen, SearchX } from "lucide-react";
-import { NuevoProducto, PanelHeader } from "@/components/panel";
+import { Buscador, FiltrosRapidos, NuevoProducto, PanelHeader, type OpcionFiltro } from "@/components/panel";
 import { Button, Card, EmptyState } from "@/components/ui";
 import { plural } from "@/lib/formato";
 import type { Filtro, Producto } from "../types";
 import { useCatalogo } from "../hooks/use-catalogo";
 import { AvisoDeshacer } from "./aviso-deshacer";
 import { BarraSeleccion } from "./barra-seleccion";
-import { Buscador } from "./buscador";
-import { Filtros } from "./filtros";
 import { ListaMovil } from "./lista-movil";
 import { TablaProductos } from "./tabla-productos";
+
+const FILTROS: OpcionFiltro<Filtro>[] = [
+  { id: "todos", label: "Todos" },
+  { id: "activos", label: "Activos" },
+  { id: "bajo-stock", label: "Bajo stock" },
+  { id: "agotados", label: "Agotados" },
+];
 
 type VistaProps = { productos: Producto[]; filtroInicial: Filtro };
 
@@ -41,8 +46,15 @@ export function ProductosVista({ productos, filtroInicial }: VistaProps) {
       ) : (
         <Card className="overflow-hidden p-0 lg:p-0">
           <div className="flex flex-col gap-2 border-b border-line-subtle px-4 pt-4 pb-2 lg:flex-row-reverse lg:items-center lg:justify-between lg:px-6 lg:py-3">
-            <Buscador valor={c.busqueda} onCambio={c.setBusqueda} className="lg:w-80" />
-            <Filtros valor={c.filtro} conteos={c.conteos} onCambio={c.setFiltro} />
+            <Buscador
+              id="buscar-productos"
+              etiqueta="Buscar productos por nombre o SKU"
+              placeholder="Buscar por nombre o SKU"
+              valor={c.busqueda}
+              onCambio={c.setBusqueda}
+              className="lg:w-80"
+            />
+            <FiltrosRapidos etiqueta="Filtrar productos" opciones={FILTROS} valor={c.filtro} conteos={c.conteos} onCambio={c.setFiltro} />
           </div>
           <BarraSeleccion cantidad={c.seleccionVisible.length} onArchivar={() => c.archivar(c.seleccionVisible)} onLimpiar={c.limpiarSeleccion} />
           {c.visibles.length === 0 ? (
