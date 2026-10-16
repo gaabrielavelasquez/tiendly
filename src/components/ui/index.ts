@@ -4,6 +4,7 @@ export { buttonVariants } from "./button-variants";
 export { Card } from "./card";
 export { Checkbox } from "./checkbox";
 export { Chip } from "./chip";
+export { Collapsible } from "./collapsible";
 export { EmptyState } from "./empty-state";
 export { Field } from "./field";
 export { Skeleton } from "./skeleton";

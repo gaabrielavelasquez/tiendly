@@ -53,7 +53,8 @@ export function useFormularioProducto(inicial: FormProducto) {
       const primero = (["nombre", "precio", "precioAntes", "variantes"] as const).find((k) => e[k]);
       requestAnimationFrame(() => {
         // En la tabla de variantes, al precio que está mal (no a la primera fila).
-        const destino = primero === "variantes" ? document.querySelector<HTMLElement>("[data-error-variante]") : null;
+        // Solo el visible: en móvil es el acordeón; desde 640 px, la planilla.
+        const destino = primero === "variantes" ? [...document.querySelectorAll<HTMLElement>("[data-error-variante]")].find((el) => el.offsetParent) : null;
         (destino ?? document.getElementById(`campo-${primero}`))?.focus();
       });
       return cantidad;

@@ -39,3 +39,14 @@ export function aCsv(pedidos: Pedido[]) {
   ]);
   return "﻿" + [cabecera, ...filas].map((f) => f.map(celda).join(",")).join("\r\n");
 }
+
+export type GrupoDia = "Hoy" | "Ayer" | "Esta semana" | "Antes";
+
+/** Grupo de la lista móvil según el día en Lima: Hoy, Ayer, Esta semana (últimos 7 días) o Antes. */
+export function grupoDia(iso: string, ahora: string): GrupoDia {
+  const base = new Date(ahora).getTime();
+  const dia = enLima(new Date(iso).getTime()).dia;
+  if (dia === enLima(base).dia) return "Hoy";
+  if (dia === enLima(base - 86400000).dia) return "Ayer";
+  return base - new Date(iso).getTime() < 7 * 86400000 ? "Esta semana" : "Antes";
+}
