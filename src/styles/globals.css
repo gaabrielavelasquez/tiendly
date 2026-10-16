@@ -196,3 +196,35 @@
     filter: none;
   }
 }
+
+/*
+  Profundidad estilo Luma, solo con tokens. Sin blur: sobre degradados suaves el desenfoque
+  no se nota y no hay token de blur en DESIGN.md.
+  - glass: superficie translúcida con filo de luz (effect/highlight) y sombra de dos capas.
+  - orb-*: halos radiales que se desvanecen a transparente (para fondos vivos).
+*/
+@utility glass {
+  background-color: color-mix(in srgb, var(--tl-bg-surface) 72%, transparent);
+  border: var(--tl-stroke-thin) solid color-mix(in srgb, var(--tl-bg-surface) 85%, transparent);
+  box-shadow: inset 0 var(--tl-stroke-thin) 0 var(--tl-effect-highlight), var(--tl-elevation-low);
+}
+@utility bg-orb-sky {
+  background-image: radial-gradient(closest-side, var(--tl-glow-sky-from), transparent);
+}
+@utility bg-orb-lilac {
+  background-image: radial-gradient(closest-side, var(--tl-gradient-highlight-mid), transparent);
+}
+@utility bg-orb-warm {
+  background-image: radial-gradient(closest-side, var(--tl-glow-warm), transparent);
+}
+
+/*
+  Barras del gráfico: píldoras con degradado vertical suave del mismo token
+  (chart/bar o indicator/fill) hacia la superficie. Nunca cobalto (decisión 0019).
+*/
+@utility bg-bar {
+  background-image: linear-gradient(to top, var(--tl-chart-bar), color-mix(in srgb, var(--tl-chart-bar) 55%, var(--tl-bg-surface)));
+}
+@utility bg-bar-today {
+  background-image: linear-gradient(to top, var(--tl-indicator-fill), color-mix(in srgb, var(--tl-indicator-fill) 70%, var(--tl-bg-surface)));
+}

@@ -1,5 +1,5 @@
 import type { InicioData, Paso } from "../types";
-import { fechaCorta } from "./format";
+import { fechaCorta, hora } from "./format";
 
 // Reglas de negocio de Inicio (decisión 0012). Funciones puras: fáciles de probar y de mover al backend.
 
@@ -9,7 +9,15 @@ export function resumenHoy(d: InicioData) {
   return { ventas: pagados.reduce((s, p) => s + p.monto, 0), pedidos: pagados.length };
 }
 
-export type Pendiente = { id: string; tono: "success" | "warning" | "error"; titulo: string; detalle: string; href: string };
+export type Pendiente = {
+  id: "por-enviar" | "reservas" | "agotados";
+  tono: "info" | "warning" | "error";
+  titulo: string;
+  detalle: string;
+  href: string;
+  /** Dato urgente que va en un badge (p. ej. la hora en que vence la primera reserva). */
+  etiqueta?: string;
+};
 
 const plural = (n: number, uno: string, varios: string) => `${n} ${n === 1 ? uno : varios}`;
 
@@ -31,19 +39,21 @@ export function pendientes(d: InicioData): Pendiente[] {
     const delivery = porEnviar.filter((p) => p.entrega === "delivery").length;
     filas.push({
       id: "por-enviar",
-      tono: "success",
+      tono: "info",
       titulo: plural(porEnviar.length, "pedido por enviar", "pedidos por enviar"),
       detalle: detalleEntregas(delivery, porEnviar.length - delivery),
       href: "/panel/pedidos?estado=por-enviar",
     });
   }
   if (reservas.length) {
+    const primera = reservas.map((r) => r.venceEl).sort()[0];
     filas.push({
       id: "reservas",
       tono: "warning",
       titulo: plural(reservas.length, "reserva vence hoy", "reservas vencen hoy"),
       detalle: "Revisa si ya te pagaron por Yape.",
       href: "/panel/pedidos?estado=pendientes",
+      etiqueta: `Vence ${hora(primera)}`,
     });
   }
   if (agotados.length) {
@@ -61,14 +71,14 @@ export function pendientes(d: InicioData): Pendiente[] {
 
 export type Comparacion = { direccion: "sube" | "baja" | "igual"; texto: string } | null;
 
-/** Comparación con la semana pasada: flecha + texto, nunca solo color. Sin base, no se muestra. */
+/** Comparación con la semana pasada (la UI suma el ícono de tendencia: nunca solo color). Sin base, no se muestra. */
 export function compararSemana(total: number, pasada: number): Comparacion {
   if (pasada <= 0) return null;
   const pct = Math.round(((total - pasada) / pasada) * 100);
   if (pct === 0) return { direccion: "igual", texto: "Igual que la semana pasada" };
   return pct > 0
-    ? { direccion: "sube", texto: `↑ ${pct} % más que la semana pasada` }
-    : { direccion: "baja", texto: `↓ ${Math.abs(pct)} % menos que la semana pasada` };
+    ? { direccion: "sube", texto: `${pct} % más que la semana pasada` }
+    : { direccion: "baja", texto: `${Math.abs(pct)} % menos que la semana pasada` };
 }
 
 export function totalSemana(d: InicioData) {
