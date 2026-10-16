@@ -16,3 +16,7 @@ Una carpeta por módulo aprobado en Figma. Cada una tiene `components/` (UI de m
 | `onboarding/` | 10 · Onboarding | 0013 |
 
 Toda vista lleva sus 4 estados: carga (`Skeleton`), vacío (`EmptyState`), con datos y error (CLAUDE.md §5).
+
+## Datos simulados (hasta tener backend)
+
+- **Onboarding:** cualquier código de 4 dígitos pasa; `0000` muestra el error. Los links `tienda`, `moda`, `zapatos`, `belleza`, `tiendly` y `admin` figuran como ocupados, para probar la sugerencia. El estado se guarda en `sessionStorage`.
