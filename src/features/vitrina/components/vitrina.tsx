@@ -13,8 +13,8 @@ import { TarjetaProducto } from "./tarjeta-producto";
 type VitrinaProps = { datos: DatosVitrina; categoriaInicial: Categoria | "todos" };
 
 /**
- * Catálogo público, mobile-first: cabecera fija, categorías que se desplazan y grilla de 2 columnas
- * (3 en tablet, 4 en desktop). La categoría va en ?categoria= para poder compartir el link.
+ * Catálogo público (Figma, tema Editorial), mobile-first: categorías en pestañas (móvil) o en la cabecera
+ * (desktop) y grilla de 2 columnas (3 en tablet, 4 en desktop). La categoría va en ?categoria=.
  */
 export function Vitrina({ datos, categoriaInicial }: VitrinaProps) {
   const [categoria, setCategoriaState] = useState(categoriaInicial);
@@ -33,7 +33,7 @@ export function Vitrina({ datos, categoriaInicial }: VitrinaProps) {
 
   return (
     <div className="flex min-h-dvh flex-col">
-      <CabeceraTienda nombre={datos.tienda.nombre} slug={datos.tienda.slug} />
+      <CabeceraTienda nombre={datos.tienda.nombre} slug={datos.tienda.slug} categorias={datos.categorias} activa={categoria} onCategoria={setCategoria} />
       <main className="mx-auto flex w-full max-w-6xl flex-1 flex-col px-4 pb-10">
         {datos.productos.length === 0 ? (
           <EmptyState icon={PackageOpen} title="Muy pronto" description={`${datos.tienda.nombre} está preparando su catálogo. Vuelve en unos días.`} />
@@ -49,7 +49,7 @@ export function Vitrina({ datos, categoriaInicial }: VitrinaProps) {
                 action={<Button variant="secondary" onClick={() => setCategoria("todos")}>Ver todos</Button>}
               />
             ) : (
-              <ul className="grid grid-cols-2 gap-x-3 gap-y-6 pt-2 sm:grid-cols-3 lg:grid-cols-4 lg:gap-x-6 lg:gap-y-10">
+              <ul className="grid grid-cols-2 gap-x-3 gap-y-8 pt-5 sm:grid-cols-3 lg:grid-cols-4 lg:gap-x-6 lg:gap-y-12 lg:pt-10">
                 {visibles.map((p, i) => (
                   <li key={p.id}>
                     <TarjetaProducto p={p} tienda={datos.tienda.slug} prioridad={i < 4} />
@@ -60,7 +60,7 @@ export function Vitrina({ datos, categoriaInicial }: VitrinaProps) {
           </>
         )}
       </main>
-      <PieTienda nombre={datos.tienda.nombre} />
+      <PieTienda nombre={datos.tienda.nombre} slug={datos.tienda.slug} celular={datos.tienda.celular} categorias={datos.categorias} />
     </div>
   );
 }

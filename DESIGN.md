@@ -98,8 +98,10 @@ La identidad visual de Tiendly combina **velocidad ultra limpia**, **lenguaje mo
 1. **Neutral:** Minimalista, directo y enfocado en el producto (estilo Uniqlo / GOAT).
    - *Decisión 0025 (16-oct-2026):* titulares en **Outfit SemiBold** (antes Bricolage Grotesque Bold), fotos y tarjetas de 8 px, chips y botones de 6 px. Acento y selección en negro carbón. La UI se aparta: la foto manda.
    - Vitrina mobile-first: cabecera fija mínima (nombre al centro, carrito a la derecha con punto spark si hay productos), categorías en fila desplazable, grilla de 2 columnas (3 en tablet, 4 en desktop) con fotos 4:5 y filo de 1 px al 5 %. Sin botón "agregar" en la grilla: toda la tarjeta lleva al producto.
-   - El crédito "Hecho con tiendly" usa el cobalto de la marca (`color-tiendly`), que no cambia con el tema.
+   - El crédito "Hecho con Tiendly" va atenuado en el pie, como en el Figma de la vitrina (el token `color-tiendly` queda disponible si se quiere en cobalto).
 2. **Editorial:** Refinado, tipo revista o catálogo D2C con tipografías de alto contraste (estilo Zara / SKIMS).
+   - *Referencia en Figma (16-oct-2026), la usa Heather:* logo en serif a la izquierda y categorías al centro; títulos en Instrument Serif; fotos sobre blanco con borde de 1 px y esquinas a 0; color con muestras redondas y talla en botones cuadrados (agotadas deshabilitadas); CTA negro "Agregar al carrito" + "Consultar por WhatsApp"; envío, pago y cambios; "Sobre el modelo" y "También te puede gustar"; pie con logo en círculo.
+   - El CTA de cada tema sale de su acento (`bg-cta` arma el degradado con `accent/base` → `accent/base-deep` en el elemento): negro en Editorial y Neutral, cobalto en el panel.
 3. **Suave:** Cálido, cercano y acogedor con bordes redondeados y tonos crema (estilo Blank Street / Shop).
 
 ### Plan Pro (Monetización & Personalización Avanzada)

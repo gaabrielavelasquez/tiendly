@@ -138,8 +138,13 @@
 }
 
 /* Utilidades que Tailwind no puede expresar con una sola variable */
+/*
+  El degradado del CTA se arma aquí con las variables del acento (no con --tl-gradient-primary):
+  esa variable se resuelve una sola vez en :root con el cobalto, y los temas de tienda no la
+  recalculan. Así cada tema pinta su propio CTA (negro en Editorial y Neutral, cobalto en el panel).
+*/
 @utility bg-cta {
-  background-image: var(--tl-gradient-primary);
+  background-image: linear-gradient(135deg, var(--tl-accent-base) 0%, var(--tl-accent-base-deep) 100%);
 }
 @utility bg-hero {
   background-image: var(--tl-gradient-hero);

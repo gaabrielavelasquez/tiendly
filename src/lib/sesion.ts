@@ -1,4 +1,5 @@
 // Sesión simulada del panel hasta tener backend: la tienda, su dueña y los avisos sin leer.
-export const tiendaActual = { nombre: "Heather", slug: "heather", duena: "Cecilia" };
+/** `celularVentas`: el WhatsApp al que escriben los clientes desde la vitrina. */
+export const tiendaActual = { nombre: "Heather", slug: "heather", duena: "Cecilia", celularVentas: "987654321" };
 
 export const avisosSinLeer = 2;

@@ -1,6 +1,7 @@
 import { obtenerProductos } from "@/features/productos/lib/mock";
-import { nivelStock } from "@/features/productos/lib/reglas";
-import type { Categoria, Producto } from "@/features/productos/types";
+import { nivelStock, stockTotal } from "@/features/productos/lib/reglas";
+import type { Categoria, Producto, Variante } from "@/features/productos/types";
+import { DETALLE, HEX_COLOR } from "./contenido";
 import { tiendaActual } from "@/lib/sesion";
 
 // Vitrina pública: lo que ve el cliente. Lee el mismo catálogo que el panel, pero solo lo publicado.
@@ -14,11 +15,17 @@ export type ProductoVitrina = {
   imagen?: string;
   categorias: Categoria[];
   agotado: boolean;
+  /** Colores en orden, con su muestra (dato del producto). */
+  colores: { nombre: string; hex?: string }[];
+  stock: number;
 };
 
-export type Vitrina = { tienda: { nombre: string; slug: string }; productos: ProductoVitrina[]; categorias: { id: Categoria; label: string }[] };
+/** Lo que agrega la página de producto. */
+export type FichaProducto = ProductoVitrina & { variantes: Variante[]; tallas: string[]; corto?: string; sobre?: string };
 
-const LABEL: Record<Categoria, string> = { ropa: "Ropa", calzado: "Calzado", accesorios: "Accesorios", joyeria: "Joyería" };
+export type Vitrina = { tienda: { nombre: string; slug: string; celular: string }; productos: ProductoVitrina[]; categorias: { id: Categoria; label: string }[] };
+
+export const LABEL: Record<Categoria, string> = { ropa: "Ropa", calzado: "Calzado", accesorios: "Accesorios", joyeria: "Joyería" };
 
 /** "Vestido Chloé" → "vestido-chloe" (para el link del producto). */
 export const slugProducto = (nombre: string) =>
@@ -36,7 +43,32 @@ const aVitrina = (p: Producto): ProductoVitrina => ({
   imagen: fotoVitrina(p.imagen),
   categorias: p.categorias,
   agotado: nivelStock(p) === "agotado",
+  colores: [...new Set(p.variantes.map((x) => x.color))].map((nombre) => ({ nombre, hex: HEX_COLOR[nombre] })),
+  stock: stockTotal(p),
 });
+
+const aFicha = (p: Producto): FichaProducto => ({
+  ...aVitrina(p),
+  variantes: p.variantes,
+  tallas: [...new Set(p.variantes.map((x) => x.talla))],
+  corto: DETALLE[p.id]?.corto,
+  sobre: DETALLE[p.id]?.sobre,
+});
+
+/**
+ * Página de producto: la ficha y 4 relacionados (primero de la misma categoría, sin agotados).
+ * `null` si la tienda o el producto no existen, o si el producto no está publicado.
+ */
+export async function obtenerFicha(tienda: string, slug: string) {
+  if (tienda !== tiendaActual.slug) return null;
+  const activos = (await obtenerProductos("catalogo")).filter((p) => p.estado === "activo");
+  const p = activos.find((x) => slugProducto(x.nombre) === slug);
+  if (!p) return null;
+  const otros = activos.filter((x) => x.id !== p.id && nivelStock(x) !== "agotado");
+  const misma = otros.filter((x) => x.categorias.some((c) => p.categorias.includes(c)));
+  const relacionados = [...misma, ...otros.filter((x) => !misma.includes(x))].slice(0, 4).map(aVitrina);
+  return { tienda: { nombre: tiendaActual.nombre, slug: tienda, celular: tiendaActual.celularVentas }, ficha: aFicha(p), relacionados };
+}
 
 /**
  * Datos de la vitrina de una tienda. `null` si la tienda no existe (404).
@@ -51,7 +83,7 @@ export async function obtenerVitrina(slug: string): Promise<Vitrina | null> {
     .sort((a, b) => Number(a.agotado) - Number(b.agotado));
   const presentes = new Set(productos.flatMap((p) => p.categorias));
   const categorias = (Object.keys(LABEL) as Categoria[]).filter((c) => presentes.has(c)).map((id) => ({ id, label: LABEL[id] }));
-  return { tienda: { nombre: tiendaActual.nombre, slug }, productos, categorias };
+  return { tienda: { nombre: tiendaActual.nombre, slug, celular: tiendaActual.celularVentas }, productos, categorias };
 }
 
 export const leerCategoria = (v: string | string[] | undefined, validas: Categoria[]): Categoria | "todos" => {
