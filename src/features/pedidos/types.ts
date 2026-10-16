@@ -20,3 +20,24 @@ export type Pedido = {
 };
 
 export type Filtro = "todos" | "para-atender" | "por-cobrar" | "reservas" | "por-enviar";
+
+/** Una línea del pedido: un producto en una variante, con su cantidad y precio unitario. */
+export type ItemPedido = { producto: string; variante: string; cantidad: number; precio: number; foto?: string };
+
+/** Lo que solo se ve en el detalle de un pedido. */
+export type DetallePedido = {
+  items: ItemPedido[];
+  /** Costo de delivery; 0 en recojo. */
+  envio: number;
+  email?: string;
+  direccion?: string;
+  referencia?: string;
+  /** Momentos del historial (ISO). El de creación es `Pedido.creadoEl`. */
+  pagadoEl?: string;
+  enviadoEl?: string;
+  entregadoEl?: string;
+  canceladoEl?: string;
+  /** Quién lo canceló: la tienda desde el panel o la reserva de 24 h que venció. */
+  cancelacion?: "tienda" | "reserva-vencida";
+  nota?: string;
+};

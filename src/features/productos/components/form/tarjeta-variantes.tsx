@@ -5,7 +5,7 @@ import { useState } from "react";
 import { COLORES_SUGERIDOS, TALLAS_CALZADO, TALLAS_ROPA, type Errores, type FormProducto, type VarianteForm } from "../../lib/formulario";
 import { ChipsOpciones } from "./chips-opciones";
 import { TablaVariantes } from "./tabla-variantes";
-import { Tarjeta } from "./tarjeta";
+import { TarjetaSeccion as Tarjeta } from "@/components/panel";
 
 type VariantesProps = {
   form: FormProducto;

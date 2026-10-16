@@ -14,7 +14,7 @@ import { EditorDescripcion } from "./editor-descripcion";
 import { TarjetaMedia } from "./tarjeta-media";
 import { TarjetaPrecios } from "./tarjeta-precios";
 import { TarjetaVariantes } from "./tarjeta-variantes";
-import { Tarjeta } from "./tarjeta";
+import { TarjetaSeccion as Tarjeta } from "@/components/panel";
 import { TarjetaEstado, TarjetaOrganizacion } from "./tarjetas-laterales";
 import { Field } from "@/components/ui";
 

@@ -5,4 +5,5 @@ export { NuevoProducto } from "./nuevo-producto";
 export { PanelHeader } from "./panel-header";
 export { PanelMain } from "./panel-main";
 export { Sidebar } from "./sidebar";
+export { TarjetaSeccion } from "./tarjeta-seccion";
 export { ZonaUsuario } from "./zona-usuario";

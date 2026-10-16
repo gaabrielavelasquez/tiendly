@@ -6,7 +6,7 @@ import { useRef, useState } from "react";
 import { Badge } from "@/components/ui";
 import { cn } from "@/lib/cn";
 import type { ImagenForm } from "../../lib/formulario";
-import { Tarjeta } from "./tarjeta";
+import { TarjetaSeccion as Tarjeta } from "@/components/panel";
 
 const MAX_MB = 5;
 

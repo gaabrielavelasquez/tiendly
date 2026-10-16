@@ -1,6 +1,6 @@
 import { Field } from "@/components/ui";
 import { descuento, type Errores, type FormProducto } from "../../lib/formulario";
-import { Tarjeta } from "./tarjeta";
+import { TarjetaSeccion as Tarjeta } from "@/components/panel";
 
 type PreciosProps = { form: FormProducto; errores: Errores; onCambio: (k: "precio" | "precioAntes", v: string) => void };
 

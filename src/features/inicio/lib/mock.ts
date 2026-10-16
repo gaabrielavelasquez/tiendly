@@ -41,7 +41,7 @@ const ACTIVIDAD: InicioData = {
   pedidosHoy: [
     { monto: 420, pagado: true, entrega: "delivery", enviado: false },
     { monto: 380, pagado: true, entrega: "delivery", enviado: false },
-    { monto: 290, pagado: true, entrega: "recojo", enviado: false },
+    { monto: 288, pagado: true, entrega: "recojo", enviado: false },
     { monto: 230, pagado: true, entrega: "delivery", enviado: true },
     { monto: 310, pagado: false, entrega: "delivery", enviado: false },
   ],

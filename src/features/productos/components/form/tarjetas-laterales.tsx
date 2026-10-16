@@ -3,7 +3,7 @@
 import { Switch } from "@/components/ui";
 import type { Categoria } from "../../types";
 import { ChipsOpciones } from "./chips-opciones";
-import { Tarjeta } from "./tarjeta";
+import { TarjetaSeccion as Tarjeta } from "@/components/panel";
 
 const CATEGORIAS: { id: Categoria; label: string }[] = [
   { id: "ropa", label: "Ropa" },
