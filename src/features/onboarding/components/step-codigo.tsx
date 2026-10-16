@@ -3,6 +3,7 @@
 import { ChevronLeft } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import { Pressable } from "@/components/motion/pressable";
 import { Button } from "@/components/ui";
 import { OtpInput } from "./otp-input";
 import { useCountdown } from "../hooks/use-countdown";
@@ -44,14 +45,14 @@ export function StepCodigo() {
 
   return (
     <div className="flex flex-1 flex-col gap-6">
-      <button
+      <Pressable
         type="button"
         aria-label="Volver"
         onClick={() => set({ paso: "registro" })}
-        className="-ml-3 flex size-12 items-center justify-center rounded-full text-icon hover:bg-sunken"
+        className="-ml-3 flex size-12 items-center justify-center rounded-full text-icon transition-colors hover:bg-sunken"
       >
-        <ChevronLeft aria-hidden className="size-6" />
-      </button>
+        <ChevronLeft aria-hidden strokeWidth={1.6} className="size-6" />
+      </Pressable>
       <header className="flex flex-col gap-2">
         <h1 className="font-display-hero text-h1">Escribe el código</h1>
         <p className="text-body text-fg-secondary">

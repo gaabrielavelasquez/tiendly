@@ -24,8 +24,9 @@ export function Field({ label, hint, error, prefix, className, id, ...rest }: Fi
       </label>
       <div
         className={cn(
-          "flex h-12 items-center gap-2 rounded-button border bg-surface px-3 transition-colors",
-          "focus-within:outline-2 focus-within:outline-offset-2 focus-within:outline-focus",
+          "flex h-12 items-center gap-2 rounded-button border bg-surface px-3 transition",
+          // El anillo siempre existe (transparente) para que el foco se funda en 150 ms en vez de aparecer de golpe.
+          "outline-2 outline-offset-2 outline-transparent focus-within:outline-focus",
           error ? "border-error" : "border-line-strong",
         )}
       >

@@ -165,8 +165,12 @@
 }
 
 /*
-  Link de texto (cobalto, decisión 0019). Hover: subrayado suave que se completa
-  y el color pasa al cobalto activo. 150 ms ease-out.
+  Link de texto (cobalto, decisión 0019). En reposo ya es el cobalto activo (accent/text = accent/hover,
+  6.70:1 sobre blanco), así que el hover no puede depender del color:
+  - hover y foco de teclado: el subrayado pasa del 40 % a sólido, se engrosa y el texto
+    se oscurece apenas (brightness), sin bajar el contraste;
+  - al presionar: accent/pressed.
+  Todo en 150 ms ease-out (motion.duration.fast + motion.easing.standard).
 */
 @utility link-text {
   color: var(--tl-accent-text);
@@ -175,12 +179,20 @@
   text-decoration-thickness: var(--tl-stroke-thin);
   text-underline-offset: var(--tl-space-1);
   text-decoration-color: color-mix(in srgb, var(--tl-accent-text) 40%, transparent);
-  transition: color var(--tl-motion-duration-fast) var(--tl-motion-easing-standard),
-    text-decoration-color var(--tl-motion-duration-fast) var(--tl-motion-easing-standard),
-    text-decoration-thickness var(--tl-motion-duration-fast) var(--tl-motion-easing-standard);
-  &:hover {
+  border-radius: var(--tl-radius-sm);
+  transition-property: color, filter, text-decoration-color, text-decoration-thickness;
+  transition-duration: var(--tl-motion-duration-fast);
+  transition-timing-function: var(--tl-motion-easing-standard);
+  &:hover,
+  &:focus-visible {
     color: var(--tl-accent-hover);
     text-decoration-color: var(--tl-accent-hover);
     text-decoration-thickness: var(--tl-stroke-thick);
+    filter: brightness(0.88);
+  }
+  &:active {
+    color: var(--tl-accent-pressed);
+    text-decoration-color: var(--tl-accent-pressed);
+    filter: none;
   }
 }
