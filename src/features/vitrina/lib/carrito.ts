@@ -24,3 +24,11 @@ export function agregarAlCarrito(slug: string, item: Omit<ItemCarrito, "cantidad
   } catch {}
   window.dispatchEvent(new Event(EVENTO_CARRITO));
 }
+
+/** Reemplaza el carrito completo (cambiar cantidad, quitar o deshacer) y avisa a la cabecera. */
+export function guardarCarrito(slug: string, items: ItemCarrito[]) {
+  try {
+    localStorage.setItem(clave(slug), JSON.stringify(items));
+  } catch {}
+  window.dispatchEvent(new Event(EVENTO_CARRITO));
+}
