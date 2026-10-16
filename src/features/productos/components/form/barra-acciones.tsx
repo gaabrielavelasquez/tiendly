@@ -2,7 +2,9 @@
 
 import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
+import { ZonaUsuario } from "@/components/panel";
 import { Button, buttonVariants } from "@/components/ui";
+import { avisosSinLeer, tiendaActual } from "@/lib/sesion";
 import { cn } from "@/lib/cn";
 
 type BarraProps = { titulo: string; sinGuardar: boolean; guardando: boolean };
@@ -30,6 +32,9 @@ export function BarraAcciones({ titulo, sinGuardar, guardando }: BarraProps) {
           <Button type="submit" loading={guardando}>
             {guardando ? "Guardando…" : "Guardar producto"}
           </Button>
+          {/* Misma zona de cuenta que el resto del panel (avisos con spark + avatar). */}
+          <span aria-hidden className="mx-2 h-6 w-px bg-line-subtle" />
+          <ZonaUsuario nombre={tiendaActual.duena} avisos={avisosSinLeer} />
         </div>
       </div>
 

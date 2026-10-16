@@ -2,6 +2,7 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/cn";
 
 // Badge compacto: 24 px de alto, pill (decisión 0018). Sin cobalto (decisión 0019).
+// `spark` solo para Nuevo / Pro (regla del 1 %, decisión 0022): texto spark/text sobre spark/subtle, accesible.
 const badge = cva("inline-flex h-6 items-center gap-1 rounded-chip px-2 text-label font-semibold whitespace-nowrap", {
   variants: {
     tone: {
@@ -11,6 +12,7 @@ const badge = cva("inline-flex h-6 items-center gap-1 rounded-chip px-2 text-lab
       warning: "border border-warning-border bg-warning-surface text-warning",
       error: "border border-error-border bg-error-surface text-error",
       info: "border border-info-border bg-info-surface text-info",
+      spark: "border border-spark/30 bg-spark-subtle text-spark-text",
     },
   },
   defaultVariants: { tone: "neutral" },

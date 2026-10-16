@@ -34,6 +34,9 @@
   --tl-color-amber-500: #CE8A2A;
   --tl-color-amber-700: #9A6200;
   --tl-color-amber-900: #4E2F00;
+  --tl-color-orange-50: #FFF7ED;
+  --tl-color-orange-600: #EA580C;
+  --tl-color-orange-700: #C2410C;
   --tl-color-red-100: #FFE0E1;
   --tl-color-red-300: #FFA4A9;
   --tl-color-red-500: #FF4967;
@@ -194,6 +197,9 @@
   --tl-glow-sky-to: var(--tl-color-cobalt-50);
   --tl-glow-warm: var(--tl-color-warm-glow);
   --tl-indicator-fill: var(--tl-color-neutral-1000);
+  --tl-spark-base: var(--tl-color-orange-600);
+  --tl-spark-subtle: var(--tl-color-orange-50);
+  --tl-spark-text: var(--tl-color-orange-700);
   --tl-selection-bg: var(--tl-color-neutral-1000);
   --tl-selection-fg: var(--tl-color-neutral-0);
   --tl-selection-border: var(--tl-color-neutral-1000);

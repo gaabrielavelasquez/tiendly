@@ -15,6 +15,7 @@ La identidad visual de Tiendly combina **velocidad ultra limpia**, **lenguaje mo
   - `color.brand.glow-sky`: halo difuminado del cobalto (16 %) hacia celeste pastel `#EFF6FF`.
   - `color.brand.glow-warm`: halo cálido (durazno al 4 %) que da profundidad a tarjetas y estados de celebración.
   - Opacidad baja del cobalto (`rgba(37, 99, 235, 0.08)`) para selecciones suaves.
+- **Acento cálido "Spark" (`color.brand.spark`, `#EA580C`):** el contrapunto cálido al cobalto y al carbón, para que el panel no se sienta frío. Se usa con la **regla del 1 %** (ver §4). *Decisión 0022, 16-oct-2026.*
 - **Superficie y Lienzo:** Fondo neutro de pantalla `#F8F9FA` o `#F6F5F3` con tarjetas blanco puro `#FFFFFF`.
 - **Texto:** `#1A1A1A` (Primario) / `#6B7280` (Secundario / Muted).
 
@@ -67,6 +68,14 @@ La identidad visual de Tiendly combina **velocidad ultra limpia**, **lenguaje mo
   - La tarjeta protagonista del panel ("Hoy") usa `gradient/hero` (cobalto `#2563EB` → azul medianoche `#1B365D`, 135°) con texto blanco, filo interior de 1 px al 15 % y radio de tarjeta. Hay una sola por vista. Dentro, los bloques secundarios son vidrio (ver "Vidrio sobre la tarjeta protagonista").
   - En el gráfico semanal, la barra de hoy va en cobalto (`accent/base`); el resto de los días, en `chart/bar`. Las barras de progreso y los pasos siguen en `indicator/fill`.
 - *Alternativa evaluada y no aplicada:* fondo `#EFF6FF` con borde de 1.5 px y texto `#1D4ED8`. Para cambiar de estilo se editan solo las variables `selection/*` del modo Tiendly.
+
+### Spark: acento cálido y regla del 1 % (decisión 0022)
+- **Qué es:** `spark/base` (`#EA580C`, ámbar eléctrico), con `spark/subtle` (`#FFF7ED`) y `spark/text` (`#C2410C`) para badges.
+- **Regla del 1 %:** como mucho uno o dos toques por pantalla, siempre en micro-UI de alto impacto:
+  - punto de avisos sin leer (con un destello breve de 3 pulsos que respeta "reducir movimiento");
+  - badges "Nuevo" o "Pro" (`Badge tone="spark"`: texto `spark/text` sobre `spark/subtle`).
+- **Nunca:** botones, fondos, tarjetas, gráficos, links ni estados de error o advertencia (para eso están `feedback/*`). El CTA sigue siendo cobalto, y la selección, carbón.
+- **Contraste:** se eligió `#EA580C` y no `#F59E0B` porque llega a 3.6:1 sobre blanco (mínimo 3:1 para elementos no textuales). Para texto, nunca blanco sobre spark (3.6:1, no llega a 4.5:1): se usa `spark/text` sobre `spark/subtle` (≈ 5:1).
 
 ### Chips & Badges
 - Tamaño reducido (`12px`) con rellenos pastel o transparencias de opacidad baja.
@@ -168,6 +177,7 @@ La identidad visual de Tiendly combina **velocidad ultra limpia**, **lenguaje mo
 | Sombra de tarjeta | `elevation.card` (0021) | 0 1 3 + 0 4 10, negro 4 % |
 | Sombra suave de vidrio y avisos | estilo `Sombra/Baja` (`elevation.low`) | 0 4 20 negro 4 % + halo cálido 0 12 40 |
 | Cifras grandes | `font/metric-style` (0021) | Outfit SemiBold (600), tracking-tight, tabulares |
+| `color.brand.spark` | `spark/base` · `spark/subtle` · `spark/text` (0022) | `#EA580C` · `#FFF7ED` · `#C2410C` |
 | Celebración | estilo `Halo/Cálido` (`elevation.celebration`) | halo cálido + glow celeste |
 | Tarjeta protagonista | `gradient/hero` | cobalto → azul medianoche, 135° (0020) |
 | Tipografía de cuerpo | `font/body` | Inter |
