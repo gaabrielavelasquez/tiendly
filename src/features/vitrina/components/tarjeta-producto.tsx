@@ -3,12 +3,13 @@ import Link from "next/link";
 import { formatoSoles } from "@/lib/formato";
 import { cn } from "@/lib/cn";
 import type { ProductoVitrina } from "../lib/vitrina";
+import { Muestras } from "./muestras";
 
 type TarjetaProps = { p: ProductoVitrina; tienda: string; prioridad?: boolean };
 
 /**
  * Tarjeta editorial (como una página de revista): foto al ras, sin borde, sin esquinas y sin sombra;
- * debajo, el nombre en serif y el precio en Inter. Toda la tarjeta es el link a la página del producto.
+ * debajo, el nombre en serif, el precio en Inter y las muestras de color. Toda la tarjeta es el link a la página del producto.
  */
 export function TarjetaProducto({ p, tienda, prioridad = false }: TarjetaProps) {
   return (
@@ -39,6 +40,7 @@ export function TarjetaProducto({ p, tienda, prioridad = false }: TarjetaProps) 
             </span>
           )}
         </span>
+        {p.colores.length > 1 && <span className="pt-1"><Muestras colores={p.colores} /></span>}
       </div>
     </Link>
   );

@@ -31,14 +31,15 @@ export const TALLAS_CM: Record<string, string> = {
   "35": "22.5 cm", "36": "23 cm", "37": "23.5 cm", "38": "24 cm", "39": "24.5 cm", "40": "25 cm",
 };
 
-/** Portada de la vitrina: fotos de campaña (lifestyle) de la marca y el titular. */
+/** Portada de la vitrina: fotos de campaña (lifestyle) de la marca, titular y llamado a la acción. */
 export const PORTADA = {
-  titulo: "Calzado hecho a mano en Lima.",
-  bajada: "Cuero natural, en tallas del 35 al 40. Cada par se hace en el taller.",
-  /** Desktop: tríptico. Móvil: solo la primera. */
+  temporada: "Otoño · Invierno 2026",
+  titulo: "Nueva colección",
+  bajada: "Calzado hecho a mano en Lima, en cuero natural y tallas del 35 al 40.",
+  cta: "Explorar colección",
+  /** Móvil: solo la primera. Desktop: las dos lado a lado (las fotos miden ~950 px: una sola a 1440 px se vería borrosa). */
   fotos: [
     { src: "/heather/danika-black-2.png", alt: "Modelo con las Botas Danika" },
     { src: "/heather/chloe-silver-2.png", alt: "Balerinas Chloé en plata, al caminar" },
-    { src: "/heather/mary-jane-black-2.png", alt: "Zapatos Mary Jane en negro, puestos" },
   ],
 };

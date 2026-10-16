@@ -40,11 +40,11 @@ export function Vitrina({ datos, categoriaInicial }: VitrinaProps) {
           <EmptyState icon={PackageOpen} title="Muy pronto" description={`${datos.tienda.nombre} está preparando su catálogo. Vuelve en unos días.`} />
         ) : (
           <>
-            <div className="pt-0 lg:pt-8">
+            <div className="lg:pt-6">
               <Portada />
             </div>
             <h2 className="sr-only">Productos</h2>
-            <div className="sticky top-16 z-10 -mx-4 mt-10 bg-page/90 px-4 py-3 backdrop-blur-md lg:mx-0 lg:mt-14 lg:px-0">
+            <div id="catalogo" className="sticky top-16 z-10 -mx-4 mt-12 scroll-mt-16 bg-page/90 px-4 py-3 backdrop-blur-md lg:mx-0 lg:mt-16 lg:px-0">
               {datos.categorias.length > 1 && <CategoriasTienda categorias={datos.categorias} valor={categoria} onCambio={setCategoria} />}
             </div>
             {visibles.length === 0 ? (
