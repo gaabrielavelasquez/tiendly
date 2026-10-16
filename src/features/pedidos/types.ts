@@ -19,4 +19,4 @@ export type Pedido = {
   entrega: { estado: EstadoEntrega; metodo: "delivery" | "recojo"; distrito?: string };
 };
 
-export type Filtro = "todos" | "para-atender" | "por-cobrar" | "por-enviar";
+export type Filtro = "todos" | "para-atender" | "por-cobrar" | "reservas" | "por-enviar";

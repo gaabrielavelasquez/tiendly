@@ -1,4 +1,5 @@
 import type { EstadoEntrega, EstadoPago, Filtro, MetodoPago, Pedido } from "../types";
+import { mismoDiaLima } from "./tiempo";
 
 // Reglas de pedidos. Funciones puras: fáciles de probar y de mover al backend.
 
@@ -32,37 +33,45 @@ const activo = (p: Pedido) => p.pago.estado !== "cancelado";
 const porCobrar = (p: Pedido) => activo(p) && p.pago.estado === "pendiente";
 const porEnviar = (p: Pedido) => p.pago.estado === "pagado" && p.entrega.estado === "por-enviar";
 
-const CUMPLE: Record<Filtro, (p: Pedido) => boolean> = {
+/**
+ * Reservas que vencen hoy: reservas de 24 h vigentes cuyo vencimiento cae hoy en Lima.
+ * Es la misma definición que usa Inicio ("2 reservas vencen hoy"), así el número coincide.
+ * No incluye contra entrega (no vence) ni reservas ya vencidas (se cancelaron solas).
+ */
+export const venceHoy = (p: Pedido, ahora: string) => {
+  const t = new Date(ahora).getTime();
+  return esReserva(p) && venceEl(p) > t && mismoDiaLima(venceEl(p), t);
+};
+
+/** Reglas de cada filtro. "reservas" depende de la hora, por eso todas reciben `ahora`. */
+const CUMPLE: Record<Filtro, (p: Pedido, ahora: string) => boolean> = {
   todos: () => true,
   /** Todo lo que pide una acción de la tienda: cobrar o enviar. */
   "para-atender": (p) => porCobrar(p) || porEnviar(p),
   "por-cobrar": porCobrar,
+  reservas: venceHoy,
   "por-enviar": porEnviar,
 };
 
-export function contarPorFiltro(lista: Pedido[]): Record<Filtro, number> {
-  return {
-    todos: lista.length,
-    "para-atender": lista.filter(CUMPLE["para-atender"]).length,
-    "por-cobrar": lista.filter(porCobrar).length,
-    "por-enviar": lista.filter(porEnviar).length,
-  };
+export function contarPorFiltro(lista: Pedido[], ahora: string): Record<Filtro, number> {
+  const contar = (f: Filtro) => lista.filter((p) => CUMPLE[f](p, ahora)).length;
+  return { todos: lista.length, "para-atender": contar("para-atender"), "por-cobrar": contar("por-cobrar"), reservas: contar("reservas"), "por-enviar": contar("por-enviar") };
 }
 
 const normalizar = (s: string) => s.normalize("NFD").replace(/\p{Diacritic}/gu, "").toLowerCase().replace(/[\s#-]/g, "");
 
 /** Busca por número de pedido (con o sin "#T-"), nombre del cliente o celular. */
-export function filtrarPedidos(lista: Pedido[], filtro: Filtro, busqueda: string) {
+export function filtrarPedidos(lista: Pedido[], filtro: Filtro, busqueda: string, ahora: string) {
   const q = normalizar(busqueda);
   return lista.filter(
     (p) =>
-      CUMPLE[filtro](p) &&
+      CUMPLE[filtro](p, ahora) &&
       (!q || normalizar(p.numero).includes(q) || normalizar(p.cliente.nombre).includes(q) || p.cliente.celular.includes(q)),
   );
 }
 
 export function leerFiltro(v: string | null | undefined): Filtro {
-  return v === "para-atender" || v === "por-cobrar" || v === "por-enviar" ? v : "todos";
+  return v === "para-atender" || v === "por-cobrar" || v === "reservas" || v === "por-enviar" ? v : "todos";
 }
 
 export const METODO_PAGO: Record<MetodoPago, string> = {

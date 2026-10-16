@@ -10,7 +10,7 @@ type PageProps = { searchParams: Promise<Record<string, string | string[] | unde
 
 /**
  * Pedidos (decisión 0010). Datos simulados: ?escenario=pedidos (por defecto), vacio o error.
- * Filtro en ?estado= (para-atender, por-cobrar, por-enviar): Inicio abre la lista ya filtrada.
+ * Filtro en ?estado= (para-atender, por-cobrar, reservas, por-enviar): Inicio abre la lista ya filtrada.
  */
 export default async function PanelPedidos({ searchParams }: PageProps) {
   const { escenario, estado } = await searchParams;

@@ -25,8 +25,8 @@ export function usePedidos(inicial: Pedido[], ahora: string, filtroInicial: Filt
     window.history.replaceState(null, "", url);
   }, []);
 
-  const visibles = useMemo(() => filtrarPedidos(lista, filtro, busqueda), [lista, filtro, busqueda]);
-  const conteos = useMemo(() => contarPorFiltro(lista), [lista]);
+  const visibles = useMemo(() => filtrarPedidos(lista, filtro, busqueda, ahora), [lista, filtro, busqueda, ahora]);
+  const conteos = useMemo(() => contarPorFiltro(lista, ahora), [lista, ahora]);
 
   /** Descarga un CSV con los pedidos visibles (respeta filtro y búsqueda). */
   const exportar = useCallback(() => {

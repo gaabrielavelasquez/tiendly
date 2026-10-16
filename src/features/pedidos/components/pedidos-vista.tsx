@@ -13,6 +13,7 @@ const FILTROS: OpcionFiltro<Filtro>[] = [
   { id: "todos", label: "Todos" },
   { id: "para-atender", label: "Para atender" },
   { id: "por-cobrar", label: "Por cobrar" },
+  { id: "reservas", label: "Vencen hoy" },
   { id: "por-enviar", label: "Por enviar" },
 ];
 

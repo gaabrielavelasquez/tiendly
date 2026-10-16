@@ -1,17 +1,10 @@
 import type { Pedido } from "../types";
 import { BADGE_PAGO, badgeEntrega, METODO_PAGO } from "./reglas";
+import { enLima } from "./tiempo";
 
-// Fechas de pedidos sin Intl: el texto se arma igual en el servidor (Node) y en el navegador, así no hay
-// diferencias de hidratación (Intl puede variar entre motores, p. ej. el espacio antes de "p. m.").
-// Lima está siempre en UTC−5 (sin horario de verano).
+// Fechas de pedidos sin Intl (ver lib/tiempo.ts): el mismo texto en servidor y navegador.
 const ZONA = "America/Lima";
-const OFFSET_LIMA_MIN = -5 * 60;
 const MESES = ["ene", "feb", "mar", "abr", "may", "jun", "jul", "ago", "sep", "oct", "nov", "dic"];
-
-function enLima(ms: number) {
-  const d = new Date(ms + OFFSET_LIMA_MIN * 60000);
-  return { dia: `${d.getUTCFullYear()}-${d.getUTCMonth()}-${d.getUTCDate()}`, mes: d.getUTCMonth(), fecha: d.getUTCDate(), h: d.getUTCHours(), min: d.getUTCMinutes() };
-}
 
 /** "5:52 p. m." */
 function hora(h: number, min: number) {
