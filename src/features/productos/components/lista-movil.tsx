@@ -1,6 +1,7 @@
 "use client";
 
-import { AnimatePresence, motion, useReducedMotion } from "motion/react";
+import { AnimatePresence, motion } from "motion/react";
+import { useReducedMotion } from "@/components/motion/use-reduced-motion";
 import { Checkbox } from "@/components/ui";
 import type { Producto } from "../types";
 import { motionTokens } from "@/styles/tokens";

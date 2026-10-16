@@ -1,7 +1,8 @@
 "use client";
 
 import { Check, Clock3, PackageX, Truck, type LucideIcon } from "lucide-react";
-import { motion, useReducedMotion } from "motion/react";
+import { motion } from "motion/react";
+import { useReducedMotion } from "@/components/motion/use-reduced-motion";
 import Link from "next/link";
 import { Badge, buttonVariants, Card } from "@/components/ui";
 import { cn } from "@/lib/cn";

@@ -1,7 +1,8 @@
 "use client";
 
 import { CircleCheck } from "lucide-react";
-import { AnimatePresence, motion, useReducedMotion } from "motion/react";
+import { AnimatePresence, motion } from "motion/react";
+import { useReducedMotion } from "@/components/motion/use-reduced-motion";
 import Link from "next/link";
 import { useState } from "react";
 import { plural } from "@/lib/formato";

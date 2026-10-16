@@ -1,7 +1,8 @@
 "use client";
 
 import { Menu, X } from "lucide-react";
-import { AnimatePresence, motion, useReducedMotion } from "motion/react";
+import { AnimatePresence, motion } from "motion/react";
+import { useReducedMotion } from "@/components/motion/use-reduced-motion";
 import { useEffect, useState } from "react";
 import { Pressable } from "@/components/motion/pressable";
 import { motionTokens } from "@/styles/tokens";

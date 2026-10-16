@@ -1,6 +1,7 @@
 "use client";
 
-import { AnimatePresence, motion, useReducedMotion } from "motion/react";
+import { AnimatePresence, motion } from "motion/react";
+import { useReducedMotion } from "@/components/motion/use-reduced-motion";
 import { motionTokens } from "@/styles/tokens";
 import type { Archivado } from "../hooks/use-catalogo";
 
