@@ -98,7 +98,7 @@
   --radius-chip: var(--tl-radius-chip);
 
   /* Sombras */
-  --shadow-card: var(--tl-elevation-low);
+  --shadow-card: var(--tl-elevation-card);
   --shadow-float: var(--tl-elevation-medium);
   --shadow-overlay: var(--tl-elevation-high);
   --shadow-celebration: var(--tl-elevation-celebration);
@@ -233,10 +233,10 @@
   background-image: linear-gradient(to top, var(--tl-accent-base), color-mix(in srgb, var(--tl-accent-base) 70%, var(--tl-bg-surface)));
 }
 
-/*
-  Sombra de tarjeta ultra suave: dos capas con desplazamiento vertical (contacto + ambiente),
-  armada con shadow/soft y la escala de espacio. Proponer en Figma como elevation/soft.
-*/
-@utility shadow-soft {
-  box-shadow: 0 var(--tl-stroke-thin) var(--tl-space-1) var(--tl-shadow-soft), 0 var(--tl-space-2) var(--tl-space-8) var(--tl-shadow-soft);
+/* Cifras grandes (decisión 0021): Outfit SemiBold, tracking-tight y números tabulares para que no "bailen". */
+@utility font-metric {
+  font-family: var(--tl-font-display);
+  font-weight: var(--tl-font-metric-style);
+  letter-spacing: var(--tracking-tight);
+  font-variant-numeric: tabular-nums;
 }

@@ -20,7 +20,7 @@ export function ZonaUsuario({ nombre, avisos, className }: ZonaUsuarioProps) {
       <Link href="/panel/configuracion" className={tocable} aria-label={`Tu cuenta, ${nombre}`}>
         <span
           aria-hidden
-          className="flex size-9 items-center justify-center rounded-full bg-selected font-display-title text-body-sm text-on-selected shadow-soft"
+          className="flex size-9 items-center justify-center rounded-full bg-selected font-display-title text-body-sm text-on-selected shadow-card"
         >
           {nombre.charAt(0).toUpperCase()}
         </span>

@@ -28,7 +28,7 @@ export function SemanaCard({ total, pedidos, comparacion, dias, hoy }: SemanaCar
             Esta semana
           </h2>
           <p className="flex items-baseline gap-2">
-            <span className="font-display-hero text-h2 tracking-tight text-fg">{formatoSoles(total)}</span>
+            <span className="font-metric text-h2 text-fg">{formatoSoles(total)}</span>
             <span className="text-body-sm text-fg-secondary">
               · {pedidos} {pedidos === 1 ? "pedido" : "pedidos"}
             </span>

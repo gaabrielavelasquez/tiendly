@@ -38,6 +38,7 @@ La identidad visual de Tiendly combina **velocidad ultra limpia**, **lenguaje mo
 ## 3. Tipografía & Jerarquía
 
 - **Titulares (Headings):** **Outfit SemiBold (600)** en Display y H1–H3, con `tracking-tight`; Medium (500) para subtítulos de apoyo. Nada de Black (900): se ve pesado y "de juguete". *Cambiado el 16-oct-2026 (decisión 0020 · Sleek & Crisp).*
+- **Cifras grandes (métricas):** token `font/metric-style` (utilidad `font-metric`): Outfit SemiBold (600), `tracking-tight` y números tabulares, para montos y totales (S/ 1,320, S/ 5,480). Nunca Bold ni Black. *Decisión 0021 · Crisp, 16-oct-2026.*
 - **Cuerpo / Interfaz (Body & UI):** Sans-Serif neutra (ej. Inter / SF Pro) en pesos Regular y Medium, enfocada en máxima legibilidad en dispositivos móviles.
 
 ---
@@ -47,7 +48,7 @@ La identidad visual de Tiendly combina **velocidad ultra limpia**, **lenguaje mo
 ### Tarjetas (Cards)
 - Fondo blanco puro (`#FFFFFF`) sobre superficie neutra.
 - Esquinas precisas: `border-radius: 12px` (`radii.card`). *Bajado de 16 px el 16-oct-2026 (decisión 0020).*
-- Sombras sutiles y difuminadas (`0px 4px 20px rgba(0, 0, 0, 0.04)`).
+- Borde nítido `border/subtle` (1 px) y sombra ajustada de dos capas `elevation/card`: contacto `0 1 3` y ambiente `0 4 10`, ambas en `shadow/soft`. Nada de sombras "nube" difusas. *Cambiado el 16-oct-2026 (decisión 0021); antes `0 4 20` + halo cálido.*
 
 ### Botones
 - Esquinas de **`8px`** en botones y campos (`radii.button`, que también usan los inputs). *Bajado de 10 px el 16-oct-2026 (decisión 0020); antes, de 12 a 10 px (0018).* Nunca pill en botones.
@@ -60,8 +61,10 @@ La identidad visual de Tiendly combina **velocidad ultra limpia**, **lenguaje mo
 - Tarjetas de opción seleccionadas: fondo blanco (`selection/subtle`) y borde negro carbón. Sin tinte azul.
 - Barras de progreso, pasos, línea de tiempo y destellos: `indicator/fill` (negro carbón). Ítem de menú activo: `bg/sunken` + `text/primary`. Casillas marcadas: `selection/*`.
 - **Excepción:** los links y el botón Fantasma siguen en cobalto (`accent/text`, `#1D4ED8`), para que se reconozcan como links.
+- **Gráficos (0021):** barras finas de datos, no bloques: 24 px de ancho en móvil y 32 px en desktop, con radio de 8 px (no píldora), sobre un riel `bg/sunken`.
+- **Vidrio sobre la tarjeta protagonista (0021):** blanco al 10 %, `ring-1` blanco al 20 % y `backdrop-blur-md`. El blur todavía no tiene token: proponer `effect/blur` en Figma.
 - **Excepciones (0020):**
-  - La tarjeta protagonista del panel ("Hoy") usa `gradient/hero` (cobalto `#2563EB` → azul medianoche `#1B365D`, 135°) con texto blanco, filo interior de 1 px al 15 % y radio de tarjeta. Hay una sola por vista. Dentro, los bloques secundarios son vidrio: blanco al 10 %, borde blanco al 10 % y `backdrop-blur-sm` (aún sin token: proponer `effect/blur` en Figma).
+  - La tarjeta protagonista del panel ("Hoy") usa `gradient/hero` (cobalto `#2563EB` → azul medianoche `#1B365D`, 135°) con texto blanco, filo interior de 1 px al 15 % y radio de tarjeta. Hay una sola por vista. Dentro, los bloques secundarios son vidrio (ver "Vidrio sobre la tarjeta protagonista").
   - En el gráfico semanal, la barra de hoy va en cobalto (`accent/base`); el resto de los días, en `chart/bar`. Las barras de progreso y los pasos siguen en `indicator/fill`.
 - *Alternativa evaluada y no aplicada:* fondo `#EFF6FF` con borde de 1.5 px y texto `#1D4ED8`. Para cambiar de estilo se editan solo las variables `selection/*` del modo Tiendly.
 
@@ -162,7 +165,9 @@ La identidad visual de Tiendly combina **velocidad ultra limpia**, **lenguaje mo
 | `radii.button` | `radius/button` | 8 en Tiendly (botones y campos) |
 | `radii.card` | `radius/card` | 12 en Tiendly |
 | `radii.pill` | `radius/full` | 9999 |
-| Sombra de tarjeta | estilo `Sombra/Baja` (`elevation.low`) | 0 4 20 negro 4 % + halo cálido 0 12 40 |
+| Sombra de tarjeta | `elevation.card` (0021) | 0 1 3 + 0 4 10, negro 4 % |
+| Sombra suave de vidrio y avisos | estilo `Sombra/Baja` (`elevation.low`) | 0 4 20 negro 4 % + halo cálido 0 12 40 |
+| Cifras grandes | `font/metric-style` (0021) | Outfit SemiBold (600), tracking-tight, tabulares |
 | Celebración | estilo `Halo/Cálido` (`elevation.celebration`) | halo cálido + glow celeste |
 | Tarjeta protagonista | `gradient/hero` | cobalto → azul medianoche, 135° (0020) |
 | Tipografía de cuerpo | `font/body` | Inter |
