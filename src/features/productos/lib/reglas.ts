@@ -29,11 +29,8 @@ export function variantesAgotadas(p: Producto) {
   return p.variantes.filter((v) => v.stock === 0).length;
 }
 
-/** "45 en stock", "3 en stock" o "Sin unidades". */
-export function textoStock(p: Producto) {
-  const total = stockTotal(p);
-  return total ? `${total} en stock` : "Sin unidades";
-}
+/** "22 unidades", "1 unidad" o "0 unidades". */
+export const textoStock = (p: Producto) => plural(stockTotal(p), "unidad", "unidades");
 
 export const textoPrecio = (p: Producto) => formatoSoles(p.precio);
 

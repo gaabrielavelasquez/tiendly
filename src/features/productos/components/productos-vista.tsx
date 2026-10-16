@@ -7,6 +7,7 @@ import { plural } from "@/lib/formato";
 import type { Filtro, Producto } from "../types";
 import { useCatalogo } from "../hooks/use-catalogo";
 import { AvisoDeshacer } from "./aviso-deshacer";
+import { BarraSeleccion } from "./barra-seleccion";
 import { Buscador } from "./buscador";
 import { Filtros } from "./filtros";
 import { ListaMovil } from "./lista-movil";
@@ -43,6 +44,7 @@ export function ProductosVista({ productos, filtroInicial }: VistaProps) {
             <Buscador valor={c.busqueda} onCambio={c.setBusqueda} className="lg:w-80" />
             <Filtros valor={c.filtro} conteos={c.conteos} onCambio={c.setFiltro} />
           </div>
+          <BarraSeleccion cantidad={c.seleccionVisible.length} onArchivar={() => c.archivar(c.seleccionVisible)} onLimpiar={c.limpiarSeleccion} />
           {c.visibles.length === 0 ? (
             <EmptyState
               icon={SearchX}
@@ -57,10 +59,23 @@ export function ProductosVista({ productos, filtroInicial }: VistaProps) {
           ) : (
             <>
               <div className="hidden lg:block">
-                <TablaProductos productos={c.visibles} onDuplicar={c.duplicar} onArchivar={c.archivar} />
+                <TablaProductos
+                  productos={c.visibles}
+                  seleccion={c.seleccion}
+                  onAlternar={c.alternar}
+                  onAlternarTodos={c.alternarTodos}
+                  onDuplicar={c.duplicar}
+                  onArchivar={(id) => c.archivar([id])}
+                />
               </div>
               <div className="lg:hidden">
-                <ListaMovil productos={c.visibles} onDuplicar={c.duplicar} onArchivar={c.archivar} />
+                <ListaMovil
+                  productos={c.visibles}
+                  seleccion={c.seleccion}
+                  onAlternar={c.alternar}
+                  onDuplicar={c.duplicar}
+                  onArchivar={(id) => c.archivar([id])}
+                />
               </div>
             </>
           )}

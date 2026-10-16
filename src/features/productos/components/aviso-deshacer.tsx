@@ -20,7 +20,11 @@ export function AvisoDeshacer({ archivado, onDeshacer }: { archivado: Archivado 
             transition={{ duration: motionTokens.durationFast, ease }}
             className="pointer-events-auto flex w-full max-w-sm items-center justify-between gap-4 rounded-card bg-inverse py-2 pr-2 pl-4 text-body-sm text-fg-inverse shadow-overlay"
           >
-            <span className="truncate">{archivado.producto.nombre} se archivó.</span>
+            <span className="truncate">
+              {archivado.productos.length === 1
+                ? `${archivado.productos[0].nombre} se archivó.`
+                : `${archivado.productos.length} productos se archivaron.`}
+            </span>
             <button
               type="button"
               onClick={onDeshacer}

@@ -16,6 +16,8 @@ export type Producto = {
   /** Precio antes de la rebaja, si hay. */
   precioAntes?: number;
   variantes: Variante[];
+  /** Foto principal (URL). Sin foto, la miniatura muestra el ícono de la categoría. */
+  imagen?: string;
 };
 
 export type Filtro = "todos" | "activos" | "bajo-stock" | "agotados";

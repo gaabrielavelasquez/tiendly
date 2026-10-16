@@ -2,6 +2,7 @@ export { Badge } from "./badge";
 export { Button } from "./button";
 export { buttonVariants } from "./button-variants";
 export { Card } from "./card";
+export { Checkbox } from "./checkbox";
 export { Chip } from "./chip";
 export { EmptyState } from "./empty-state";
 export { Field } from "./field";
