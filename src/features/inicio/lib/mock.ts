@@ -87,3 +87,6 @@ export async function obtenerInicio(escenario: Escenario): Promise<InicioData> {
 }
 
 export const tiendaActual = TIENDA;
+
+/** Avisos sin leer del panel (simulado). */
+export const avisosSinLeer = 2;

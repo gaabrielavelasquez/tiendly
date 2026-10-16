@@ -1,9 +1,9 @@
 "use client";
 
-import { Check, ChevronRight, Clock3, PackageX, Truck, type LucideIcon } from "lucide-react";
+import { Check, Clock3, PackageX, Truck, type LucideIcon } from "lucide-react";
 import { motion, useReducedMotion } from "motion/react";
 import Link from "next/link";
-import { Badge, Card } from "@/components/ui";
+import { Badge, buttonVariants, Card } from "@/components/ui";
 import { cn } from "@/lib/cn";
 import { ESCALON, rapido } from "../lib/motion";
 import type { Pendiente } from "../lib/reglas";
@@ -18,7 +18,11 @@ const TILE: Record<Pendiente["tono"], string> = {
 
 type AtenderCardProps = { filas: Pendiente[]; className?: string };
 
-/** "Para atender hoy": atajos a las listas ya filtradas, con ícono por tipo. Entrada escalonada (fade + y). */
+/**
+ * "Para atender hoy": atajos a las listas ya filtradas, con ícono por tipo y acción explícita
+ * "Ver detalle" (44 px de alto). Toda la fila sigue siendo tocable: el link se estira con ::after.
+ * Entrada escalonada (fade + y).
+ */
 export function AtenderCard({ filas, className }: AtenderCardProps) {
   const reduce = useReducedMotion();
   return (
@@ -46,10 +50,7 @@ export function AtenderCard({ filas, className }: AtenderCardProps) {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ ...rapido, delay: i * ESCALON }}
               >
-                <Link
-                  href={f.href}
-                  className="group -mx-2 flex min-h-16 items-center gap-3 rounded-theme px-2 py-2.5 transition-colors hover:bg-sunken"
-                >
+                <div className="relative -mx-2 flex min-h-16 flex-wrap items-center gap-x-3 gap-y-1 rounded-theme px-2 py-2.5 transition-colors hover:bg-sunken lg:flex-nowrap">
                   <span className={cn("flex size-10 shrink-0 items-center justify-center rounded-theme border", TILE[f.tono])}>
                     <Icono aria-hidden strokeWidth={1.8} className="size-5" />
                   </span>
@@ -60,12 +61,19 @@ export function AtenderCard({ filas, className }: AtenderCardProps) {
                     </span>
                     <span className="text-caption text-fg-secondary">{f.detalle}</span>
                   </span>
-                  <ChevronRight
-                    aria-hidden
-                    strokeWidth={1.6}
-                    className="size-5 shrink-0 text-icon-subtle transition-transform group-hover:translate-x-0.5 group-hover:text-icon"
-                  />
-                </Link>
+                  {/* Móvil: la acción baja debajo del texto (alineada con él) para no apretarlo. */}
+                  <div className="basis-full pl-10 lg:basis-auto lg:pl-0">
+                    <Link
+                      href={f.href}
+                      className={cn(
+                        buttonVariants({ variant: "ghost", size: "sm" }),
+                        "static h-11 px-3 transition after:absolute after:inset-0 after:content-[''] active:scale-98",
+                      )}
+                    >
+                      Ver detalle<span className="sr-only">: {f.titulo}</span>
+                    </Link>
+                  </div>
+                </div>
               </motion.li>
             );
           })}

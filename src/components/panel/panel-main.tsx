@@ -6,7 +6,7 @@ import { cn } from "@/lib/cn";
  */
 export function PanelMain({ className, children, ...rest }: React.HTMLAttributes<HTMLElement>) {
   return (
-    <main className={cn("relative isolate mx-auto flex w-full max-w-6xl flex-col gap-6 px-4 py-6 lg:px-12 lg:pt-10 lg:pb-16", className)} {...rest}>
+    <main className={cn("relative isolate mx-auto flex w-full max-w-6xl flex-col gap-6 px-4 py-6 lg:px-12 lg:pt-2 lg:pb-16", className)} {...rest}>
       <div aria-hidden className="pointer-events-none absolute -top-40 -left-24 -z-10 h-112 w-3/4 bg-orb-sky lg:-left-32" />
       {children}
     </main>

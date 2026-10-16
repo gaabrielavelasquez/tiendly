@@ -6,12 +6,15 @@ import { useEffect, useState } from "react";
 import { Pressable } from "@/components/motion/pressable";
 import { motionTokens } from "@/styles/tokens";
 import { PanelNav } from "./panel-nav";
+import { ZonaUsuario } from "./zona-usuario";
 
 const transicion = { duration: motionTokens.durationFast, ease: [...motionTokens.easing] as [number, number, number, number] };
 const iconButton = "flex size-12 items-center justify-center rounded-button text-icon transition-colors hover:bg-sunken";
 
-/** Barra superior del panel en móvil: botón de menú + nombre de la tienda. El menú se abre como panel lateral. */
-export function MobileTopbar({ nombreTienda }: { nombreTienda: string }) {
+type MobileTopbarProps = { nombreTienda: string; duena: string; avisos: number };
+
+/** Barra superior del panel en móvil: menú, nombre de la tienda y zona de cuenta. El menú se abre como panel lateral. */
+export function MobileTopbar({ nombreTienda, duena, avisos }: MobileTopbarProps) {
   const [abierto, setAbierto] = useState(false);
   const reduce = useReducedMotion();
   const cerrar = () => setAbierto(false);
@@ -25,11 +28,12 @@ export function MobileTopbar({ nombreTienda }: { nombreTienda: string }) {
 
   return (
     <>
-      <header className="flex items-center gap-3 border-b border-line-subtle bg-surface px-4 py-4 lg:hidden">
+      <header className="flex items-center gap-2 border-b border-line-subtle bg-surface px-2 py-2 lg:hidden">
         <Pressable type="button" aria-label="Abrir menú" aria-expanded={abierto} onClick={() => setAbierto(true)} className={iconButton}>
           <Menu aria-hidden strokeWidth={1.6} className="size-6" />
         </Pressable>
         <p className="flex-1 truncate text-body font-bold text-fg">{nombreTienda}</p>
+        <ZonaUsuario nombre={duena} avisos={avisos} />
       </header>
 
       <AnimatePresence>
