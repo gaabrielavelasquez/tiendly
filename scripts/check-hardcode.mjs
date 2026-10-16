@@ -1,8 +1,9 @@
 // Regla de CLAUDE.md: cero hardcoding. Falla si un componente usa hex, rgb/hsl o px sueltos.
 import { readdirSync, readFileSync, statSync } from "node:fs";
 import { join } from "node:path";
+import { fileURLToPath } from "node:url";
 
-const ROOT = new URL("../src", import.meta.url).pathname;
+const ROOT = fileURLToPath(new URL("../src", import.meta.url));
 const SKIP = new Set(["tokens.css", "tokens.ts"]);
 const RULES = [
   [/#[0-9a-fA-F]{3,8}\b/, "color hex"],
