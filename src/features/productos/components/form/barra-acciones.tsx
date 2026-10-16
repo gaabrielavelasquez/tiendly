@@ -17,7 +17,7 @@ export function BarraAcciones({ titulo, sinGuardar, guardando }: BarraProps) {
   const estado = sinGuardar && <span className="text-caption text-fg-secondary">Cambios sin guardar</span>;
   return (
     <>
-      <div className="sticky top-0 z-20 -mx-4 hidden items-center gap-4 border-b border-line-subtle bg-page/85 px-4 py-3 backdrop-blur-md lg:-mx-12 lg:flex lg:px-12">
+      <div className="sticky top-0 z-20 -mx-4 hidden items-center gap-4 border-b border-line-subtle bg-surface/80 px-4 py-3 backdrop-blur-md lg:-mx-12 lg:flex lg:px-12">
         <Link href="/panel/productos" aria-label="Volver a Productos" className="flex size-9 items-center justify-center rounded-sm text-icon transition-colors hover:bg-sunken">
           <ArrowLeft aria-hidden strokeWidth={1.6} className="size-5" />
         </Link>

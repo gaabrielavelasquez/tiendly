@@ -2,9 +2,9 @@
 
 import { Plus } from "lucide-react";
 import { useState } from "react";
-import { COLORES_SUGERIDOS, TALLAS_CALZADO, TALLAS_ROPA, type Errores, type FormProducto } from "../../lib/formulario";
+import { COLORES_SUGERIDOS, TALLAS_CALZADO, TALLAS_ROPA, type Errores, type FormProducto, type VarianteForm } from "../../lib/formulario";
 import { ChipsOpciones } from "./chips-opciones";
-import { GrillaStock } from "./grilla-stock";
+import { TablaVariantes } from "./tabla-variantes";
 import { Tarjeta } from "./tarjeta";
 
 type VariantesProps = {
@@ -12,11 +12,11 @@ type VariantesProps = {
   errores: Errores;
   onColor: (c: string) => void;
   onTalla: (t: string) => void;
-  onStock: (color: string, talla: string, v: string) => void;
+  onVariante: (clave: string, campo: keyof VarianteForm, v: string) => void;
 };
 
-/** Variantes (1 modelo = 1 producto): colorways y tallas en chips; el stock se pide por combinación. */
-export function TarjetaVariantes({ form, errores, onColor, onTalla, onStock }: VariantesProps) {
+/** Variantes (1 modelo = 1 producto): colorways y tallas en chips; SKU, precio y cantidad por combinación. */
+export function TarjetaVariantes({ form, errores, onColor, onTalla, onVariante }: VariantesProps) {
   const [nuevo, setNuevo] = useState("");
   const colores = [...new Set([...COLORES_SUGERIDOS, ...form.colores])];
 
@@ -53,7 +53,7 @@ export function TarjetaVariantes({ form, errores, onColor, onTalla, onStock }: V
       </ChipsOpciones>
       <ChipsOpciones legend="Tallas de ropa" opciones={TALLAS_ROPA} elegidas={form.tallas} onAlternar={onTalla} />
       <ChipsOpciones legend="Tallas de calzado" opciones={TALLAS_CALZADO} elegidas={form.tallas} onAlternar={onTalla} />
-      <GrillaStock form={form} error={errores.stock} onCambio={onStock} />
+      <TablaVariantes form={form} error={errores.variantes} onCambio={onVariante} />
     </Tarjeta>
   );
 }

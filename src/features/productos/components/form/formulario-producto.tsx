@@ -58,7 +58,7 @@ export function FormularioProducto({ titulo, inicial }: FormularioProps) {
           </Tarjeta>
           <TarjetaMedia imagenes={f.form.imagenes} onAgregar={f.agregarImagenes} onQuitar={f.quitarImagen} />
           <TarjetaPrecios form={f.form} errores={f.errores} onCambio={(k, v) => f.set(k, v)} />
-          <TarjetaVariantes form={f.form} errores={f.errores} onColor={f.alternarColor} onTalla={f.alternarTalla} onStock={f.setStock} />
+          <TarjetaVariantes form={f.form} errores={f.errores} onColor={f.alternarColor} onTalla={f.alternarTalla} onVariante={f.setVariante} />
         </div>
         <aside className="order-1 flex flex-col gap-6 lg:sticky lg:top-24 lg:order-2">
           <TarjetaEstado estado={f.form.estado} onCambio={(e) => f.set("estado", e)} />

@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type { Categoria } from "../types";
-import { clave, validar, type Errores, type FormProducto, type ImagenForm } from "../lib/formulario";
+import { VARIANTE_VACIA, validar, type Errores, type FormProducto, type ImagenForm, type VarianteForm } from "../lib/formulario";
 
 const alternar = <T,>(lista: T[], v: T) => (lista.includes(v) ? lista.filter((x) => x !== v) : [...lista, v]);
 
@@ -35,8 +35,10 @@ export function useFormularioProducto(inicial: FormProducto) {
   const alternarColor = useCallback((c: string) => setForm((f) => ({ ...f, colores: alternar(f.colores, c) })), []);
   const alternarTalla = useCallback((t: string) => setForm((f) => ({ ...f, tallas: alternar(f.tallas, t) })), []);
   const alternarCategoria = useCallback((c: Categoria) => setForm((f) => ({ ...f, categorias: alternar(f.categorias, c) })), []);
-  const setStock = useCallback((color: string, talla: string, v: string) => {
-    setForm((f) => ({ ...f, stock: { ...f.stock, [clave(color, talla)]: v.replace(/[^\d]/g, "") } }));
+  /** Cantidad solo enteros; precio con decimales; SKU en mayúsculas. */
+  const setVariante = useCallback((k: string, campo: keyof VarianteForm, v: string) => {
+    const limpio = campo === "stock" ? v.replace(/[^\d]/g, "") : campo === "precio" ? v.replace(/[^\d.,]/g, "") : v.toUpperCase();
+    setForm((f) => ({ ...f, variantes: { ...f.variantes, [k]: { ...(f.variantes[k] ?? VARIANTE_VACIA), [campo]: limpio } } }));
   }, []);
   const agregarImagenes = useCallback((nuevas: ImagenForm[]) => setForm((f) => ({ ...f, imagenes: [...f.imagenes, ...nuevas] })), []);
   const quitarImagen = useCallback((id: string) => setForm((f) => ({ ...f, imagenes: f.imagenes.filter((i) => i.id !== id) })), []);
@@ -48,8 +50,12 @@ export function useFormularioProducto(inicial: FormProducto) {
     const cantidad = Object.keys(e).length;
     if (cantidad) {
       // Lleva el foco al primer campo con error para que no haya que buscarlo.
-      const primero = (["nombre", "precio", "precioAntes", "stock"] as const).find((k) => e[k]);
-      requestAnimationFrame(() => document.getElementById(`campo-${primero}`)?.focus());
+      const primero = (["nombre", "precio", "precioAntes", "variantes"] as const).find((k) => e[k]);
+      requestAnimationFrame(() => {
+        // En la tabla de variantes, al precio que está mal (no a la primera fila).
+        const destino = primero === "variantes" ? document.querySelector<HTMLElement>("[data-error-variante]") : null;
+        (destino ?? document.getElementById(`campo-${primero}`))?.focus();
+      });
       return cantidad;
     }
     setGuardando(true);
@@ -63,7 +69,7 @@ export function useFormularioProducto(inicial: FormProducto) {
   }, [form]);
 
   return {
-    form, set, alternarColor, alternarTalla, alternarCategoria, setStock, agregarImagenes, quitarImagen,
+    form, set, alternarColor, alternarTalla, alternarCategoria, setVariante, agregarImagenes, quitarImagen,
     errores, guardar, guardando, guardado, sinGuardar,
   };
 }

@@ -23,7 +23,7 @@ export function Chip({ selected = false, className, children, ...rest }: ChipPro
         "relative inline-flex h-7 items-center gap-1.5 rounded-chip border px-3 text-body-sm font-medium transition-colors",
         "after:absolute after:-inset-y-2 after:inset-x-0 after:content-['']",
         selected
-          ? "border-selected-border bg-selected text-on-selected"
+          ? "border-transparent bg-selected text-on-selected"
           : "border-line bg-surface text-fg hover:border-line-strong",
         className,
       )}
