@@ -59,7 +59,7 @@ export function StepRegistro() {
           {state.modo === "ingresar" ? "¿Todavía no tienes tienda? " : "¿Ya tienes tienda? "}
           <button
             type="button"
-            className="inline-flex min-h-11 items-center font-semibold text-accent-text"
+            className="link-text inline-flex min-h-11 items-center"
             onClick={() => set({ modo: state.modo === "ingresar" ? "crear" : "ingresar" })}
           >
             {state.modo === "ingresar" ? "Crear una" : "Ingresar"}
@@ -67,8 +67,8 @@ export function StepRegistro() {
         </p>
         <p className="text-label text-fg-secondary">
           Al continuar aceptas los{" "}
-          <a href="#" className="font-semibold text-accent-text underline">Términos</a> y la{" "}
-          <a href="#" className="font-semibold text-accent-text underline">Política de privacidad</a>.
+          <a href="#" className="link-text">Términos</a> y la{" "}
+          <a href="#" className="link-text">Política de privacidad</a>.
         </p>
       </div>
     </form>

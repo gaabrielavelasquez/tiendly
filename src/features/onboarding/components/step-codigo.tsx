@@ -60,7 +60,7 @@ export function StepCodigo() {
         <button
           type="button"
           onClick={() => set({ paso: "registro" })}
-          className="inline-flex min-h-11 items-center self-start text-body-sm font-semibold text-accent-text"
+          className="link-text inline-flex min-h-11 items-center self-start text-body-sm"
         >
           Cambiar número
         </button>
@@ -74,7 +74,7 @@ export function StepCodigo() {
         ) : (
           <button
             type="button"
-            className="inline-flex min-h-11 items-center self-start font-semibold text-accent-text"
+            className="link-text inline-flex min-h-11 items-center self-start"
             onClick={() => {
               reiniciar();
               setAviso("Te mandamos un código nuevo.");
