@@ -11,7 +11,7 @@ type ChipProps = Omit<HTMLMotionProps<"button">, "children"> & {
 
 /**
  * Chip de selección (tallas, colores, categorías, filtros). Decisiones 0018 y 0019:
- * pill compacto de 32 px; seleccionado en negro carbón (chip.selected), nunca en cobalto.
+ * pill compacto de 28 px (0020); seleccionado en negro carbón (chip.selected), nunca en cobalto.
  * La zona táctil se extiende a 44 px con un ::after invisible.
  */
 export function Chip({ selected = false, className, children, ...rest }: ChipProps) {
@@ -20,8 +20,8 @@ export function Chip({ selected = false, className, children, ...rest }: ChipPro
       type="button"
       aria-pressed={selected}
       className={cn(
-        "relative inline-flex h-8 items-center gap-1.5 rounded-chip border px-3 text-body-sm font-medium transition-colors",
-        "after:absolute after:-inset-y-1.5 after:inset-x-0 after:content-['']",
+        "relative inline-flex h-7 items-center gap-1.5 rounded-chip border px-3 text-body-sm font-medium transition-colors",
+        "after:absolute after:-inset-y-2 after:inset-x-0 after:content-['']",
         selected
           ? "border-selected-border bg-selected text-on-selected"
           : "border-line bg-surface text-fg hover:border-line-strong",

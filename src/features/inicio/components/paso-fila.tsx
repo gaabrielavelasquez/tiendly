@@ -37,7 +37,7 @@ export function PasoFila({ paso, destacado, separador }: PasoFilaProps) {
   return (
     <li className={cn(separador && "border-t border-line-subtle")}>
       {paso.hecho ? (
-        <div className="flex min-h-14 items-center gap-3 py-3">
+        <div className="flex min-h-12 items-center gap-3 py-2.5">
           <Marca hecho />
           {texto}
           <span className="sr-only">Listo.</span>
@@ -46,7 +46,7 @@ export function PasoFila({ paso, destacado, separador }: PasoFilaProps) {
         <Link
           href={paso.href}
           className={cn(
-            "group flex min-h-14 items-center gap-3 transition-colors",
+            "group flex min-h-12 items-center gap-3 transition-colors",
             destacado
               ? "rounded-sm border border-accent-border bg-accent-subtle p-3"
               : "-mx-2 rounded-sm px-2 py-3 hover:bg-sunken",

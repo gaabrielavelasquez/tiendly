@@ -20,7 +20,7 @@ type AtenderCardProps = { filas: Pendiente[]; className?: string };
 
 /**
  * "Para atender hoy": atajos a las listas ya filtradas, con ícono por tipo y acción explícita
- * "Ver detalle" (44 px de alto). Toda la fila sigue siendo tocable: el link se estira con ::after.
+ * "Ver detalle". Toda la fila sigue siendo tocable: el link se estira con ::after.
  * Entrada escalonada (fade + y).
  */
 export function AtenderCard({ filas, className }: AtenderCardProps) {
@@ -32,7 +32,7 @@ export function AtenderCard({ filas, className }: AtenderCardProps) {
       </h2>
       {filas.length === 0 ? (
         <div className="flex min-h-16 items-center gap-3 py-3">
-          <span className="flex size-10 shrink-0 items-center justify-center rounded-theme border border-success-border bg-success-surface">
+          <span className="flex size-9 shrink-0 items-center justify-center rounded-sm border border-success-border bg-success-surface">
             <Check aria-hidden strokeWidth={2} className="size-5 text-success" />
           </span>
           <p className="text-body-sm text-fg-secondary">
@@ -51,7 +51,7 @@ export function AtenderCard({ filas, className }: AtenderCardProps) {
                 transition={{ ...rapido, delay: i * ESCALON }}
               >
                 <div className="relative -mx-2 flex min-h-16 flex-wrap items-center gap-x-3 gap-y-1 rounded-theme px-2 py-2.5 transition-colors hover:bg-sunken lg:flex-nowrap">
-                  <span className={cn("flex size-10 shrink-0 items-center justify-center rounded-theme border", TILE[f.tono])}>
+                  <span className={cn("flex size-9 shrink-0 items-center justify-center rounded-sm border", TILE[f.tono])}>
                     <Icono aria-hidden strokeWidth={1.8} className="size-5" />
                   </span>
                   <span className="flex min-w-0 flex-1 flex-col gap-0.5">
@@ -62,12 +62,12 @@ export function AtenderCard({ filas, className }: AtenderCardProps) {
                     <span className="text-caption text-fg-secondary">{f.detalle}</span>
                   </span>
                   {/* Móvil: la acción baja debajo del texto (alineada con él) para no apretarlo. */}
-                  <div className="basis-full pl-10 lg:basis-auto lg:pl-0">
+                  <div className="basis-full pl-9 lg:basis-auto lg:pl-0">
                     <Link
                       href={f.href}
                       className={cn(
                         buttonVariants({ variant: "ghost", size: "sm" }),
-                        "static h-11 px-3 transition after:absolute after:inset-0 after:content-[''] active:scale-98",
+                        "static px-3 transition after:absolute after:inset-0 after:content-[''] active:scale-98",
                       )}
                     >
                       Ver detalle<span className="sr-only">: {f.titulo}</span>

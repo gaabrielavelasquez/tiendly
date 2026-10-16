@@ -44,7 +44,7 @@ export function SemanaCard({ total, pedidos, comparacion, dias, hoy }: SemanaCar
       <SemanaGrafico dias={dias} hoy={hoy} />
       <Link
         href="/panel/pedidos"
-        className={cn(buttonVariants({ variant: "ghost" }), "h-12 w-full transition active:scale-98 lg:w-auto lg:self-start")}
+        className={cn(buttonVariants({ variant: "ghost" }), "w-full transition active:scale-98 lg:w-auto lg:self-start")}
       >
         Ver todos los pedidos
       </Link>

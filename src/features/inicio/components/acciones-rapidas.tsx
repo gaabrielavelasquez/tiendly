@@ -13,12 +13,12 @@ type AccionesRapidasProps = { slug: string; className?: string };
 export function AccionesRapidas({ slug, className }: AccionesRapidasProps) {
   return (
     <div className={cn("flex flex-col-reverse gap-2 lg:flex-row lg:items-center", className)}>
-      <CompartirWhatsApp slug={slug} className="h-12 w-full lg:w-auto" />
+      <CompartirWhatsApp slug={slug} className="w-full lg:w-auto" />
       <Link
         href="/panel/productos/nuevo"
         className={cn(buttonVariants({ variant: "primary" }), "w-full transition hover:bg-cta-hover active:scale-98 lg:w-auto")}
       >
-        <Plus aria-hidden strokeWidth={2} className="size-5" />
+        <Plus aria-hidden strokeWidth={2} className="size-4" />
         <span>Nuevo producto</span>
       </Link>
     </div>

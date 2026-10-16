@@ -108,8 +108,8 @@
   --tl-radius-xl: 20px;
   --tl-radius-full: 9999px;
   --tl-radius-base: var(--tl-radius-md);
-  --tl-radius-card: var(--tl-radius-lg);
-  --tl-radius-button: 10px;
+  --tl-radius-card: var(--tl-radius-md);
+  --tl-radius-button: var(--tl-radius-sm);
   --tl-radius-chip: var(--tl-radius-full);
   --tl-stroke-thin: 1px;
   --tl-stroke-thick: 2px;
@@ -172,6 +172,7 @@
   --tl-gradient-highlight-mid: var(--tl-color-tint-lilac);
   --tl-gradient-highlight-end: var(--tl-color-tint-mist);
   --tl-gradient-primary: linear-gradient(135deg, var(--tl-accent-base) 0%, var(--tl-accent-base-deep) 100%);
+  --tl-gradient-hero: linear-gradient(135deg, var(--tl-accent-base) 0%, var(--tl-accent-base-deep) 55%, var(--tl-bg-inverse) 100%);
   --tl-gradient-glow-sky: radial-gradient(60% 60% at 50% 0%, var(--tl-glow-sky-from) 0%, var(--tl-glow-sky-to) 100%);
   --tl-effect-highlight: var(--tl-color-highlight-35);
   --tl-chart-bar: var(--tl-color-neutral-500);
@@ -185,9 +186,9 @@
   --tl-accent-glow: var(--tl-color-cobalt-alpha-8);
   --tl-accent-base-deep: var(--tl-color-navy-900);
   --tl-font-display: "Outfit", ui-sans-serif, system-ui, sans-serif;
-  --tl-font-display-style: 700;
+  --tl-font-display-style: 600;
   --tl-font-body: "Inter Variable", "Inter", ui-sans-serif, system-ui, sans-serif;
-  --tl-font-hero-style: 900;
+  --tl-font-hero-style: 600;
   --tl-glow-sky-from: var(--tl-color-cobalt-alpha-16);
   --tl-glow-sky-to: var(--tl-color-cobalt-50);
   --tl-glow-warm: var(--tl-color-warm-glow);

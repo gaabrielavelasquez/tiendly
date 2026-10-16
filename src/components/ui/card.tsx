@@ -2,7 +2,7 @@ import { cn } from "@/lib/cn";
 
 type CardProps = React.HTMLAttributes<HTMLDivElement> & { as?: "div" | "section" | "article" };
 
-/** Tarjeta: blanco sobre el lienzo (bg/page), radio 16 px, sombra suave de dos capas y aire generoso (24 · 32 px). */
+/** Tarjeta: blanco sobre el lienzo (bg/page), radio 12 px (0020), sombra suave de dos capas y aire generoso (24 · 32 px). */
 export function Card({ as: Tag = "div", className, ...rest }: CardProps) {
   return (
     <Tag

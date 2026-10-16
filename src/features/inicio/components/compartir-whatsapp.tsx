@@ -11,7 +11,7 @@ export function CompartirWhatsApp({ slug, texto = "Compartir mi tienda por Whats
       href={whatsappCompartir(slug)}
       target="_blank"
       rel="noopener noreferrer"
-      className={cn(buttonVariants({ variant: "secondary" }), "h-14 transition active:scale-98", className)}
+      className={cn(buttonVariants({ variant: "secondary" }), "transition active:scale-98", className)}
     >
       {/* Icono/whatsapp de Figma (20 × 20, trazo icon/default). */}
       {/* eslint-disable-next-line @next/next/no-img-element */}

@@ -2,7 +2,8 @@ import { cva } from "class-variance-authority";
 
 // DESIGN.md §4 · El degradado cobalto es exclusivo del CTA (decisión 0019).
 export const buttonVariants = cva(
-  "group relative isolate inline-flex aria-busy:pointer-events-none items-center justify-center gap-2 overflow-hidden rounded-button font-body font-semibold transition-colors disabled:cursor-not-allowed",
+  // Sleek & Crisp (0020): se ve de 40/36 px; el ::after estira la zona táctil a 48/44 px.
+  "group relative isolate inline-flex aria-busy:pointer-events-none items-center justify-center gap-2 rounded-button font-body font-semibold transition-colors disabled:cursor-not-allowed after:absolute after:inset-x-0 after:-inset-y-1 after:content-['']",
   {
     variants: {
       variant: {
@@ -12,8 +13,8 @@ export const buttonVariants = cva(
         danger: "bg-danger text-on-danger hover:bg-danger-hover disabled:bg-sunken disabled:text-fg-tertiary",
       },
       size: {
-        md: "h-12 px-5 text-body",
-        sm: "h-10 px-4 text-body-sm",
+        md: "h-10 px-4 text-body-sm",
+        sm: "h-9 px-3 text-body-sm",
       },
       block: { true: "w-full" },
     },

@@ -34,7 +34,7 @@ export function VistaPrevia({ nombre, slug }: { nombre: string; slug: string }) 
   return (
     <div className="relative shrink-0">
       <div aria-hidden className="absolute -inset-16 -z-10 bg-orb-sky" />
-      <div className="glass rounded-xl p-4">
+      <div className="glass rounded-card p-4">
         <MiniTienda nombre={nombre} slug={slug} tema={TEMA_INICIAL} />
       </div>
       <Flotante icon={ShoppingBag} tono="neutral" texto="Nuevo pedido · S/ 180" className="-top-6 -right-12" desfase={0.3} />

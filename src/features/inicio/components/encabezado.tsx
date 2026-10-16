@@ -1,6 +1,6 @@
 type EncabezadoProps = { titulo: string; subtitulo: string; accion?: React.ReactNode };
 
-/** Saludo de Inicio. En desktop, la acción (compartir) va a la derecha. Outfit Bold en móvil, Black en desktop. */
+/** Saludo de Inicio. En desktop, la acción (compartir) va a la derecha. Outfit SemiBold (decisión 0020). */
 export function Encabezado({ titulo, subtitulo, accion }: EncabezadoProps) {
   return (
     <header className="flex items-center gap-4">

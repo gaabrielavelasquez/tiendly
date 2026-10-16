@@ -24,7 +24,7 @@ export function Field({ label, hint, error, prefix, className, id, ...rest }: Fi
       </label>
       <div
         className={cn(
-          "flex h-12 items-center gap-2 rounded-button border bg-surface px-3 transition",
+          "flex h-10 items-center gap-2 rounded-button border bg-surface px-3 transition", // texto en 16 px: iOS no hace zoom
           // El anillo siempre existe (transparente) para que el foco se funda en 150 ms en vez de aparecer de golpe.
           "outline-2 outline-offset-2 outline-transparent focus-within:outline-focus",
           error ? "border-error" : "border-line-strong",

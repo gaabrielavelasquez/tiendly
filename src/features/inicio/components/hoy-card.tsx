@@ -8,18 +8,17 @@ import { formatoSoles } from "../lib/format";
 type HoyCardProps = { ventas: number; pedidos: number; corte: string; className?: string };
 
 /**
- * "Hoy": la tarjeta protagonista del panel. Fondo bg/inverse (negro carbón) con texto blanco y un
- * halo glow-sky en la esquina: contrasta con las tarjetas blancas sin usar el degradado cobalto,
- * que es solo del CTA (decisión 0019). El monto sube hasta su valor (Motion Primitives).
+ * "Hoy": la tarjeta protagonista del panel. Degradado gradient/hero (cobalto → marino → carbón),
+ * filo interior de 1 px y radio de tarjeta (12 px). Es la única excepción a 0019 fuera del CTA
+ * (decisión 0020). El monto sube hasta su valor (Motion Primitives).
  */
 export function HoyCard({ ventas, pedidos, corte, className }: HoyCardProps) {
   return (
     <Card
       as="section"
       aria-labelledby="hoy-titulo"
-      className={cn("relative isolate flex flex-col gap-5 overflow-hidden border-inverse bg-inverse text-fg-inverse shadow-float", className)}
+      className={cn("relative flex flex-col gap-5 border-transparent bg-hero text-fg-inverse shadow-float ring-1 ring-fg-inverse/10 ring-inset", className)}
     >
-      <div aria-hidden className="pointer-events-none absolute -top-1/2 -right-1/3 -z-10 size-full bg-orb-sky" />
       <div className="flex items-center justify-between gap-3">
         <h2 id="hoy-titulo" className="text-label font-bold tracking-widest text-fg-inverse/70 uppercase">
           Hoy
@@ -40,7 +39,7 @@ export function HoyCard({ ventas, pedidos, corte, className }: HoyCardProps) {
         </div>
       </div>
       {pedidos > 0 && (
-        <div className="mt-auto flex items-center justify-between rounded-theme bg-fg-inverse/10 px-4 py-3">
+        <div className="mt-auto flex items-center justify-between rounded-sm bg-fg-inverse/10 px-4 py-2.5">
           <span className="text-caption text-fg-inverse/70">Ticket promedio</span>
           <span className="text-body-sm font-bold tabular-nums">{formatoSoles(ventas / pedidos)}</span>
         </div>

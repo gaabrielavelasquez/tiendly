@@ -22,7 +22,7 @@ export function Button({ variant, size, block, loading, disabled, className, chi
     >
       {isPrimary && !disabled && (
         // Capa de hover: CSS no anima degradados, así que se funde una segunda capa.
-        <span aria-hidden className="absolute inset-0 -z-10 bg-cta-hover opacity-0 transition-opacity group-hover:opacity-100" />
+        <span aria-hidden className="absolute inset-0 -z-10 rounded-[inherit] bg-cta-hover opacity-0 transition-opacity group-hover:opacity-100" />
       )}
       {loading && <LoaderCircle aria-hidden className="size-5 motion-safe:animate-spin" />}
       <span>{children}</span>
