@@ -7,7 +7,11 @@ import { PasosCard } from "./pasos-card";
 export function VistaNueva({ datos }: { datos: InicioData }) {
   return (
     <>
-      <Encabezado titulo="Te damos la bienvenida" subtitulo="Tu tienda ya existe. Sigue estos pasos para recibir tu primer pedido." />
+      <Encabezado
+        titulo="Te damos la bienvenida"
+        subtitulo="Tu tienda ya existe. Sigue estos pasos para recibir tu primer pedido."
+        duena={datos.tienda.duena}
+      />
       <div className="grid items-start gap-6 lg:grid-cols-5">
         <PasosCard className="lg:col-span-3" pasos={datos.pasos} />
         <LinkTiendaCard className="lg:col-span-2" slug={datos.tienda.slug} />

@@ -15,7 +15,7 @@ type SemanaGraficoProps = { dias: DiaVentas[]; hoy: string };
 
 /**
  * Barras por día en píldora sobre un riel suave, lunes a domingo, sin ejes ni montos.
- * Degradado del mismo token (chart/bar); hoy en indicator/fill, nunca en cobalto.
+ * Degradado del mismo token (chart/bar); hoy en cobalto (accent/base, decisión 0020).
  * Con mouse o teclado se ve el detalle del día.
  */
 export function SemanaGrafico({ dias, hoy }: SemanaGraficoProps) {
@@ -59,7 +59,7 @@ export function SemanaGrafico({ dias, hoy }: SemanaGraficoProps) {
               aria-hidden
               className={cn(
                 "flex h-6 min-w-6 items-center justify-center rounded-chip px-1.5 text-label",
-                esHoy ? "bg-indicator font-bold text-on-selected" : "text-fg-secondary",
+                esHoy ? "bg-accent font-bold text-on-accent" : "text-fg-secondary",
               )}
             >
               {INICIALES[i]}

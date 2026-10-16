@@ -223,14 +223,14 @@
 }
 
 /*
-  Barras del gráfico: píldoras con degradado vertical suave del mismo token
-  (chart/bar o indicator/fill) hacia la superficie. Nunca cobalto (decisión 0019).
+  Barras del gráfico: píldoras con degradado vertical suave del mismo token hacia la superficie.
+  Resto de días en chart/bar; hoy en accent/base (cobalto), excepción a 0019 (decisión 0020).
 */
 @utility bg-bar {
   background-image: linear-gradient(to top, var(--tl-chart-bar), color-mix(in srgb, var(--tl-chart-bar) 55%, var(--tl-bg-surface)));
 }
 @utility bg-bar-today {
-  background-image: linear-gradient(to top, var(--tl-indicator-fill), color-mix(in srgb, var(--tl-indicator-fill) 70%, var(--tl-bg-surface)));
+  background-image: linear-gradient(to top, var(--tl-accent-base), color-mix(in srgb, var(--tl-accent-base) 70%, var(--tl-bg-surface)));
 }
 
 /*

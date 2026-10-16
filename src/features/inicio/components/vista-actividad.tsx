@@ -20,6 +20,7 @@ export function VistaActividad({ datos }: { datos: InicioData }) {
       <Encabezado
         titulo={`Hola, ${datos.tienda.duena}`}
         subtitulo={fechaLarga(datos.ahora)}
+        duena={datos.tienda.duena}
         accion={<AccionesRapidas slug={datos.tienda.slug} />}
       />
       <div className="grid gap-6 lg:grid-cols-5">

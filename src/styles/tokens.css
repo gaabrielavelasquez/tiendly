@@ -172,7 +172,7 @@
   --tl-gradient-highlight-mid: var(--tl-color-tint-lilac);
   --tl-gradient-highlight-end: var(--tl-color-tint-mist);
   --tl-gradient-primary: linear-gradient(135deg, var(--tl-accent-base) 0%, var(--tl-accent-base-deep) 100%);
-  --tl-gradient-hero: linear-gradient(135deg, var(--tl-accent-base) 0%, var(--tl-accent-base-deep) 55%, var(--tl-bg-inverse) 100%);
+  --tl-gradient-hero: linear-gradient(135deg, var(--tl-accent-base) 0%, var(--tl-accent-base-deep) 100%);
   --tl-gradient-glow-sky: radial-gradient(60% 60% at 50% 0%, var(--tl-glow-sky-from) 0%, var(--tl-glow-sky-to) 100%);
   --tl-effect-highlight: var(--tl-color-highlight-35);
   --tl-chart-bar: var(--tl-color-neutral-500);

@@ -32,7 +32,7 @@ Fuente: decisión **0012** (proyecto "IA on Product Design" → `tiendly/decisio
 - **Tokens:** cero valores escritos a mano; `npm run check:tokens` tiene que pasar.
 - **Colores:**
   - las barras van en `bg-chart`;
-  - la barra de hoy va en `bg-indicator` (negro carbón), nunca en cobalto;
+  - la barra de hoy va en cobalto (`bg-bar-today`, accent/base). *Cambiado el 16-oct-2026 por la decisión 0020; antes iba en `bg-indicator`.*;
   - el cobalto con degradado es solo para el botón primario.
 - **Los 4 estados:** carga (ya existe `loading.tsx`), vacío, con datos y error.
 - **Copy:** tuteo sin voseo, "cliente" y punto final en descripciones.

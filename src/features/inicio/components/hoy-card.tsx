@@ -8,16 +8,15 @@ import { formatoSoles } from "../lib/format";
 type HoyCardProps = { ventas: number; pedidos: number; corte: string; className?: string };
 
 /**
- * "Hoy": la tarjeta protagonista del panel. Degradado gradient/hero (cobalto → marino → carbón),
- * filo interior de 1 px y radio de tarjeta (12 px). Es la única excepción a 0019 fuera del CTA
- * (decisión 0020). El monto sube hasta su valor (Motion Primitives).
+ * "Hoy": la tarjeta protagonista del panel. Degradado gradient/hero (cobalto → azul medianoche),
+ * filo interior de 1 px al 15 % y radio de tarjeta (12 px). Excepción a 0019 (decisión 0020). El monto sube hasta su valor (Motion Primitives).
  */
 export function HoyCard({ ventas, pedidos, corte, className }: HoyCardProps) {
   return (
     <Card
       as="section"
       aria-labelledby="hoy-titulo"
-      className={cn("relative flex flex-col gap-5 border-transparent bg-hero text-fg-inverse shadow-float ring-1 ring-fg-inverse/10 ring-inset", className)}
+      className={cn("relative flex flex-col gap-5 border-transparent bg-hero text-fg-inverse shadow-float ring-1 ring-fg-inverse/15 ring-inset", className)}
     >
       <div className="flex items-center justify-between gap-3">
         <h2 id="hoy-titulo" className="text-label font-bold tracking-widest text-fg-inverse/70 uppercase">
@@ -39,7 +38,7 @@ export function HoyCard({ ventas, pedidos, corte, className }: HoyCardProps) {
         </div>
       </div>
       {pedidos > 0 && (
-        <div className="mt-auto flex items-center justify-between rounded-sm bg-fg-inverse/10 px-4 py-2.5">
+        <div className="mt-auto flex items-center justify-between rounded-sm border border-fg-inverse/10 bg-fg-inverse/10 px-4 py-2.5 backdrop-blur-sm">
           <span className="text-caption text-fg-inverse/70">Ticket promedio</span>
           <span className="text-body-sm font-bold tabular-nums">{formatoSoles(ventas / pedidos)}</span>
         </div>

@@ -60,7 +60,9 @@ La identidad visual de Tiendly combina **velocidad ultra limpia**, **lenguaje mo
 - Tarjetas de opción seleccionadas: fondo blanco (`selection/subtle`) y borde negro carbón. Sin tinte azul.
 - Barras de progreso, pasos, línea de tiempo y destellos: `indicator/fill` (negro carbón). Ítem de menú activo: `bg/sunken` + `text/primary`. Casillas marcadas: `selection/*`.
 - **Excepción:** los links y el botón Fantasma siguen en cobalto (`accent/text`, `#1D4ED8`), para que se reconozcan como links.
-- **Excepción (0020):** la tarjeta protagonista del panel ("Hoy") usa `gradient/hero` (cobalto → marino → carbón, 135°) con texto blanco, filo interior de 1 px al 10 % y radio de tarjeta. Es la única superficie con cobalto fuera del CTA, y hay una sola por vista.
+- **Excepciones (0020):**
+  - La tarjeta protagonista del panel ("Hoy") usa `gradient/hero` (cobalto `#2563EB` → azul medianoche `#1B365D`, 135°) con texto blanco, filo interior de 1 px al 15 % y radio de tarjeta. Hay una sola por vista. Dentro, los bloques secundarios son vidrio: blanco al 10 %, borde blanco al 10 % y `backdrop-blur-sm` (aún sin token: proponer `effect/blur` en Figma).
+  - En el gráfico semanal, la barra de hoy va en cobalto (`accent/base`); el resto de los días, en `chart/bar`. Las barras de progreso y los pasos siguen en `indicator/fill`.
 - *Alternativa evaluada y no aplicada:* fondo `#EFF6FF` con borde de 1.5 px y texto `#1D4ED8`. Para cambiar de estilo se editan solo las variables `selection/*` del modo Tiendly.
 
 ### Chips & Badges
@@ -162,7 +164,7 @@ La identidad visual de Tiendly combina **velocidad ultra limpia**, **lenguaje mo
 | `radii.pill` | `radius/full` | 9999 |
 | Sombra de tarjeta | estilo `Sombra/Baja` (`elevation.low`) | 0 4 20 negro 4 % + halo cálido 0 12 40 |
 | Celebración | estilo `Halo/Cálido` (`elevation.celebration`) | halo cálido + glow celeste |
-| Tarjeta protagonista | `gradient/hero` | cobalto → marino → carbón, 135° (0020) |
+| Tarjeta protagonista | `gradient/hero` | cobalto → azul medianoche, 135° (0020) |
 | Tipografía de cuerpo | `font/body` | Inter |
 | Tipografía de titulares | `font/display` + `font/display-style` / `font/hero-style` (modo Tiendly) | Outfit SemiBold (600) en Display y H1–H3 (0020) |
 | Estado informativo | `feedback/info/*` | teal: `#0D9488` en rellenos e íconos, `#0F766E` en texto (0016) |
