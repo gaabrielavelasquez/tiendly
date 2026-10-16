@@ -11,7 +11,7 @@ const ease = [...motionTokens.easing] as [number, number, number, number];
 export function AvisoDeshacer({ pausado, onDeshacer }: { pausado: Pausado | null; onDeshacer: () => void }) {
   const reduce = useReducedMotion();
   return (
-    <div role="status" className="pointer-events-none fixed inset-x-4 bottom-4 z-30 flex justify-center lg:inset-x-auto lg:right-8 lg:bottom-8">
+    <div role="status" className="pointer-events-none fixed inset-x-4 bottom-20 z-30 flex justify-center lg:inset-x-auto lg:right-8 lg:bottom-8">
       <AnimatePresence>
         {pausado && (
           <motion.div

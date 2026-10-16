@@ -44,7 +44,7 @@ export function TarjetaMedia({ imagenes, onAgregar, onQuitar }: MediaProps) {
           <ImagePlus aria-hidden strokeWidth={1.6} className="size-5 text-icon" />
         </span>
         <p className="text-body-sm text-fg">
-          <button type="button" onClick={() => input.current?.click()} className="link-text">
+          <button type="button" onClick={() => input.current?.click()} className="link-text relative after:absolute after:-inset-3 after:content-['']">
             Elige fotos
           </button>{" "}
           <span className="text-fg-secondary">o arrástralas aquí</span>
@@ -70,7 +70,7 @@ export function TarjetaMedia({ imagenes, onAgregar, onQuitar }: MediaProps) {
                   if (img.url.startsWith("blob:")) URL.revokeObjectURL(img.url); // libera la vista previa
                   onQuitar(img.id);
                 }}
-                className="absolute top-1.5 right-1.5 flex size-7 items-center justify-center rounded-full bg-surface text-icon shadow-card transition-opacity hover:text-fg pointer-fine:opacity-0 pointer-fine:group-hover:opacity-100 focus-visible:opacity-100"
+                className="absolute top-1.5 right-1.5 flex size-7 items-center justify-center rounded-full bg-surface after:absolute after:-inset-2 after:content-[''] text-icon shadow-card transition-opacity hover:text-fg pointer-fine:opacity-0 pointer-fine:group-hover:opacity-100 focus-visible:opacity-100"
               >
                 <X aria-hidden strokeWidth={1.8} className="size-4" />
               </button>
