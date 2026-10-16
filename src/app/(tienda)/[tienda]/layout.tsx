@@ -1,6 +1,6 @@
 type Tema = "neutral" | "editorial" | "suave" | "custom";
 
-/** Vitrina: cada tienda aplica su tema con data-theme (colección Brand). */
+/** Vitrina: cada tienda aplica su tema con data-theme (colección Brand). Neutral: decisión 0025. */
 export default async function TiendaLayout({
   children,
   params,

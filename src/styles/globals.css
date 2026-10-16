@@ -56,6 +56,8 @@
   --color-accent-subtle: var(--tl-accent-subtle);
   --color-accent-border: var(--tl-accent-border);
   --color-accent-glow: var(--tl-accent-glow);
+  /* Cobalto de la marca Tiendly: no lo cambian los temas de tienda (crédito "Hecho con tiendly"). */
+  --color-tiendly: var(--tl-color-cobalt-700);
 
   /* Selección (chip.selected) e indicadores: negro carbón en Tiendly */
   --color-selected: var(--tl-selection-bg);
@@ -275,4 +277,12 @@
   font-size: var(--tl-font-size-caption);
   font-weight: var(--tl-font-display-style);
   letter-spacing: var(--tracking-tight);
+}
+
+/* Filas que se desplazan con el dedo (categorías de la vitrina) sin barra visible. */
+@utility sin-scrollbar {
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
 }

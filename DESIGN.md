@@ -96,6 +96,9 @@ La identidad visual de Tiendly combina **velocidad ultra limpia**, **lenguaje mo
 
 ### Plan Free (3 Temas Curados)
 1. **Neutral:** Minimalista, directo y enfocado en el producto (estilo Uniqlo / GOAT).
+   - *Decisión 0025 (16-oct-2026):* titulares en **Outfit SemiBold** (antes Bricolage Grotesque Bold), fotos y tarjetas de 8 px, chips y botones de 6 px. Acento y selección en negro carbón. La UI se aparta: la foto manda.
+   - Vitrina mobile-first: cabecera fija mínima (nombre al centro, carrito a la derecha con punto spark si hay productos), categorías en fila desplazable, grilla de 2 columnas (3 en tablet, 4 en desktop) con fotos 4:5 y filo de 1 px al 5 %. Sin botón "agregar" en la grilla: toda la tarjeta lleva al producto.
+   - El crédito "Hecho con tiendly" usa el cobalto de la marca (`color-tiendly`), que no cambia con el tema.
 2. **Editorial:** Refinado, tipo revista o catálogo D2C con tipografías de alto contraste (estilo Zara / SKIMS).
 3. **Suave:** Cálido, cercano y acogedor con bordes redondeados y tonos crema (estilo Blank Street / Shop).
 

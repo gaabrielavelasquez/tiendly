@@ -254,10 +254,10 @@
 
 /* Tema de vitrina: neutral */
 [data-theme="neutral"] {
-  --tl-radius-base: var(--tl-radius-md);
-  --tl-radius-card: var(--tl-radius-md);
-  --tl-radius-button: var(--tl-radius-md);
-  --tl-radius-chip: var(--tl-radius-sm);
+  --tl-radius-base: var(--tl-radius-xs);
+  --tl-radius-card: var(--tl-radius-sm);
+  --tl-radius-button: var(--tl-radius-xs);
+  --tl-radius-chip: var(--tl-radius-xs);
   --tl-accent-base: var(--tl-bg-inverse);
   --tl-accent-hover: var(--tl-bg-inverse-hover);
   --tl-accent-pressed: var(--tl-bg-inverse-hover);
@@ -267,10 +267,10 @@
   --tl-accent-border: var(--tl-border-default);
   --tl-accent-glow: var(--tl-bg-sunken);
   --tl-accent-base-deep: var(--tl-bg-inverse);
-  --tl-font-display: "Bricolage Grotesque", ui-sans-serif, system-ui, sans-serif;
-  --tl-font-display-style: 700;
+  --tl-font-display: "Outfit", ui-sans-serif, system-ui, sans-serif;
+  --tl-font-display-style: 600;
   --tl-font-body: "Inter Variable", "Inter", ui-sans-serif, system-ui, sans-serif;
-  --tl-font-hero-style: 800;
+  --tl-font-hero-style: 600;
   --tl-glow-sky-from: var(--tl-bg-sunken);
   --tl-glow-sky-to: var(--tl-bg-page);
   --tl-glow-warm: var(--tl-color-warm-glow);
