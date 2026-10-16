@@ -1,0 +1,158 @@
+@import "tailwindcss";
+@import "./tokens.css";
+@import "@fontsource-variable/inter";
+@import "@fontsource/outfit/700.css";
+@import "@fontsource/outfit/900.css";
+
+/*
+  Puente entre los tokens de DESIGN.md (--tl-*) y las clases de Tailwind.
+  Se borran los colores, radios, sombras y tamaños por defecto de Tailwind:
+  si una clase no está aquí, no existe. Así es imposible usar un azul "de Tailwind".
+*/
+@theme inline {
+  --color-*: initial;
+  --radius-*: initial;
+  --shadow-*: initial;
+  --text-*: initial;
+  --font-*: initial;
+
+  /* Fondos */
+  --color-page: var(--tl-bg-page);
+  --color-surface: var(--tl-bg-surface);
+  --color-sunken: var(--tl-bg-sunken);
+  --color-inverse: var(--tl-bg-inverse);
+  --color-scrim: var(--tl-bg-scrim);
+  --color-transparent: transparent;
+
+  /* Texto e íconos */
+  --color-fg: var(--tl-text-primary);
+  --color-fg-secondary: var(--tl-text-secondary);
+  --color-fg-tertiary: var(--tl-text-tertiary);
+  --color-fg-inverse: var(--tl-text-inverse);
+  --color-icon: var(--tl-icon-default);
+  --color-icon-subtle: var(--tl-icon-subtle);
+
+  /* Bordes */
+  --color-line-subtle: var(--tl-border-subtle);
+  --color-line: var(--tl-border-default);
+  --color-line-strong: var(--tl-border-strong);
+  --color-focus: var(--tl-focus-ring);
+
+  /* Acento: el relleno cobalto es SOLO del CTA (decisión 0019). accent-text = links. */
+  --color-accent: var(--tl-accent-base);
+  --color-accent-hover: var(--tl-accent-hover);
+  --color-accent-pressed: var(--tl-accent-pressed);
+  --color-on-accent: var(--tl-accent-contrast);
+  --color-accent-text: var(--tl-accent-text);
+  --color-accent-subtle: var(--tl-accent-subtle);
+  --color-accent-border: var(--tl-accent-border);
+  --color-accent-glow: var(--tl-accent-glow);
+
+  /* Selección (chip.selected) e indicadores: negro carbón en Tiendly */
+  --color-selected: var(--tl-selection-bg);
+  --color-on-selected: var(--tl-selection-fg);
+  --color-selected-border: var(--tl-selection-border);
+  --color-selected-subtle: var(--tl-selection-subtle);
+  --color-indicator: var(--tl-indicator-fill);
+
+  /* Estados */
+  --color-success: var(--tl-feedback-success-text);
+  --color-success-surface: var(--tl-feedback-success-surface);
+  --color-success-border: var(--tl-feedback-success-border);
+  --color-warning: var(--tl-feedback-warning-text);
+  --color-warning-surface: var(--tl-feedback-warning-surface);
+  --color-warning-border: var(--tl-feedback-warning-border);
+  --color-error: var(--tl-feedback-error-text);
+  --color-error-surface: var(--tl-feedback-error-surface);
+  --color-error-border: var(--tl-feedback-error-border);
+  --color-info: var(--tl-feedback-info-text);
+  --color-info-solid: var(--tl-feedback-info-solid);
+  --color-info-surface: var(--tl-feedback-info-surface);
+  --color-info-border: var(--tl-feedback-info-border);
+  --color-danger: var(--tl-danger-base);
+  --color-danger-hover: var(--tl-danger-hover);
+  --color-on-danger: var(--tl-danger-contrast);
+  --color-control-off: var(--tl-control-off);
+  --color-chart: var(--tl-chart-bar);
+  --color-whatsapp: var(--tl-channel-whatsapp-fill);
+  --color-on-whatsapp: var(--tl-channel-whatsapp-contrast);
+
+  /* Radios (DESIGN.md §4) */
+  --radius-none: var(--tl-radius-none);
+  --radius-sm: var(--tl-radius-sm);
+  --radius-md: var(--tl-radius-md);
+  --radius-lg: var(--tl-radius-lg);
+  --radius-xl: var(--tl-radius-xl);
+  --radius-full: var(--tl-radius-full);
+  --radius-theme: var(--tl-radius-base);
+  --radius-card: var(--tl-radius-card);
+  --radius-button: var(--tl-radius-button);
+  --radius-chip: var(--tl-radius-chip);
+
+  /* Sombras */
+  --shadow-card: var(--tl-elevation-low);
+  --shadow-float: var(--tl-elevation-medium);
+  --shadow-overlay: var(--tl-elevation-high);
+  --shadow-celebration: var(--tl-elevation-celebration);
+
+  /* Tipografía: Outfit (titulares) e Inter (cuerpo) */
+  --font-display: var(--tl-font-display);
+  --font-body: var(--tl-font-body);
+  --text-display: var(--tl-font-size-display);
+  --text-display--line-height: 1.05;
+  --text-h1: var(--tl-font-size-h1);
+  --text-h1--line-height: 1.15;
+  --text-h2: var(--tl-font-size-h2);
+  --text-h2--line-height: 1.2;
+  --text-h3: var(--tl-font-size-h3);
+  --text-h3--line-height: 1.3;
+  --text-body-lg: var(--tl-font-size-body-lg);
+  --text-body: var(--tl-font-size-body);
+  --text-body-sm: var(--tl-font-size-body-sm);
+  --text-caption: var(--tl-font-size-caption);
+  --text-label: var(--tl-font-size-label);
+
+  /* Espaciado: base 4 pt, igual que space/* */
+  --spacing: var(--tl-space-1);
+
+  /* Movimiento */
+  --ease-standard: var(--tl-motion-easing-standard);
+  --default-transition-duration: var(--tl-motion-duration-fast);
+  --default-transition-timing-function: var(--tl-motion-easing-standard);
+}
+
+/* Utilidades que Tailwind no puede expresar con una sola variable */
+@utility bg-cta {
+  background-image: var(--tl-gradient-primary);
+}
+@utility bg-glow-sky {
+  background-image: var(--tl-gradient-glow-sky);
+}
+@utility bg-highlight {
+  background-image: linear-gradient(135deg, var(--tl-gradient-highlight-start), var(--tl-gradient-highlight-mid) 55%, var(--tl-gradient-highlight-end));
+}
+@utility font-display-hero {
+  font-family: var(--tl-font-display);
+  font-weight: var(--tl-font-hero-style);
+}
+@utility font-display-title {
+  font-family: var(--tl-font-display);
+  font-weight: var(--tl-font-display-style);
+}
+
+@layer base {
+  html {
+    background: var(--tl-bg-page);
+    color: var(--tl-text-primary);
+    font-family: var(--tl-font-body);
+    -webkit-font-smoothing: antialiased;
+  }
+  :focus-visible {
+    outline: var(--tl-stroke-thick) solid var(--tl-focus-ring);
+    outline-offset: var(--tl-stroke-thick);
+  }
+}
+
+@utility bg-cta-hover {
+  background-image: linear-gradient(135deg, var(--tl-accent-hover) 0%, var(--tl-accent-base-deep) 100%);
+}
