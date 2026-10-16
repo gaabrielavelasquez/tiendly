@@ -4,6 +4,7 @@ import { Plus } from "lucide-react";
 import { useState } from "react";
 import { COLORES_SUGERIDOS, TALLAS_CALZADO, TALLAS_ROPA, type Errores, type FormProducto, type VarianteForm } from "../../lib/formulario";
 import { ChipsOpciones } from "./chips-opciones";
+import { AcordeonVariantes } from "./acordeon-variantes";
 import { TablaVariantes } from "./tabla-variantes";
 import { TarjetaSeccion as Tarjeta } from "@/components/panel";
 
@@ -53,7 +54,11 @@ export function TarjetaVariantes({ form, errores, onColor, onTalla, onVariante }
       </ChipsOpciones>
       <ChipsOpciones legend="Tallas de ropa" opciones={TALLAS_ROPA} elegidas={form.tallas} onAlternar={onTalla} />
       <ChipsOpciones legend="Tallas de calzado" opciones={TALLAS_CALZADO} elegidas={form.tallas} onAlternar={onTalla} />
-      <TablaVariantes form={form} error={errores.variantes} onCambio={onVariante} />
+      {/* Móvil: acordeón por color. Desde 640 px: la planilla completa. */}
+      <AcordeonVariantes form={form} error={errores.variantes} onCambio={onVariante} className="sm:hidden" />
+      <div className="hidden sm:block">
+        <TablaVariantes form={form} error={errores.variantes} onCambio={onVariante} />
+      </div>
     </Tarjeta>
   );
 }
