@@ -60,7 +60,7 @@ export function contarPorFiltro(lista: Pedido[], ahora: string): Record<Filtro, 
 
 const normalizar = (s: string) => s.normalize("NFD").replace(/\p{Diacritic}/gu, "").toLowerCase().replace(/[\s#-]/g, "");
 
-/** Busca por número de pedido (con o sin "#T-"), nombre del cliente o celular. */
+/** Busca por número de pedido (con o sin "#TL-"), nombre del cliente o celular. */
 export function filtrarPedidos(lista: Pedido[], filtro: Filtro, busqueda: string, ahora: string) {
   const q = normalizar(busqueda);
   return lista.filter(

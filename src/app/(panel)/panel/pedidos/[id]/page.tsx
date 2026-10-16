@@ -8,7 +8,7 @@ export const metadata: Metadata = { title: "Pedido · Tiendly" };
 
 type PageProps = { params: Promise<{ id: string }> };
 
-/** Detalle de un pedido (t-1035 a t-1047). Si el id no existe, 404. */
+/** Detalle de un pedido (tl-1035 a tl-1047). Si el id no existe, 404. */
 export default async function DetallePedidoPage({ params }: PageProps) {
   const { id } = await params;
   const datos = await obtenerPedido(id);

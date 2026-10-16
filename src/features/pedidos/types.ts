@@ -10,7 +10,7 @@ export type EstadoEntrega = "por-enviar" | "enviado" | "entregado";
 
 export type Pedido = {
   id: string;
-  /** Número visible, p. ej. "T-1042". */
+  /** Número visible, p. ej. "TL-1042" (decisión 0028). */
   numero: string;
   creadoEl: string;
   cliente: { nombre: string; celular: string };

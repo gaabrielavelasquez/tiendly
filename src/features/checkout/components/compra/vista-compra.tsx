@@ -9,7 +9,7 @@ import { CabeceraTienda } from "@/features/vitrina/components/cabecera-tienda";
 import { formatoSoles } from "@/lib/formato";
 import { cn } from "@/lib/cn";
 import type { DatosCompra } from "../../lib/catalogo";
-import { registrarPedido, reservarNumero } from "../../lib/acciones";
+import { registrarPedido, reservarNumero, revisarStock } from "../../lib/acciones";
 import { guardarPedido, reservaHasta } from "../../lib/pedido";
 import { calcularTotales } from "../../lib/reglas";
 import { linkWhatsApp, mensajePedido } from "../../lib/whatsapp";
@@ -48,21 +48,28 @@ export function VistaCompra({ datos: { tienda, categorias, catalogo } }: { datos
   async function pagar() {
     if (!numero || !c.entrega) return;
     setError("");
+    // WhatsApp: la pestaña se abre en el mismo clic (si no, el navegador la bloquea) y recibe el link después.
+    const ventana = c.metodo === "whatsapp" ? window.open("", "_blank") : null;
+    if (ventana) ventana.opener = null;
+    const fallar = (m: string) => (ventana?.close(), setError(m));
+    const items = lineas.map(({ id, color, talla, cantidad }) => ({ id, color, talla, cantidad }));
+    const sinStock = await revisarStock(tienda.slug, items);
+    if (sinStock) return fallar(sinStock);
     let pago: Awaited<ReturnType<typeof c.confirmar>> = { metodo: "whatsapp" };
-    if (c.metodo === "whatsapp") window.open(linkWhatsApp(tienda.celular, mensaje), "_blank", "noopener"); // en el mismo clic: así no lo bloquea el navegador
-    else pago = await c.confirmar();
+    if (c.metodo !== "whatsapp") pago = await c.confirmar();
     if (!pago || !c.metodo) return;
     const e = c.entrega;
     const r = await registrarPedido({
       tienda: tienda.slug,
       numero,
-      items: lineas.map(({ id, color, talla, cantidad }) => ({ id, color, talla, cantidad })),
+      items,
       cupon: carrito.cupon?.codigo,
       datos: c.datos,
       entrega: e.tipo === "recojo" ? e : { tipo: "delivery", distrito: e.distrito.nombre, direccion: e.direccion, referencia: e.referencia },
       metodo: c.metodo,
     });
-    if ("error" in r) return setError(r.error);
+    if ("error" in r) return fallar(r.error);
+    if (ventana) ventana.location.href = linkWhatsApp(tienda.celular, mensaje);
     const base = { numero, creadoEl: r.creadoEl, datos: c.datos, entrega: e, lineas, cupon: carrito.cupon?.codigo, totales: r.totales };
     const pedido: PedidoCreado = pago.metodo === "whatsapp" ? { ...base, pago: { metodo: "whatsapp", reservadoHasta: reservaHasta(r.creadoEl) } } : { ...base, pago };
     guardarPedido(tienda.slug, pedido);

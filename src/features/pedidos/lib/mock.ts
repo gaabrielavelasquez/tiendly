@@ -8,7 +8,7 @@ import { DETALLES, unidades } from "./detalle-mock";
 export const AHORA = "2026-10-15T18:30:00-05:00";
 
 type Base = Omit<Pedido, "id" | "numero">;
-const p = (n: number, datos: Base): Pedido => ({ id: `t-${n}`, numero: `T-${n}`, ...datos });
+const p = (n: number, datos: Base): Pedido => ({ id: `tl-${n}`, numero: `TL-${n}`, ...datos });
 
 const PEDIDOS: Pedido[] = [
   // Hoy
@@ -64,7 +64,7 @@ export async function obtenerPedido(id: string): Promise<{ pedido: Pedido; detal
   await new Promise((r) => setTimeout(r, 400));
   const { pedidosCreados } = await import("./almacen");
   const creado = pedidosCreados().find((c) => c.pedido.id === id);
-  if (creado) return creado;
+  if (creado) return { pedido: creado.pedido, detalle: creado.detalle };
   const pedido = PEDIDOS.find((p) => p.id === id);
   const detalle = DETALLES[id];
   return pedido && detalle ? { pedido: conUnidades(pedido), detalle } : null;

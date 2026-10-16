@@ -1,6 +1,8 @@
 "use server";
 
 import { agregarPedido, horaDemo, siguienteNumero } from "@/features/pedidos/lib/almacen";
+import { RESERVA_HORAS } from "@/features/pedidos/lib/reglas";
+import { asignarStock } from "@/features/productos/lib/inventario";
 import type { DetallePedido, Pedido } from "@/features/pedidos/types";
 import type { ItemCarrito } from "@/features/vitrina/lib/carrito";
 import type { Datos, MetodoPago, Totales } from "../types";
@@ -13,6 +15,19 @@ import { calcularTotales, resolverLineas, validarCupon, validarDatos } from "./r
 /** Reserva el número del pedido al llegar al pago (el mensaje de WhatsApp ya lo muestra). */
 export async function reservarNumero(): Promise<string> {
   return siguienteNumero();
+}
+
+/** El stock pudo cambiar mientras el cliente compraba (otra venta o una reserva por WhatsApp). */
+function faltaStock(items: ItemCarrito[], lineas: ReturnType<typeof resolverLineas>) {
+  const l = lineas.find((x) => items.some((i) => i.id === x.id && i.color === x.color && i.talla === x.talla && i.cantidad > x.maximo));
+  if (!l) return null;
+  return l.maximo ? `Solo quedan ${l.maximo} de ${l.nombre} en talla ${l.talla}. Ajusta la cantidad en tu carrito.` : `Se agotó ${l.nombre} en talla ${l.talla}. Quítala de tu carrito para seguir.`;
+}
+
+/** Se llama ANTES de cobrar: si falta stock, no se cobra nada. */
+export async function revisarStock(tienda: string, items: ItemCarrito[]): Promise<string | null> {
+  const compra = await obtenerCompra(tienda);
+  return compra ? faltaStock(items, resolverLineas(items, compra.catalogo)) : "La tienda no existe.";
 }
 
 type Entrada = {
@@ -33,8 +48,10 @@ type Entrada = {
 export async function registrarPedido(e: Entrada): Promise<{ creadoEl: string; totales: Totales } | { error: string }> {
   const compra = await obtenerCompra(e.tienda);
   if (!compra) return { error: "La tienda no existe." };
-  const lineas = resolverLineas(e.items, compra.catalogo).filter((l) => l.maximo > 0);
+  const lineas = resolverLineas(e.items, compra.catalogo);
   if (!lineas.length || Object.keys(validarDatos(e.datos)).length) return { error: "Revisa tu pedido y tus datos." };
+  const falta = faltaStock(e.items, lineas);
+  if (falta) return { error: falta };
   const distrito = e.entrega.tipo === "delivery" ? DISTRITOS.find((d) => d.nombre === (e.entrega as { distrito: string }).distrito) : undefined;
   if (e.entrega.tipo === "delivery" && !distrito) return { error: "Elige el distrito donde recibes tu pedido." };
   const productos = lineas.reduce((s, l) => s + l.precio * l.cantidad, 0);
@@ -62,6 +79,10 @@ export async function registrarPedido(e: Entrada): Promise<{ creadoEl: string; t
     referencia: entrega.tipo === "delivery" && entrega.referencia ? entrega.referencia : undefined,
     pagadoEl: pagado ? creadoEl : undefined,
   };
-  agregarPedido(pedido, detalle);
+  const stock = lineas.map(({ id, color, talla, cantidad }) => ({ id, color, talla, cantidad }));
+  agregarPedido({ pedido, detalle, stock });
+  // Pagado: el stock baja ya. Por WhatsApp: queda reservado 24 h (si vence, se libera solo).
+  const hasta = new Date(new Date(creadoEl).getTime() + RESERVA_HORAS * 3600000).toISOString();
+  asignarStock(pedido.id, pagado ? { tipo: "vendido", items: stock } : { tipo: "reservado", items: stock, hasta });
   return { creadoEl, totales };
 }
