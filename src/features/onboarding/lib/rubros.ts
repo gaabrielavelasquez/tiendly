@@ -1,26 +1,32 @@
 export type Tema = "neutral" | "editorial" | "suave";
 
+/** "¿Qué vendes?": se pueden elegir varios (una tienda puede vender ropa y accesorios a la vez). */
 export const RUBROS = [
-  { id: "moda", label: "Moda", tema: "editorial", frase: "moda" },
-  { id: "calzado", label: "Calzado", tema: "editorial", frase: "calzado" },
-  { id: "accesorios", label: "Accesorios", tema: "editorial", frase: "accesorios" },
-  { id: "belleza", label: "Belleza", tema: "suave", frase: "belleza" },
-  { id: "reposteria", label: "Repostería", tema: "suave", frase: "repostería" },
-  { id: "otro", label: "Otro", tema: "neutral", frase: "" },
-] as const satisfies readonly { id: string; label: string; tema: Tema; frase: string }[];
+  { id: "moda", label: "Moda" },
+  { id: "calzado", label: "Calzado" },
+  { id: "accesorios", label: "Accesorios" },
+  { id: "belleza", label: "Belleza" },
+  { id: "reposteria", label: "Repostería" },
+  { id: "otro", label: "Otro" },
+] as const;
 
 export type RubroId = (typeof RUBROS)[number]["id"];
 
 export const TEMA_LABEL: Record<Tema, string> = { neutral: "Neutral", editorial: "Editorial", suave: "Suave" };
 
-/** Decisión 0013: el tema por defecto sale del rubro. */
-export function temaDe(rubro: RubroId | null): Tema {
-  return RUBROS.find((r) => r.id === rubro)?.tema ?? "neutral";
-}
+/**
+ * Toda tienda arranca con el tema Neutral y la persona lo cambia en Mi tienda.
+ * Reemplaza la regla anterior de la decisión 0013 (tema según el rubro): con varios rubros
+ * no hay un único tema que elegir, y decirlo claro evita sorpresas.
+ */
+export const TEMA_INICIAL: Tema = "neutral";
 
-export function explicacionTema(rubro: RubroId | null): string {
-  const r = RUBROS.find((x) => x.id === rubro);
-  const tema = TEMA_LABEL[temaDe(rubro)];
-  if (!r || !r.frase) return `Le pusimos el tema ${tema}, que va bien con todo.`;
-  return `Le pusimos el tema ${tema} por ser de ${r.frase}.`;
+export const EXPLICACION_TEMA = `Le pusimos el tema ${TEMA_LABEL[TEMA_INICIAL]} para empezar. Podrás cambiarlo o personalizarlo cuando quieras desde Mi tienda.`;
+
+/** Agrega o quita un rubro, manteniendo el orden de la lista. */
+export function alternarRubro(actuales: readonly RubroId[], id: RubroId): RubroId[] {
+  const set = new Set(actuales);
+  if (set.has(id)) set.delete(id);
+  else set.add(id);
+  return RUBROS.map((r) => r.id).filter((r) => set.has(r));
 }

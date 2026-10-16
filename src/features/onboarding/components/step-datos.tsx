@@ -21,7 +21,7 @@ export function StepDatos() {
     e.preventDefault();
     const nuevos: Errores = {
       nombre: state.nombre.trim().length < 2 ? "Escribe el nombre de tu negocio." : undefined,
-      rubro: state.rubro ? undefined : "Elige qué vendes para armar tu tienda.",
+      rubro: state.rubros.length ? undefined : "Elige al menos una opción para armar tu tienda.",
       celular: errorCelular(state.celularVentas),
     };
     setErrores(nuevos);
@@ -49,7 +49,7 @@ export function StepDatos() {
         />
         <SlugStatus estado={slug} />
       </div>
-      <RubroChips value={state.rubro} onChange={(rubro) => set({ rubro })} error={errores.rubro} />
+      <RubroChips value={state.rubros} onChange={(rubros) => set({ rubros })} error={errores.rubro} />
       <Field
         label="WhatsApp de ventas"
         prefix="+51"

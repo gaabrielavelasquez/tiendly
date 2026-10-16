@@ -2,7 +2,7 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/cn";
 
 // Badge compacto: 24 px de alto, pill (decisión 0018). Sin cobalto (decisión 0019).
-const badge = cva("inline-flex h-6 items-center gap-1 rounded-chip px-2 text-label font-semibold", {
+const badge = cva("inline-flex h-6 items-center gap-1 rounded-chip px-2 text-label font-semibold whitespace-nowrap", {
   variants: {
     tone: {
       neutral: "bg-sunken text-fg",

@@ -8,7 +8,7 @@ import { Button } from "@/components/ui";
 import { MiniTienda } from "./mini-tienda";
 import { Sparkles } from "./sparkles";
 import { useOnboarding } from "../hooks/use-onboarding";
-import { explicacionTema, temaDe } from "../lib/rubros";
+import { EXPLICACION_TEMA, TEMA_INICIAL } from "../lib/rubros";
 
 /** O4 / OD4 · Celebración. Móvil muestra la mini tienda; desktop, el sello de éxito (la tienda ya está a la izquierda). */
 export function StepLista() {
@@ -22,7 +22,7 @@ export function StepLista() {
     <div className="flex flex-1 flex-col items-center gap-6 text-center lg:items-start lg:text-left">
       <div className="relative mt-auto flex justify-center px-10 py-6 lg:hidden">
         <motion.div initial={entrada} animate={{ opacity: 1, scale: 1, y: 0 }} transition={{ type: "spring", stiffness: 220, damping: 20 }}>
-          <MiniTienda nombre={state.nombre} slug={state.slug} tema={temaDe(state.rubro)} className="shadow-celebration" />
+          <MiniTienda nombre={state.nombre} slug={state.slug} tema={TEMA_INICIAL} className="shadow-celebration" />
         </motion.div>
         <Sparkles />
       </div>
@@ -38,10 +38,8 @@ export function StepLista() {
         <Sparkles count={3} className="-inset-8" />
       </div>
       <header className="flex flex-col gap-2">
-        <h1 className="font-display-hero text-h1">¡Tu tienda ya existe!</h1>
-        <p className="text-body text-fg-secondary">
-          {explicacionTema(state.rubro)} Ahora agrega tu primer producto y empieza a vender.
-        </p>
+        <h1 className="font-display-hero text-h1">¡Tu tienda está lista!</h1>
+        <p className="text-body text-fg-secondary">{EXPLICACION_TEMA}</p>
       </header>
       <Button
         className="mt-auto lg:mt-2"

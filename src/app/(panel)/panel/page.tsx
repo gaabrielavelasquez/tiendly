@@ -1,20 +1,17 @@
-import { PackageOpen } from "lucide-react";
-import { Button, Card, EmptyState } from "@/components/ui";
-import { Bienvenida } from "./bienvenida";
+import { PanelMain } from "@/components/panel";
+import { VistaActividad } from "@/features/inicio/components/vista-actividad";
+import { VistaNueva } from "@/features/inicio/components/vista-nueva";
+import { leerEscenario, obtenerInicio } from "@/features/inicio/lib/mock";
+import { esTiendaNueva } from "@/features/inicio/lib/reglas";
 
-// Placeholder: Inicio (decisión 0012) se construye en feat/inicio.
-export default function PanelInicio() {
-  return (
-    <main className="mx-auto flex max-w-xl flex-col gap-4 px-4 py-8">
-      <Bienvenida />
-      <Card>
-        <EmptyState
-          icon={PackageOpen}
-          title="Tu tienda está lista para recibir productos"
-          description="Inicio con tus pasos para arrancar llega en la próxima entrega."
-          action={<Button>Agregar mi primer producto</Button>}
-        />
-      </Card>
-    </main>
-  );
+type PageProps = { searchParams: Promise<Record<string, string | string[] | undefined>> };
+
+/**
+ * Inicio (decisión 0012). Con datos simulados: ?escenario=actividad (por defecto), al-dia, nueva o error.
+ * Carga en loading.tsx y error en error.tsx; "tienda nueva" es el estado vacío.
+ */
+export default async function PanelInicio({ searchParams }: PageProps) {
+  const { escenario } = await searchParams;
+  const datos = await obtenerInicio(leerEscenario(escenario));
+  return <PanelMain>{esTiendaNueva(datos) ? <VistaNueva datos={datos} /> : <VistaActividad datos={datos} />}</PanelMain>;
 }

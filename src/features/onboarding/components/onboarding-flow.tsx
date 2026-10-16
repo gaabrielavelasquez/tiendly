@@ -9,7 +9,6 @@ import { StepLista } from "./step-lista";
 import { StepRegistro } from "./step-registro";
 import { OnboardingProvider, useOnboarding, type Paso } from "../hooks/use-onboarding";
 import { aSlug } from "../lib/slug";
-import { temaDe } from "../lib/rubros";
 
 const PASOS: Record<Paso, () => React.ReactElement> = {
   registro: StepRegistro,
@@ -25,7 +24,7 @@ function Flujo() {
   const desplazamiento = reduce ? 0 : 16;
 
   return (
-    <OnboardingShell nombre={state.nombre} slug={state.slug || aSlug(state.nombre)} tema={temaDe(state.rubro)}>
+    <OnboardingShell nombre={state.nombre} slug={state.slug || aSlug(state.nombre)}>
       <AnimatePresence mode="wait" initial={false}>
         <motion.div
           key={state.paso}

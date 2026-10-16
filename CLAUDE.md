@@ -55,4 +55,4 @@ Claude utilizará los siguientes principios y bibliotecas de UI/Motion para evit
   4. Estado de Error.
 - **Feedback Háptico / Visual:** Botones con transición `150ms ease-out` y escala al presionar (`active:scale-[0.98]`).
 - **Selección:** chips, fichas, radios, tarjetas de opción e interruptores seleccionados usan `selection/*` (negro carbón `#1A1A1A` + texto blanco). El cobalto con degradado es exclusivo del botón primario (CTA).
-- **Forma:** botones de `10px` (`radius/button`); chips y badges en pill compacto (`radius/chip`): chip de 32 px y badge de 24 px de alto visibles, con zona táctil de 44 px en los chips. Ante cualquier diferencia, manda `DESIGN.md`.
+- **Forma (decisión 0020 · Sleek & Crisp):** tarjetas de `12px` (`radius/card`); botones y campos de `8px` (`radius/button`) y 40 px de alto; chips y badges en pill compacto (`radius/chip`): chip de 28 px y badge de 24 px visibles, con zona táctil de 44 px. Titulares en Outfit SemiBold. Ante cualquier diferencia, manda `DESIGN.md`.

@@ -32,7 +32,7 @@ export function OtpInput({ value, onChange, error, disabled }: OtpInputProps) {
           <div
             key={i}
             className={cn(
-              "flex h-18 items-center justify-center rounded-button border bg-surface font-display-title text-h1 transition-colors",
+              "flex h-14 items-center justify-center rounded-button border bg-surface font-display-title text-h2 transition-colors",
               error ? "border-error" : "border-line-strong",
               !error && foco && i === activo && "border-selected-border outline-2 outline-offset-2 outline-focus",
             )}

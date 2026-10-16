@@ -12,7 +12,7 @@ export type OnboardingState = {
   celular: string;
   nombre: string;
   slug: string;
-  rubro: RubroId | null;
+  rubros: RubroId[];
   celularVentas: string;
 };
 
@@ -22,7 +22,7 @@ const INICIAL: OnboardingState = {
   celular: "",
   nombre: "",
   slug: "",
-  rubro: null,
+  rubros: [],
   celularVentas: "",
 };
 const KEY = "tiendly:onboarding";

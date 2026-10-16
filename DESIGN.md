@@ -37,7 +37,7 @@ La identidad visual de Tiendly combina **velocidad ultra limpia**, **lenguaje mo
 
 ## 3. Tipografía & Jerarquía
 
-- **Titulares (Headings):** **Outfit**. Black para Display y titulares grandes (≥ 32 px); Bold para H1–H3. Transmite impacto rápido, modernismo e invitación clara a la acción.
+- **Titulares (Headings):** **Outfit SemiBold (600)** en Display y H1–H3, con `tracking-tight`; Medium (500) para subtítulos de apoyo. Nada de Black (900): se ve pesado y "de juguete". *Cambiado el 16-oct-2026 (decisión 0020 · Sleek & Crisp).*
 - **Cuerpo / Interfaz (Body & UI):** Sans-Serif neutra (ej. Inter / SF Pro) en pesos Regular y Medium, enfocada en máxima legibilidad en dispositivos móviles.
 
 ---
@@ -46,11 +46,12 @@ La identidad visual de Tiendly combina **velocidad ultra limpia**, **lenguaje mo
 
 ### Tarjetas (Cards)
 - Fondo blanco puro (`#FFFFFF`) sobre superficie neutra.
-- Esquinas redondeadas suaves: `border-radius: 16px` (`radii.card`).
+- Esquinas precisas: `border-radius: 12px` (`radii.card`). *Bajado de 16 px el 16-oct-2026 (decisión 0020).*
 - Sombras sutiles y difuminadas (`0px 4px 20px rgba(0, 0, 0, 0.04)`).
 
 ### Botones
-- Bordes suavizados de **`10px`** por defecto en el panel (`radii.button`). *Bajado de 12 px el 15-oct-2026 (decisión 0018).* Nunca pill en botones.
+- Esquinas de **`8px`** en botones y campos (`radii.button`, que también usan los inputs). *Bajado de 10 px el 16-oct-2026 (decisión 0020); antes, de 12 a 10 px (0018).* Nunca pill en botones.
+- **Proporciones finas:** botón de **40 px** de alto (relleno 16 a los lados, texto 14) y **36 px** en la variante chica; campo de **40 px** con texto de 16 (para que iOS no haga zoom al enfocar). La zona táctil sigue siendo de 44–48 px con un `::after` invisible.
 - Transición suave al tacto (`150ms ease-out`) con micro-reducción de escala (`scale: 0.98`, en Tailwind `active:scale-[0.98]`) al presionar.
 
 ### Selección (`chip.selected`) — decisión 0019
@@ -59,12 +60,15 @@ La identidad visual de Tiendly combina **velocidad ultra limpia**, **lenguaje mo
 - Tarjetas de opción seleccionadas: fondo blanco (`selection/subtle`) y borde negro carbón. Sin tinte azul.
 - Barras de progreso, pasos, línea de tiempo y destellos: `indicator/fill` (negro carbón). Ítem de menú activo: `bg/sunken` + `text/primary`. Casillas marcadas: `selection/*`.
 - **Excepción:** los links y el botón Fantasma siguen en cobalto (`accent/text`, `#1D4ED8`), para que se reconozcan como links.
+- **Excepciones (0020):**
+  - La tarjeta protagonista del panel ("Hoy") usa `gradient/hero` (cobalto `#2563EB` → azul medianoche `#1B365D`, 135°) con texto blanco, filo interior de 1 px al 15 % y radio de tarjeta. Hay una sola por vista. Dentro, los bloques secundarios son vidrio: blanco al 10 %, borde blanco al 10 % y `backdrop-blur-sm` (aún sin token: proponer `effect/blur` en Figma).
+  - En el gráfico semanal, la barra de hoy va en cobalto (`accent/base`); el resto de los días, en `chart/bar`. Las barras de progreso y los pasos siguen en `indicator/fill`.
 - *Alternativa evaluada y no aplicada:* fondo `#EFF6FF` con borde de 1.5 px y texto `#1D4ED8`. Para cambiar de estilo se editan solo las variables `selection/*` del modo Tiendly.
 
 ### Chips & Badges
 - Tamaño reducido (`12px`) con rellenos pastel o transparencias de opacidad baja.
-- **Pills compactos** en el panel (`radii.chip: 999px`): chip de filtro de **32 px** de alto (relleno 4 × 12, texto 14) y badge de **24 px** (relleno 4 × 8, texto 12). Redondos, pero sin ocupar espacio de más. *Ajustado el 15-oct-2026 (decisión 0018).*
-- **Área táctil:** el chip se ve de 32 px, pero en código su zona de toque llega a 44 px (padding invisible o `::after`), para no perder la regla de objetivos táctiles.
+- **Pills compactos** en el panel (`radii.chip: 999px`): chip de filtro de **28 px** de alto (relleno 12 a los lados, texto 14) y badge de **24 px** (relleno 4 × 8, texto 12). Los chips y badges siguen en pill; los botones, no. *Ajustado el 16-oct-2026 (decisión 0020); antes, chip de 32 px (0018).*
+- **Área táctil:** el chip se ve de 28 px, pero en código su zona de toque llega a 44 px (padding invisible o `::after`), para no perder la regla de objetivos táctiles.
 
 ---
 
@@ -120,8 +124,8 @@ La identidad visual de Tiendly combina **velocidad ultra limpia**, **lenguaje mo
   },
   "radii": {
     "chip": { "value": "999px" },
-    "button": { "value": "10px" },
-    "card": { "value": "16px" },
+    "button": { "value": "8px" },
+    "card": { "value": "12px" },
     "pill": { "value": "999px" }
   }
 }
@@ -154,14 +158,15 @@ La identidad visual de Tiendly combina **velocidad ultra limpia**, **lenguaje mo
 | `color.text.on-brand` | `accent/contrast` | `#FFFFFF` |
 | `chip.selected` | `selection/bg` · `selection/fg` · `selection/border` · `selection/subtle` | `#1A1A1A` · `#FFFFFF` · `#1A1A1A` · `#FFFFFF` |
 | `spacing.xs … xl` | `space/1, 2, 4, 6, 8` | 4 · 8 · 16 · 24 · 32 |
-| `radii.chip` | `radius/chip` | pill en Tiendly (chip 32 px, badge 24 px de alto) |
-| `radii.button` | `radius/button` | 10 en Tiendly |
-| `radii.card` | `radius/card` | 16 |
+| `radii.chip` | `radius/chip` | pill en Tiendly (chip 28 px, badge 24 px de alto) |
+| `radii.button` | `radius/button` | 8 en Tiendly (botones y campos) |
+| `radii.card` | `radius/card` | 12 en Tiendly |
 | `radii.pill` | `radius/full` | 9999 |
 | Sombra de tarjeta | estilo `Sombra/Baja` (`elevation.low`) | 0 4 20 negro 4 % + halo cálido 0 12 40 |
 | Celebración | estilo `Halo/Cálido` (`elevation.celebration`) | halo cálido + glow celeste |
+| Tarjeta protagonista | `gradient/hero` | cobalto → azul medianoche, 135° (0020) |
 | Tipografía de cuerpo | `font/body` | Inter |
-| Tipografía de titulares | `font/display` + `font/display-style` / `font/hero-style` (modo Tiendly) | Outfit Bold (H1–H3) y Black (Display, ≥ 32 px) |
+| Tipografía de titulares | `font/display` + `font/display-style` / `font/hero-style` (modo Tiendly) | Outfit SemiBold (600) en Display y H1–H3 (0020) |
 | Estado informativo | `feedback/info/*` | teal: `#0D9488` en rellenos e íconos, `#0F766E` en texto (0016) |
 | Transición de botones | `motion.duration.fast`, `motion.easing.standard`, `motion.scale.pressed` | 150 ms · ease-out · 0.98 |
 
@@ -169,5 +174,5 @@ La identidad visual de Tiendly combina **velocidad ultra limpia**, **lenguaje mo
 - **Temas de la tienda:** Neutral, Editorial y Suave mantienen su propio acento. El cobalto es de Tiendly (panel, onboarding, marca) y del crédito "Powered by Tiendly".
 
 - **Pro (V1.1):** componentes base en Figma → Components → "Pro · V1.1": Sello de producto, Banner de portada y Mensaje de WhatsApp · vista previa. Las pantallas de configuración se diseñan después del lanzamiento del Core Loop.
-- **Prioridad ante diferencias con CLAUDE.md:** manda este documento. Confirmado el 15-oct: escala `0.98` al presionar, botones de 10 px; chips y badges en pill compacto (32 y 24 px de alto).
+- **Prioridad ante diferencias con CLAUDE.md:** manda este documento. Vigente desde el 16-oct (decisión 0020 · Sleek & Crisp): escala `0.98` al presionar; tarjetas de 12 px; botones y campos de 8 px y 40 px de alto; chips en pill de 28 px y badges de 24 px; titulares en Outfit SemiBold.
 - **Banner Pro (V1.1):** el overlay `overlay/hero` se valida con fotos claras reales antes de lanzar, para que el texto blanco se lea.

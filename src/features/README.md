@@ -20,3 +20,4 @@ Toda vista lleva sus 4 estados: carga (`Skeleton`), vacío (`EmptyState`), con d
 ## Datos simulados (hasta tener backend)
 
 - **Onboarding:** cualquier código de 4 dígitos pasa; `0000` muestra el error. Los links `tienda`, `moda`, `zapatos`, `belleza`, `tiendly` y `admin` figuran como ocupados, para probar la sugerencia. El estado se guarda en `sessionStorage`.
+- **Inicio:** `/panel` muestra la tienda con actividad. Se cambia con `?escenario=`: `al-dia` (sin pendientes: "Todo al día"), `nueva` (pasos para arrancar, el estado vacío) y `error`. La carga tarda 600 ms para ver el esqueleto.
