@@ -80,6 +80,7 @@ export const METODO_PAGO: Record<MetodoPago, string> = {
   tarjeta: "Tarjeta",
   transferencia: "Transferencia",
   "contra-entrega": "Contra entrega",
+  whatsapp: "WhatsApp",
 };
 
 type Tono = "success" | "warning" | "neutral";

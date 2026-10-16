@@ -1,6 +1,6 @@
 import { formatoSoles, plural } from "@/lib/formato";
 import type { DetallePedido, Pedido } from "../types";
-import { subtotal, unidades } from "./detalle-mock";
+import { totalDetalle, unidades } from "./detalle-mock";
 import { fechaPedido } from "./format";
 import { conReglas, METODO_PAGO, venceEl } from "./reglas";
 
@@ -64,7 +64,7 @@ export type Paso = { id: string; titulo: string; detalle?: string; cuando?: stri
 /** Historial vertical: lo que ya pasó con su hora y lo que falta como marcador de posición. */
 export function lineaDeTiempo(p: Pedido, d: DetallePedido, ahora: string): Paso[] {
   const cuando = (iso?: string) => (iso ? fechaPedido(iso, ahora) : undefined);
-  const recibido: Paso = { id: "recibido", titulo: "Pedido recibido", detalle: `${plural(unidades(d), "producto", "productos")} · ${formatoSoles(subtotal(d) + d.envio)}.`, cuando: cuando(p.creadoEl), estado: "hecho" };
+  const recibido: Paso = { id: "recibido", titulo: "Pedido recibido", detalle: `${plural(unidades(d), "producto", "productos")} · ${formatoSoles(totalDetalle(d))}.`, cuando: cuando(p.creadoEl), estado: "hecho" };
   if (p.pago.estado === "cancelado") {
     return [recibido, { id: "cancelado", titulo: "Pedido cancelado", detalle: d.cancelacion === "tienda" ? "Lo cancelaste desde el panel." : "La reserva de 24 h venció sin pago.", cuando: cuando(d.canceladoEl), estado: "cancelado" }];
   }

@@ -1,6 +1,7 @@
 export type Escenario = "pedidos" | "vacio" | "error";
 
-export type MetodoPago = "yape" | "plin" | "tarjeta" | "transferencia" | "contra-entrega";
+/** "whatsapp": pedido de la vitrina que se paga después, coordinando por chat (decisión 0007). */
+export type MetodoPago = "yape" | "plin" | "tarjeta" | "transferencia" | "contra-entrega" | "whatsapp";
 
 /** Pago. "pendiente" es una reserva de 24 h; si vence sin pago, el pedido se cancela solo (decisión 0010). */
 export type EstadoPago = "pagado" | "pendiente" | "cancelado";
@@ -27,8 +28,10 @@ export type ItemPedido = { producto: string; variante: string; cantidad: number;
 /** Lo que solo se ve en el detalle de un pedido. */
 export type DetallePedido = {
   items: ItemPedido[];
-  /** Costo de delivery; 0 en recojo. */
+  /** Costo de delivery; 0 en recojo o con envío gratis. */
   envio: number;
+  /** Cupón usado en la vitrina (decisión 0008): se resta del subtotal. */
+  cupon?: { codigo: string; descuento: number };
   email?: string;
   direccion?: string;
   referencia?: string;

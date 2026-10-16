@@ -2,22 +2,10 @@ import { enLima } from "@/features/pedidos/lib/tiempo";
 import type { PedidoCreado } from "../types";
 import { CONFIG_COMPRA } from "./config";
 
-// Pedidos creados desde la vitrina, guardados en este navegador hasta tener backend.
-// La confirmación los lee por número; el panel todavía usa sus datos simulados.
+// Copia del pedido en este navegador para la confirmación (con fotos y plazos). El pedido "oficial"
+// lo crea registrarPedido en el almacén del panel (lib/acciones.ts).
 
 const clave = (slug: string) => `tiendly:pedidos:${slug}`;
-const claveContador = (slug: string) => `tiendly:ultimo-pedido:${slug}`;
-
-/** Número correlativo por tienda, siguiendo a los pedidos simulados del panel (#T-1047). */
-export function nuevoNumero(slug: string) {
-  let n = 1047;
-  try {
-    n = Number(localStorage.getItem(claveContador(slug)) ?? n) + 1;
-    localStorage.setItem(claveContador(slug), String(n));
-  } catch {}
-  return `T-${n}`;
-}
-
 export function guardarPedido(slug: string, pedido: PedidoCreado) {
   try {
     const todos = JSON.parse(localStorage.getItem(clave(slug)) ?? "{}");

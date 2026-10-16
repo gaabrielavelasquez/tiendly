@@ -22,7 +22,9 @@ export const mismaLinea = (a: ItemCarrito, b: ItemCarrito) => a.id === b.id && a
 /** Lo que falta para el envío gratis (0 si ya llegó). Se cuenta después del descuento del cupón. */
 export const faltaEnvioGratis = (base: number) => Math.max(0, CONFIG_COMPRA.envioGratisDesde - base);
 
-export function calcularTotales(lineas: Linea[], cupon: Cupon | null, entrega: Entrega | null): Totales {
+/** Las tallas agotadas no suman: no se pueden comprar (el carrito pide quitarlas). */
+export function calcularTotales(todas: Linea[], cupon: Cupon | null, entrega: Entrega | null): Totales {
+  const lineas = todas.filter((l) => l.maximo > 0);
   const productos = lineas.reduce((s, l) => s + l.precio * l.cantidad, 0);
   const unidades = lineas.reduce((s, l) => s + l.cantidad, 0);
   const descuento = cupon?.tipo === "porcentaje" ? Math.round((productos * cupon.valor) / 100) : 0;

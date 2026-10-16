@@ -9,7 +9,8 @@ import { CabeceraTienda } from "@/features/vitrina/components/cabecera-tienda";
 import { formatoSoles } from "@/lib/formato";
 import { cn } from "@/lib/cn";
 import type { DatosCompra } from "../../lib/catalogo";
-import { guardarPedido, nuevoNumero, reservaHasta } from "../../lib/pedido";
+import { registrarPedido, reservarNumero } from "../../lib/acciones";
+import { guardarPedido, reservaHasta } from "../../lib/pedido";
 import { calcularTotales } from "../../lib/reglas";
 import { linkWhatsApp, mensajePedido } from "../../lib/whatsapp";
 import { useCarrito } from "../../hooks/use-carrito";
@@ -31,38 +32,46 @@ export function VistaCompra({ datos: { tienda, categorias, catalogo } }: { datos
   const c = useCompra();
   const router = useRouter();
   const [numero, setNumero] = useState<string | null>(null);
-  const [cerrando, setCerrando] = useState(false); // pedido creado: no mostrar "carrito vacío" mientras navega
+  const [cerrando, setCerrando] = useState(false);
+  const [error, setError] = useState(""); // pedido creado: no mostrar "carrito vacío" mientras navega
   const inicio = `/${tienda.slug}`;
   const lineas = carrito.lineas ?? [];
   const totales = calcularTotales(lineas, carrito.cupon, c.entrega);
 
   // El número se reserva al llegar al pago: el mensaje de WhatsApp ya lo muestra.
   useEffect(() => {
-    if (c.paso === "pago" && !numero) setNumero(nuevoNumero(tienda.slug));
-  }, [c.paso, numero, tienda.slug]);
+    if (c.paso === "pago" && !numero) reservarNumero().then(setNumero);
+  }, [c.paso, numero]);
 
   const mensaje = numero && c.entrega ? mensajePedido({ tienda: tienda.nombre, numero, lineas, cupon: carrito.cupon?.codigo, totales, datos: c.datos, entrega: c.entrega }) : "";
 
   async function pagar() {
     if (!numero || !c.entrega) return;
-    const creadoEl = new Date().toISOString();
-    const base = { numero, creadoEl, datos: c.datos, entrega: c.entrega, lineas, cupon: carrito.cupon?.codigo, totales };
-    let pedido: PedidoCreado;
-    if (c.metodo === "whatsapp") {
-      window.open(linkWhatsApp(tienda.celular, mensaje), "_blank", "noopener"); // en el mismo clic: así no lo bloquea el navegador
-      pedido = { ...base, pago: { metodo: "whatsapp", reservadoHasta: reservaHasta(creadoEl) } };
-    } else {
-      const pago = await c.confirmar();
-      if (!pago || pago.metodo === "whatsapp") return;
-      pedido = { ...base, pago };
-    }
+    setError("");
+    let pago: Awaited<ReturnType<typeof c.confirmar>> = { metodo: "whatsapp" };
+    if (c.metodo === "whatsapp") window.open(linkWhatsApp(tienda.celular, mensaje), "_blank", "noopener"); // en el mismo clic: así no lo bloquea el navegador
+    else pago = await c.confirmar();
+    if (!pago || !c.metodo) return;
+    const e = c.entrega;
+    const r = await registrarPedido({
+      tienda: tienda.slug,
+      numero,
+      items: lineas.map(({ id, color, talla, cantidad }) => ({ id, color, talla, cantidad })),
+      cupon: carrito.cupon?.codigo,
+      datos: c.datos,
+      entrega: e.tipo === "recojo" ? e : { tipo: "delivery", distrito: e.distrito.nombre, direccion: e.direccion, referencia: e.referencia },
+      metodo: c.metodo,
+    });
+    if ("error" in r) return setError(r.error);
+    const base = { numero, creadoEl: r.creadoEl, datos: c.datos, entrega: e, lineas, cupon: carrito.cupon?.codigo, totales: r.totales };
+    const pedido: PedidoCreado = pago.metodo === "whatsapp" ? { ...base, pago: { metodo: "whatsapp", reservadoHasta: reservaHasta(r.creadoEl) } } : { ...base, pago };
     guardarPedido(tienda.slug, pedido);
     setCerrando(true);
     carrito.vaciar();
     router.replace(`${inicio}/pedido/${numero}`);
   }
 
-  const listo = c.paso === "pago" && c.hechos.datos && c.hechos.entrega && c.metodo !== null;
+  const listo = c.paso === "pago" && c.hechos.datos && c.hechos.entrega && c.metodo !== null && numero !== null; // el número llega del servidor
   const accion = {
     listo,
     procesando: c.procesando,
@@ -93,6 +102,7 @@ export function VistaCompra({ datos: { tienda, categorias, catalogo } }: { datos
               <PasoDatos c={c} />
               <PasoEntrega c={c} envioGratis={totales.envioGratis} tienda={tienda.nombre} />
               <PasoPago c={c} mensaje={mensaje} />
+              {error && <p role="alert" className="border border-error-border bg-error-surface p-3 text-body-sm text-error">{error}</p>}
             </div>
             <ResumenDesktop lineas={lineas} totales={totales} cupon={carrito.cupon?.codigo} entrega={c.entrega} accion={accion}>
               <Cupon cupon={carrito.cupon} productos={totales.productos} descuento={totales.descuento} onAplicar={carrito.setCupon} />

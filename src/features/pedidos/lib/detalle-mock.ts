@@ -50,4 +50,6 @@ export const DETALLES: Record<string, DetallePedido> = {
 };
 
 export const subtotal = (d: DetallePedido) => d.items.reduce((s, i) => s + i.precio * i.cantidad, 0);
+/** Lo que paga el cliente: subtotal − cupón + envío. */
+export const totalDetalle = (d: DetallePedido) => subtotal(d) - (d.cupon?.descuento ?? 0) + d.envio;
 export const unidades = (d: DetallePedido) => d.items.reduce((s, i) => s + i.cantidad, 0);
