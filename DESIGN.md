@@ -2,6 +2,8 @@
 
 Este documento es la guía oficial e inmutable del sistema de diseño para **Tiendly**. Contiene las reglas estéticas, la arquitectura de tokens, los componentes visuales y las pautas de micro-copy que deben respetarse en el diseño de prototipos y en la generación de código frontend.
 
+> **Fuente de verdad (decisión 0026, 16-oct-2026):** las reglas visuales viven en este documento, en `design/tokens.json` y en el código. Figma es la referencia de flujos y de estructura de pantallas; ante una diferencia visual, manda el repo. Historial de decisiones: `docs/decisiones/`.
+
 ---
 
 ## 1. Dirección de Marca & Identidad Visual
@@ -14,7 +16,7 @@ La identidad visual de Tiendly combina **velocidad ultra limpia**, **lenguaje mo
 - **Gama de Soporte (Estilo Luma):**
   - `color.brand.glow-sky`: halo difuminado del cobalto (16 %) hacia celeste pastel `#EFF6FF`.
   - `color.brand.glow-warm`: halo cálido (durazno al 4 %) que da profundidad a tarjetas y estados de celebración.
-  - Opacidad baja del cobalto (`rgba(37, 99, 235, 0.08)`) para selecciones suaves.
+  - Opacidad baja del cobalto (`rgba(37, 99, 235, 0.08)`, `accent/glow`) para halos y anillos de foco. Nunca para selección: va en negro carbón (§4).
 - **Acento cálido "Spark" (`color.brand.spark`, `#EA580C`):** el contrapunto cálido al cobalto y al carbón, para que el panel no se sienta frío. Se usa con la **regla del 1 %** (ver §4). *Decisión 0022, 16-oct-2026.*
 - **Superficie y Lienzo:** Fondo neutro de pantalla `#F8F9FA` o `#F6F5F3` con tarjetas blanco puro `#FFFFFF`.
 - **Texto:** `#1A1A1A` (Primario) / `#6B7280` (Secundario / Muted).
@@ -50,31 +52,34 @@ La identidad visual de Tiendly combina **velocidad ultra limpia**, **lenguaje mo
 > - **Radios:** tarjetas de 8 px (`radius/card` → `radius/sm`); botones, campos, chips y badges de 6 px (`radius/button`, `radius/chip`, `radius/base` → `radius/xs`). Ni redondo de juguete ni bloque.
 > - **Profundidad:** tarjetas blancas con borde de 1 px `#E5E7EB` (`border/subtle`) y sombra nítida de dos capas `elevation/card` (0 1 2 + 0 2 8, negro al 4 %). Sin halos ni nubes.
 > - **Lienzo (se mantiene de 0023):** blanco cálido `#F4F4F3` (`bg/page`) y hundido `#F0EFED` (`bg/sunken`); `#666D7A` sigue en ≥ 4.5:1.
-> - **CTA:** vuelve el degradado cobalto → marino (`gradient/primary`), en tipo oración. Es el único elemento con degradado cobalto junto a la tarjeta protagonista.
+> - **CTA:** vuelve el degradado cobalto → marino (`gradient/primary`), en tipo oración. El cobalto sigue la regla de §4 · Selección y cobalto.
 > - **Encabezados:** de sección y de columnas en Outfit SemiBold, tipo oración y `tracking-tight` (`encabezado-seccion`, `encabezado-columna`). Las mayúsculas quedan solo para etiquetas chicas de contexto ("HOY").
 > - **Sin cambios:** spark (0022), selección en carbón (0019), métricas (0021).
 
 ### Tarjetas (Cards)
 - Fondo blanco puro (`#FFFFFF`) sobre superficie neutra.
-- Esquinas precisas: `border-radius: 12px` (`radii.card`). *Bajado de 16 px el 16-oct-2026 (decisión 0020).*
-- Borde nítido `border/subtle` (1 px) y sombra ajustada de dos capas `elevation/card`: contacto `0 1 3` y ambiente `0 4 10`, ambas en `shadow/soft`. Nada de sombras "nube" difusas. *Cambiado el 16-oct-2026 (decisión 0021); antes `0 4 20` + halo cálido.*
+- Esquinas de **`8px`** (`radius/card` → `radius/sm`). *Decisión 0024; antes 12 px (0020) y 16 px.*
+- Borde nítido `border/subtle` (1 px, `#E5E7EB`) y sombra de dos capas `elevation/card`: `0 1 2` + `0 2 8`, negro al 4 %. Nada de sombras "nube" difusas. *Decisión 0024; antes `0 1 3 + 0 4 10` (0021).*
 
 ### Botones
-- Esquinas de **`8px`** en botones y campos (`radii.button`, que también usan los inputs). *Bajado de 10 px el 16-oct-2026 (decisión 0020); antes, de 12 a 10 px (0018).* Nunca pill en botones.
+- Esquinas de **`6px`** en botones y campos (`radius/button` → `radius/xs`). *Decisión 0024; antes 8 px (0020), 10 px (0018) y 12 px.* Nunca pill en botones.
 - **Proporciones finas:** botón de **40 px** de alto (relleno 16 a los lados, texto 14) y **36 px** en la variante chica; campo de **40 px** con texto de 16 (para que iOS no haga zoom al enfocar). La zona táctil sigue siendo de 44–48 px con un `::after` invisible.
 - Transición suave al tacto (`150ms ease-out`) con micro-reducción de escala (`scale: 0.98`, en Tailwind `active:scale-[0.98]`) al presionar.
 
-### Selección (`chip.selected`) — decisión 0019
-- **Regla de oro:** el cobalto con degradado es **exclusivo del botón de acción primario (CTA)**.
+### Selección y cobalto (`chip.selected`) — decisiones 0019 y 0020, ratificadas el 16-oct-2026
+- **Regla de oro:** el degradado cobalto se usa **solo en dos lugares**:
+  1. el **botón de acción primario (CTA)**;
+  2. la **tarjeta protagonista** de la pantalla (`gradient/hero`), **como máximo una por pantalla**. Hoy: la tarjeta "Hoy" de Inicio.
+- Todo lo demás que indica selección o progreso va en negro carbón: `selection/*` e `indicator/*`.
 - Chips, fichas y controles seleccionados (tallas, colores, categorías, filtros, radios, tarjetas de opción, interruptores): **fondo negro carbón `#1A1A1A` con texto blanco** (estilo Shop / GOAT). Tokens `selection/bg`, `selection/fg`, `selection/border`.
 - Tarjetas de opción seleccionadas: fondo blanco (`selection/subtle`) y borde negro carbón. Sin tinte azul.
 - Barras de progreso, pasos, línea de tiempo y destellos: `indicator/fill` (negro carbón). Ítem de menú activo: `bg/sunken` + `text/primary`. Casillas marcadas: `selection/*`.
 - **Excepción:** los links y el botón Fantasma siguen en cobalto (`accent/text`, `#1D4ED8`), para que se reconozcan como links.
 - **Gráficos (0021):** barras finas de datos, no bloques: 24 px de ancho en móvil y 32 px en desktop, con radio de 8 px (no píldora), sobre un riel `bg/sunken`.
 - **Vidrio sobre la tarjeta protagonista (0021):** blanco al 10 %, `ring-1` blanco al 20 % y `backdrop-blur-md`. El blur todavía no tiene token: proponer `effect/blur` en Figma.
-- **Excepciones (0020):**
-  - La tarjeta protagonista del panel ("Hoy") usa `gradient/hero` (cobalto `#2563EB` → azul medianoche `#1B365D`, 135°) con texto blanco, filo interior de 1 px al 15 % y radio de tarjeta. Hay una sola por vista. Dentro, los bloques secundarios son vidrio (ver "Vidrio sobre la tarjeta protagonista").
-  - En el gráfico semanal, la barra de hoy va en cobalto (`accent/base`); el resto de los días, en `chart/bar`. Las barras de progreso y los pasos siguen en `indicator/fill`.
+- **Tarjeta protagonista:** `gradient/hero` (cobalto `#2563EB` → azul medianoche `#1B365D`, 135°) con texto blanco, filo interior de 1 px al 15 % y radio de tarjeta. Dentro, los bloques secundarios son vidrio (ver "Vidrio sobre la tarjeta protagonista"). Aprobada por Gabi.
+- **Dato de hoy en gráficos:** la barra de hoy del gráfico semanal va en cobalto sólido (`accent/base`), el resto de los días en `chart/bar`. Es un dato resaltado, no selección ni progreso. Aprobada por Gabi.
+- Las barras de progreso, los pasos y la línea de tiempo siguen en `indicator/fill`.
 - *Alternativa evaluada y no aplicada:* fondo `#EFF6FF` con borde de 1.5 px y texto `#1D4ED8`. Para cambiar de estilo se editan solo las variables `selection/*` del modo Tiendly.
 
 ### Spark: acento cálido y regla del 1 % (decisión 0022)
@@ -87,7 +92,7 @@ La identidad visual de Tiendly combina **velocidad ultra limpia**, **lenguaje mo
 
 ### Chips & Badges
 - Tamaño reducido (`12px`) con rellenos pastel o transparencias de opacidad baja.
-- **Pills compactos** en el panel (`radii.chip: 999px`): chip de filtro de **28 px** de alto (relleno 12 a los lados, texto 14) y badge de **24 px** (relleno 4 × 8, texto 12). Los chips y badges siguen en pill; los botones, no. *Ajustado el 16-oct-2026 (decisión 0020); antes, chip de 32 px (0018).*
+- **Compactos** en el panel, con esquinas de **6 px** (`radius/chip` → `radius/xs`, decisión 0024): chip de filtro de **28 px** de alto (relleno 12 a los lados, texto 14) y badge de **24 px** (relleno 4 × 8, texto 12). *Alturas de 0020; antes, chip de 32 px (0018).* En la vitrina, las categorías van en pill (es un control, no una tarjeta).
 - **Área táctil:** el chip se ve de 28 px, pero en código su zona de toque llega a 44 px (padding invisible o `::after`), para no perder la regla de objetivos táctiles.
 
 ---
@@ -161,7 +166,7 @@ La identidad visual de Tiendly combina **velocidad ultra limpia**, **lenguaje mo
 
 > Anexo agregado al aplicar esta guía. No cambia las reglas de arriba: dice dónde vive cada una.
 
-- **Fuente de verdad de los tokens:** `tiendly/design-system/tokens.json` (formato DTCG real: `$value`, `$type`, alias `{grupo.token}`). El JSON de la sección 6 es un resumen y usa `value` sin `$`, que las herramientas DTCG no leen.
+- **Fuente de verdad de los tokens:** `design/tokens.json` en este repo (decisión 0026; `npm run tokens` genera `tokens.css` y `tokens.ts`) (formato DTCG real: `$value`, `$type`, alias `{grupo.token}`). El JSON de la sección 6 es un resumen y usa `value` sin `$`, que las herramientas DTCG no leen.
 - **Mapeo de la sección 6 a las variables de Figma:**
 
 | DESIGN.md | Variable en Figma | Valor |
@@ -183,9 +188,9 @@ La identidad visual de Tiendly combina **velocidad ultra limpia**, **lenguaje mo
 | `color.text.on-brand` | `accent/contrast` | `#FFFFFF` |
 | `chip.selected` | `selection/bg` · `selection/fg` · `selection/border` · `selection/subtle` | `#1A1A1A` · `#FFFFFF` · `#1A1A1A` · `#FFFFFF` |
 | `spacing.xs … xl` | `space/1, 2, 4, 6, 8` | 4 · 8 · 16 · 24 · 32 |
-| `radii.chip` | `radius/chip` | pill en Tiendly (chip 28 px, badge 24 px de alto) |
-| `radii.button` | `radius/button` | 8 en Tiendly (botones y campos) |
-| `radii.card` | `radius/card` | 12 en Tiendly |
+| `radii.chip` | `radius/chip` | 6 px en Tiendly (chip 28 px, badge 24 px de alto) |
+| `radii.button` | `radius/button` | 6 en Tiendly (botones y campos) |
+| `radii.card` | `radius/card` | 8 en Tiendly |
 | `radii.pill` | `radius/full` | 9999 |
 | Sombra de tarjeta | `elevation.card` (0024) | 0 1 2 + 0 2 8, negro 4 % |
 | Sombra suave de vidrio y avisos | estilo `Sombra/Baja` (`elevation.low`) | 0 4 20 negro 4 % + halo cálido 0 12 40 |
@@ -203,5 +208,6 @@ La identidad visual de Tiendly combina **velocidad ultra limpia**, **lenguaje mo
 - **Temas de la tienda:** Neutral, Editorial y Suave mantienen su propio acento. El cobalto es de Tiendly (panel, onboarding, marca) y del crédito "Powered by Tiendly".
 
 - **Pro (V1.1):** componentes base en Figma → Components → "Pro · V1.1": Sello de producto, Banner de portada y Mensaje de WhatsApp · vista previa. Las pantallas de configuración se diseñan después del lanzamiento del Core Loop.
-- **Prioridad ante diferencias con CLAUDE.md:** manda este documento. Vigente desde el 16-oct (decisión 0024 · Calibrado): tarjetas de 8 px con borde y sombra nítida; botones, campos, chips y badges de 6 px; CTA con degradado cobalto; lienzo `#F4F4F3`; titulares en Outfit SemiBold; escala `0.98` al presionar.
+- **Prioridad ante diferencias con CLAUDE.md:** manda este documento. Vigente desde el 16-oct (decisión 0024 · Calibrado): tarjetas de 8 px con borde y sombra nítida; botones, campos, chips y badges de 6 px; degradado cobalto solo en el CTA y en una tarjeta protagonista por pantalla; lienzo `#F4F4F3`; titulares en Outfit SemiBold; escala `0.98` al presionar.
+- **Congelamiento estético:** hasta completar el Core Loop no se cambian estos tokens (ver CLAUDE.md).
 - **Banner Pro (V1.1):** el overlay `overlay/hero` se valida con fotos claras reales antes de lanzar, para que el texto blanco se lea.
