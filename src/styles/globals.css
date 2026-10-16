@@ -3,6 +3,12 @@
 @import "@fontsource-variable/inter";
 @import "@fontsource/outfit/700.css";
 @import "@fontsource/outfit/900.css";
+/* Familias de los temas de vitrina (Editorial, Neutral, Suave) */
+@import "@fontsource/instrument-serif/400.css";
+@import "@fontsource/bricolage-grotesque/700.css";
+@import "@fontsource/bricolage-grotesque/800.css";
+@import "@fontsource/plus-jakarta-sans/700.css";
+@import "@fontsource/plus-jakarta-sans/800.css";
 
 /*
   Puente entre los tokens de DESIGN.md (--tl-*) y las clases de Tailwind.
@@ -156,4 +162,25 @@
 
 @utility bg-cta-hover {
   background-image: linear-gradient(135deg, var(--tl-accent-hover) 0%, var(--tl-accent-base-deep) 100%);
+}
+
+/*
+  Link de texto (cobalto, decisión 0019). Hover: subrayado suave que se completa
+  y el color pasa al cobalto activo. 150 ms ease-out.
+*/
+@utility link-text {
+  color: var(--tl-accent-text);
+  font-weight: 600;
+  text-decoration-line: underline;
+  text-decoration-thickness: var(--tl-stroke-thin);
+  text-underline-offset: var(--tl-space-1);
+  text-decoration-color: color-mix(in srgb, var(--tl-accent-text) 40%, transparent);
+  transition: color var(--tl-motion-duration-fast) var(--tl-motion-easing-standard),
+    text-decoration-color var(--tl-motion-duration-fast) var(--tl-motion-easing-standard),
+    text-decoration-thickness var(--tl-motion-duration-fast) var(--tl-motion-easing-standard);
+  &:hover {
+    color: var(--tl-accent-hover);
+    text-decoration-color: var(--tl-accent-hover);
+    text-decoration-thickness: var(--tl-stroke-thick);
+  }
 }

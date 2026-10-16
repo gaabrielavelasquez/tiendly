@@ -8,7 +8,7 @@ import { cn } from "@/lib/cn";
 
 // DESIGN.md §4 · El degradado cobalto es exclusivo del CTA (decisión 0019).
 const button = cva(
-  "group relative isolate inline-flex items-center justify-center gap-2 overflow-hidden rounded-button font-body font-semibold transition-colors disabled:cursor-not-allowed",
+  "group relative isolate inline-flex aria-busy:pointer-events-none items-center justify-center gap-2 overflow-hidden rounded-button font-body font-semibold transition-colors disabled:cursor-not-allowed",
   {
     variants: {
       variant: {
@@ -35,8 +35,9 @@ export function Button({ variant, size, block, loading, disabled, className, chi
   return (
     <Pressable
       className={cn(button({ variant, size, block }), className)}
-      disabled={disabled || loading}
+      disabled={disabled}
       aria-busy={loading || undefined}
+      aria-disabled={loading || undefined}
       {...rest}
     >
       {isPrimary && !disabled && (
