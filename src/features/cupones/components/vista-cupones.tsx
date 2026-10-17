@@ -8,13 +8,13 @@ import { Button, buttonVariants, Card, EmptyState } from "@/components/ui";
 import { cn } from "@/lib/cn";
 import type { Cupon } from "../types";
 import { alternarCupon } from "../lib/acciones";
-import { cuponesEnUso, estadoCupon, LIMITE_FREE } from "../lib/reglas";
+import { cuponesEnUso, estadoCupon, LIMITE_FREE, limiteCupones } from "../lib/reglas";
 import { TarjetaCupon } from "./tarjeta-cupon";
 
 const grupo = "text-label font-semibold tracking-widest text-fg-secondary uppercase";
 
-/** Cupones (Figma, módulo 3; decisión 0008): en uso arriba, pausados y vencidos abajo, con el límite del Plan Free. */
-export function VistaCupones({ inicial, hoy, creado }: { inicial: Cupon[]; hoy: string; creado?: string }) {
+/** Cupones (Figma, módulo 3; decisión 0008): en uso arriba, pausados y vencidos abajo. Plan Free: hasta 3 en uso; Pro: sin límite. */
+export function VistaCupones({ inicial, hoy, creado, plan }: { inicial: Cupon[]; hoy: string; creado?: string; plan: "free" | "pro" }) {
   const [lista, setLista] = useState(inicial);
   const [aviso, setAviso] = useState<TextoAviso>(creado ? { texto: `Cupón guardado. Ya puedes compartir ${creado}.`, tono: "ok" } : null);
   const timer = useRef<number | undefined>(undefined);
@@ -27,7 +27,8 @@ export function VistaCupones({ inicial, hoy, creado }: { inicial: Cupon[]; hoy: 
   const conEstado = lista.map((c) => ({ c, estado: estadoCupon(c, hoy) }));
   const usados = cuponesEnUso(lista, hoy);
   const activos = conEstado.filter((x) => x.estado === "activo").length;
-  const enLimite = usados >= LIMITE_FREE;
+  const limite = limiteCupones(plan);
+  const enLimite = limite !== null && usados >= limite;
   const crear = (clase = "") => (enLimite ? <Button disabled className={clase}><Plus aria-hidden className="size-4" />Crear cupón</Button> : <Link href="/panel/cupones/nuevo" className={cn(buttonVariants(), clase)}><Plus aria-hidden className="size-4" />Crear cupón</Link>);
 
   async function alternar(c: Cupon, activo: boolean) {
@@ -43,7 +44,7 @@ export function VistaCupones({ inicial, hoy, creado }: { inicial: Cupon[]; hoy: 
     return (
       <>
         <PanelHeader titulo="Cupones" subtitulo={subtitulo} />
-        <Card><EmptyState icon={TicketPercent} title="Todavía no tienes cupones" description="Tu primer cupón puede ser de bienvenida: un 10% para quien compra por primera vez." action={<div className="flex flex-col items-center gap-2">{crear()}<p className="text-caption text-fg-secondary">Plan Free: hasta {LIMITE_FREE} cupones activos a la vez.</p></div>} /></Card>
+        <Card><EmptyState icon={TicketPercent} title="Todavía no tienes cupones" description="Tu primer cupón puede ser de bienvenida: un 10% para quien compra por primera vez." action={<div className="flex flex-col items-center gap-2">{crear()}<p className="text-caption text-fg-secondary">{limite ? `Plan Free: hasta ${limite} cupones activos a la vez.` : "Plan Pro: cupones ilimitados."}</p></div>} /></Card>
       </>
     );
   }
@@ -69,7 +70,7 @@ export function VistaCupones({ inicial, hoy, creado }: { inicial: Cupon[]; hoy: 
         </div>
       )}
       <p className="text-body-sm text-fg-secondary">
-        <span className="font-semibold text-fg">{usados} de {LIMITE_FREE} en uso</span> · {activos} {activos === 1 ? "activo" : "activos"} y {usados - activos} {usados - activos === 1 ? "programado" : "programados"} · Plan Free
+        <span className="font-semibold text-fg">{limite ? `${usados} de ${limite} en uso` : `${usados} en uso`}</span> · {activos} {activos === 1 ? "activo" : "activos"} y {usados - activos} {usados - activos === 1 ? "programado" : "programados"} · {limite ? "Plan Free" : "Plan Pro, sin límite"}
       </p>
       <div className="lg:hidden">{crear("w-full")}</div>
       {seccion("Activos y programados", conEstado.filter((x) => x.estado === "activo" || x.estado === "programado"))}

@@ -15,5 +15,6 @@ Una decisión por archivo: contexto, decisión y consecuencias. Las anteriores a
 | 0027 | [Limpieza del Core Loop: qué se queda, qué se va y qué se ajusta](0027-limpieza-core-loop.md) | Vigente |
 | 0028 | [Portada partida, productos nuevos activos, stock en la compra y números #TL-](0028-portada-stock-y-numeros.md) | Vigente |
 | 0029 | [Panel móvil: barra inferior en vez de menú hamburguesa](0029-barra-inferior-movil.md) | Vigente |
+| 0030 | [Heather es la tienda de demo Pro](0030-heather-demo-pro.md) | Vigente |
 
 Para una decisión nueva: copia la estructura de 0026, usa el número siguiente y súmala a esta tabla.
