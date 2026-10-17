@@ -12,11 +12,11 @@ export function TiendaPreview({ tienda, mini = false, computadora = false }: { t
         : <p className={cn("font-display-title text-h2", mini && "w-full text-center text-caption")}>Heather</p>}
       {!mini && <ShoppingBag aria-hidden className="size-5" />}
     </div>
+    {!mini && <p className="break-words px-5 py-3 text-center text-body-sm text-fg-secondary">{tienda.bienvenida || "Bienvenidos a Heather."}</p>}
     {tienda.portada ? <img src={tienda.portada} alt="Colección de zapatos Heather" className={cn("aspect-video w-full object-cover", mini && "aspect-[2/1]")} />
       : <div className="flex aspect-video items-center justify-center bg-sunken p-4 text-caption text-fg-secondary">Tu foto de portada</div>}
     <div className={cn("flex flex-col gap-4 p-5", mini && "gap-2 p-2")}>
       <h3 className={cn("font-display-title text-h2", mini && "text-label")}>{mini ? "Nueva colección" : "Tu próximo par favorito"}</h3>
-      {!mini && <p className="break-words text-body-sm text-fg-secondary">{tienda.bienvenida || "Bienvenidos a Heather."}</p>}
       <div className="flex gap-2"><span className={cn("rounded-chip bg-accent px-3 py-2 text-body-sm text-on-accent", mini && "px-2 py-1 text-label")}>Todos</span>
         {!mini && <span className="p-2 text-body-sm text-fg-secondary">Balerinas</span>}</div>
       <div className={cn("grid grid-cols-2 gap-3", computadora && "grid-cols-4")}>

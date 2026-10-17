@@ -9,4 +9,4 @@ Implementación de la decisión 0003, texto aprobado compartido por Gabi el 16-o
 - Guardado simulado en localStorage (`tiendly:mi-tienda:heather`), solo en este navegador. Todavía no publica cambios en la vitrina ni sube imágenes a un servidor. Los productos de la vista previa son una muestra del catálogo Heather.
 - Carga, datos, personalización vacía y error. Escenarios `?escenario=vacio|error` solo en desarrollo/previews.
 
-Se mantiene el sistema visual vigente de main (0020), por pedido expreso de partir de esa rama y respetar el congelamiento estético. Figma inicialmente rechazó el acceso; se implementa desde la descripción aprobada de 0003.
+Se mantiene el sistema visual vigente de main (0020), por pedido expreso de partir de esa rama y respetar el congelamiento estético. La implementación inicial se hizo desde la descripción aprobada de 0003. Después se revisó MT1 con contexto completo y captura de Figma; [revisión, correcciones y límites](revision-figma-mi-tienda.md).

@@ -35,7 +35,7 @@ export function useMiTienda(escenario?: string) {
   async function guardar() {
     const errores = validarTienda(tienda);
     setErrores(errores); setMensaje("");
-    if (Object.keys(errores).length) return false;
+    if (Object.keys(errores).length) { setMensaje("Revisa los campos marcados antes de guardar."); return false; }
     setGuardando(true);
     try {
       localStorage.setItem(STORAGE, JSON.stringify(tienda));
@@ -44,5 +44,6 @@ export function useMiTienda(escenario?: string) {
     } catch { setMensaje("No pudimos guardar. Revisa el espacio disponible de tu navegador e inténtalo de nuevo."); return false; }
     finally { setGuardando(false); }
   }
-  return { tienda, estado, errores, mensaje, pendiente, guardando, cambiar, guardar, cargar };
+  function descartar() { setTienda(guardada); setErrores({}); setMensaje(""); }
+  return { tienda, estado, errores, mensaje, pendiente, guardando, cambiar, guardar, cargar, descartar };
 }
