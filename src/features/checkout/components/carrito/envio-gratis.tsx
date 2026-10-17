@@ -1,12 +1,11 @@
 import { Truck } from "lucide-react";
 import { formatoSoles } from "@/lib/formato";
-import { CONFIG_COMPRA } from "../../lib/config";
 import { faltaEnvioGratis } from "../../lib/reglas";
 
-/** Avance hacia el envío gratis (Figma C0 y C4). La barra va en indicator/* (carbón). */
-export function EnvioGratis({ base }: { base: number }) {
-  const falta = faltaEnvioGratis(base);
-  const desde = CONFIG_COMPRA.envioGratisDesde;
+/** Avance hacia el envío gratis (Figma C0 y C4). La barra va en indicator/* (carbón). Solo si la tienda lo ofrece (0009). */
+export function EnvioGratis({ base, desde }: { base: number; desde: number | null }) {
+  const falta = faltaEnvioGratis(base, desde);
+  if (desde === null || falta === null) return null;
   return (
     <div className="flex flex-col gap-2 border border-line-subtle bg-surface p-4">
       <p className="flex items-center gap-2 text-body-sm font-semibold text-fg">

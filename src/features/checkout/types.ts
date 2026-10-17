@@ -7,9 +7,22 @@ export type CatalogoCompra = Record<string, ProductoCompra>;
 /** Una línea del carrito ya resuelta: el ítem guardado + lo que se muestra y se cobra. */
 export type Linea = ItemCarrito & { nombre: string; slug: string; precio: number; foto?: string; maximo: number };
 
-export type Cupon = { codigo: string; tipo: "porcentaje"; valor: number } | { codigo: string; tipo: "envio" };
+/** El cupón ya validado en el servidor (decisión 0008): lo justo para calcular el descuento. */
+export type Cupon = { codigo: string; tipo: "porcentaje" | "monto" | "envio"; valor?: number };
 
-export type Distrito = { nombre: string; zona: string; costo: number; plazo: string };
+/** Un distrito donde la tienda entrega, con el costo y el plazo de su zona (decisión 0009). */
+export type Distrito = { nombre: string; lugar: string; zona: "lima" | "callao" | "provincias"; costo: number; plazo: string };
+
+export type Recojo = { direccion: string; distrito: string; horario: string; nota: string };
+
+/** Lo que la tienda configuró, ya listo para el checkout (sale de Configuración → Pagos y Entregas). */
+export type ReglasCompra = {
+  celular: string;
+  pagos: { tarjeta: boolean; yape: boolean; whatsapp: boolean };
+  envioGratisDesde: number | null;
+  delivery: { distritos: Distrito[]; soloLima: boolean } | null;
+  recojo: Recojo | null;
+};
 
 export type Datos = { nombre: string; celular: string };
 export type Entrega = { tipo: "delivery"; distrito: Distrito; direccion: string; referencia: string } | { tipo: "recojo" };
@@ -27,5 +40,7 @@ export type PedidoCreado = {
   lineas: Linea[];
   cupon?: string;
   totales: Totales;
+  /** Dónde recoger, tal como estaba al comprar (la tienda puede cambiarlo después). */
+  recojo?: Recojo;
   pago: { metodo: "tarjeta"; ultimos4: string } | { metodo: "yape" } | { metodo: "whatsapp"; reservadoHasta: string };
 };

@@ -1,10 +1,9 @@
 import { CircleAlert, CreditCard, MessageCircle, QrCode } from "lucide-react";
-import { Badge } from "@/components/ui";
+import { Badge, Opcion } from "@/components/ui";
 import type { Compra } from "../../hooks/use-compra";
-import { CONFIG_COMPRA } from "../../lib/config";
+import type { ReglasCompra } from "../../types";
 import { FormTarjeta } from "./form-tarjeta";
 import { FormYape } from "./form-yape";
-import { Opcion } from "./opcion";
 import { Paso } from "./paso";
 
 const grupo = "pb-1 text-label font-semibold tracking-widest text-fg-secondary uppercase";
@@ -14,8 +13,7 @@ const inmediata = <Badge tone="success" className="w-fit tracking-wider uppercas
  * 3 · Pago (Figma, tarjeta, Yape y WhatsApp): "Pagar ahora" (confirmación inmediata) o "Pagar después"
  * (separado por 24 h). Solo se ven los métodos que la tienda tiene activos.
  */
-export function PasoPago({ c, mensaje }: { c: Compra; mensaje: string }) {
-  const { pagos } = CONFIG_COMPRA;
+export function PasoPago({ c, mensaje, pagos }: { c: Compra; mensaje: string; pagos: ReglasCompra["pagos"] }) {
   const estado = c.paso === "pago" ? "abierto" : "pendiente";
   return (
     <Paso numero={3} titulo="Pago" estado={estado} resumen="Tarjeta, Yape o por WhatsApp">

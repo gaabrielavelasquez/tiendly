@@ -7,10 +7,29 @@ import type { DetallePedido, Pedido } from "@/features/pedidos/types";
 import type { ItemCarrito } from "@/features/vitrina/lib/carrito";
 import type { Datos, MetodoPago, Totales } from "../types";
 import { obtenerCompra } from "./catalogo";
-import { DISTRITOS } from "./config";
-import { calcularTotales, resolverLineas, validarCupon, validarDatos } from "./reglas";
+import { cuponesActuales, sumarUso } from "@/features/cupones/lib/mock";
+import { usarEnCarrito } from "@/features/cupones/lib/reglas";
+import { AHORA } from "@/features/pedidos/lib/mock";
+import type { Cupon } from "../types";
+import { calcularTotales, faltaEnvioGratis, resolverLineas, validarDatos } from "./reglas";
 
 // Acciones de la vitrina que llegan al panel (Pedidos). Simulado: escriben en el almacén en memoria.
+
+/** Hoy en el reloj de la demo (los cupones vencen por día). */
+const hoyDemo = () => AHORA.slice(0, 10);
+
+/** Valida un cupón contra los de la tienda (módulo 3): estado, fechas, compra mínima y envío gratis. */
+function validarCuponCompra(codigo: string, productos: number, envioGratisDesde: number | null) {
+  return usarEnCarrito(codigo, cuponesActuales(), productos, faltaEnvioGratis(productos, envioGratisDesde) === 0, hoyDemo());
+}
+
+/** El cliente aplica un cupón en el carrito o en "Finalizar compra" (Figma C3a–C3c y C5). */
+export async function aplicarCupon(tienda: string, codigo: string, productos: number): Promise<{ cupon: Cupon } | { error: string }> {
+  const compra = await obtenerCompra(tienda);
+  if (!compra) return { error: "La tienda no existe." };
+  const r = validarCuponCompra(codigo, productos, compra.reglas.envioGratisDesde);
+  return r.ok ? { cupon: { codigo: r.cupon.codigo, tipo: r.cupon.tipo, valor: r.cupon.valor } } : { error: r.error };
+}
 
 /** Reserva el número del pedido al llegar al pago (el mensaje de WhatsApp ya lo muestra). */
 export async function reservarNumero(): Promise<string> {
@@ -24,10 +43,16 @@ function faltaStock(items: ItemCarrito[], lineas: ReturnType<typeof resolverLine
   return l.maximo ? `Solo quedan ${l.maximo} de ${l.nombre} en talla ${l.talla}. Ajusta la cantidad en tu carrito.` : `Se agotó ${l.nombre} en talla ${l.talla}. Quítala de tu carrito para seguir.`;
 }
 
-/** Se llama ANTES de cobrar: si falta stock, no se cobra nada. */
-export async function revisarStock(tienda: string, items: ItemCarrito[]): Promise<string | null> {
+/** Se llama ANTES de cobrar: si falta stock o el cupón ya no vale, no se cobra nada. */
+export async function revisarStock(tienda: string, items: ItemCarrito[], cupon?: string): Promise<string | null> {
   const compra = await obtenerCompra(tienda);
-  return compra ? faltaStock(items, resolverLineas(items, compra.catalogo)) : "La tienda no existe.";
+  if (!compra) return "La tienda no existe.";
+  const lineas = resolverLineas(items, compra.catalogo);
+  const falta = faltaStock(items, lineas);
+  if (falta || !cupon) return falta;
+  const productos = lineas.reduce((s, l) => s + l.precio * l.cantidad, 0);
+  const r = validarCuponCompra(cupon, productos, compra.reglas.envioGratisDesde);
+  return r.ok ? null : `Tu cupón ${cupon} ya no se puede usar: ${r.error.charAt(0).toLowerCase()}${r.error.slice(1)} Quítalo para seguir.`;
 }
 
 type Entrada = {
@@ -52,12 +77,17 @@ export async function registrarPedido(e: Entrada): Promise<{ creadoEl: string; t
   if (!lineas.length || Object.keys(validarDatos(e.datos)).length) return { error: "Revisa tu pedido y tus datos." };
   const falta = faltaStock(e.items, lineas);
   if (falta) return { error: falta };
-  const distrito = e.entrega.tipo === "delivery" ? DISTRITOS.find((d) => d.nombre === (e.entrega as { distrito: string }).distrito) : undefined;
-  if (e.entrega.tipo === "delivery" && !distrito) return { error: "Elige el distrito donde recibes tu pedido." };
+  const { reglas } = compra;
+  // La tienda pudo cambiar su configuración mientras el cliente compraba (Pagos y Entregas).
+  if (!reglas.pagos[e.metodo]) return { error: "Este método de pago ya no está disponible. Elige otro." };
+  if (e.entrega.tipo === "recojo" && !reglas.recojo) return { error: "El recojo en tienda ya no está disponible. Elige delivery." };
+  const distrito = e.entrega.tipo === "delivery" ? reglas.delivery?.distritos.find((d) => d.nombre === (e.entrega as { distrito: string }).distrito) : undefined;
+  if (e.entrega.tipo === "delivery" && !distrito) return { error: "Ya no enviamos a ese distrito. Elige otro o recojo en tienda." };
   const productos = lineas.reduce((s, l) => s + l.precio * l.cantidad, 0);
-  const cupon = e.cupon ? validarCupon(e.cupon, productos) : null;
+  const cupon = e.cupon ? validarCuponCompra(e.cupon, productos, reglas.envioGratisDesde) : null;
+  if (cupon && !cupon.ok) return { error: cupon.error };
   const entrega = e.entrega.tipo === "delivery" && distrito ? { ...e.entrega, distrito } : { tipo: "recojo" as const };
-  const totales = calcularTotales(lineas, cupon?.ok ? cupon.cupon : null, entrega);
+  const totales = calcularTotales(lineas, cupon?.ok ? cupon.cupon : null, entrega, reglas.envioGratisDesde);
 
   const creadoEl = horaDemo();
   const pagado = e.metodo !== "whatsapp";
@@ -81,6 +111,7 @@ export async function registrarPedido(e: Entrada): Promise<{ creadoEl: string; t
   };
   const stock = lineas.map(({ id, color, talla, cantidad }) => ({ id, color, talla, cantidad }));
   agregarPedido({ pedido, detalle, stock });
+  if (cupon?.ok) sumarUso(cupon.cupon.codigo); // el cupón puede pasar a "Agotado"
   // Pagado: el stock baja ya. Por WhatsApp: queda reservado 24 h (si vence, se libera solo).
   const hasta = new Date(new Date(creadoEl).getTime() + RESERVA_HORAS * 3600000).toISOString();
   asignarStock(pedido.id, pagado ? { tipo: "vendido", items: stock } : { tipo: "reservado", items: stock, hasta });

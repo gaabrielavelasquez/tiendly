@@ -14,12 +14,13 @@ type Props = {
 };
 
 /**
- * Tarjeta de opción con radio (Figma: entrega y pago). Elegida: borde carbón de 2 px (selection/border,
+ * Tarjeta de opción con radio (Figma: entrega y pago en el checkout; tipo de descuento en Cupones).
+ * Esquinas del tema: rectas en la vitrina Editorial, 8 px en el panel. Elegida: borde carbón de 2 px (selection/border,
  * decisión 0019) y su contenido se despliega adentro.
  */
 export function Opcion({ nombre, valor, elegida, onElegir, titulo, detalle, icono: Icono, etiqueta, children }: Props) {
   return (
-    <div className={cn("bg-surface transition-colors", elegida ? "border-2 border-selected-border" : "border border-line-subtle hover:border-line-strong")}>
+    <div className={cn("rounded-card bg-surface transition-colors", elegida ? "border-2 border-selected-border" : "border border-line-subtle hover:border-line-strong")}>
       <label className={cn("flex cursor-pointer items-start gap-3", elegida ? "p-3.75" : "p-4")}>
         <input type="radio" name={nombre} value={valor} checked={elegida} onChange={onElegir} className="peer sr-only" />
         <span aria-hidden className={cn("mt-0.5 flex size-5 shrink-0 items-center justify-center rounded-full border-2 peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-focus", elegida ? "border-selected-border" : "border-line-strong")}>
