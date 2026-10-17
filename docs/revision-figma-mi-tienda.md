@@ -25,4 +25,6 @@ La barra compartida del panel se conserva como en main. El guardado sigue simula
 
 Chrome a 390 y 1440: secciones MT1, 15 combinaciones tema/acento con contraste ≥4.5:1, navegación con Seguir/Guardar/Descartar, validación que impide salir, persistencia, vista previa móvil, planes y error; sin desbordes ni errores JavaScript. Capturas actualizadas en `docs/capturas/mi-tienda/`, incluida `salir-390.png`.
 
+El registro del servidor mostró una advertencia de hidratación de `tabindex` en el `Pressable` compartido al emular «reducir movimiento». Ese componente no cambió respecto de main; queda registrado fuera del alcance de esta revisión. «Sin errores JavaScript» se refiere a las excepciones no controladas detectadas por `pageerror`, no a una consola sin advertencias.
+
 **Pendiente:** comparación visual directa de MT2 (260:6086) y MTD1 (261:5943), bloqueada por el conector de Figma. Las verificaciones funcionales y de navegador de esas vistas no equivalen a confirmar su coincidencia visual con Figma.
