@@ -4,12 +4,12 @@ Guía para una sesión de 30 a 40 minutos con una dueña o dueño de tienda real
 
 ## Antes de la sesión
 
-- **Dónde correrlo:** en una laptop con `npm run build && npm start`, y abrir la app desde los celulares por la IP de la laptop (misma red Wi-Fi). Los datos viven en la memoria del servidor: en Vercel pueden perderse entre una pantalla y otra, porque cada instancia tiene su propia memoria.
-- **Reiniciar el servidor antes de cada persona.** Arranca con Heather (tienda de demo); el registro la reemplaza por la tienda nueva.
-- **Todo es simulado:** el código de WhatsApp no se envía (sirve cualquier código, menos `0000`) y no hay cobros reales. Una tienda nueva solo cobra por WhatsApp: tarjeta y Yape llegan con Cobros automáticos, que necesitan aprobación.
-- **Dos celulares:** el de la persona (panel) y uno tuyo (cliente). Usa números ficticios para el cliente.
+- **Dónde correrlo:** en el link de Vercel, cada persona desde su propio celular (remoto, en Perú). Los datos se guardan en una base compartida: sobreviven a los reinicios y el pedido que hagas desde tu celular le llega a su panel.
+- **Cada persona crea su propia tienda** desde `/registro`. Su celular la recuerda; si abre el panel desde otro navegador, ve la tienda de demo (Aurora Calzado, ficticia).
+- **Todo es simulado:** el código de WhatsApp no se envía (sirve cualquier código, menos `0000`) y no hay cobros reales. Una tienda nueva solo cobra por WhatsApp: tarjeta y Yape llegan con Cobros automáticos, que necesitan aprobación. Mientras no defina sus entregas, el cliente elige "Coordinar la entrega por WhatsApp".
+- **Tú eres el cliente:** compras desde tu celular con el link que te comparte. Usa números ficticios para el cliente.
 - **Una foto de producto** de la persona, en su celular, para la tarea 2.
-- **Graba la pantalla** del celular de la persona, con su permiso.
+- **Por videollamada:** pídele que comparta la pantalla de su celular y graba la llamada, con su permiso.
 
 Dile al empezar: "Estamos probando la app, no a ti. Si algo no se entiende, es culpa de la app. Piensa en voz alta." No le expliques las pantallas ni le muestres dónde tocar. Si se traba más de 2 minutos, anota dónde y ayuda a la persona a seguir.
 
@@ -37,7 +37,7 @@ Qué observar:
 
 ### 3. Comparte tu tienda
 
-> "Mándale el link de tu tienda a este número para que te compre." (el celular del cliente)
+> "Mándame el link de tu tienda para que te compre."
 
 Qué observar:
 - Si usa "Compartir por WhatsApp" o copia el link.
@@ -46,7 +46,7 @@ Qué observar:
 
 ### 4. Atiende el pedido que te llega
 
-Desde el celular del cliente, compra su producto con "Pedir por WhatsApp" y manda el mensaje. Luego dile:
+Desde tu celular, abre su link, compra su producto con "Pedir por WhatsApp" y manda el mensaje. Luego dile:
 
 > "Te llegó un pedido de un cliente. Atiéndelo como lo harías hoy."
 
