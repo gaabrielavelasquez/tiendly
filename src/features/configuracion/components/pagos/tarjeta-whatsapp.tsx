@@ -1,20 +1,21 @@
 "use client";
 
 import { MessageCircle } from "lucide-react";
+import Link from "next/link";
 import { useState } from "react";
-import { Button, Card, Field, Switch } from "@/components/ui";
-import { formatoCelular, soloDigitos } from "@/features/checkout/lib/reglas";
+import { Card, Switch } from "@/components/ui";
+import { formatoCelular } from "@/features/checkout/lib/reglas";
 import type { ConfigPagos } from "../../types";
 import { CabeceraMetodo } from "../estado-metodo";
 
 type Props = { whatsapp: ConfigPagos["whatsapp"]; unico: boolean; onCambio: (w: ConfigPagos["whatsapp"]) => void };
 
-/** Pedidos por WhatsApp (decisión 0007, "pagar después"). Si es el único método, no se puede apagar (Figma E2). */
+/**
+ * Pedidos por WhatsApp (decisión 0007, "pagar después"). Si es el único método, no se puede apagar (Figma E2).
+ * El número de ventas se edita solo en Mi tienda › Contacto; aquí se muestra en solo lectura.
+ */
 export function TarjetaWhatsApp({ whatsapp, unico, onCambio }: Props) {
-  const [editando, setEditando] = useState(false);
-  const [numero, setNumero] = useState(whatsapp.celular);
   const [aviso, setAviso] = useState(false);
-  const valido = /^9\d{8}$/.test(soloDigitos(numero));
 
   function alternar(v: boolean) {
     if (!v && unico) return setAviso(true);
@@ -35,24 +36,14 @@ export function TarjetaWhatsApp({ whatsapp, unico, onCambio }: Props) {
       <p id="wsp-desc" className="text-body-sm text-fg-secondary">
         Tu cliente te manda su pedido ya escrito y acuerdan el pago por chat: Yape a tu número, transferencia o efectivo.
       </p>
-      <div className="border-t border-line-subtle pt-4">
-        {editando ? (
-          <form onSubmit={(e) => (e.preventDefault(), valido && (onCambio({ ...whatsapp, celular: soloDigitos(numero) }), setEditando(false)))} className="flex flex-col gap-3">
-            <Field label="Número de WhatsApp" type="tel" inputMode="numeric" value={formatoCelular(numero)} onChange={(e) => setNumero(e.target.value)} error={numero && !valido ? "Son 9 dígitos y empieza con 9." : undefined} hint="Aquí te llegan los pedidos y los mensajes de tus clientes." autoFocus />
-            <div className="flex gap-2">
-              <Button type="submit" size="sm" disabled={!valido}>Guardar número</Button>
-              <Button type="button" size="sm" variant="ghost" onClick={() => (setEditando(false), setNumero(whatsapp.celular))}>Cancelar</Button>
-            </div>
-          </form>
-        ) : (
-          <div className="flex items-center justify-between gap-3">
-            <p className="flex flex-col text-caption text-fg-secondary">
-              {whatsapp.activo ? "Tus pedidos llegan al" : "Cuando lo prendas, tus pedidos llegarán al"}
-              <span className="text-body-sm font-semibold text-fg tabular-nums">{formatoCelular(whatsapp.celular)}</span>
-            </p>
-            <Button variant="ghost" size="sm" onClick={() => setEditando(true)}>Cambiar número</Button>
-          </div>
-        )}
+      <div className="flex items-center justify-between gap-3 border-t border-line-subtle pt-4">
+        <p className="flex flex-col text-caption text-fg-secondary">
+          {whatsapp.activo ? "Tus pedidos llegan al" : "Cuando lo prendas, tus pedidos llegarán al"}
+          <span className="text-body-sm font-semibold text-fg tabular-nums">{formatoCelular(whatsapp.celular)}</span>
+        </p>
+        <Link href="/panel/mi-tienda" className="link-text flex min-h-11 items-center text-body-sm font-semibold">
+          Editar en Mi tienda
+        </Link>
       </div>
     </Card>
   );

@@ -2,7 +2,11 @@ import { obtenerProductos } from "@/features/productos/lib/mock";
 import { nivelStock, stockTotal } from "@/features/productos/lib/reglas";
 import type { Categoria, Producto, Variante } from "@/features/productos/types";
 import { DETALLE, HEX_COLOR } from "./contenido";
+import { configActual } from "@/features/configuracion/lib/mock";
 import { tiendaActual } from "@/lib/sesion";
+
+/** WhatsApp de ventas: un solo dato, se edita en Mi tienda › Contacto (lo usan la vitrina, Pagos y el checkout). */
+const celularVentas = () => configActual().pagos.whatsapp.celular;
 
 // Vitrina pública: lo que ve el cliente. Lee el mismo catálogo que el panel, pero solo lo publicado.
 
@@ -68,7 +72,7 @@ export async function obtenerFicha(tienda: string, slug: string) {
   const otros = activos.filter((x) => x.id !== p.id && nivelStock(x) !== "agotado");
   const misma = otros.filter((x) => x.categorias.some((c) => p.categorias.includes(c)));
   const relacionados = [...misma, ...otros.filter((x) => !misma.includes(x))].slice(0, 4).map(aVitrina);
-  return { tienda: { nombre: tiendaActual.nombre, slug: tienda, celular: tiendaActual.celularVentas }, ficha: aFicha(p), relacionados };
+  return { tienda: { nombre: tiendaActual.nombre, slug: tienda, celular: celularVentas() }, ficha: aFicha(p), relacionados };
 }
 
 /**
@@ -84,7 +88,7 @@ export async function obtenerVitrina(slug: string): Promise<Vitrina | null> {
     .sort((a, b) => Number(a.agotado) - Number(b.agotado));
   const presentes = new Set(productos.flatMap((p) => p.categorias));
   const categorias = (Object.keys(LABEL) as Categoria[]).filter((c) => presentes.has(c)).map((id) => ({ id, label: LABEL[id] }));
-  return { tienda: { nombre: tiendaActual.nombre, slug, celular: tiendaActual.celularVentas, logo: tiendaActual.logo, plan: tiendaActual.plan }, productos, categorias };
+  return { tienda: { nombre: tiendaActual.nombre, slug, celular: celularVentas(), logo: tiendaActual.logo, plan: tiendaActual.plan }, productos, categorias };
 }
 
 export const leerCategoria = (v: string | string[] | undefined, validas: Categoria[]): Categoria | "todos" => {
