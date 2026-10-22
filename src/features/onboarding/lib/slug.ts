@@ -1,5 +1,6 @@
 // Simulación local de links (decisión 0013). Se reemplaza por la API cuando exista el backend.
-const OCUPADOS = new Set(["tienda", "moda", "zapatos", "belleza", "tiendly", "admin"]);
+// Además de los ocupados de ejemplo: la tienda de demo y las rutas de la app (un link /panel abriría el panel).
+const OCUPADOS = new Set(["tienda", "moda", "zapatos", "belleza", "tiendly", "admin", "heather", "demo", "panel", "registro", "kit"]);
 
 export function aSlug(nombre: string): string {
   return nombre
