@@ -54,10 +54,9 @@ export function CabeceraTienda({ nombre, logo, slug, categorias, activa, onCateg
         </button>
         <Link href={`/${slug}`} aria-label={`${nombre}, inicio de la tienda`} className="justify-self-center font-display-hero text-h2 tracking-wide text-fg uppercase lg:col-start-1 lg:row-start-1 lg:justify-self-start">
           {logo ? (
-            // El archivo tiene aire alrededor del wordmark (la caja ancha y object-cover lo recortan) y fondo
-            // blanco opaco: multiply lo funde con el lienzo sin tocar la imagen.
+            // El logo se muestra tal cual en todos los temas: sin filtros, mezcla, recorte ni radio.
             <span className="relative block h-9 w-36">
-              <Image src={logo} alt="" fill priority sizes="9rem" className="object-cover mix-blend-multiply" />
+              <Image src={logo} alt="" fill priority sizes="9rem" className="object-contain" />
             </span>
           ) : (
             nombre

@@ -7,17 +7,17 @@ const EXTRAS = ["Banner de alto impacto", "Ocultar el sello de Tiendly", "Badges
 const OPCIONES = [{ titulo: "Color personalizado", ayuda: "Cualquier color, con validador de contraste." }, { titulo: "Tipografías exclusivas", ayuda: "Elige entre una lista curada." }, { titulo: "Dominio propio", ayuda: "Por ejemplo, heathercalzado.pe." }];
 
 /**
- * Opciones Pro de Mi tienda (todavía no funcionan: llegan en V1.1). Tienda Pro (Heather, 0030): «Incluido en
- * tu plan Pro · Muy pronto», sin candado ni «Ver planes». Tienda Free: candado, badge PRO y «Ver planes».
+ * Opciones Pro de Mi tienda (todavía no funcionan: llegan en V1.1). Tienda Pro (Heather, 0030): incluidas en
+ * el plan y cada una con «Muy pronto», sin candado ni «Ver planes». Tienda Free: candado, badge PRO y «Ver planes».
  */
 export function ProBloqueado({ plan }: { plan: "free" | "pro" }) {
   const dialog = useRef<HTMLDialogElement>(null);
   if (plan === "pro") {
     return <Card as="section" className="flex flex-col gap-4 bg-highlight p-5 lg:p-6">
       <h2 className="font-display-title text-h3">Opciones de tu plan Pro</h2>
-      <p className="text-body-sm text-fg-secondary">Haz que tu tienda sea 100 % tuya.</p>
+      <p className="text-body-sm text-fg-secondary">Están incluidas en tu plan. Todavía no funcionan: llegan muy pronto.</p>
       {OPCIONES.map(t => <div key={t.titulo} className="flex min-h-12 items-start gap-3 py-2 text-body-sm">
-        <CircleCheck aria-hidden className="mt-0.5 size-5 shrink-0 text-success" /><div className="min-w-0 flex-1"><p className="font-semibold text-fg">{t.titulo}</p><p className="mt-1 text-caption text-fg-secondary">{t.ayuda}</p><p className="mt-1 text-caption font-semibold text-fg">Incluido en tu plan Pro · Muy pronto</p></div>
+        <CircleCheck aria-hidden className="mt-0.5 size-5 shrink-0 text-success" /><div className="min-w-0 flex-1"><p className="font-semibold text-fg">{t.titulo}</p><p className="mt-1 text-caption text-fg-secondary">{t.ayuda}</p></div><Badge tone="warning">Muy pronto</Badge>
       </div>)}
     </Card>;
   }
