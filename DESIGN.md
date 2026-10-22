@@ -15,10 +15,11 @@ La identidad visual de Tiendly combina **velocidad ultra limpia**, **lenguaje mo
 - **Color de Marca (Cobalto Eléctrico):** el primario **no es un relleno plano**: es un degradado de `#2563EB` (cobalto) a `#1B365D` (marino profundo), a 135°. `#1D4ED8` queda para hover y links. *(Recalibrado el 15-oct-2026 para diferenciarse del azul plano de Tiendanube y Mercado Pago, decisión 0017.)*
 - **Gama de Soporte (Estilo Luma):**
   - `color.brand.glow-sky`: halo difuminado del cobalto (16 %) hacia celeste pastel `#EFF6FF`.
-  - `color.brand.glow-warm`: halo cálido (durazno al 4 %) que da profundidad a tarjetas y estados de celebración.
+  - `color.brand.glow-warm`: halo cálido (durazno al 4 %).
+  - **Dónde van los halos (decisión 0031, actualiza 0017):** solo detrás de la tarjeta protagonista, asomando por sus bordes, o en momentos de logro (primera venta, pedido confirmado, estado vacío "todo al día"). **Nunca como fondo de página.** Solo degradados CSS (`bg-halo-hoy`), sin `filter: blur`; si aparecen con movimiento, respetan "reducir movimiento".
   - Opacidad baja del cobalto (`rgba(37, 99, 235, 0.08)`, `accent/glow`) para halos y anillos de foco. Nunca para selección: va en negro carbón (§4).
 - **Acento cálido "Spark" (`color.brand.spark`, `#EA580C`):** el contrapunto cálido al cobalto y al carbón, para que el panel no se sienta frío. Se usa con la **regla del 1 %** (ver §4). *Decisión 0022, 16-oct-2026.*
-- **Superficie y Lienzo:** Fondo neutro de pantalla `#F8F9FA` o `#F6F5F3` con tarjetas blanco puro `#FFFFFF`.
+- **Superficie y Lienzo:** lienzo del panel `#F8F8F6` (`bg/page`, decisión 0031) con contenedores blanco puro `#FFFFFF`. Las vitrinas siguen en `#F4F4F3`.
 - **Texto:** `#1A1A1A` (Primario) / `#6B7280` (Secundario / Muted).
 
 ---
@@ -40,8 +41,12 @@ La identidad visual de Tiendly combina **velocidad ultra limpia**, **lenguaje mo
 
 ## 3. Tipografía & Jerarquía
 
-- **Titulares (Headings):** **Outfit SemiBold (600)** en Display y H1–H3, con `tracking-tight`; Medium (500) para subtítulos de apoyo. Nada de Black (900): se ve pesado y "de juguete". *Cambiado el 16-oct-2026 (decisión 0020 · Sleek & Crisp).*
-- **Cifras grandes (métricas):** token `font/metric-style` (utilidad `font-metric`): Outfit SemiBold (600), `tracking-tight` y números tabulares, para montos y totales (S/ 1,320, S/ 5,480). Nunca Bold ni Black. *Decisión 0021 · Crisp, 16-oct-2026.*
+- **Titulares (Headings):** Outfit con `tracking-tight`. Nada de Black (900): se ve pesado y "de juguete". *Decisión 0031 (22-oct-2026); antes SemiBold en todo (0020).*
+  - **Títulos de página y saludo:** Outfit Medium (500, `font/title-style`, utilidad `font-display-light`) en H1 (28 · 40 px).
+  - **Títulos de sección:** Outfit variable a 550 (`font/section-style`, utilidad `font-titulo-seccion`) en H3 (20 · 24 px): el nivel intermedio entre el título de página y el cuerpo.
+- **Saludo en dos tonos (0031):** mismo tamaño, dos líneas a propósito: "Hola, Cecilia." en `text/primary` y la frase de contexto ("Tienes 3 cosas para hoy.", "Todo al día por hoy.") en `text/secondary`. Sin emoji. Debajo, la fecha en texto chico; en móvil no se repite la tienda (ya está en la barra superior).
+- **Dinero (0031, estilo Stripe):** peso Regular o Medium; **SemiBold (`font-metric`) solo en totales**. Cifras tabulares siempre. "S/" un escalón más chico y atenuado; decimales atenuados. Etiqueta chica en `text/secondary` arriba de cada monto ("Ventas", "Total de la semana"). Componente `Monto` en Inicio. *Reemplaza a 0021 en el peso de los montos.*
+- **Variaciones (deltas):** solo la cifra va en color (`feedback/success` si sube, `feedback/error` si baja: "+12 %"); el resto de la frase, en `text/secondary`.
 - **Cuerpo / Interfaz (Body & UI):** Sans-Serif neutra (ej. Inter / SF Pro) en pesos Regular y Medium, enfocada en máxima legibilidad en dispositivos móviles.
 
 ---
@@ -50,48 +55,50 @@ La identidad visual de Tiendly combina **velocidad ultra limpia**, **lenguaje mo
 
 > **Vigente desde el 16-oct-2026 · Decisión 0024 · Calibrado (SaaS moderno, estilo Stripe / Vercel).** Reemplaza a 0023 · Editorial, que se sentía plana y "de planilla". Manda sobre lo que se contradiga más abajo:
 > - **Radios:** tarjetas de 8 px (`radius/card` → `radius/sm`); botones, campos, chips y badges de 6 px (`radius/button`, `radius/chip`, `radius/base` → `radius/xs`). Ni redondo de juguete ni bloque.
-> - **Profundidad:** tarjetas blancas con borde de 1 px `#E5E7EB` (`border/subtle`) y sombra nítida de dos capas `elevation/card` (0 1 2 + 0 2 8, negro al 4 %). Sin halos ni nubes.
-> - **Lienzo (se mantiene de 0023):** blanco cálido `#F4F4F3` (`bg/page`) y hundido `#F0EFED` (`bg/sunken`); `#666D7A` sigue en ≥ 4.5:1.
+> - **Profundidad:** sombra nítida de dos capas `elevation/card` (0 1 2 + 0 2 8, negro al 4 %), sin nubes. *El borde pasa a `border/card` casi invisible y los halos tienen reglas propias (0031).*
+> - **Lienzo:** hundido `#F0EFED` (`bg/sunken`); `#666D7A` sigue en ≥ 4.5:1. *El lienzo del panel pasa a `#F8F8F6` (0031).*
 > - **CTA:** vuelve el degradado cobalto → marino (`gradient/primary`), en tipo oración. El cobalto sigue la regla de §4 · Selección y cobalto.
-> - **Encabezados:** de sección y de columnas en Outfit SemiBold, tipo oración y `tracking-tight` (`encabezado-seccion`, `encabezado-columna`). Las mayúsculas quedan solo para etiquetas chicas de contexto ("HOY").
+> - **Encabezados:** tipo oración y `tracking-tight`; de columnas en Outfit SemiBold (`encabezado-columna`). Las mayúsculas quedan solo para etiquetas chicas de contexto. *Los de sección pasan a Outfit 550 en H3, fuera de los contenedores (0031).*
 > - **Sin cambios:** spark (0022), selección en carbón (0019), métricas (0021).
 
-> **Pase de diseño · Decisión 0031 (22-oct-2026, propuesta).** Aplicada en Inicio; se extiende a Pedidos, Productos y Mi tienda con el ok de Gabi. Manda sobre 0024 y lo de abajo donde se contradiga:
-> - **Aire:** más espacio entre secciones (40 px móvil · 48 px desktop) y dentro de las tarjetas protagonistas (40 px desktop). Lienzo del panel `#F8F8F6` (`bg/page` → `color/paper/50`; las vitrinas siguen en `#F4F4F3`). Borde de tarjeta casi invisible `border/card` (`#F0EFED`): separa la sombra.
-> - **Títulos de página:** Outfit Medium (`font/title-style`, utilidad `font-display-light`), un tamaño arriba (`text-display`: 40 · 56 px). El peso fuerte, solo en cifras clave (`font-metric`).
-> - **Un protagonista por pantalla.** Inicio: saludo grande y liviano sobre un halo cálido de puro CSS (`bg-halo`: `glow/warm` + `glow/sky`, sin WebGL). "Hola, {nombre} 👋" si se conoce el nombre de la dueña; si no, "¡Hola! 👋" con la tienda debajo. "Hoy" sigue en cobalto, con halo `elevation/celebration`, cifra más grande y alto a la medida de su contenido.
-> - **Orden de Inicio (0012):** desktop, Hoy (a la medida de su contenido) a la izquierda y Para atender hoy a la derecha; Esta semana a todo el ancho debajo. Móvil: Hoy, Para atender, Esta semana y acciones.
-> - **Para atender** (`AccionCard`): ícono en círculo neutro, título, detalle corto y botón redondo con chevron. Móvil: una sola tarjeta con filas divididas. Desktop: fila de tarjetas chicas, texto un paso más grande (título 16, detalle 14) e ícono arriba con el texto alineado abajo. Toda la fila o tarjeta es el link, con zona táctil ≥ 44 px.
-> - **Subtítulo del saludo:** en móvil, solo la fecha (la tienda ya está en la barra superior); en desktop, tienda · fecha.
-> - **Encabezados de sección** (`EncabezadoSeccion`): nivel intermedio en Outfit Medium H3 (20 · 24 px), para que el salto desde el saludo no sea brusco. Título a la izquierda, acciones silenciosas a la derecha (botón `quiet`: píldora neutra, la única excepción al "nunca pill").
-> - **Botones de la cabecera:** una sola acción fuerte (primario) y, a su lado, el secundario con la misma forma y alto (`radius/button`, 40 px). Nunca primario y píldora juntos.
-> - **Estados:** ícono chico + texto de color. Badges rellenos solo para lo urgente (vence hoy, agotado).
-> - **Gráficos:** barras de 8 px (móvil) y 10 px (desktop), punta redonda y más aire entre días; hoy en cobalto sólido sin sombra. En desktop, "Esta semana" pone el resumen a la izquierda y el gráfico en un área acotada (3/5 del ancho, 128 px de alto) a la derecha. Cifras y barras entran con movimiento (Motion Primitives) y respetan "reducir movimiento".
+> **Decisión 0031 · De-layering (22-oct-2026, vigente).** Aprobada por Gabi en Inicio después de 6 rondas; toda pantalla nueva o rediseñada la sigue desde el inicio. Manda sobre 0024 y lo de abajo donde se contradiga. Principios del nuevo Admin de Shopify (menos contenedores, la estructura de la página hace el trabajo, color solo para lo que pide atención) y de Stripe (montos serenos); no se copian.
+> - **Aire:** 40 px entre secciones en móvil y 48 en desktop. Lienzo `#F8F8F6`.
+> - **Menos cajas:** los títulos de sección van **fuera** de los contenedores (`EncabezadoSeccion`). Una lista vive en **un solo contenedor** con divisores finos (`divide-line-subtle`), en móvil y desktop: nada de una tarjeta por fila. La jerarquía la dan el espacio y la tipografía, no los bordes ni las sombras. Contenedor sereno: blanco, radio de tarjeta y `elevation/container` (`shadow-contenedor`: anillo interior de 1 px al 8 % + base de 1 px al 7 %), sin borde extra.
+> - **Íconos:** finos (trazo 1.5), gris neutro (`icon/default`), **sin contenedores circulares**. El color queda solo para lo que pide atención.
+> - **Urgencia y plazos:** como texto de color, sin píldora ("Vence hoy, 8:10 p. m." en `feedback/warning`). Píldoras y badges, solo para estados donde hacen falta (p. ej. el estado de un pedido en una lista, "Pro").
+> - **Filas de acción:** toda la fila es el link, de al menos 44 px de alto; chevron simple, sin botones circulares. Orden de lectura: título → plazo → detalle.
+> - **Encabezados de sección:** título a la izquierda y acciones silenciosas a la derecha (botón `quiet`: píldora neutra). Una sola acción fuerte por pantalla; en la cabecera, primario y secundario con la misma forma y alto (`radius/button`, 40 px).
+> - **Tarjeta protagonista:** como máximo una por pantalla. Cobalto con **degradado corto** (`accent/base` → `accent/pressed`, `bg-hero-suave`; sin marino) y **profundidad en capas** (`elevation/layered`, `shadow-capas`: filo superior interior blanco al 25 %, anillo de 1 px al 8 % y tres sombras cortas apiladas, adaptadas de `@shopify/polaris-tokens`). Sin sombra de color difuminada, sin vidrio y sin grano. Su título también va fuera.
+> - **Halos:** ver §1 (solo detrás de la protagonista o en momentos de logro; nunca de fondo).
+> - **Gráficos:** barras **sólidas** y finas con punta redonda (8 px móvil · 16 px desktop); períodos pasados en gris medio (`chart/bar-muted`, `#878D97`, 3.3:1), el actual en cobalto (`accent/base`), y **sin riel** para los períodos que no llegan. Junto a los totales, el gráfico usa el ancho que queda.
+> - **Dinero, saludo y tipografía:** ver §3.
+> - **Movimiento:** cifras que suben y barras que crecen al entrar (Motion Primitives), escalonadas; todo respeta "reducir movimiento". Sin animaciones perpetuas.
 > - **No se copia:** gráficos en cada tarjeta, violeta, analítica densa.
 
 ### Tarjetas (Cards)
 - Fondo blanco puro (`#FFFFFF`) sobre superficie neutra.
 - Esquinas de **`8px`** (`radius/card` → `radius/sm`). *Decisión 0024; antes 12 px (0020) y 16 px.*
-- Borde nítido `border/subtle` (1 px, `#E5E7EB`) y sombra de dos capas `elevation/card`: `0 1 2` + `0 2 8`, negro al 4 %. Nada de sombras "nube" difusas. *Decisión 0024; antes `0 1 3 + 0 4 10` (0021).*
+- Borde casi invisible `border/card` (1 px, `#F0EFED`, decisión 0031) y sombra de dos capas `elevation/card`: `0 1 2` + `0 2 8`, negro al 4 %. Nada de sombras "nube" difusas. *Antes borde `border/subtle` (0024).*
+- **Contenedores de lista y de sección (0031):** `elevation/container` en vez de borde + sombra; ver §4 · 0031.
 
 ### Botones
-- Esquinas de **`6px`** en botones y campos (`radius/button` → `radius/xs`). *Decisión 0024; antes 8 px (0020), 10 px (0018) y 12 px.* Nunca pill en botones.
+- Esquinas de **`6px`** en botones y campos (`radius/button` → `radius/xs`). *Decisión 0024; antes 8 px (0020), 10 px (0018) y 12 px.* Nunca pill en botones, salvo la acción silenciosa de un encabezado de sección (`quiet`, 0031).
 - **Proporciones finas:** botón de **40 px** de alto (relleno 16 a los lados, texto 14) y **36 px** en la variante chica; campo de **40 px** con texto de 16 (para que iOS no haga zoom al enfocar). La zona táctil sigue siendo de 44–48 px con un `::after` invisible.
 - Transición suave al tacto (`150ms ease-out`) con micro-reducción de escala (`scale: 0.98`, en Tailwind `active:scale-[0.98]`) al presionar.
 
 ### Selección y cobalto (`chip.selected`) — decisiones 0019 y 0020, ratificadas el 16-oct-2026
 - **Regla de oro:** el degradado cobalto se usa **solo en dos lugares**:
   1. el **botón de acción primario (CTA)**;
-  2. la **tarjeta protagonista** de la pantalla (`gradient/hero`), **como máximo una por pantalla**. Hoy: la tarjeta "Hoy" de Inicio.
+  2. la **tarjeta protagonista** de la pantalla, **como máximo una por pantalla**, con su degradado corto (`bg-hero-suave`, 0031). Hoy: la tarjeta "Hoy" de Inicio.
 - Todo lo demás que indica selección o progreso va en negro carbón: `selection/*` e `indicator/*`.
 - Chips, fichas y controles seleccionados (tallas, colores, categorías, filtros, radios, tarjetas de opción, interruptores): **fondo negro carbón `#1A1A1A` con texto blanco** (estilo Shop / GOAT). Tokens `selection/bg`, `selection/fg`, `selection/border`.
 - Tarjetas de opción seleccionadas: fondo blanco (`selection/subtle`) y borde negro carbón. Sin tinte azul.
 - Barras de progreso, pasos, línea de tiempo y destellos: `indicator/fill` (negro carbón). Ítem de menú activo: `bg/sunken` + `text/primary`. Casillas marcadas: `selection/*`.
 - **Excepción:** los links y el botón Fantasma siguen en cobalto (`accent/text`, `#1D4ED8`), para que se reconozcan como links.
-- **Gráficos (0021):** barras finas de datos, no bloques: 24 px de ancho en móvil y 32 px en desktop, con radio de 8 px (no píldora), sobre un riel `bg/sunken`.
-- **Vidrio sobre la tarjeta protagonista (0021):** blanco al 10 %, `ring-1` blanco al 20 % y `backdrop-blur-md`. El blur todavía no tiene token: proponer `effect/blur` en Figma.
-- **Tarjeta protagonista:** `gradient/hero` (cobalto `#2563EB` → azul medianoche `#1B365D`, 135°) con texto blanco, filo interior de 1 px al 15 % y radio de tarjeta. Dentro, los bloques secundarios son vidrio (ver "Vidrio sobre la tarjeta protagonista"). Aprobada por Gabi.
-- **Dato de hoy en gráficos:** la barra de hoy del gráfico semanal va en cobalto sólido (`accent/base`), el resto de los días en `chart/bar`. Es un dato resaltado, no selección ni progreso. Aprobada por Gabi.
+- **Gráficos:** ver §4 · 0031 (barras sólidas de 8 · 16 px, sin riel). *Reemplaza a 0021: 24 · 32 px sobre riel `bg/sunken`.*
+- **Vidrio sobre la tarjeta protagonista (0021):** retirado en 0031. Dentro de la protagonista, etiquetas chicas y un divisor al 15 %; sin bloques de vidrio.
+- **Tarjeta protagonista:** degradado corto cobalto `#2563EB` → `#1E40AF` (`accent/pressed`), 135°, con texto blanco, radio de tarjeta y `elevation/layered`. Ver §4 · 0031. *Antes `gradient/hero` hasta el azul medianoche `#1B365D` (0020), que sigue en el token por si se necesita.*
+- **Dato de hoy en gráficos:** la barra del período actual va en cobalto sólido (`accent/base`) y los pasados en `chart/bar-muted`. Es un dato resaltado, no selección ni progreso. Aprobada por Gabi.
 - Las barras de progreso, los pasos y la línea de tiempo siguen en `indicator/fill`. El paso actual de "Tienda nueva" se resalta con `selection/subtle` + `selection/border` (0027).
 - *Alternativa evaluada y no aplicada:* fondo `#EFF6FF` con borde de 1.5 px y texto `#1D4ED8`. Para cambiar de estilo se editan solo las variables `selection/*` del modo Tiendly.
 
@@ -105,6 +112,7 @@ La identidad visual de Tiendly combina **velocidad ultra limpia**, **lenguaje mo
 
 ### Chips & Badges
 - Tamaño reducido (`12px`) con rellenos pastel o transparencias de opacidad baja.
+- **Cuándo (0031):** solo para estados donde hacen falta. La urgencia y los plazos van como texto de color, sin píldora.
 - **Compactos** en el panel, con esquinas de **6 px** (`radius/chip` → `radius/xs`, decisión 0024): chip de filtro de **28 px** de alto (relleno 12 a los lados, texto 14) y badge de **24 px** (relleno 4 × 8, texto 12). *Alturas de 0020; antes, chip de 32 px (0018).* En la vitrina, las categorías van en pill (es un control, no una tarjeta).
 - **Área táctil:** el chip se ve de 28 px, pero en código su zona de toque llega a 44 px (padding invisible o `::after`), para no perder la regla de objetivos táctiles.
 
@@ -207,13 +215,19 @@ La identidad visual de Tiendly combina **velocidad ultra limpia**, **lenguaje mo
 | `radii.pill` | `radius/full` | 9999 |
 | Sombra de tarjeta | `elevation.card` (0024) | 0 1 2 + 0 2 8, negro 4 % |
 | Sombra suave de vidrio y avisos | estilo `Sombra/Baja` (`elevation.low`) | 0 4 20 negro 4 % + halo cálido 0 12 40 |
-| Cifras grandes | `font/metric-style` (0021) | Outfit SemiBold (600), tracking-tight, tabulares |
+| Cifras grandes | `font/metric-style` (0021) | Outfit SemiBold (600), tracking-tight, tabulares: solo totales desde 0031 |
+| Títulos de página y sección (0031) | `font/title-style` · `font/section-style` | Outfit 500 · Outfit variable 550 |
 | `color.brand.spark` | `spark/base` · `spark/subtle` · `spark/text` (0022) | `#EA580C` · `#FFF7ED` · `#C2410C` |
-| Celebración | estilo `Halo/Cálido` (`elevation.celebration`) | halo cálido + glow celeste |
-| Tarjeta protagonista | `gradient/hero` | cobalto → azul medianoche, 135° (0020) |
-| Calibrado (0024) | `bg/page` · `bg/sunken` · `border/subtle` · `radius/sm` · `radius/xs` | `#F4F4F3` · `#F0EFED` · `#E5E7EB` · 8 px · 6 px |
+| Celebración | estilo `Halo/Cálido` (`elevation.celebration`) | halo cálido + glow celeste: solo momentos de logro (0031) |
+| Halo de la protagonista (0031) | utilidad `bg-halo-hoy` | `glow/warm` en capas + toque de `glow/sky`, solo detrás de la tarjeta |
+| Tarjeta protagonista | utilidad `bg-hero-suave` + `elevation/layered` (0031) | cobalto → `accent/pressed`, 135°; filo blanco 25 %, anillo 1 px 8 %, tres sombras cortas |
+| Contenedor sereno (0031) | `elevation/container` | anillo interior 1 px al 8 % + base 0 1 0 al 7 % |
+| Borde de tarjeta (0031) | `border/card` | `#F0EFED` |
+| Barras pasadas (0031) | `chart/bar-muted` → `color/neutral/450` | `#878D97` (3.3:1) |
+| Calibrado (0024) | `bg/sunken` · `border/subtle` · `radius/sm` · `radius/xs` | `#F0EFED` · `#E5E7EB` · 8 px · 6 px |
+| Lienzo del panel (0031) | `bg/page` → `color/paper/50` | `#F8F8F6` (vitrinas: `#F4F4F3`) |
 | Tipografía de cuerpo | `font/body` | Inter |
-| Tipografía de titulares | `font/display` + `font/display-style` / `font/hero-style` (modo Tiendly) | Outfit SemiBold (600) en Display y H1–H3 (0020) |
+| Tipografía de titulares | `font/display` + `font/display-style` / `font/hero-style` (modo Tiendly) | Outfit SemiBold (600) para el resto de titulares; páginas y secciones según 0031 |
 | Estado informativo | `feedback/info/*` | teal: `#0D9488` en rellenos e íconos, `#0F766E` en texto (0016) |
 | Transición de botones | `motion.duration.fast`, `motion.easing.standard`, `motion.scale.pressed` | 150 ms · ease-out · 0.98 |
 
@@ -221,6 +235,6 @@ La identidad visual de Tiendly combina **velocidad ultra limpia**, **lenguaje mo
 - **Temas de la tienda:** Neutral, Editorial y Suave mantienen su propio acento. El cobalto es de Tiendly (panel, onboarding, marca) y del crédito "Powered by Tiendly".
 
 - **Pro (V1.1):** componentes base en Figma → Components → "Pro · V1.1": Sello de producto, Banner de portada y Mensaje de WhatsApp · vista previa. Las pantallas de configuración se diseñan después del lanzamiento del Core Loop.
-- **Prioridad ante diferencias con CLAUDE.md:** manda este documento. Vigente desde el 16-oct (decisión 0024 · Calibrado): tarjetas de 8 px con borde y sombra nítida; botones, campos, chips y badges de 6 px; degradado cobalto solo en el CTA y en una tarjeta protagonista por pantalla; lienzo `#F4F4F3`; titulares en Outfit SemiBold; escala `0.98` al presionar.
-- **Congelamiento estético:** hasta completar el Core Loop no se cambian estos tokens (ver CLAUDE.md).
+- **Prioridad ante diferencias con CLAUDE.md:** manda este documento. Vigente desde el 22-oct (decisiones 0024 y 0031): tarjetas de 8 px con borde casi invisible y sombra nítida; listas en un solo contenedor con divisores; títulos de sección fuera; botones, campos, chips y badges de 6 px; degradado cobalto solo en el CTA y en una tarjeta protagonista por pantalla (corto y con profundidad en capas); lienzo `#F8F8F6`; títulos de página en Outfit Medium y de sección a 550; escala `0.98` al presionar.
+- **Congelamiento estético:** se levantó solo para el pase 0031, ya cerrado. Cualquier cambio visual nuevo necesita la aprobación de Gabi (ver CLAUDE.md).
 - **Banner Pro (V1.1):** el overlay `overlay/hero` se valida con fotos claras reales antes de lanzar, para que el texto blanco se lea.

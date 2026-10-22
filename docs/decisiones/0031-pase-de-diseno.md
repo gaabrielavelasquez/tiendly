@@ -1,50 +1,46 @@
-# 0031 · Pase de diseño: más aire, títulos livianos y un protagonista por pantalla
+# 0031 · De-layering: menos cajas, montos serenos y un protagonista por pantalla
 
 - **Fecha:** 22-oct-2026
-- **Estado:** propuesta. Aplicada en Inicio y en dos arreglos de la vitrina; se extiende a Pedidos, Productos y Mi tienda con el ok de Gabi.
-- **Ajusta:** 0021 (gráfico), 0024 (lienzo, borde de tarjeta, "nunca pill") y el congelamiento estético de `CLAUDE.md` §6, levantado solo para este pase.
+- **Estado:** aceptada (Gabi aprobó Inicio el 22-oct-2026). Vigente. Las demás pantallas la siguen desde el inicio.
+- **Ajusta:** 0017 (dónde van los halos), 0020 (tarjeta protagonista y titulares), 0021 (montos, gráfico y vidrio), 0024 (lienzo, borde de tarjeta, "nunca pill" y encabezados) y el congelamiento estético de `CLAUDE.md` §6, levantado solo para este pase.
 
 ## Contexto
 
-Con el Core Loop terminado (PR #12), el panel funciona pero se siente denso: lienzo gris, bordes marcados, títulos pesados, badges rellenos en todos lados. Referencias de Gabi: Bizee, Dokani y un dashboard SaaS de analítica. De ellas se toma el aire, la jerarquía y el halo suave; no se copian gráficos en cada tarjeta, el violeta ni la analítica densa.
+Con el Core Loop terminado (PR #12), el panel funcionaba pero se sentía denso y "de plantilla": lienzo gris, bordes marcados, títulos pesados, una tarjeta por cosa, badges rellenos en todos lados y un halo azul difuminado. Referencias de Gabi: Bizee, Dokani y un dashboard SaaS de analítica, y después el nuevo Admin de Shopify (sept. 2026, "de-layering": menos contenedores, la estructura de la página hace el trabajo, UI neutra, color solo para lo que pide atención) y el Dashboard de Stripe (tipografía de montos serena). Se toman principios, no se copian pantallas. No se copia: gráficos en cada tarjeta, violeta, analítica densa.
 
-## Decisión
+El pase se probó solo en Inicio, en 6 rondas con capturas antes/después a 390 y 1440 px.
 
-1. **Más aire.** Más espacio entre secciones (40 px móvil · 48 px desktop en Inicio) y dentro de las tarjetas protagonistas (40 px en desktop). Lienzo del panel más claro: `bg/page` → `#F8F8F6` (`color/paper/50`); las vitrinas siguen en `#F4F4F3`. Borde de tarjeta casi invisible: token nuevo `border/card` (`#F0EFED`); separa la sombra `elevation/card`.
-2. **Tipografía.** Títulos de página más grandes y livianos: Outfit Medium (`font/title-style`, 500, utilidad `font-display-light`) un tamaño arriba (`text-display`: 40 px móvil · 56 px desktop). Nivel intermedio para los títulos de sección: Outfit Medium en H3 (20 · 24 px), para que el salto desde el saludo no sea brusco. El peso fuerte queda solo para las cifras clave (`font-metric`).
-3. **Un protagonista por pantalla.** En Inicio, el saludo grande y liviano sobre un halo cálido de puro CSS (`bg-halo`: `glow/warm` + un toque de `glow/sky`, lados desvanecidos, sin WebGL). Saludo: "Hola, {nombre} 👋" si se conoce el nombre de la dueña (demo Heather: Cecilia; o el nombre de pila de Google); si no, "¡Hola! 👋" con el nombre de la tienda debajo. La tarjeta "Hoy" sigue en cobalto, con halo suave (`elevation/celebration`), cifra más grande y alto a la medida de su contenido. Orden de 0012: en desktop, Hoy a la izquierda y Para atender hoy a la derecha; Esta semana a todo el ancho debajo.
-4. **Para atender hoy.** Cada pendiente lleva ícono, título, detalle corto y botón redondo con chevron. Móvil: una sola tarjeta con filas divididas. Desktop: fila de tarjetas de acción chicas. Toda la fila o tarjeta es el link (0027).
-5. **Encabezados de sección** (`EncabezadoSeccion`): título a la izquierda y acciones silenciosas a la derecha (botón `quiet`, píldora neutra: la única excepción al "nunca pill"). Una sola acción fuerte por pantalla (en Inicio, "Nuevo producto"); a su lado, "Compartir por WhatsApp" va como secundario con la misma forma y alto (`radius/button`, 40 px).
-6. **Estados.** Ícono chico + texto de color, sin relleno. Badges rellenos solo para lo urgente: vence hoy, agotado.
-7. **Gráficos.** Barras más finas (8 px móvil · 10 px desktop, punta redonda) con más aire entre días; la barra de hoy sigue en cobalto sólido, sin sombra, y su inicial en `accent/text` sin relleno.
-8. **Movimiento.** Cifras que suben (`AnimatedNumber`, Motion Primitives) y barras que crecen escalonadas al entrar; todo respeta "reducir movimiento". Sin animaciones perpetuas.
+## Las 6 rondas: antes y después
 
-**Arreglos de la vitrina:** sin logo, el círculo del pie lleva las iniciales y el nombre completo va debajo; en la cabecera, los nombres largos bajan de tamaño y se cortan en dos líneas. Con una sola categoría no se muestra la barra de filtros (quedaba vacía).
+| Ronda | Antes | Después |
+|---|---|---|
+| 1 · Aire y protagonista | Lienzo `#F4F4F3`, bordes `#E5E7EB`, títulos SemiBold, "Para atender" en una tarjeta con filas, badges rellenos, gráfico de 24–32 px sobre riel. | Lienzo `#F8F8F6`, `border/card` casi invisible, saludo grande y liviano con halo de fondo, tarjetas de acción, encabezados con acción silenciosa, estados como ícono + texto, barras de 12–14 px. Arreglos de la vitrina (pie, cabecera y barra de filtros). |
+| 2 · Orden y botones | Hoy y Esta semana lado a lado; "Compartir" como píldora; tarjetas separadas también en móvil. | Orden de 0012 (Hoy y Para atender lado a lado, Esta semana a todo el ancho); en móvil, una sola tarjeta con filas; primario y secundario con la misma forma; títulos de sección en H3; barras de 8–10 px. |
+| 3 · Pulido | Gráfico vacío a todo el ancho; tarjetas de tareas con aire vacío al pie; la tienda repetida en móvil. | Resumen a la izquierda y gráfico al lado; texto un paso más grande; solo la fecha en móvil; filas ≥ 44 px; el espaciador de la barra inferior suma la zona segura de iPhone. |
+| 4 · De-layering | Emoji, halos de fondo, íconos en círculos, chevrons en botones redondos, montos en SemiBold, títulos dentro de las tarjetas. | Saludo en dos tonos; títulos fuera; un contenedor con divisores; íconos finos grises; Hoy con degradado corto y profundidad en capas (Polaris); montos al estilo Stripe; títulos de sección a 550. Se probó una variante con grano. |
+| 5 · Últimos toques | Badge "Vence"; barras con degradado y riel; gráfico apretado a la derecha; delta en verde completo. | Plazo como texto de color; barras sólidas sin riel; gráfico usa el ancho; saludo en dos líneas; solo "+12 %" en verde; Hoy queda lisa (sin grano). |
+| 6 · Halo con intención | Gris claro de barras por debajo de 3:1; sin halo. | Barras de 16 px en desktop en gris medio (`#878D97`, 3.3:1); halo cálido solo detrás de Hoy; plazo sin ícono propio. |
 
-**Criterio de revisión:** Design Taste (madebymustafa/design-taste) — sin glows neón, sombras suaves, sin tarjetas de más, sin animaciones perpetuas. Donde choca con el repo, manda el repo (Inter, Lucide, el 👋 del saludo).
+Capturas finales en el PR del pase.
 
-**Ronda 2 (22-oct, feedback de Gabi):** orden de 0012 en desktop, Para atender en una sola tarjeta en móvil, Hoy a la medida de su contenido, botones de la cabecera con la misma forma, nivel tipográfico intermedio y barras más finas.
+## Decisión: las reglas
 
-**Ronda 3 (22-oct, pulido final):** en desktop, "Esta semana" lleva el resumen a la izquierda y el gráfico acotado a la derecha (128 px de alto); tarjetas de tareas con texto un paso más grande e ícono arriba con el texto abajo (sin aire vacío al pie); en móvil el subtítulo del saludo es solo la fecha; filas y tarjetas enteras son el link (≥ 44 px); el espaciador de la barra inferior suma la zona segura de iPhone, verificado en un viewport real de 390 × 844.
+1. **Saludo:** título en dos tonos, mismo tamaño (H1, Outfit Medium), en dos líneas: nombre en `text/primary` y contexto en `text/secondary` ("Tienes 3 cosas para hoy.", "Todo al día por hoy."). Sin emoji. Fecha chica debajo; en móvil no se repite la tienda.
+2. **De-layering:** los títulos de sección van fuera de los contenedores; cada lista vive en UN contenedor con divisores finos (`elevation/container`); la jerarquía la dan el espacio y la tipografía, no las cajas.
+3. **Íconos:** finos (trazo 1.5), gris neutro, sin contenedores circulares. El color, solo para lo que pide atención.
+4. **Urgencia y plazos:** como texto de color, sin píldora ("Vence hoy, 8:10 p. m."). Píldoras y badges, solo para estados donde hacen falta.
+5. **Filas de acción:** toda la fila es el link (mín. 44 px), chevron simple, sin botones circulares.
+6. **Dinero:** Regular o Medium, cifras tabulares, "S/" más chico y atenuado, decimales atenuados; SemiBold solo en totales. Etiqueta chica arriba de cada monto. **Deltas:** solo la cifra en `feedback/success` o `feedback/error`.
+7. **Tarjeta protagonista:** como máximo una por pantalla, cobalto con degradado corto (`accent/base` → `accent/pressed`) y profundidad en capas (`elevation/layered`: sombras cortas apiladas + anillo de 1 px + filo superior interior blanco), adaptada de `@shopify/polaris-tokens` 9.4.2. Sin sombra de color difuminada, sin vidrio, sin grano.
+8. **Halos (actualiza 0017):** solo detrás de la protagonista, asomando por sus bordes, o en momentos de logro (primera venta, pedido confirmado, estado vacío "todo al día"). Nunca como fondo de página. Solo degradados CSS, sin `filter: blur`; respetan "reducir movimiento".
+9. **Gráficos:** barras sólidas con punta redonda (8 px móvil · 16 px desktop), pasados en gris medio (`chart/bar-muted`, 3.3:1), actual en cobalto, sin riel para los períodos que no llegan.
+10. **Tipografía y aire:** títulos de sección en Outfit variable a 550 (H3); lienzo `#F8F8F6`; 40 · 48 px entre secciones. Encabezados con acción silenciosa (`quiet`) a la derecha y una sola acción fuerte por pantalla.
 
-**Ronda 4 · "des-plantillar" (22-oct, experimento solo en Inicio; DESIGN.md no cambia hasta la aprobación de Gabi):**
-Principios del nuevo Admin de Shopify (menos contenedores, la estructura de la página hace el trabajo, UI neutra y color solo para lo que pide atención) y de Stripe (tipografía de montos serena). No se copian.
-- **Saludo en dos tonos, mismo tamaño (H1, Outfit Medium):** "Hola, Cecilia." en `text/primary` + "Tienes 3 cosas para hoy." en `text/secondary` (cuenta las filas de Para atender; sin pendientes, "Todo al día por hoy."). Debajo, la fecha en texto chico; en móvil no se repite la tienda. Sin 👋 ni halos.
-- **Menos cajas:** todos los títulos de sección van fuera de los contenedores (Hoy, Para atender hoy, Esta semana). "Para atender hoy" es UN contenedor con divisores finos, en móvil y desktop.
-- **Íconos:** finos (trazo 1.5), gris neutro, sin contenedor. El color queda para lo que pide atención (el badge "Vence"). Chevron simple; toda la fila es el link (≥ 44 px). La comparación semanal también va neutra.
-- **Hoy:** degradado corto `accent/base` → `accent/pressed` (`bg-hero-suave`, sin marino) y profundidad en capas (`elevation/layered` → `shadow-capas`): filo superior blanco al 25 %, anillo interior de 1 px al 8 % y tres sombras cortas apiladas (0 1 0 · 0 3 1 −1 · 0 4 6 −2). Sin halo. (La variante con grano se probó y se descartó en la ronda 5.)
-- **Contenedores:** `elevation/container` → `shadow-contenedor` (anillo interior de 1 px al 8 % + base de 1 px al 7 %), sin borde de tarjeta.
-- **Valores adaptados de `@shopify/polaris-tokens` 9.4.2:** `shadow-100` (0 1 0, 7 %), `shadow-200` (0 3 1 −1, 7 %), `shadow-300` (0 4 6 −2, 20 % → 12 % aquí) y `shadow-border-inset` (1 px, 8 %). Primitivos nuevos: `color/shadow/7`, `color/shadow/12` y `color/highlight/25`.
-- **Montos al estilo Stripe (`Monto`):** peso Medium; SemiBold solo en totales ("Total de la semana"); cifras tabulares en todo Inicio; "S/" más chico y atenuado; decimales atenuados; etiqueta chica en gris arriba de cada monto.
-- **Pesos:** títulos de sección en Outfit variable a 550 (`font/section-style`, utilidad `font-titulo-seccion`; paquete `@fontsource-variable/outfit`).
+Tokens nuevos: `color/paper/50`, `color/neutral/450`, `color/shadow/7`, `color/shadow/12`, `color/highlight/25`, `border/card`, `chart/bar-muted`, `elevation/container`, `elevation/layered`, `font/title-style` (500) y `font/section-style` (550). Paquete nuevo: `@fontsource-variable/outfit` (pesos intermedios).
 
-**Ronda 5 (22-oct, últimos toques, experimento solo en Inicio):**
-- Sin el badge "Vence": en la fila, título → reloj + "Vence hoy, 8:10 p. m." en `feedback/warning` (texto, sin fondo) → detalle en `text/secondary`.
-- Gráfico: barras sólidas sin degradado ni riel; días pasados en un neutro claro (`chart/bar-muted`, `#D1D5DB`), hoy en cobalto sólido, días que no llegan sin nada. En desktop el gráfico usa todo el ancho junto a los totales.
-- Saludo en dos líneas a propósito en todos los tamaños.
-- Comparación semanal: solo "+12 %" en `feedback/success`; el resto en `text/secondary`.
-- "Hoy": queda la variante lisa (A); se quitan la variante con grano y su código.
+## Consecuencias
 
-- Los tokens (lienzo, `border/card`, `font/title-style`) y el componente `Card` ya aplican en todo el panel; los patrones (cabecera con halo, tarjetas de acción, encabezados con acción silenciosa, estados sin relleno) por ahora solo en Inicio.
-- Al extender a Pedidos, Productos y Mi tienda: `PanelHeader` pasa a `font-display-light` + `text-display`, y los badges no urgentes pasan a ícono + texto.
-- `DESIGN.md` §4 suma la sección "Pase de diseño (0031)", que manda sobre lo anterior donde se contradiga.
+- `DESIGN.md` (§1, §3, §4 y §7) y `CLAUDE.md` §5 ya tienen estas reglas; lo que las contradecía se reescribió o se marcó como reemplazado.
+- Los tokens, `Card` y el lienzo ya aplican en todo el panel. Los patrones (saludo en dos tonos, contenedor único, filas de acción, `Monto`, gráfico) por ahora están en Inicio; Pedidos, Productos y Mi tienda los adoptan cuando se rediseñen, empezando por `PanelHeader` (título en Outfit Medium) y los badges no urgentes (pasan a texto de color).
+- La decisión 0017 vive fuera del repo ("IA on Product Design" → `tiendly/decisiones/`): hay que sumarle allá la nota de que 0031 la actualiza en los halos.
+- Al integrar la rama hay que correr `npm install` (Outfit variable).

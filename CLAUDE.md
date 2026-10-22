@@ -55,14 +55,24 @@ Claude utilizará los siguientes principios y bibliotecas de UI/Motion para evit
   3. Estado con Datos.
   4. Estado de Error.
 - **Feedback Háptico / Visual:** Botones con transición `150ms ease-out` y escala al presionar (`active:scale-[0.98]`).
-- **Cobalto y selección:** el degradado cobalto va **solo** en el botón primario (CTA) y en **una** tarjeta protagonista por pantalla, como máximo (hoy: la tarjeta "Hoy" de Inicio). La barra de hoy del gráfico semanal va en cobalto sólido, aprobada por Gabi. Todo lo demás sigue `selection/*` (chips, fichas, radios, tarjetas de opción, interruptores: negro carbón `#1A1A1A` + texto blanco) e `indicator/*` (progreso, pasos, línea de tiempo: negro carbón). Links y botón Fantasma en `accent/text`.
-- **Forma (decisión 0024 · Calibrado):** tarjetas de `8px` con borde de 1 px y sombra nítida (`elevation/card`); botones, campos, chips y badges de `6px`, 40 px de alto en botones y campos (chip de 28 px y badge de 24 px visibles, zona táctil de 44 px). Lienzo `#F4F4F3`. Ante cualquier diferencia, manda `DESIGN.md`.
+- **Cobalto y selección:** el degradado cobalto va **solo** en el botón primario (CTA) y en **una** tarjeta protagonista por pantalla, como máximo (hoy: la tarjeta "Hoy" de Inicio, con su degradado corto de 0031). La barra del período actual en los gráficos va en cobalto sólido, aprobada por Gabi. Todo lo demás sigue `selection/*` (chips, fichas, radios, tarjetas de opción, interruptores: negro carbón `#1A1A1A` + texto blanco) e `indicator/*` (progreso, pasos, línea de tiempo: negro carbón). Links y botón Fantasma en `accent/text`.
+- **Forma (decisiones 0024 y 0031):** tarjetas de `8px` con borde casi invisible (`border/card`) y sombra nítida (`elevation/card`); botones, campos, chips y badges de `6px`, 40 px de alto en botones y campos (chip de 28 px y badge de 24 px visibles, zona táctil de 44 px). Lienzo `#F8F8F6`. Ante cualquier diferencia, manda `DESIGN.md`.
+- **De-layering (decisión 0031, ver `DESIGN.md` §3 y §4):**
+  - Saludo en dos tonos (primario + secundario, mismo tamaño), sin emoji.
+  - Títulos de sección fuera de los contenedores; cada lista en UN contenedor con divisores finos; jerarquía por espacio y tipografía, no por cajas.
+  - Íconos finos, gris neutro, sin contenedores circulares; el color solo para lo que pide atención.
+  - Urgencia y plazos como texto de color (sin píldora); píldoras y badges solo para estados donde hacen falta.
+  - Filas de acción: toda la fila es el link (mín. 44 px), chevron simple, sin botones circulares.
+  - Dinero: Regular o Medium, cifras tabulares, "S/" y decimales atenuados; SemiBold solo en totales. Deltas: solo la cifra en verde o rojo.
+  - Tarjeta protagonista: máximo una por pantalla, cobalto con degradado corto y profundidad en capas; sin sombra de color difuminada ni grano.
+  - Halos: solo detrás de la protagonista o en momentos de logro; nunca como fondo de página.
+  - Gráficos: barras sólidas, pasados en gris medio, actual en cobalto, sin riel para lo que no llega.
 
 ---
 
 ## 6. Congelamiento estético (Aesthetic freeze)
 
-Vigente hasta completar el Core Loop (onboarding → productos → vitrina → pedidos → carrito y compra).
+Vigente hasta completar el Core Loop (onboarding → productos → vitrina → pedidos → carrito y compra). El Core Loop se completó (PR #12) y el congelamiento se levantó **solo** para el pase de diseño 0031, ya cerrado: sus reglas viven en `DESIGN.md`. Lo de abajo sigue valiendo para cualquier cambio visual nuevo.
 
 - **No se cambian** tokens de color, radios, sombras, tipografía ni espacios, ni en `design/tokens.json` ni con clases nuevas que los imiten.
 - Las pantallas nuevas **reutilizan solo** los componentes de `src/components/` y los tokens existentes. Si algo no se puede armar con ellos, se pregunta antes de crear uno nuevo.

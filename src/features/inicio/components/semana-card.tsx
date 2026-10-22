@@ -25,7 +25,7 @@ const TENDENCIA = { sube: TrendingUp, baja: TrendingDown, igual: Minus } as cons
 
 /**
  * "Esta semana" (decisión 0031, ronda 4): título y acción silenciosa fuera del contenedor; dentro, etiqueta chica,
- * total en SemiBold (es un total) que sube al entrar, comparación con solo el delta en color ("+12 %") y el resto
+ * total en SemiBold (es un total) que sube al entrar, comparación con solo el delta en color (verde si sube, rojo si baja) y el resto
  * en texto secundario, y barras finas por día. Desktop: resumen a la izquierda y el gráfico usa todo el ancho que queda.
  */
 export function SemanaCard({ total, pedidos, comparacion, dias, hoy, className }: SemanaCardProps) {
@@ -55,7 +55,7 @@ export function SemanaCard({ total, pedidos, comparacion, dias, hoy, className }
             <p className="flex items-center gap-1.5 text-caption text-fg-secondary">
               <Tendencia aria-hidden strokeWidth={1.5} className="size-4 text-icon" />
               {comparacion.delta && (
-                <span className={cn("font-medium", comparacion.direccion === "sube" ? "text-success" : "text-fg")}>{comparacion.delta}</span>
+                <span className={cn("font-medium", comparacion.direccion === "sube" ? "text-success" : "text-error")}>{comparacion.delta}</span>
               )}
               {comparacion.resto}
             </p>
