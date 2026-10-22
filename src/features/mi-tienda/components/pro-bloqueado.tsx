@@ -4,7 +4,7 @@ import { CircleCheck, LockKeyhole } from "lucide-react";
 import { Badge, Button, Card } from "@/components/ui";
 
 const EXTRAS = ["Banner de alto impacto", "Ocultar el sello de Tiendly", "Badges de stock personalizados", "Mensajes dinámicos de WhatsApp", "Avisos de stock bajo por WhatsApp"];
-const OPCIONES = [{ titulo: "Color personalizado", ayuda: "Cualquier color, con validador de contraste." }, { titulo: "Tipografías exclusivas", ayuda: "Elige entre una lista curada." }, { titulo: "Dominio propio", ayuda: "Por ejemplo, heathercalzado.pe." }];
+const OPCIONES = [{ titulo: "Color personalizado", ayuda: "Cualquier color, con validador de contraste." }, { titulo: "Tipografías exclusivas", ayuda: "Elige entre una lista curada." }, { titulo: "Dominio propio", ayuda: "Por ejemplo, tutienda.pe." }];
 
 /**
  * Opciones Pro de Mi tienda (todavía no funcionan: llegan en V1.1). Tienda Pro (Heather, 0030): incluidas en

@@ -40,7 +40,7 @@ export function ProductosVista({ productos, filtroInicial }: VistaProps) {
           <EmptyState
             icon={PackageOpen}
             title="Todavía no tienes productos"
-            description="Agrega tu primer modelo con sus colores y tallas. Tus clientes lo verán en tu tienda apenas lo publiques."
+            description="Agrega tu primer producto. Si tiene opciones como color, talla o tamaño, van en el mismo producto."
             action={<NuevoProducto />}
           />
         </Card>

@@ -55,7 +55,7 @@ export function FormularioProducto({ titulo, inicial, id }: FormularioProps) {
             <Field
               id="campo-nombre"
               label="Nombre"
-              placeholder="Ej. Vestido Chloé"
+              placeholder="Ej. Lámpara lunar impresa en 3D"
               value={f.form.nombre}
               onChange={(e) => f.set("nombre", e.target.value)}
               error={f.errores.nombre}

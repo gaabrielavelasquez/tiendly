@@ -10,7 +10,7 @@ import { PORTADA } from "../lib/contenido";
 export function Portada({ nombre, demo }: { nombre: string; demo: boolean }) {
   // Una tienda nueva todavía no tiene fotos de portada ni textos propios (Mi tienda aún no los publica):
   // su nombre y una bajada neutra, sin las fotos de Heather.
-  const textos = demo ? PORTADA : { ...PORTADA, fotos: [], titulo: nombre, bajada: "Elige lo que te guste y coordina tu pedido por WhatsApp." };
+  const textos = demo ? PORTADA : { ...PORTADA, fotos: [], titulo: nombre, bajada: "Elige lo que te guste y coordina tu pedido por WhatsApp.", cta: "Ver productos" };
   return (
     <section aria-labelledby="portada-titulo">
       <div className="grid grid-cols-2">

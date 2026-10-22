@@ -14,7 +14,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   return datos ? { title: `${datos.ficha.nombre} · ${datos.tienda.nombre}`, description: datos.ficha.corto } : {};
 }
 
-/** Página de producto de la vitrina (Figma): ficha, "Sobre el modelo" y "También te puede gustar". */
+/** Página de producto de la vitrina (Figma): ficha, "Sobre el producto" y "También te puede gustar". */
 export default async function ProductoPage({ params }: PageProps) {
   const { tienda, producto } = await params;
   const [datos, vitrina] = await Promise.all([obtenerFicha(tienda, producto), obtenerVitrina(tienda)]);
@@ -27,7 +27,7 @@ export default async function ProductoPage({ params }: PageProps) {
         <FichaProducto p={ficha} tienda={tienda} celular={datos.tienda.celular} demo={datos.tienda.demo} />
         {ficha.sobre && (
           <section aria-labelledby="sobre" className="flex max-w-2xl flex-col gap-3">
-            <h2 id="sobre" className="font-display-hero text-h2 text-fg">Sobre el modelo</h2>
+            <h2 id="sobre" className="font-display-hero text-h2 text-fg">Sobre el producto</h2>
             <p className="text-body text-fg-secondary">{ficha.sobre}</p>
           </section>
         )}

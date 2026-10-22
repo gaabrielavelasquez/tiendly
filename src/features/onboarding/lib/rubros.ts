@@ -1,12 +1,21 @@
 export type Tema = "neutral" | "editorial" | "suave";
 
-/** "¿Qué vendes?": se pueden elegir varios (una tienda puede vender ropa y accesorios a la vez). */
+/**
+ * "¿Qué vendes?": se pueden elegir varios (una tienda puede vender ropa y accesorios a la vez).
+ * Multirubro (decisión 0032): en orden alfabético, para que ninguno parezca el principal, y "Otro" al final.
+ * Los ids no cambian aunque cambie el texto (las tiendas guardadas los usan): "moda" se muestra como "Ropa".
+ * Vapes entran por "Otro" hasta revisar lo legal y las pasarelas de pago.
+ */
 export const RUBROS = [
-  { id: "moda", label: "Moda" },
-  { id: "calzado", label: "Calzado" },
   { id: "accesorios", label: "Accesorios" },
-  { id: "belleza", label: "Belleza" },
-  { id: "reposteria", label: "Repostería" },
+  { id: "belleza", label: "Belleza y cuidado personal" },
+  { id: "calzado", label: "Calzado" },
+  { id: "reposteria", label: "Comida y repostería" },
+  { id: "hogar", label: "Hogar y decoración" },
+  { id: "hecho-a-mano", label: "Impresión 3D y hecho a mano" },
+  { id: "moda", label: "Ropa" },
+  { id: "segunda-mano", label: "Segunda mano" },
+  { id: "tecnologia", label: "Tecnología" },
   { id: "otro", label: "Otro" },
 ] as const;
 

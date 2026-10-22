@@ -48,7 +48,7 @@ export function StepDatos() {
       <div className="flex flex-col gap-3">
         <Field
           label="Nombre de tu negocio"
-          placeholder="Ej. Heather"
+          placeholder="Ej. Casa Nube"
           autoComplete="organization"
           value={state.nombre}
           onChange={(e) => set({ nombre: e.target.value })}
