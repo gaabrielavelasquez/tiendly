@@ -64,7 +64,7 @@ type Entrada = {
   items: ItemCarrito[];
   cupon?: string;
   datos: Datos;
-  entrega: { tipo: "recojo" } | { tipo: "delivery"; distrito: string; direccion: string; referencia: string };
+  entrega: { tipo: "recojo" } | { tipo: "coordinar" } | { tipo: "delivery"; distrito: string; direccion: string; referencia: string };
   metodo: MetodoPago;
 };
 
@@ -84,13 +84,14 @@ export async function registrarPedido(e: Entrada): Promise<{ creadoEl: string; t
   // La tienda pudo cambiar su configuración mientras el cliente compraba (Pagos y Entregas).
   if (!reglas.pagos[e.metodo]) return { error: "Este método de pago ya no está disponible. Elige otro." };
   if (e.entrega.tipo === "recojo" && !reglas.recojo) return { error: "El recojo en tienda ya no está disponible. Elige delivery." };
+  if (e.entrega.tipo === "coordinar" && (!reglas.coordinar || e.metodo !== "whatsapp")) return { error: "La tienda ya definió sus entregas. Elige cómo recibir tu pedido." };
   const distrito = e.entrega.tipo === "delivery" ? reglas.delivery?.distritos.find((d) => d.nombre === (e.entrega as { distrito: string }).distrito) : undefined;
   if (e.entrega.tipo === "delivery" && !distrito) return { error: "Ya no enviamos a ese distrito. Elige otro o recojo en tienda." };
   const productos = lineas.reduce((s, l) => s + l.precio * l.cantidad, 0);
   const cupones = (await datosTienda(e.tienda))?.cupones ?? [];
   const cupon = e.cupon ? validarCuponCompra(cupones, e.cupon, productos, reglas.envioGratisDesde) : null;
   if (cupon && !cupon.ok) return { error: cupon.error };
-  const entrega = e.entrega.tipo === "delivery" && distrito ? { ...e.entrega, distrito } : { tipo: "recojo" as const };
+  const entrega = e.entrega.tipo === "delivery" && distrito ? { ...e.entrega, distrito } : { tipo: e.entrega.tipo === "coordinar" ? ("coordinar" as const) : ("recojo" as const) };
   const totales = calcularTotales(lineas, cupon?.ok ? cupon.cupon : null, entrega, reglas.envioGratisDesde);
 
   const creadoEl = horaDemo();

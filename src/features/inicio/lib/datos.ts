@@ -17,7 +17,7 @@ export function actividadDe(pedidos: Pedido[], catalogo: ProductoCatalogo[], aho
   const pedidosHoy: InicioData["pedidosHoy"] = hoy.map((p) => ({
     monto: p.total,
     pagado: p.pago.estado === "pagado",
-    entrega: p.entrega.metodo,
+    entrega: p.entrega.metodo === "recojo" ? "recojo" : "delivery", // por coordinar también sale de la tienda
     enviado: p.entrega.estado !== "por-enviar",
   }));
   const reservas = vigentes

@@ -1,3 +1,4 @@
+import { textoEntrega } from "../../lib/reglas";
 import { ShoppingBag } from "lucide-react";
 import Image from "next/image";
 import { TarjetaSeccion } from "@/components/panel";
@@ -51,8 +52,8 @@ export function TarjetaItems({ pedido, detalle }: ItemsProps) {
           </div>
         )}
         <div className="flex justify-between">
-          <dt className="text-fg-secondary">{pedido.entrega.metodo === "recojo" ? "Recojo en tienda" : `Delivery a ${pedido.entrega.distrito}`}</dt>
-          <dd className="text-fg">{detalle.envio ? formatoSoles(detalle.envio) : "Gratis"}</dd>
+          <dt className="text-fg-secondary">{textoEntrega(pedido, " a ")}</dt>
+          <dd className="text-fg">{pedido.entrega.metodo === "coordinar" ? "Por coordinar" : detalle.envio ? formatoSoles(detalle.envio) : "Gratis"}</dd>
         </div>
         <div className="flex items-baseline justify-between border-t border-line-subtle pt-3">
           <dt className="font-semibold text-fg">Total</dt>

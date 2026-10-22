@@ -8,6 +8,7 @@ const fila = "flex items-baseline justify-between gap-3 text-body-sm";
 
 /** "Gratis", "S/ 15" o "Se calcula en Entrega" (Figma K0 y D2). */
 export function textoEnvio(t: Totales) {
+  if (t.envioPorCoordinar) return "Por coordinar";
   if (t.envio === null) return t.envioGratis ? "Gratis" : "Se calcula en Entrega";
   return t.envio === 0 ? "Gratis" : formatoSoles(t.envio);
 }
@@ -36,7 +37,7 @@ export function ListaLineas({ lineas }: { lineas: Linea[] }) {
 
 /** Productos, cupón, envío y total. */
 export function Desglose({ totales: t, cupon, entrega, className }: { totales: Totales; cupon?: string; entrega: Entrega | null; className?: string }) {
-  const envio = entrega?.tipo === "delivery" ? `Delivery a ${entrega.distrito.nombre}` : entrega?.tipo === "recojo" ? "Recojo en tienda" : "Envío";
+  const envio = entrega?.tipo === "delivery" ? `Delivery a ${entrega.distrito.nombre}` : entrega?.tipo === "recojo" ? "Recojo en tienda" : entrega?.tipo === "coordinar" ? "Entrega por WhatsApp" : "Envío";
   return (
     <div className={cn("flex flex-col gap-2", className)}>
       <p className={fila}>

@@ -14,6 +14,7 @@ type Base = { lineas: Linea[]; totales: Totales; cupon?: string; entrega: Entreg
 function bajada(t: Totales, entrega: Entrega | null) {
   const productos = `${formatoSoles(t.productos - t.descuento)} productos`;
   if (entrega?.tipo === "recojo") return `${productos} · Recojo gratis`;
+  if (entrega?.tipo === "coordinar") return `${productos} · Envío por coordinar`;
   if (t.envio === null) return t.envioGratis ? `${productos} · Envío gratis` : "Envío: elige tu distrito";
   return `${productos} + ${textoEnvio(t).toLowerCase() === "gratis" ? "envío gratis" : `${textoEnvio(t)} envío`}`;
 }

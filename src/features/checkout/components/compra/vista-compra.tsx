@@ -29,7 +29,7 @@ import { BarraPagar, ResumenDesktop, ResumenMovil } from "./resumen-compra";
  */
 export function VistaCompra({ datos: { tienda, categorias, catalogo, reglas } }: { datos: DatosCompra }) {
   const carrito = useCarrito(tienda.slug, catalogo);
-  const c = useCompra(reglas.delivery ? "delivery" : "recojo");
+  const c = useCompra(reglas.delivery ? "delivery" : reglas.recojo ? "recojo" : "coordinar");
   const router = useRouter();
   const [numero, setNumero] = useState<string | null>(null);
   const [cerrando, setCerrando] = useState(false);
@@ -37,8 +37,8 @@ export function VistaCompra({ datos: { tienda, categorias, catalogo, reglas } }:
   const inicio = `/${tienda.slug}`;
   const lineas = carrito.lineas ?? [];
   const totales = calcularTotales(lineas, carrito.cupon, c.entrega, reglas.envioGratisDesde);
-  // Sin entrega o sin cobro configurado, no se puede comprar en línea (Figma, Entregas · vacío).
-  const sinCompra = (!reglas.delivery && !reglas.recojo) || !Object.values(reglas.pagos).some(Boolean);
+  // Sin ninguna forma de entrega (ni coordinarla por WhatsApp) o sin cobro, no se puede comprar en línea.
+  const sinCompra = (!reglas.delivery && !reglas.recojo && !reglas.coordinar) || !Object.values(reglas.pagos).some(Boolean);
 
   // El número se reserva al llegar al pago: el mensaje de WhatsApp ya lo muestra.
   useEffect(() => {
@@ -67,7 +67,7 @@ export function VistaCompra({ datos: { tienda, categorias, catalogo, reglas } }:
       items,
       cupon: carrito.cupon?.codigo,
       datos: c.datos,
-      entrega: e.tipo === "recojo" ? e : { tipo: "delivery", distrito: e.distrito.nombre, direccion: e.direccion, referencia: e.referencia },
+      entrega: e.tipo !== "delivery" ? e : { tipo: "delivery", distrito: e.distrito.nombre, direccion: e.direccion, referencia: e.referencia },
       metodo: c.metodo,
     });
     if ("error" in r) return fallar(r.error);
@@ -116,8 +116,8 @@ export function VistaCompra({ datos: { tienda, categorias, catalogo, reglas } }:
             <div className="flex flex-col gap-4 lg:col-span-2">
               <ResumenMovil lineas={lineas} totales={totales} cupon={carrito.cupon?.codigo} entrega={c.entrega} />
               <PasoDatos c={c} />
-              <PasoEntrega c={c} envioGratis={totales.envioGratis} tienda={tienda.nombre} delivery={reglas.delivery} recojo={reglas.recojo} />
-              <PasoPago c={c} mensaje={mensaje} pagos={reglas.pagos} />
+              <PasoEntrega c={c} envioGratis={totales.envioGratis} tienda={tienda.nombre} delivery={reglas.delivery} recojo={reglas.recojo} coordinar={reglas.coordinar} />
+              <PasoPago c={c} mensaje={mensaje} pagos={c.entrega?.tipo === "coordinar" ? { tarjeta: false, yape: false, whatsapp: reglas.pagos.whatsapp } : reglas.pagos} />
               {error && <p role="alert" className="border border-error-border bg-error-surface p-3 text-body-sm text-error">{error}</p>}
             </div>
             <ResumenDesktop lineas={lineas} totales={totales} cupon={carrito.cupon?.codigo} entrega={c.entrega} accion={accion}>

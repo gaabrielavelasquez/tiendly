@@ -63,7 +63,7 @@ export function VistaEntregas({ inicial }: { inicial: ConfigEntregas }) {
       {intento && r.regla ? (
         <Banner tono="error" titulo="Debes mantener al menos un método de entrega activo" detalle="Activa Delivery o Recojo en tienda para poder guardar." />
       ) : ninguno ? (
-        <Banner tono="warning" titulo="Activa al menos un método de entrega" detalle="Mientras tanto, tu tienda muestra tus productos, pero tus clientes no pueden finalizar la compra." />
+        <Banner tono="warning" titulo="Activa al menos un método de entrega" detalle="Mientras tanto, tus clientes pueden hacer su pedido y coordinar la entrega contigo por WhatsApp." />
       ) : null}
       {cantidad > 0 && r.resumen && <Banner tono="error" titulo={`Revisa ${cantidad} ${cantidad === 1 ? "campo" : "campos"} antes de guardar`} detalle={r.resumen} />}
       <div className="grid items-start gap-6 lg:grid-cols-3">

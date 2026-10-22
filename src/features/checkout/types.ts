@@ -22,14 +22,19 @@ export type ReglasCompra = {
   envioGratisDesde: number | null;
   delivery: { distritos: Distrito[]; soloLima: boolean } | null;
   recojo: Recojo | null;
+  /** Sin delivery ni recojo configurados: la entrega se acuerda por WhatsApp (tienda nueva). */
+  coordinar: boolean;
 };
 
 export type Datos = { nombre: string; celular: string };
-export type Entrega = { tipo: "delivery"; distrito: Distrito; direccion: string; referencia: string } | { tipo: "recojo" };
+/** "coordinar": la tienda todavía no definió sus entregas; se acuerda por WhatsApp (costo aparte). */
+export type Entrega = { tipo: "delivery"; distrito: Distrito; direccion: string; referencia: string } | { tipo: "recojo" } | { tipo: "coordinar" };
+export type TipoEntrega = Entrega["tipo"];
 export type MetodoPago = "tarjeta" | "yape" | "whatsapp";
 
 /** Montos de la compra. `envio` es null mientras no se elige la entrega. */
-export type Totales = { productos: number; unidades: number; descuento: number; envio: number | null; envioGratis: boolean; total: number };
+/** `envioPorCoordinar`: entrega por WhatsApp; el envío no se suma al total. */
+export type Totales = { productos: number; unidades: number; descuento: number; envio: number | null; envioGratis: boolean; envioPorCoordinar?: boolean; total: number };
 
 /** El pedido que se crea al pagar o al enviarlo por WhatsApp (se guarda en este navegador hasta tener backend). */
 export type PedidoCreado = {

@@ -34,7 +34,7 @@ export function aCsv(pedidos: Pedido[]) {
     BADGE_PAGO[p.pago.estado].texto,
     METODO_PAGO[p.pago.metodo],
     badgeEntrega(p.entrega.estado, p.entrega.metodo).texto,
-    p.entrega.metodo === "recojo" ? "Recojo" : "Delivery",
+    p.entrega.metodo === "recojo" ? "Recojo" : p.entrega.metodo === "coordinar" ? "Por coordinar" : "Delivery",
     p.entrega.distrito ?? "",
   ]);
   return "﻿" + [cabecera, ...filas].map((f) => f.map(celda).join(",")).join("\r\n");

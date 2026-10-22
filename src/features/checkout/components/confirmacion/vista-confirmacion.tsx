@@ -38,6 +38,7 @@ export function VistaConfirmacion({ tienda, numero }: Props) {
   const pagado = pedido.pago.metodo !== "whatsapp";
   const nombre = pedido.datos.nombre.trim().split(/\s+/)[0];
   const recojo = pedido.entrega.tipo === "recojo";
+  const coordinar = pedido.entrega.tipo === "coordinar";
   const whatsapp = linkWhatsApp(tienda.celular, pagado ? `Hola ${tienda.nombre}, tengo una consulta sobre mi pedido #${numero}.` : mensajePedido({ ...pedido, tienda: tienda.nombre }));
   const enlace = cn(buttonVariants({ variant: "ghost" }), "h-12 text-fg");
 
@@ -56,7 +57,7 @@ export function VistaConfirmacion({ tienda, numero }: Props) {
       </div>
       {pedido.pago.metodo === "whatsapp" && (
         <p className="border border-warning-border bg-warning-surface p-4 text-body-sm text-fg">
-          Tus productos están reservados hasta {textoReserva(pedido.pago.reservadoHasta, pedido.creadoEl)} {tienda.nombre} te escribirá por WhatsApp con los datos para pagar{recojo ? " y coordinar el recojo" : ""}.
+          Tus productos están reservados hasta {textoReserva(pedido.pago.reservadoHasta, pedido.creadoEl)} {tienda.nombre} te escribirá por WhatsApp con los datos para pagar{recojo ? " y coordinar el recojo" : coordinar ? " y coordinar la entrega" : ""}.
         </p>
       )}
       <DetallePedido p={pedido} />

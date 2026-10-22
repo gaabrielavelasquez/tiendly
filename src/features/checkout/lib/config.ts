@@ -38,5 +38,6 @@ export function reglasCompra({ pagos, entregas }: ConfigCompra): ReglasCompra {
     envioGratisDesde: delivery.activo && delivery.envioGratis.activo && monto(delivery.envioGratis.desde) > 0 ? monto(delivery.envioGratis.desde) : null,
     delivery: distritos.length ? { distritos, soloLima: zonas.length === 1 && zonas[0].id === "lima" } : null,
     recojo: recojo.activo ? { direccion: recojo.direccion, distrito: recojo.distrito, horario: recojo.horario, nota: recojo.nota } : null,
+    coordinar: !distritos.length && !recojo.activo && pagos.whatsapp.activo,
   };
 }

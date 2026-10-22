@@ -92,8 +92,12 @@ export const BADGE_PAGO: Record<EstadoPago, { tono: Tono; texto: string }> = {
   cancelado: { tono: "neutral", texto: "Cancelado" },
 };
 
+/** "Recojo en tienda", "Entrega por coordinar" o "Delivery · Miraflores" (`sep`: " · " o " a "). */
+export const textoEntrega = (p: Pedido, sep = " · ") =>
+  p.entrega.metodo === "recojo" ? "Recojo en tienda" : p.entrega.metodo === "coordinar" ? "Entrega por coordinar" : `Delivery${sep}${p.entrega.distrito}`;
+
 /** Badge de entrega. "Por enviar" cambia a "Por recoger" si es recojo en tienda. */
-export function badgeEntrega(estado: EstadoEntrega, metodo: "delivery" | "recojo"): { tono: Tono; texto: string } {
+export function badgeEntrega(estado: EstadoEntrega, metodo: Pedido["entrega"]["metodo"]): { tono: Tono; texto: string } {
   if (estado === "por-enviar") return { tono: "warning", texto: metodo === "recojo" ? "Por recoger" : "Por enviar" };
   if (estado === "enviado") return { tono: "neutral", texto: "Enviado" };
   return { tono: "success", texto: metodo === "recojo" ? "Recogido" : "Entregado" };
