@@ -12,10 +12,11 @@ export function CeldaProducto({ p }: { p: Producto }) {
     <div className="flex min-w-0 items-center gap-3">
       <Miniatura categoria={p.categorias[0] ?? "balerinas"} imagen={p.imagen} />
       <div className="flex min-w-0 flex-col gap-0.5">
-        <Link href={`/panel/productos/${p.id}`} className="truncate text-body-sm font-semibold text-fg hover:underline">
+        {/* Nombres largos: hasta 2 líneas, sin cortar los datos de abajo (decisión de revisión móvil). */}
+        <Link href={`/panel/productos/${p.id}`} className="relative line-clamp-2 text-body-sm font-semibold text-fg hover:underline after:absolute after:-inset-y-3 after:-inset-x-1 after:content-['']">
           {p.nombre}
         </Link>
-        <span className="truncate text-caption text-fg-secondary">
+        <span className="text-caption text-fg-secondary">
           {p.sku ? `${p.sku} · ` : ""}
           {resumenVariantes(p)}
         </span>

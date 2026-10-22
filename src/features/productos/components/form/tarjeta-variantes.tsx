@@ -45,9 +45,9 @@ export function TarjetaVariantes({ form, errores, onColor, onTalla, onVariante }
             onChange={(e) => setNuevo(e.target.value)}
             onKeyDown={(e) => e.key === "Enter" && (e.preventDefault(), agregarColor())}
             placeholder="Otro color"
-            className="w-24 bg-transparent text-body-sm text-fg outline-none placeholder:text-fg-tertiary"
+            className="-my-2 h-11 w-24 bg-transparent text-body-sm text-fg outline-none placeholder:text-fg-tertiary"
           />
-          <button type="button" onClick={agregarColor} aria-label="Agregar color" className="flex size-5 items-center justify-center rounded-full text-icon hover:bg-sunken">
+          <button type="button" onClick={agregarColor} aria-label="Agregar color" className="relative flex size-5 items-center justify-center rounded-full text-icon hover:bg-sunken after:absolute after:-inset-3 after:content-['']">
             <Plus aria-hidden strokeWidth={2} className="size-3.5" />
           </button>
         </div>

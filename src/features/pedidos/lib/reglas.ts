@@ -109,6 +109,12 @@ export const celularVisible = (c: string) => c.replace(/(\d{3})(\d{3})(\d{3})/, 
 /** Mensaje de WhatsApp listo para escribirle al cliente por su pedido. */
 export function whatsappCliente(p: Pedido) {
   const nombre = p.cliente.nombre.split(" ")[0];
-  const texto = `¡Hola, ${nombre}! Te escribo por tu pedido #${p.numero}.`;
+  // El mensaje sigue el estado: así el atajo sirve para contactar o para avisar.
+  const texto =
+    p.pago.estado === "pendiente" && p.pago.metodo !== "contra-entrega"
+      ? `¡Hola, ${nombre}! Te escribo por tu pedido #${p.numero} para coordinar el pago.`
+      : p.entrega.estado === "enviado"
+        ? `¡Hola, ${nombre}! Tu pedido #${p.numero} ya va en camino.`
+        : `¡Hola, ${nombre}! Te escribo por tu pedido #${p.numero}.`;
   return `https://wa.me/51${p.cliente.celular}?text=${encodeURIComponent(texto)}`;
 }

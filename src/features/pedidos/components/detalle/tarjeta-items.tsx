@@ -21,11 +21,18 @@ export function TarjetaItems({ pedido, detalle }: ItemsProps) {
             <span aria-hidden className="relative flex size-12 shrink-0 items-center justify-center overflow-hidden rounded-theme border border-line-subtle bg-sunken">
               {it.foto ? <Image src={it.foto} alt="" fill sizes="48px" className="object-cover" /> : <ShoppingBag strokeWidth={1.6} className="size-5 text-icon-subtle" />}
             </span>
+            {/* Móvil: el nombre completo (hasta 2 líneas) y "precio × cantidad" debajo, para no cortarlo. */}
             <div className="flex min-w-0 flex-1 flex-col gap-0.5">
-              <span className="truncate text-body-sm font-semibold text-fg">{it.producto}</span>
-              <span className="text-caption text-fg-secondary">{it.variante}</span>
+              <span className="line-clamp-2 text-body-sm font-semibold text-fg sm:line-clamp-1">{it.producto}</span>
+              <span className="text-caption text-fg-secondary">
+                {it.variante}
+                <span className="tabular-nums sm:hidden">
+                  {" "}
+                  · {formatoSoles(it.precio)} × {it.cantidad}
+                </span>
+              </span>
             </div>
-            <span className="text-caption text-fg-secondary tabular-nums">
+            <span className="hidden text-caption text-fg-secondary tabular-nums sm:inline">
               {formatoSoles(it.precio)} × {it.cantidad}
             </span>
             <span className="w-20 text-right text-body-sm font-semibold text-fg tabular-nums">{formatoSoles(it.precio * it.cantidad)}</span>

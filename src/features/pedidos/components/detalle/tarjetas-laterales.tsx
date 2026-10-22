@@ -34,7 +34,7 @@ export function TarjetaCliente({ pedido, detalle }: Props) {
       {detalle.email && (
         <p className="flex items-center gap-2 text-body-sm">
           <Mail aria-hidden strokeWidth={1.6} className="size-4 shrink-0 text-icon" />
-          <a href={`mailto:${detalle.email}`} className="link-text truncate">
+          <a href={`mailto:${detalle.email}`} className="link-text relative truncate after:absolute after:-inset-y-3 after:inset-x-0 after:content-['']">
             {detalle.email}
           </a>
         </p>
