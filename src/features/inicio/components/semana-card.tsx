@@ -25,8 +25,8 @@ const TENDENCIA = { sube: TrendingUp, baja: TrendingDown, igual: Minus } as cons
 
 /**
  * "Esta semana" (decisión 0031, ronda 4): título y acción silenciosa fuera del contenedor; dentro, etiqueta chica,
- * total en SemiBold (es un total) que sube al entrar, comparación neutra (ícono + texto, sin color: no pide
- * atención) y barras finas por día. Desktop: resumen a la izquierda y gráfico acotado a la derecha.
+ * total en SemiBold (es un total) que sube al entrar, comparación con solo el delta en color ("+12 %") y el resto
+ * en texto secundario, y barras finas por día. Desktop: resumen a la izquierda y el gráfico usa todo el ancho que queda.
  */
 export function SemanaCard({ total, pedidos, comparacion, dias, hoy, className }: SemanaCardProps) {
   const Tendencia = comparacion ? TENDENCIA[comparacion.direccion] : null;
@@ -41,8 +41,8 @@ export function SemanaCard({ total, pedidos, comparacion, dias, hoy, className }
           </Link>
         }
       />
-      <Card className="flex flex-col gap-6 border-0 shadow-contenedor lg:grid lg:grid-cols-5 lg:items-end lg:gap-10 lg:p-10">
-        <div className="flex flex-col gap-2 lg:col-span-2 lg:self-start">
+      <Card className="flex flex-col gap-6 border-0 shadow-contenedor lg:flex-row lg:items-end lg:gap-16 lg:p-10">
+        <div className="flex shrink-0 flex-col gap-2 lg:self-start">
           <span className="text-caption text-fg-secondary">Total de la semana</span>
           <p className="flex items-baseline gap-2">
             <span className="sr-only">{formatoSoles(total)}</span>
@@ -54,11 +54,14 @@ export function SemanaCard({ total, pedidos, comparacion, dias, hoy, className }
           {comparacion && Tendencia && (
             <p className="flex items-center gap-1.5 text-caption text-fg-secondary">
               <Tendencia aria-hidden strokeWidth={1.5} className="size-4 text-icon" />
-              {comparacion.texto}
+              {comparacion.delta && (
+                <span className={cn("font-medium", comparacion.direccion === "sube" ? "text-success" : "text-fg")}>{comparacion.delta}</span>
+              )}
+              {comparacion.resto}
             </p>
           )}
         </div>
-        <SemanaGrafico className="lg:col-span-3" dias={dias} hoy={hoy} />
+        <SemanaGrafico className="lg:flex-1" dias={dias} hoy={hoy} />
       </Card>
     </section>
   );

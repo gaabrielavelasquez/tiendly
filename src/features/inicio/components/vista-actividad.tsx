@@ -21,8 +21,7 @@ export const resumenPendientes = (n: number) => (n === 0 ? "Todo al día por hoy
  * Móvil: saludo, Hoy, Para atender, Esta semana y acciones.
  * Desktop: Hoy (a la medida de su contenido) y Para atender lado a lado, Esta semana a todo el ancho; acciones en la cabecera.
  */
-/** `grano`: variante de la tarjeta Hoy con textura sutil (ronda 4, se prueba con ?hoy=grano). */
-export function VistaActividad({ datos, grano = false }: { datos: InicioData; grano?: boolean }) {
+export function VistaActividad({ datos }: { datos: InicioData }) {
   const hoy = resumenHoy(datos);
   const semana = totalSemana(datos);
   const filas = pendientes(datos);
@@ -32,7 +31,9 @@ export function VistaActividad({ datos, grano = false }: { datos: InicioData; gr
       <CabeceraInicio
         titulo={
           <>
-            {saludo(datos.tienda.duena)} <span className="text-fg-secondary">{resumenPendientes(filas.length)}</span>
+            {/* Dos líneas a propósito en todos los tamaños (ronda 5). */}
+            <span className="block">{saludo(datos.tienda.duena)}</span>
+            <span className="block text-fg-secondary">{resumenPendientes(filas.length)}</span>
           </>
         }
         subtitulo={
@@ -47,7 +48,7 @@ export function VistaActividad({ datos, grano = false }: { datos: InicioData; gr
         accion={<AccionesRapidas link={datos.tienda.link} />}
       />
       <div className="grid gap-10 lg:grid-cols-5 lg:items-start lg:gap-x-8 lg:gap-y-12">
-        <HoyCard className="lg:col-span-2" grano={grano} ventas={hoy.ventas} pedidos={hoy.pedidos} corte={hora(datos.ahora)} />
+        <HoyCard className="lg:col-span-2" ventas={hoy.ventas} pedidos={hoy.pedidos} corte={hora(datos.ahora)} />
         <ParaAtender className="lg:col-span-3" filas={filas} />
         <SemanaCard
           className="lg:col-span-5"

@@ -8,15 +8,15 @@ import { cn } from "@/lib/cn";
 import { formatoSoles } from "../lib/format";
 import { Monto } from "./monto";
 
-type HoyCardProps = { ventas: number; pedidos: number; corte: string; grano?: boolean; className?: string };
+type HoyCardProps = { ventas: number; pedidos: number; corte: string; className?: string };
 
 /**
  * "Hoy": la tarjeta protagonista del panel (decisiones 0020 y 0026). Ronda 4 de 0031, término medio:
  * degradado corto de cobalto a un cobalto apenas más hondo (`bg-hero-suave`, sin marino) y profundidad en capas
  * al estilo Polaris (`shadow-capas`: filo superior blanco, anillo de 1 px y sombras cortas apiladas), sin halo azul.
- * Título fuera de la tarjeta (como las otras secciones) y etiqueta chica arriba de cada cifra. Variante opcional con grano.
+ * Título fuera de la tarjeta (como las otras secciones) y etiqueta chica arriba de cada cifra. Variante lisa (A, ronda 5).
  */
-export function HoyCard({ ventas, pedidos, corte, grano = false, className }: HoyCardProps) {
+export function HoyCard({ ventas, pedidos, corte, className }: HoyCardProps) {
   return (
     <section aria-labelledby="hoy-titulo" className={cn("flex flex-col gap-4", className)}>
       <EncabezadoSeccion
@@ -29,8 +29,7 @@ export function HoyCard({ ventas, pedidos, corte, grano = false, className }: Ho
           </span>
         }
       />
-      <Card className="relative isolate flex flex-col gap-8 overflow-hidden border-0 bg-hero-suave text-fg-inverse shadow-capas lg:p-8">
-        {grano && <span aria-hidden className="pointer-events-none absolute inset-0 -z-10 bg-grano opacity-40 mix-blend-overlay" />}
+      <Card className="flex flex-col gap-8 border-0 bg-hero-suave text-fg-inverse shadow-capas lg:p-8">
         <p className="sr-only">
           {formatoSoles(ventas)} vendidos en {pedidos} {pedidos === 1 ? "pedido" : "pedidos"}.
         </p>

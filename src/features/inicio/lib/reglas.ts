@@ -15,8 +15,8 @@ export type Pendiente = {
   titulo: string;
   detalle: string;
   href: string;
-  /** Dato urgente que va en un badge (p. ej. la hora en que vence la primera reserva). */
-  etiqueta?: string;
+  /** Hora en que vence lo primero (p. ej. la primera reserva): se muestra como "Vence hoy, 8:10 p. m.". */
+  vence?: string;
 };
 
 const plural = (n: number, uno: string, varios: string) => `${n} ${n === 1 ? uno : varios}`;
@@ -53,7 +53,7 @@ export function pendientes(d: InicioData): Pendiente[] {
       titulo: plural(reservas.length, "reserva vence hoy", "reservas vencen hoy"),
       detalle: "Revisa si ya te pagaron por Yape.",
       href: "/panel/pedidos?estado=reservas",
-      etiqueta: `Vence ${hora(primera)}`,
+      vence: hora(primera),
     });
   }
   if (agotados.length) {
@@ -69,16 +69,17 @@ export function pendientes(d: InicioData): Pendiente[] {
   return filas;
 }
 
-export type Comparacion = { direccion: "sube" | "baja" | "igual"; texto: string } | null;
+/** `delta` ("+12 %") va resaltado; `resto`, en texto secundario; `texto` es la frase completa. */
+export type Comparacion = { direccion: "sube" | "baja" | "igual"; delta: string; resto: string; texto: string } | null;
 
 /** Comparación con la semana pasada (la UI suma el ícono de tendencia: nunca solo color). Sin base, no se muestra. */
 export function compararSemana(total: number, pasada: number): Comparacion {
   if (pasada <= 0) return null;
   const pct = Math.round(((total - pasada) / pasada) * 100);
-  if (pct === 0) return { direccion: "igual", texto: "Igual que la semana pasada" };
-  return pct > 0
-    ? { direccion: "sube", texto: `${pct} % más que la semana pasada` }
-    : { direccion: "baja", texto: `${Math.abs(pct)} % menos que la semana pasada` };
+  if (pct === 0) return { direccion: "igual", delta: "", resto: "Igual que la semana pasada", texto: "Igual que la semana pasada" };
+  const resto = pct > 0 ? "más que la semana pasada" : "menos que la semana pasada";
+  const delta = `${pct > 0 ? "+" : "−"}${Math.abs(pct)} %`;
+  return { direccion: pct > 0 ? "sube" : "baja", delta, resto, texto: `${delta} ${resto}` };
 }
 
 export function totalSemana(d: InicioData) {

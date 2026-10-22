@@ -9,16 +9,15 @@ import { herramientasDev } from "@/lib/entorno";
 
 /**
  * Inicio (decisión 0012). Con datos simulados: ?escenario=actividad (por defecto), al-dia, nueva o error.
- * ?hoy=grano: variante de la tarjeta Hoy con textura (0031, ronda 4), solo con herramientas de desarrollo.
  * Carga en loading.tsx y error en error.tsx; "tienda nueva" es el estado vacío.
  */
 export default async function PanelInicio({ searchParams }: PageProps) {
-  const { escenario, hoy } = await searchParams;
+  const { escenario } = await searchParams;
   const datos = await obtenerInicio(leerEscenario(herramientasDev ? escenario : undefined));
   return (
     // Cifras tabulares en todo Inicio (0031, ronda 4): font-variant-numeric se hereda.
     <PanelMain className="gap-10 tabular-nums lg:gap-12">
-      {esTiendaNueva(datos) ? <VistaNueva datos={datos} /> : <VistaActividad datos={datos} grano={herramientasDev && hoy === "grano"} />}
+      {esTiendaNueva(datos) ? <VistaNueva datos={datos} /> : <VistaActividad datos={datos} />}
     </PanelMain>
   );
 }

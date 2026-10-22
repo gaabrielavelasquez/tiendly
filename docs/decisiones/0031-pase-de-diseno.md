@@ -32,13 +32,18 @@ Principios del nuevo Admin de Shopify (menos contenedores, la estructura de la p
 - **Saludo en dos tonos, mismo tamaño (H1, Outfit Medium):** "Hola, Cecilia." en `text/primary` + "Tienes 3 cosas para hoy." en `text/secondary` (cuenta las filas de Para atender; sin pendientes, "Todo al día por hoy."). Debajo, la fecha en texto chico; en móvil no se repite la tienda. Sin 👋 ni halos.
 - **Menos cajas:** todos los títulos de sección van fuera de los contenedores (Hoy, Para atender hoy, Esta semana). "Para atender hoy" es UN contenedor con divisores finos, en móvil y desktop.
 - **Íconos:** finos (trazo 1.5), gris neutro, sin contenedor. El color queda para lo que pide atención (el badge "Vence"). Chevron simple; toda la fila es el link (≥ 44 px). La comparación semanal también va neutra.
-- **Hoy:** degradado corto `accent/base` → `accent/pressed` (`bg-hero-suave`, sin marino) y profundidad en capas (`elevation/layered` → `shadow-capas`): filo superior blanco al 25 %, anillo interior de 1 px al 8 % y tres sombras cortas apiladas (0 1 0 · 0 3 1 −1 · 0 4 6 −2). Sin halo. Variante B con grano sutil (`?hoy=grano`).
+- **Hoy:** degradado corto `accent/base` → `accent/pressed` (`bg-hero-suave`, sin marino) y profundidad en capas (`elevation/layered` → `shadow-capas`): filo superior blanco al 25 %, anillo interior de 1 px al 8 % y tres sombras cortas apiladas (0 1 0 · 0 3 1 −1 · 0 4 6 −2). Sin halo. (La variante con grano se probó y se descartó en la ronda 5.)
 - **Contenedores:** `elevation/container` → `shadow-contenedor` (anillo interior de 1 px al 8 % + base de 1 px al 7 %), sin borde de tarjeta.
 - **Valores adaptados de `@shopify/polaris-tokens` 9.4.2:** `shadow-100` (0 1 0, 7 %), `shadow-200` (0 3 1 −1, 7 %), `shadow-300` (0 4 6 −2, 20 % → 12 % aquí) y `shadow-border-inset` (1 px, 8 %). Primitivos nuevos: `color/shadow/7`, `color/shadow/12` y `color/highlight/25`.
 - **Montos al estilo Stripe (`Monto`):** peso Medium; SemiBold solo en totales ("Total de la semana"); cifras tabulares en todo Inicio; "S/" más chico y atenuado; decimales atenuados; etiqueta chica en gris arriba de cada monto.
 - **Pesos:** títulos de sección en Outfit variable a 550 (`font/section-style`, utilidad `font-titulo-seccion`; paquete `@fontsource-variable/outfit`).
 
-## Consecuencias
+**Ronda 5 (22-oct, últimos toques, experimento solo en Inicio):**
+- Sin el badge "Vence": en la fila, título → reloj + "Vence hoy, 8:10 p. m." en `feedback/warning` (texto, sin fondo) → detalle en `text/secondary`.
+- Gráfico: barras sólidas sin degradado ni riel; días pasados en un neutro claro (`chart/bar-muted`, `#D1D5DB`), hoy en cobalto sólido, días que no llegan sin nada. En desktop el gráfico usa todo el ancho junto a los totales.
+- Saludo en dos líneas a propósito en todos los tamaños.
+- Comparación semanal: solo "+12 %" en `feedback/success`; el resto en `text/secondary`.
+- "Hoy": queda la variante lisa (A); se quitan la variante con grano y su código.
 
 - Los tokens (lienzo, `border/card`, `font/title-style`) y el componente `Card` ya aplican en todo el panel; los patrones (cabecera con halo, tarjetas de acción, encabezados con acción silenciosa, estados sin relleno) por ahora solo en Inicio.
 - Al extender a Pedidos, Productos y Mi tienda: `PanelHeader` pasa a `font-display-light` + `text-display`, y los badges no urgentes pasan a ícono + texto.

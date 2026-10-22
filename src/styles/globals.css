@@ -94,6 +94,7 @@
   --color-on-danger: var(--tl-danger-contrast);
   --color-control-off: var(--tl-control-off);
   --color-chart: var(--tl-chart-bar);
+  --color-chart-muted: var(--tl-chart-bar-muted);
   --color-whatsapp: var(--tl-channel-whatsapp-fill);
   --color-on-whatsapp: var(--tl-channel-whatsapp-contrast);
 
@@ -180,10 +181,6 @@
 @utility bg-hero-suave {
   background-image: linear-gradient(135deg, var(--tl-accent-base) 0%, var(--tl-accent-pressed) 100%);
 }
-/* Grano muy sutil (variante de Hoy, ronda 4): ruido SVG en escala de grises; se usa con opacidad baja y mix-blend-overlay. */
-@utility bg-grano {
-  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='g'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix type='saturate' values='0'/></filter><rect width='100%' height='100%' filter='url(%23g)'/></svg>");
-}
 @utility font-display-title {
   font-family: var(--tl-font-display);
   font-weight: var(--tl-font-display-style);
@@ -264,12 +261,6 @@
   Barras del gráfico: píldoras con degradado vertical suave del mismo token hacia la superficie.
   Resto de días en chart/bar; hoy en accent/base (cobalto), excepción a 0019 (decisión 0020).
 */
-@utility bg-bar {
-  background-image: linear-gradient(to top, var(--tl-chart-bar), color-mix(in srgb, var(--tl-chart-bar) 55%, var(--tl-bg-surface)));
-}
-@utility bg-bar-today {
-  background-image: linear-gradient(to top, var(--tl-accent-base), color-mix(in srgb, var(--tl-accent-base) 70%, var(--tl-bg-surface)));
-}
 
 /* Cifras grandes (decisión 0021): Outfit SemiBold, tracking-tight y números tabulares para que no "bailen". */
 @utility font-metric {
