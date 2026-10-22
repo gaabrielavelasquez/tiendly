@@ -44,3 +44,4 @@ Tokens nuevos: `color/paper/50`, `color/neutral/450`, `color/shadow/7`, `color/s
 - Los tokens, `Card` y el lienzo ya aplican en todo el panel. Los patrones (saludo en dos tonos, contenedor único, filas de acción, `Monto`, gráfico) por ahora están en Inicio; Pedidos, Productos y Mi tienda los adoptan cuando se rediseñen, empezando por `PanelHeader` (título en Outfit Medium) y los badges no urgentes (pasan a texto de color).
 - La decisión 0017 vive fuera del repo ("IA on Product Design" → `tiendly/decisiones/`): hay que sumarle allá la nota de que 0031 la actualiza en los halos.
 - Al integrar la rama hay que correr `npm install` (Outfit variable).
+- **Ajustes posteriores (22-oct):** estado vacío de "Esta semana" (PR #14); "Hoy" sin ventas en versión serena, sin halo y con siguiente paso; saludo sin pendientes "Así va tu tienda hoy."; Inicio y el resto del panel usan la fecha y hora reales de Lima (`lib/reloj`).

@@ -5,3 +5,6 @@ const soles = new Intl.NumberFormat("es-PE", { style: "currency", currency: "PEN
 export const formatoSoles = (n: number) => soles.format(n);
 
 export const plural = (n: number, uno: string, varios: string) => `${n} ${n === 1 ? uno : varios}`;
+
+/** Hora con su artículo: la 1 va en singular ("la 1:03 p. m."); las demás, en plural ("las 6:30 p. m."). */
+export const conArticulo = (hora: string) => `${/^1:/.test(hora.trim()) ? "la" : "las"} ${hora.trim()}`;

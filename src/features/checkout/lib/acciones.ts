@@ -1,6 +1,6 @@
 "use server";
 
-import { agregarPedido, horaDemo, siguienteNumero } from "@/features/pedidos/lib/almacen";
+import { agregarPedido, horaPedido, siguienteNumero } from "@/features/pedidos/lib/almacen";
 import { RESERVA_HORAS } from "@/features/pedidos/lib/reglas";
 import { asignarStock } from "@/features/productos/lib/inventario";
 import type { DetallePedido, Pedido } from "@/features/pedidos/types";
@@ -11,18 +11,17 @@ import { sumarUso } from "@/features/cupones/lib/mock";
 import { datosTienda, mutarTienda } from "@/lib/datos/tienda";
 import type { Cupon as CuponTienda } from "@/features/cupones/types";
 import { usarEnCarrito } from "@/features/cupones/lib/reglas";
-import { AHORA } from "@/features/pedidos/lib/mock";
+import { hoyLima } from "@/lib/reloj";
 import type { Cupon } from "../types";
 import { calcularTotales, faltaEnvioGratis, resolverLineas, validarDatos } from "./reglas";
 
 // Acciones de la vitrina que llegan al panel (Pedidos). Simulado: escriben en los datos de la tienda (lib/datos).
 
 /** Hoy en el reloj de la demo (los cupones vencen por día). */
-const hoyDemo = () => AHORA.slice(0, 10);
 
 /** Valida un cupón contra los de la tienda (módulo 3): estado, fechas, compra mínima y envío gratis. */
 function validarCuponCompra(cupones: CuponTienda[], codigo: string, productos: number, envioGratisDesde: number | null) {
-  return usarEnCarrito(codigo, cupones, productos, faltaEnvioGratis(productos, envioGratisDesde) === 0, hoyDemo());
+  return usarEnCarrito(codigo, cupones, productos, faltaEnvioGratis(productos, envioGratisDesde) === 0, hoyLima());
 }
 
 /** El cliente aplica un cupón en el carrito o en "Finalizar compra" (Figma C3a–C3c y C5). */
@@ -94,7 +93,7 @@ export async function registrarPedido(e: Entrada): Promise<{ creadoEl: string; t
   const entrega = e.entrega.tipo === "delivery" && distrito ? { ...e.entrega, distrito } : { tipo: e.entrega.tipo === "coordinar" ? ("coordinar" as const) : ("recojo" as const) };
   const totales = calcularTotales(lineas, cupon?.ok ? cupon.cupon : null, entrega, reglas.envioGratisDesde);
 
-  const creadoEl = horaDemo();
+  const creadoEl = horaPedido();
   const pagado = e.metodo !== "whatsapp";
   const pedido: Pedido = {
     id: e.numero.toLowerCase(),

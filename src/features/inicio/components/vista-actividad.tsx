@@ -13,8 +13,8 @@ import { SemanaCard } from "./semana-card";
  */
 export const saludo = (duena?: string) => (duena ? `Hola, ${duena}.` : "¡Hola!");
 
-/** Segundo tono del título: cuántos pendientes hay (filas de Para atender hoy). */
-export const resumenPendientes = (n: number) => (n === 0 ? "Todo al día por hoy." : `Tienes ${n} ${n === 1 ? "cosa" : "cosas"} para hoy.`);
+/** Segundo tono del título: cuántos pendientes hay. Sin pendientes, "Así va tu tienda hoy." (no repite el "Todo al día" de la lista). */
+export const resumenPendientes = (n: number) => (n === 0 ? "Así va tu tienda hoy." : `Tienes ${n} ${n === 1 ? "cosa" : "cosas"} para hoy.`);
 
 /**
  * I1 / ID1 · Inicio con actividad. Orden de la decisión 0012 con el pase 0031.
@@ -45,10 +45,10 @@ export function VistaActividad({ datos }: { datos: InicioData }) {
             {fechaLarga(datos.ahora)}
           </>
         }
-        accion={<AccionesRapidas link={datos.tienda.link} />}
+        accion={<AccionesRapidas link={datos.tienda.link} compartir={hoy.ventas > 0} />}
       />
       <div className="grid gap-10 lg:grid-cols-5 lg:items-start lg:gap-x-8 lg:gap-y-12">
-        <HoyCard className="lg:col-span-2" ventas={hoy.ventas} pedidos={hoy.pedidos} corte={hora(datos.ahora)} />
+        <HoyCard className="lg:col-span-2" link={datos.tienda.link} ventas={hoy.ventas} pedidos={hoy.pedidos} corte={hora(datos.ahora)} />
         <ParaAtender className="lg:col-span-3" filas={filas} />
         <SemanaCard
           className="lg:col-span-5"
@@ -59,7 +59,7 @@ export function VistaActividad({ datos }: { datos: InicioData }) {
           hoy={fechaCorta(datos.ahora)}
         />
       </div>
-      <AccionesRapidas link={datos.tienda.link} className="lg:hidden" />
+      <AccionesRapidas link={datos.tienda.link} compartir={hoy.ventas > 0} className="lg:hidden" />
     </>
   );
 }

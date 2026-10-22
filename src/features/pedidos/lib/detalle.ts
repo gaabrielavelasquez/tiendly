@@ -1,4 +1,4 @@
-import { formatoSoles, plural } from "@/lib/formato";
+import { conArticulo, formatoSoles, plural } from "@/lib/formato";
 import type { DetallePedido, Pedido } from "../types";
 import { totalDetalle, unidades } from "./detalle-mock";
 import { fechaPedido } from "./format";
@@ -56,8 +56,12 @@ export function inicial(p: Pedido, d: DetallePedido, ahora: string): [Pedido, De
   return [conR, d];
 }
 
-/** "Hoy, 10:45 p. m." → "hoy a las 10:45 p. m." (la hora ya termina en punto: no se agrega otro). */
-const aLasHora = (texto: string) => texto.charAt(0).toLowerCase() + texto.slice(1).replace(", ", " a las ");
+/** "Hoy, 10:45 p. m." → "hoy a las 10:45 p. m.", y "Hoy, 1:05 p. m." → "hoy a la 1:05 p. m." (la hora ya termina en punto). */
+function aLasHora(texto: string) {
+  const t = texto.charAt(0).toLowerCase() + texto.slice(1);
+  const i = t.indexOf(", ");
+  return i < 0 ? t : `${t.slice(0, i)} a ${conArticulo(t.slice(i + 2))}`;
+}
 
 export type Paso = { id: string; titulo: string; detalle?: string; cuando?: string; estado: "hecho" | "actual" | "pendiente" | "cancelado" };
 
