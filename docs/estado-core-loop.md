@@ -10,19 +10,19 @@
 
 | Estado | Módulos |
 |---|---|
-| Hecho | 1 Checkout y Carrito (pago simulado) · 8 Inicio · 10 Onboarding |
+| Hecho | 1 Checkout y Carrito (pago simulado) · 2 Métodos de pago y Entregas · 3 Cupones · 8 Inicio · 10 Onboarding |
 | Parcial | 5 Home y Producto · 6 Pedidos · 7 Productos |
-| Falta | 2 Métodos de pago y Entregas · 3 Cupones · 4 Afiliación · 9 Mi tienda |
+| Falta | 4 Afiliación · 9 Mi tienda |
 
-El Core Loop **no se puede cerrar todavía**: ya se puede comprar (módulo 1), pero sin Métodos de pago y Entregas (módulo 2) la tienda no puede configurar cómo cobra ni cómo envía; hoy eso vive en `checkout/lib/config.ts`.
+El Core Loop ya funciona de punta a punta con datos simulados: la tienda configura cómo cobra, cómo entrega y sus cupones (módulos 2 y 3), y el checkout (módulo 1) usa esa configuración. Falta el cobro real (Afiliación, módulo 4) y Mi tienda (9).
 
 ## Por módulo
 
 | # | Módulo | Pantallas en Figma (móvil · desktop) | Ruta en código | Estado | Qué falta |
 |---|---|---|---|---|---|
 | 1 | Checkout y Carrito | **Móvil:** flujo 1 Carrito, 2 Checkout (inicio, entrega, tarjeta, Yape, WhatsApp), 3a/3b Confirmación; estados C0–C5, K0–K5, E1–E3; variantes 3a-R/3a-C/3b-R/3b-C. **Desktop:** D1, D2, D5a/D5b; estados D1-S, D1-C1–C3c. | `/[tienda]/carrito`, `/[tienda]/checkout` y `/[tienda]/pedido/[numero]` | **Hecho** (pago simulado) | El cobro real llega con Afiliación (módulo 4). Los pedidos llegan a Panel › Pedidos por un almacén simulado en memoria (se borra al reiniciar el servidor). "Descargar resumen (PDF)" usa imprimir → guardar como PDF. |
-| 2 | Métodos de pago y Entregas | **Móvil:** Métodos de pago (sin pasarela, pagos activos) + E1–E7; Entregas (configurado, primera vez, guardado, errores, regla de al menos una). **Desktop:** los mismos + DE1–DE6. | Ninguna (`features/pagos` y `features/entregas` vacías). `/panel/configuracion` da 404. | **Falta** | Todo. Ojo: Figma no tiene un ítem "Configuración" propio; hay que definir dónde viven Pagos y Entregas en el menú. |
-| 3 | Cupones | **Móvil:** lista vacía, lista, crear, errores, creado, límite Plan Free, eliminar. **Desktop:** las mismas 7. | Ninguna (`features/cupones` vacía). `/panel/cupones` está en el menú y da 404. | **Falta** | Todo. |
+| 2 | Métodos de pago y Entregas | **Móvil:** Métodos de pago (sin pasarela, pagos activos) + E1–E7; Entregas (configurado, primera vez, guardado, errores, regla de al menos una). **Desktop:** los mismos + DE1–DE6. | `/panel/configuracion`, `/panel/configuracion/pagos` y `/panel/configuracion/entregas` | **Hecho** (simulado) | "Solicitar cobros automáticos" lleva a Afiliación (módulo 4, pendiente). Cambiar la cuenta de depósito, también. |
+| 3 | Cupones | **Móvil:** lista vacía, lista, crear, errores, creado, límite Plan Free, eliminar. **Desktop:** las mismas 7. | `/panel/cupones`, `/panel/cupones/nuevo` y `/panel/cupones/[id]` | **Hecho** (simulado) | "Ver planes" (Plan Pro) no tiene pantalla todavía. |
 | 4 | Afiliación (cobros automáticos) | **Móvil:** A1–A7 + estados A1b–A7b. **Desktop:** AD1–AD5 + estados AD1b–AD7b. | Ninguna (`features/afiliacion` vacía). | **Falta** | Todo (RUC con SUNAT, representante, CCI, revisión, solicitud en revisión u observada). |
 | 5 | Home y Producto (vitrina) | **Home:** móvil 390 y desktop 1440. **Producto:** móvil, desktop y tabla de tallas en cada uno. | `/[tienda]` (catálogo) y `/[tienda]/[producto]` | **Parcial** | **Home:** barra de anuncio ("Envío en Lima S/ 15 · llega el mismo día"); ícono de búsqueda en la cabecera (logo y menú ya siguen Figma, 0027); nav desktop Zapatos · Sobre Heather · Envíos y cambios · Contacto; badge "MÁS VENDIDO"; búsqueda; botón flotante de WhatsApp; secciones "Sobre Heather" y "¿Tienes alguna duda?"; pie con Envíos · Cambios · Contacto. **Producto:** la tabla de tallas es un desplegable y en Figma es una pantalla o modal propio. |
 | 6 | Pedidos | **Móvil:** P1 lista, P2–P6 detalle por estado, P4 hoja "en camino", P7 pagado con Deshacer. **Desktop:** PD1 lista, PD2–PD3 detalle en panel lateral. | `/panel/pedidos` y `/panel/pedidos/[id]` | **Parcial** | Pestañas de Figma: Pendientes · Por enviar · En camino · Finalizados (el código usa Todos · Para atender · Por cobrar · Vencen hoy · Por enviar). Estados "Por preparar → Listo → En camino → Entregado" y "Listo para recoger" (el código tiene por enviar → enviado → entregado). Hoja "Marcar como en camino" con empresa de envío, código de seguimiento y mensaje por WhatsApp. "Restablecer reserva" en cancelados. Deshacer al marcar como pagado. Aviso "Venció la reserva… Liberamos el stock". Detalle en **panel lateral** en desktop (el código abre una página aparte). Número `#TL-` (el código usa `#T-`). |

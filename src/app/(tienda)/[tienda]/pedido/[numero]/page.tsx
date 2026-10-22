@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { VistaConfirmacion } from "@/features/checkout/components/confirmacion/vista-confirmacion";
 import { CabeceraTienda } from "@/features/vitrina/components/cabecera-tienda";
+import { configActual } from "@/features/configuracion/lib/mock";
 import { obtenerVitrina } from "@/features/vitrina/lib/vitrina";
 
 type PageProps = { params: Promise<{ tienda: string; numero: string }> };
@@ -13,7 +14,8 @@ export default async function PedidoPage({ params }: PageProps) {
   const { tienda, numero } = await params;
   const vitrina = await obtenerVitrina(tienda);
   if (!vitrina) notFound();
-  const { nombre, slug, celular, logo } = vitrina.tienda;
+  const { nombre, slug, logo } = vitrina.tienda;
+  const celular = configActual().pagos.whatsapp.celular; // el número de Pedidos por WhatsApp (módulo 2)
   return (
     <div className="flex min-h-dvh flex-col">
       <CabeceraTienda nombre={nombre} logo={logo} slug={slug} categorias={vitrina.categorias} />

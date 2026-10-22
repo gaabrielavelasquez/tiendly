@@ -6,15 +6,22 @@ import { Button, Field } from "@/components/ui";
 import { formatoSoles } from "@/lib/formato";
 import { cn } from "@/lib/cn";
 import type { Cupon as TipoCupon } from "../types";
-import { validarCupon } from "../lib/reglas";
 
-type Props = { cupon: TipoCupon | null; productos: number; descuento: number; onAplicar: (c: TipoCupon | null) => void; className?: string };
+type Props = {
+  cupon: TipoCupon | null;
+  descuento: number;
+  /** Valida en el servidor contra los cupones de la tienda (módulo 3). */
+  validar: (codigo: string) => Promise<{ cupon: TipoCupon } | { error: string }>;
+  onAplicar: (c: TipoCupon | null) => void;
+  className?: string;
+};
 
 /** "¿Tienes un cupón de descuento?" plegable (Figma C3a–C3c y C5). Aplicado, muestra el ahorro y "Quitar". */
-export function Cupon({ cupon, productos, descuento, onAplicar, className }: Props) {
+export function Cupon({ cupon, descuento, validar, onAplicar, className }: Props) {
   const [abierto, setAbierto] = useState(false);
   const [codigo, setCodigo] = useState("");
   const [error, setError] = useState("");
+  const [aplicando, setAplicando] = useState(false);
   const id = useId();
 
   if (cupon) {
@@ -24,7 +31,7 @@ export function Cupon({ cupon, productos, descuento, onAplicar, className }: Pro
         <p className="flex flex-1 flex-col text-body-sm">
           <span className="font-semibold text-fg">{cupon.codigo} aplicado</span>
           <span className="text-fg-secondary">
-            {cupon.tipo === "envio" ? "Tu envío es gratis." : `Ahorras ${formatoSoles(descuento)} (${cupon.valor}%).`}
+            {cupon.tipo === "envio" ? "Tu envío es gratis." : `Ahorras ${formatoSoles(descuento)}${cupon.tipo === "porcentaje" ? ` (${cupon.valor}%)` : ""}.`}
           </span>
         </p>
         <button type="button" onClick={() => onAplicar(null)} className="-my-2.5 h-11 text-body-sm font-semibold text-fg underline-offset-4 hover:underline">
@@ -34,10 +41,12 @@ export function Cupon({ cupon, productos, descuento, onAplicar, className }: Pro
     );
   }
 
-  function aplicar(e: React.FormEvent) {
+  async function aplicar(e: React.FormEvent) {
     e.preventDefault();
-    const r = validarCupon(codigo, productos);
-    if (r.ok) onAplicar(r.cupon);
+    setAplicando(true);
+    const r = await validar(codigo);
+    setAplicando(false);
+    if ("cupon" in r) onAplicar(r.cupon);
     else setError(r.error);
   }
 
@@ -51,8 +60,8 @@ export function Cupon({ cupon, productos, descuento, onAplicar, className }: Pro
       {abierto && (
         <form id={id} onSubmit={aplicar} className="flex flex-col gap-3 px-4 pb-4">
           <Field label="Código de cupón" value={codigo} onChange={(e) => (setCodigo(e.target.value.toUpperCase()), setError(""))} error={error || undefined} autoCapitalize="characters" autoComplete="off" />
-          <Button type="submit" variant="secondary" block>
-            Aplicar cupón
+          <Button type="submit" variant="secondary" block disabled={aplicando} aria-busy={aplicando || undefined}>
+            {aplicando ? "Aplicando…" : "Aplicar cupón"}
           </Button>
         </form>
       )}

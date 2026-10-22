@@ -1,3 +1,4 @@
+export { Aviso, type TextoAviso } from "./aviso";
 export { Buscador } from "./buscador";
 export { FiltrosRapidos, type OpcionFiltro } from "./filtros-rapidos";
 export { MobileTopbar } from "./mobile-topbar";
@@ -7,4 +8,5 @@ export { PanelMain } from "./panel-main";
 export { Sidebar } from "./sidebar";
 export { TabBar } from "./tab-bar";
 export { TarjetaSeccion } from "./tarjeta-seccion";
+export { Volver } from "./volver";
 export { ZonaUsuario } from "./zona-usuario";

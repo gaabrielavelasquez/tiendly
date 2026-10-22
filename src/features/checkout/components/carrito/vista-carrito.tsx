@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { buttonVariants, EmptyState, Skeleton } from "@/components/ui";
 import { CabeceraTienda } from "@/features/vitrina/components/cabecera-tienda";
 import type { DatosCompra } from "../../lib/catalogo";
+import { aplicarCupon } from "../../lib/acciones";
 import { calcularTotales } from "../../lib/reglas";
 import { useCarrito } from "../../hooks/use-carrito";
 import { AvisoDeshacer } from "../aviso-deshacer";
@@ -20,15 +21,15 @@ import { BarraCarrito, ResumenCarrito } from "./resumen-carrito";
  * envío gratis y cupón. Móvil: barra fija abajo. Desktop: resumen fijo a la derecha (D1).
  */
 export function VistaCarrito({ datos }: { datos: DatosCompra }) {
-  const { tienda, categorias, catalogo } = datos;
+  const { tienda, categorias, catalogo, reglas } = datos;
   const c = useCarrito(tienda.slug, catalogo);
   const router = useRouter();
   const inicio = `/${tienda.slug}`;
-  const totales = calcularTotales(c.lineas ?? [], c.cupon, null);
+  const totales = calcularTotales(c.lineas ?? [], c.cupon, null, reglas.envioGratisDesde);
   const bloqueado = Boolean(c.lineas?.some((l) => l.maximo === 0));
   const finalizar = () => router.push(`/${tienda.slug}/checkout`);
   const cupon = (clase: string) => (
-    <Cupon cupon={c.cupon} productos={totales.productos} descuento={totales.descuento} onAplicar={c.setCupon} className={clase} />
+    <Cupon cupon={c.cupon} descuento={totales.descuento} validar={(codigo) => aplicarCupon(tienda.slug, codigo, totales.productos)} onAplicar={c.setCupon} className={clase} />
   );
 
   return (
@@ -64,7 +65,7 @@ export function VistaCarrito({ datos }: { datos: DatosCompra }) {
                   <LineaCarrito key={`${l.id}-${l.color}-${l.talla}`} linea={l} tienda={tienda.slug} prioridad={i < 2} onCantidad={(n) => c.cambiarCantidad(l, n)} onQuitar={() => c.quitar(l)} />
                 ))}
               </ul>
-              <EnvioGratis base={totales.productos - totales.descuento} />
+              <EnvioGratis base={totales.productos - totales.descuento} desde={reglas.envioGratisDesde} />
               {cupon("lg:hidden")}
               {!totales.envioGratis && (
                 <p className="flex items-center gap-3 bg-sunken p-4 text-body-sm text-fg-secondary">

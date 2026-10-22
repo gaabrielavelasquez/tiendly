@@ -12,12 +12,12 @@ export type Paso = "datos" | "entrega" | "pago";
  * y el pago, que se elige y se completa en la misma pantalla. `confirmar` cobra (simulado) y devuelve
  * lo necesario para crear el pedido; no navega, eso lo decide la vista.
  */
-export function useCompra() {
+export function useCompra(entregaInicial: "delivery" | "recojo") {
   const [paso, setPaso] = useState<Paso>("datos");
   const [hechos, setHechos] = useState({ datos: false, entrega: false });
   const [datos, setDatos] = useState<Datos>({ nombre: "", celular: "" });
   const [erroresDatos, setErroresDatos] = useState<Partial<Record<keyof Datos, string>>>({});
-  const [tipoEntrega, setTipoEntrega] = useState<"delivery" | "recojo">("delivery");
+  const [tipoEntrega, setTipoEntrega] = useState<"delivery" | "recojo">(entregaInicial);
   const [distrito, setDistrito] = useState<Distrito | null>(null);
   const [direccion, setDireccion] = useState("");
   const [referencia, setReferencia] = useState("");

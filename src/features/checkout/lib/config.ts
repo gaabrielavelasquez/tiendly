@@ -1,32 +1,42 @@
-import type { Cupon, Distrito } from "../types";
+import type { ConfigCompra, IdZona } from "@/features/configuracion/types";
+import type { Distrito, ReglasCompra } from "../types";
 
-// Configuración de compra de la tienda (simulada). La define la tienda en Configuración → Pagos y Entregas
-// (módulo 2); hasta entonces vive aquí. Al menos un método de pago activo siempre (Figma, módulo 1).
+// Reglas de compra que ve el cliente. Salen de lo que la tienda configuró en Configuración → Pagos y
+// Entregas (módulo 2): este archivo solo sabe de geografía y de cómo traducir esa configuración.
 
-export const CONFIG_COMPRA = {
-  envioGratisDesde: 700,
-  /** Lima: precio fijo. Si la tienda envía a provincias, el costo depende del distrito (Figma E3). */
-  enviaAProvincias: true,
-  recojo: { direccion: "Calle Los Pinos 245", distrito: "Santiago de Surco", horario: "Lunes a sábado, de 10 a. m. a 7 p. m." },
-  pagos: { tarjeta: true, yape: true, whatsapp: true },
-  /** Horas que se separan los productos de un pedido por WhatsApp (decisión 0010). */
-  horasReserva: 24,
-};
+/** Horas que se separan los productos de un pedido por WhatsApp (decisión 0010). */
+export const HORAS_RESERVA = 24;
 
-export const CUPONES: Cupon[] = [
-  { codigo: "BIENVENIDA10", tipo: "porcentaje", valor: 10 },
-  { codigo: "ENVIOGRATIS", tipo: "envio" },
+type Lugar = { nombre: string; lugar: string; zona: IdZona };
+const lima = ["Barranco", "Breña", "Chorrillos", "Jesús María", "La Molina", "La Victoria", "Lince", "Magdalena del Mar", "Miraflores", "Pueblo Libre", "San Borja", "San Isidro", "San Miguel", "Santiago de Surco", "Surquillo"];
+const callao = ["Callao", "Bellavista", "La Perla", "Ventanilla"];
+const GEOGRAFIA: Lugar[] = [
+  ...lima.map((nombre) => ({ nombre, lugar: "Lima", zona: "lima" as const })),
+  ...callao.map((nombre) => ({ nombre, lugar: "Callao", zona: "callao" as const })),
+  { nombre: "Cayma", lugar: "Arequipa, Arequipa", zona: "provincias" },
+  { nombre: "Yanahuara", lugar: "Arequipa, Arequipa", zona: "provincias" },
+  { nombre: "Cayaltí", lugar: "Chiclayo, Lambayeque", zona: "provincias" },
+  { nombre: "Trujillo", lugar: "Trujillo, La Libertad", zona: "provincias" },
+  { nombre: "Cusco", lugar: "Cusco, Cusco", zona: "provincias" },
+  { nombre: "Piura", lugar: "Piura, Piura", zona: "provincias" },
 ];
 
-const LIMA = { zona: "Lima", costo: 15, plazo: "2 a 3 días hábiles" };
-const lima = ["Barranco", "Jesús María", "La Molina", "Lince", "Magdalena del Mar", "Miraflores", "Pueblo Libre", "San Borja", "San Isidro", "San Miguel", "Santiago de Surco", "Surquillo"];
+const monto = (s: string) => Number(s.replace(",", "."));
 
-export const DISTRITOS: Distrito[] = [
-  ...lima.map((nombre) => ({ nombre, ...LIMA })),
-  { nombre: "Cayma", zona: "Arequipa, Arequipa", costo: 25, plazo: "3 a 5 días hábiles" },
-  { nombre: "Yanahuara", zona: "Arequipa, Arequipa", costo: 25, plazo: "3 a 5 días hábiles" },
-  { nombre: "Cayaltí", zona: "Chiclayo, Lambayeque", costo: 30, plazo: "4 a 6 días hábiles" },
-  { nombre: "Trujillo", zona: "Trujillo, La Libertad", costo: 25, plazo: "3 a 5 días hábiles" },
-  { nombre: "Cusco", zona: "Cusco, Cusco", costo: 30, plazo: "4 a 6 días hábiles" },
-  { nombre: "Piura", zona: "Piura, Piura", costo: 30, plazo: "4 a 6 días hábiles" },
-];
+/** Traduce la configuración de la tienda a lo que el checkout necesita (todo serializable). */
+export function reglasCompra({ pagos, entregas }: ConfigCompra): ReglasCompra {
+  const { delivery, recojo } = entregas;
+  const zonas = delivery.activo ? delivery.zonas.filter((z) => z.activa && monto(z.costo) >= 0 && z.costo.trim() !== "") : [];
+  const distritos: Distrito[] = GEOGRAFIA.flatMap((g) => {
+    const z = zonas.find((x) => x.id === g.zona);
+    return z ? [{ nombre: g.nombre, lugar: g.lugar, zona: g.zona, costo: monto(z.costo), plazo: z.plazo }] : [];
+  });
+  const cobros = pagos.cobros.estado === "activo";
+  return {
+    celular: pagos.whatsapp.celular,
+    pagos: { tarjeta: cobros && pagos.cobros.tarjeta, yape: cobros && pagos.cobros.yape, whatsapp: pagos.whatsapp.activo },
+    envioGratisDesde: delivery.activo && delivery.envioGratis.activo && monto(delivery.envioGratis.desde) > 0 ? monto(delivery.envioGratis.desde) : null,
+    delivery: distritos.length ? { distritos, soloLima: zonas.length === 1 && zonas[0].id === "lima" } : null,
+    recojo: recojo.activo ? { direccion: recojo.direccion, distrito: recojo.distrito, horario: recojo.horario, nota: recojo.nota } : null,
+  };
+}

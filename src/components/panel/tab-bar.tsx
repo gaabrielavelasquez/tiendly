@@ -14,8 +14,8 @@ const transicion = { duration: motionTokens.durationFast, ease: [...motionTokens
 const PRINCIPALES = ["/panel", "/panel/pedidos", "/panel/productos", "/panel/mi-tienda"];
 const principales = ITEMS.filter((i) => PRINCIPALES.includes(i.href));
 const resto = ITEMS.filter((i) => !PRINCIPALES.includes(i.href));
-/** Pantallas de detalle o edición: tienen su propia barra de acciones abajo y un "volver" arriba. */
-const sinBarra = (path: string) => /^\/panel\/(pedidos|productos)\/.+/.test(path);
+/** Subpáginas (detalle, edición, Pagos, Entregas, cupón): tienen "Volver" arriba y, varias, su barra de acciones abajo. */
+const sinBarra = (path: string) => /^\/panel\/(pedidos|productos|configuracion|cupones)\/.+/.test(path);
 const tab = "flex min-h-14 flex-1 flex-col items-center justify-center gap-0.5 text-label transition-colors";
 
 /**

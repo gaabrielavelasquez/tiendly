@@ -1,6 +1,6 @@
 import { enLima } from "@/features/pedidos/lib/tiempo";
 import type { PedidoCreado } from "../types";
-import { CONFIG_COMPRA } from "./config";
+import { HORAS_RESERVA } from "./config";
 
 // Copia del pedido en este navegador para la confirmación (con fotos y plazos). El pedido "oficial"
 // lo crea registrarPedido en el almacén del panel (lib/acciones.ts).
@@ -22,7 +22,7 @@ export function leerPedido(slug: string, numero: string): PedidoCreado | null {
 }
 
 /** Hasta cuándo se separan los productos de un pedido por WhatsApp (decisión 0010). */
-export const reservaHasta = (creadoEl: string) => new Date(new Date(creadoEl).getTime() + CONFIG_COMPRA.horasReserva * 3600000).toISOString();
+export const reservaHasta = (creadoEl: string) => new Date(new Date(creadoEl).getTime() + HORAS_RESERVA * 3600000).toISOString();
 
 const hora = (h: number, min: number) => `${h % 12 || 12}:${String(min).padStart(2, "0")} ${h < 12 ? "a. m." : "p. m."}`;
 

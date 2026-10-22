@@ -1,6 +1,6 @@
 import type { ItemCarrito } from "@/features/vitrina/lib/carrito";
 import type { CatalogoCompra, Cupon, Datos, Entrega, Linea, Totales } from "../types";
-import { CONFIG_COMPRA, CUPONES } from "./config";
+import { descuentoDe } from "@/features/cupones/lib/reglas";
 
 // Reglas del carrito y de la compra. Funciones puras: fáciles de probar y de mover al backend.
 // Mensajes con punto final (regla de micro-copy) y textos de Figma (módulo 1).
@@ -19,32 +19,19 @@ export function resolverLineas(items: ItemCarrito[], catalogo: CatalogoCompra): 
 
 export const mismaLinea = (a: ItemCarrito, b: ItemCarrito) => a.id === b.id && a.color === b.color && a.talla === b.talla;
 
-/** Lo que falta para el envío gratis (0 si ya llegó). Se cuenta después del descuento del cupón. */
-export const faltaEnvioGratis = (base: number) => Math.max(0, CONFIG_COMPRA.envioGratisDesde - base);
+/** Lo que falta para el envío gratis (0 si ya llegó). Se cuenta después del cupón. null: la tienda no lo ofrece. */
+export const faltaEnvioGratis = (base: number, desde: number | null) => (desde === null ? null : Math.max(0, desde - base));
 
 /** Las tallas agotadas no suman: no se pueden comprar (el carrito pide quitarlas). */
-export function calcularTotales(todas: Linea[], cupon: Cupon | null, entrega: Entrega | null): Totales {
+export function calcularTotales(todas: Linea[], cupon: Cupon | null, entrega: Entrega | null, envioGratisDesde: number | null): Totales {
   const lineas = todas.filter((l) => l.maximo > 0);
   const productos = lineas.reduce((s, l) => s + l.precio * l.cantidad, 0);
   const unidades = lineas.reduce((s, l) => s + l.cantidad, 0);
-  const descuento = cupon?.tipo === "porcentaje" ? Math.round((productos * cupon.valor) / 100) : 0;
+  const descuento = cupon ? descuentoDe(cupon, productos) : 0;
   const base = productos - descuento;
-  const envioGratis = cupon?.tipo === "envio" || faltaEnvioGratis(base) === 0;
+  const envioGratis = cupon?.tipo === "envio" || faltaEnvioGratis(base, envioGratisDesde) === 0;
   const envio = !entrega ? null : entrega.tipo === "recojo" || envioGratis ? 0 : entrega.distrito.costo;
   return { productos, unidades, descuento, envio, envioGratis, total: base + (envio ?? 0) };
-}
-
-export type ResultadoCupon = { ok: true; cupon: Cupon } | { ok: false; error: string };
-
-export function validarCupon(codigo: string, productos: number): ResultadoCupon {
-  const limpio = codigo.trim().toUpperCase();
-  if (!limpio) return { ok: false, error: "Escribe el código de tu cupón." };
-  const cupon = CUPONES.find((c) => c.codigo === limpio);
-  if (!cupon) return { ok: false, error: "Este cupón no existe o ya venció. Revisa cómo lo escribiste." };
-  if (cupon.tipo === "envio" && faltaEnvioGratis(productos) === 0) {
-    return { ok: false, error: "Tu pedido ya cuenta con envío gratis automático, así que no necesitas este cupón." };
-  }
-  return { ok: true, cupon };
 }
 
 export const soloDigitos = (s: string) => s.replace(/\D/g, "");

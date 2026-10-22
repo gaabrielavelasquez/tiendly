@@ -7,5 +7,6 @@ export { Chip } from "./chip";
 export { Collapsible } from "./collapsible";
 export { EmptyState } from "./empty-state";
 export { Field } from "./field";
+export { Opcion } from "./opcion";
 export { Skeleton } from "./skeleton";
 export { Switch } from "./switch";

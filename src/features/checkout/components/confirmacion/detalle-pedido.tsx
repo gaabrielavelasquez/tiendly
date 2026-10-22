@@ -1,18 +1,17 @@
 import { formatoSoles } from "@/lib/formato";
-import { CONFIG_COMPRA } from "../../lib/config";
 import type { PedidoCreado } from "../../types";
-
-const { recojo } = CONFIG_COMPRA;
 
 /** Entrega, dirección o recojo, pago y, si hubo cupón, el desglose (Figma 3a, 3a-R, 3a-C y 3b). */
 export function DetallePedido({ p }: { p: PedidoCreado }) {
   const filas: [string, string][] = [];
   if (p.entrega.tipo === "delivery") {
-    filas.push(["Entrega", p.entrega.distrito.zona === "Lima" ? "Delivery en Lima" : "Delivery a provincia"]);
+    const { zona } = p.entrega.distrito;
+    filas.push(["Entrega", zona === "lima" ? "Delivery en Lima" : zona === "callao" ? "Delivery en Callao" : "Delivery a provincia"]);
     filas.push(["Dirección", `${p.entrega.direccion}, ${p.entrega.distrito.nombre}`]);
     if (p.pago.metodo !== "whatsapp") filas.push(["Llega en", p.entrega.distrito.plazo]);
   } else {
-    filas.push(["Entrega", "Recojo en tienda"], ["Recoges en", `${recojo.direccion}, ${recojo.distrito}`], ["Horario", recojo.horario]);
+    filas.push(["Entrega", "Recojo en tienda"]);
+    if (p.recojo) filas.push(["Recoges en", `${p.recojo.direccion}, ${p.recojo.distrito}`], ["Horario", p.recojo.horario]);
   }
   if (p.pago.metodo === "whatsapp") filas.push(["Productos", String(p.totales.unidades)], ["Pago", "Pendiente, se coordina por WhatsApp"]);
   else filas.push(["Pagaste con", p.pago.metodo === "tarjeta" ? `Tarjeta ···· ${p.pago.ultimos4}` : "Yape"]);
