@@ -29,7 +29,7 @@ Con acceso de lectura a Figma se revisaron A2–A7 y se completó lo que faltaba
 
 | Pantalla | Resuelto |
 |---|---|
-| A2 · Tu negocio | Nombre de tu tienda (precargado), Rubro (lista del onboarding) y Dirección fiscal **bloqueada**, como en Figma («Viene de SUNAT. Si cambió, actualízala allá.»). No se hace editable: Figma la muestra con candado. |
+| A2 · Tu negocio | Nombre de tu tienda (precargado), Rubro (lista del onboarding) y Dirección fiscal **bloqueada** (decisión de Gabi, 22-oct): «Viene de SUNAT. ¿No es correcta? Actualízala en SUNAT.». |
 | A3 · Representante | Cargo. Con RUC 10, «Titular» precargado. |
 | A4 · Cuenta | Orden de Figma: titular arriba, CCI, Banco (detectado con el CCI) y Tipo de cuenta. |
 | A5 · Resumen | Negocio con tienda y rubro, representante con cargo, cuenta de depósito con tipo. Comisiones siguen «Por confirmar» (0007). |

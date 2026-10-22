@@ -29,7 +29,7 @@ export function PasoNegocio({ m, ayuda, whatsapp }: { m: ModeloAfiliacion; ayuda
       <div className="flex flex-col gap-1.5">
         <span className="text-body-sm font-semibold text-fg">Dirección fiscal</span>
         <p className="flex min-h-10 items-center gap-2 rounded-button bg-sunken px-3 py-2 text-body text-fg-secondary"><Lock aria-hidden className="size-4 shrink-0" /><span>{m.negocio.direccion}</span></p>
-        <p className="text-caption text-fg-secondary">Viene de SUNAT. Si cambió, actualízala allá.</p>
+        <p className="text-caption text-fg-secondary">Viene de SUNAT. ¿No es correcta? Actualízala en SUNAT.</p>
       </div>
     </>}
   </div>;
