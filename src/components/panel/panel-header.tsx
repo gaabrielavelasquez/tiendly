@@ -1,4 +1,4 @@
-import { avisosSinLeer, tiendaActual } from "@/lib/sesion";
+import { tiendaActual } from "@/lib/sesion";
 import { ZonaUsuario } from "./zona-usuario";
 
 type PanelHeaderProps = { titulo: string; subtitulo: string; accion?: React.ReactNode };
@@ -21,7 +21,7 @@ export function PanelHeader({ titulo, subtitulo, accion }: PanelHeaderProps) {
             <span aria-hidden className="h-6 w-px bg-line-subtle" />
           </>
         )}
-        <ZonaUsuario nombre={tiendaActual.duena} avisos={avisosSinLeer} />
+        <ZonaUsuario nombre={tiendaActual.duena} />
       </div>
     </header>
   );

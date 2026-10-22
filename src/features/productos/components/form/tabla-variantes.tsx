@@ -1,3 +1,7 @@
+"use client";
+
+import { ChevronDown } from "lucide-react";
+import { useState } from "react";
 import { plural } from "@/lib/formato";
 import { cn } from "@/lib/cn";
 import { filasVariantes, precioVarianteInvalido, skuSugerido, stockTotal, VARIANTE_VACIA, type FormProducto, type VarianteForm } from "../../lib/formulario";
@@ -11,12 +15,15 @@ const input =
 const etiquetaMovil = "pb-1 text-caption text-fg-secondary sm:hidden";
 
 /**
- * Mini planilla de variantes: una fila por combinación color × talla con SKU (opcional),
- * precio (opcional; vacío = precio base) y cantidad. En móvil, cada fila se apila como tarjeta.
+ * Mini planilla de variantes: una fila por combinación color × talla con precio (opcional; vacío =
+ * precio base) y cantidad. El SKU es opcional y vive plegado en "Más opciones" (decisión 0027).
+ * En móvil, cada fila se apila como tarjeta.
  */
 export function TablaVariantes({ form, error, onCambio }: TablaProps) {
   const filas = filasVariantes(form.colores, form.tallas);
   const base = form.precio || "0.00";
+  // Abierto de entrada solo si ya hay algún SKU cargado, para no esconder datos.
+  const [conSku, setConSku] = useState(() => filas.some((f) => form.variantes[f.clave]?.sku));
   return (
     <div className="flex flex-col gap-2">
       <div className="overflow-hidden rounded-theme border border-line-subtle">
@@ -25,7 +32,7 @@ export function TablaVariantes({ form, error, onCambio }: TablaProps) {
           <thead className="sr-only bg-sunken/60 sm:not-sr-only sm:table-header-group">
             <tr className="border-b border-line-subtle">
               <th scope="col" className={th}>Variante</th>
-              <th scope="col" className={th}>SKU</th>
+              {conSku && <th scope="col" className={th}>SKU</th>}
               <th scope="col" className={cn(th, "w-36")}>Precio</th>
               <th scope="col" className={cn(th, "w-28 text-right")}>Cantidad</th>
             </tr>
@@ -41,6 +48,7 @@ export function TablaVariantes({ form, error, onCambio }: TablaProps) {
                     {nombre}
                   </th>
                   {/* Móvil: SKU a todo el ancho (el sugerido es largo); precio y cantidad lado a lado. */}
+                  {conSku && (
                   <td className="col-span-2 sm:px-3 sm:py-2">
                     <div className={etiquetaMovil}>SKU</div>
                     <input
@@ -51,6 +59,7 @@ export function TablaVariantes({ form, error, onCambio }: TablaProps) {
                       className={input}
                     />
                   </td>
+                  )}
                   <td className="sm:px-3 sm:py-2">
                     <div className={etiquetaMovil}>Precio</div>
                     <div className="relative">
@@ -87,7 +96,7 @@ export function TablaVariantes({ form, error, onCambio }: TablaProps) {
           </tbody>
           <tfoot className="border-t border-line-subtle bg-sunken/60">
             <tr className="flex justify-between px-3 py-2.5 sm:table-row sm:p-0">
-              <th scope="row" colSpan={3} className="text-left text-caption font-semibold text-fg-secondary sm:px-3 sm:py-2.5">
+              <th scope="row" colSpan={conSku ? 3 : 2} className="text-left text-caption font-semibold text-fg-secondary sm:px-3 sm:py-2.5">
                 Total · {plural(filas.length, "variante", "variantes")}
               </th>
               <td className="text-right text-body-sm font-semibold text-fg tabular-nums sm:px-3 sm:py-2.5">
@@ -102,6 +111,15 @@ export function TablaVariantes({ form, error, onCambio }: TablaProps) {
       ) : (
         <p className="text-caption text-fg-secondary">Si dejas el precio vacío, se usa el precio base.</p>
       )}
+      <button
+        type="button"
+        aria-expanded={conSku}
+        onClick={() => setConSku((v) => !v)}
+        className="flex min-h-11 w-fit items-center gap-1.5 text-body-sm font-semibold text-fg-secondary transition-colors hover:text-fg"
+      >
+        Más opciones <span className="font-normal">· SKU por variante</span>
+        <ChevronDown aria-hidden strokeWidth={1.6} className={cn("size-4 transition-transform", conSku && "rotate-180")} />
+      </button>
     </div>
   );
 }

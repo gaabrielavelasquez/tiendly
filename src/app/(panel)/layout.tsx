@@ -1,5 +1,5 @@
 import { MobileTopbar, Sidebar } from "@/components/panel";
-import { avisosSinLeer, tiendaActual } from "@/lib/sesion";
+import { tiendaActual } from "@/lib/sesion";
 
 /**
  * Panel de la tienda (tema Tiendly, valores de :root). Desktop: barra lateral; la zona de cuenta va en la
@@ -10,7 +10,7 @@ export default function PanelLayout({ children }: { children: React.ReactNode })
     <div className="min-h-dvh bg-page lg:flex">
       <Sidebar />
       <div className="flex min-w-0 flex-1 flex-col">
-        <MobileTopbar nombreTienda={tiendaActual.nombre} duena={tiendaActual.duena} avisos={avisosSinLeer} />
+        <MobileTopbar nombreTienda={tiendaActual.nombre} duena={tiendaActual.duena} />
         {children}
       </div>
     </div>

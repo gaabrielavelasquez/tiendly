@@ -79,7 +79,7 @@ La identidad visual de Tiendly combina **velocidad ultra limpia**, **lenguaje mo
 - **Vidrio sobre la tarjeta protagonista (0021):** blanco al 10 %, `ring-1` blanco al 20 % y `backdrop-blur-md`. El blur todavía no tiene token: proponer `effect/blur` en Figma.
 - **Tarjeta protagonista:** `gradient/hero` (cobalto `#2563EB` → azul medianoche `#1B365D`, 135°) con texto blanco, filo interior de 1 px al 15 % y radio de tarjeta. Dentro, los bloques secundarios son vidrio (ver "Vidrio sobre la tarjeta protagonista"). Aprobada por Gabi.
 - **Dato de hoy en gráficos:** la barra de hoy del gráfico semanal va en cobalto sólido (`accent/base`), el resto de los días en `chart/bar`. Es un dato resaltado, no selección ni progreso. Aprobada por Gabi.
-- Las barras de progreso, los pasos y la línea de tiempo siguen en `indicator/fill`.
+- Las barras de progreso, los pasos y la línea de tiempo siguen en `indicator/fill`. El paso actual de "Tienda nueva" se resalta con `selection/subtle` + `selection/border` (0027).
 - *Alternativa evaluada y no aplicada:* fondo `#EFF6FF` con borde de 1.5 px y texto `#1D4ED8`. Para cambiar de estilo se editan solo las variables `selection/*` del modo Tiendly.
 
 ### Spark: acento cálido y regla del 1 % (decisión 0022)
@@ -110,7 +110,7 @@ La identidad visual de Tiendly combina **velocidad ultra limpia**, **lenguaje mo
 3. **Suave:** Cálido, cercano y acogedor con bordes redondeados y tonos crema (estilo Blank Street / Shop).
 
 ### Plan Pro (Monetización & Personalización Avanzada)
-- **Banner de Alto Impacto:** Portada a pantalla completa con overlay dinámico (estilo Subway / Uniqlo).
+- **Banner de Alto Impacto:** Portada a pantalla completa con overlay dinámico (estilo Subway / Uniqlo). Componente `PortadaPro`; las tiendas Free usan la portada de Figma: solo foto y, debajo, titular y bajada (0027).
 - **Remover Marca de Agua:** Opción para ocultar el sello "Powered by Tiendly".
 - **Color HEX Infinito:** Selector libre de color de acento y tipografías exclusivas curadas.
 - **Badges de Stock Personalizables:** Stickers sobre productos (ej. *"Últimas 2 unidades"*, *"Edición Limitada"*).

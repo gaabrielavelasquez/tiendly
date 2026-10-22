@@ -4,18 +4,18 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type { Filtro, Producto } from "../types";
 import { contarPorFiltro, duplicar, filtrarProductos } from "../lib/reglas";
 
-/** Lo último que se archivó (uno o varios), tal como estaba, para poder deshacer. */
-export type Archivado = { productos: Producto[] };
+/** Lo último que se pausó (uno o varios), tal como estaba, para poder deshacer. */
+export type Pausado = { productos: Producto[] };
 
 /**
  * Estado del catálogo en el cliente (hasta tener backend): filtro sincronizado con la URL,
- * búsqueda, selección para acciones masivas, y archivar (con deshacer durante unos segundos) o duplicar.
+ * búsqueda, selección para acciones masivas (solo desktop), pausar (con deshacer durante unos segundos) y duplicar.
  */
 export function useCatalogo(inicial: Producto[], filtroInicial: Filtro) {
   const [lista, setLista] = useState(inicial);
   const [filtro, setFiltroState] = useState<Filtro>(filtroInicial);
   const [busqueda, setBusqueda] = useState("");
-  const [archivado, setArchivado] = useState<Archivado | null>(null);
+  const [pausado, setPausado] = useState<Pausado | null>(null);
   const [seleccion, setSeleccion] = useState<Set<string>>(() => new Set());
   const timer = useRef<number | undefined>(undefined);
 
@@ -31,28 +31,28 @@ export function useCatalogo(inicial: Producto[], filtroInicial: Filtro) {
     window.history.replaceState(null, "", url);
   }, []);
 
-  /** Archiva uno o varios productos de una vez. */
-  const archivar = useCallback(
+  /** Pausa uno o varios productos de una vez: dejan de verse en la tienda. */
+  const pausar = useCallback(
     (ids: string[]) => {
       const productos = lista.filter((p) => ids.includes(p.id));
       if (!productos.length) return;
-      setArchivado({ productos });
-      setLista((prev) => prev.map((p) => (ids.includes(p.id) ? { ...p, estado: "archivado" } : p)));
+      setPausado({ productos });
+      setLista((prev) => prev.map((p) => (ids.includes(p.id) ? { ...p, estado: "pausado" } : p)));
       setSeleccion((prev) => new Set([...prev].filter((id) => !ids.includes(id))));
       window.clearTimeout(timer.current);
-      timer.current = window.setTimeout(() => setArchivado(null), 6000);
+      timer.current = window.setTimeout(() => setPausado(null), 6000);
     },
     [lista],
   );
 
   /** Devuelve el producto tal como estaba (incluido su estado anterior). */
   const deshacer = useCallback(() => {
-    if (!archivado) return;
-    const antes = new Map(archivado.productos.map((p) => [p.id, p]));
+    if (!pausado) return;
+    const antes = new Map(pausado.productos.map((p) => [p.id, p]));
     setLista((prev) => prev.map((p) => antes.get(p.id) ?? p));
-    setArchivado(null);
+    setPausado(null);
     window.clearTimeout(timer.current);
-  }, [archivado]);
+  }, [pausado]);
 
   const duplicarProducto = useCallback((id: string) => {
     setLista((prev) => {
@@ -64,7 +64,7 @@ export function useCatalogo(inicial: Producto[], filtroInicial: Filtro) {
   const visibles = useMemo(() => filtrarProductos(lista, filtro, busqueda), [lista, filtro, busqueda]);
   const conteos = useMemo(() => contarPorFiltro(lista), [lista]);
 
-  // Solo cuenta lo que se ve: si la búsqueda oculta un producto marcado, no se archiva "a ciegas".
+  // Solo cuenta lo que se ve: si la búsqueda oculta un producto marcado, no se pausa "a ciegas".
   const seleccionVisible = useMemo(() => visibles.filter((p) => seleccion.has(p.id)).map((p) => p.id), [visibles, seleccion]);
 
   const alternar = useCallback((id: string) => {
@@ -85,7 +85,7 @@ export function useCatalogo(inicial: Producto[], filtroInicial: Filtro) {
   const limpiarSeleccion = useCallback(() => setSeleccion(new Set()), []);
 
   return {
-    visibles, conteos, filtro, setFiltro, busqueda, setBusqueda, archivar, deshacer, archivado, duplicar: duplicarProducto,
+    visibles, conteos, filtro, setFiltro, busqueda, setBusqueda, pausar, deshacer, pausado, duplicar: duplicarProducto,
     seleccion, seleccionVisible, alternar, alternarTodos, limpiarSeleccion,
   };
 }

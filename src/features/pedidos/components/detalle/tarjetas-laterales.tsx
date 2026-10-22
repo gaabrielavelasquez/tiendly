@@ -7,7 +7,7 @@ import { celularVisible, iniciales, whatsappCliente } from "../../lib/reglas";
 
 type Props = { pedido: Pedido; detalle: DetallePedido };
 
-/** Cliente: avatar, nombre, WhatsApp con "Contactar" (mensaje con el número de pedido) y correo. */
+/** Cliente: avatar, nombre, WhatsApp con "Contactar" (mensaje con el número de pedido) y correo, solo si lo dejó (decisión 0027). */
 export function TarjetaCliente({ pedido, detalle }: Props) {
   const { nombre, celular } = pedido.cliente;
   return (
@@ -31,16 +31,14 @@ export function TarjetaCliente({ pedido, detalle }: Props) {
         <img src="/icons/whatsapp.svg" alt="" width={20} height={20} />
         <span>Contactar por WhatsApp</span>
       </a>
-      <p className="flex items-center gap-2 text-body-sm">
-        <Mail aria-hidden strokeWidth={1.6} className="size-4 shrink-0 text-icon" />
-        {detalle.email ? (
+      {detalle.email && (
+        <p className="flex items-center gap-2 text-body-sm">
+          <Mail aria-hidden strokeWidth={1.6} className="size-4 shrink-0 text-icon" />
           <a href={`mailto:${detalle.email}`} className="link-text truncate">
             {detalle.email}
           </a>
-        ) : (
-          <span className="text-fg-secondary">Sin correo: compró solo con WhatsApp.</span>
-        )}
-      </p>
+        </p>
+      )}
     </TarjetaSeccion>
   );
 }

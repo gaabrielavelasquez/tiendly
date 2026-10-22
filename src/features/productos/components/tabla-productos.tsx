@@ -18,14 +18,13 @@ type TablaProps = {
   onAlternar: (id: string) => void;
   onAlternarTodos: () => void;
   onDuplicar: (id: string) => void;
-  onArchivar: (id: string) => void;
 };
 
 /**
  * Tabla de desktop: casilla por fila + maestro, datos en Inter, encabezados en Outfit SemiBold,
- * filas con aire (py-4). Entrada escalonada sutil y salida suave al archivar.
+ * filas con aire (py-4). Entrada escalonada sutil y salida suave al cambiar de filtro.
  */
-export function TablaProductos({ productos, seleccion, onAlternar, onAlternarTodos, onDuplicar, onArchivar }: TablaProps) {
+export function TablaProductos({ productos, seleccion, onAlternar, onAlternarTodos, onDuplicar }: TablaProps) {
   const reduce = useReducedMotion();
   const marcados = productos.filter((p) => seleccion.has(p.id)).length;
   return (
@@ -83,7 +82,7 @@ export function TablaProductos({ productos, seleccion, onAlternar, onAlternarTod
                   <CeldaPrecio p={p} />
                 </td>
                 <td className="w-px py-4 pr-6 pl-4">
-                  <AccionesFila id={p.id} nombre={p.nombre} onDuplicar={() => onDuplicar(p.id)} onArchivar={() => onArchivar(p.id)} />
+                  <AccionesFila id={p.id} nombre={p.nombre} onDuplicar={() => onDuplicar(p.id)} />
                 </td>
               </motion.tr>
             );

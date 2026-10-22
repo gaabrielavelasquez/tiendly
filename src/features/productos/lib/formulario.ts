@@ -17,7 +17,7 @@ export type FormProducto = {
   tallas: string[];
   /** Una entrada por combinación, con clave `color|talla`. */
   variantes: Record<string, VarianteForm>;
-  estado: "activo" | "borrador";
+  estado: "activo" | "pausado";
   categorias: Categoria[];
   imagenes: ImagenForm[];
 };
@@ -58,7 +58,7 @@ export function combinaciones(colores: string[], tallas: string[]) {
 
 export const formVacio = (): FormProducto => ({
   nombre: "", descripcion: "", precio: "", precioAntes: "", colores: [], tallas: [], variantes: {},
-  estado: "borrador", categorias: [], imagenes: [],
+  estado: "pausado", categorias: [], imagenes: [],
 });
 
 /** Prellena el formulario para editar un producto existente. */
@@ -73,7 +73,7 @@ export function desdeProducto(p: Producto): FormProducto {
     colores,
     tallas,
     variantes: Object.fromEntries(p.variantes.map((v) => [clave(v.color, v.talla), { ...VARIANTE_VACIA, stock: String(v.stock) }])),
-    estado: p.estado === "borrador" ? "borrador" : "activo",
+    estado: p.estado,
     categorias: p.categorias,
     // Todas las fotos del producto (de todos los colores), sin repetir.
     imagenes: [...new Set(Object.values(p.fotos ?? {}).flat().concat(p.imagen ? [p.imagen] : []))].map((url, i) => ({ id: `actual-${i}`, url, nombre: p.nombre })),

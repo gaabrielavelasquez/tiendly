@@ -2,7 +2,6 @@
 
 import { Search, X } from "lucide-react";
 import { cn } from "@/lib/cn";
-import { useAtajoBusqueda } from "./use-atajo-busqueda";
 
 type BuscadorProps = {
   id: string;
@@ -14,9 +13,8 @@ type BuscadorProps = {
   className?: string;
 };
 
-/** Buscador de listas del panel. ⌘K / Ctrl K lo enfoca desde cualquier parte de la página. */
+/** Buscador de listas del panel. Escape lo borra. Sin atajo de teclado global (decisión 0027). */
 export function Buscador({ id, etiqueta, placeholder, valor, onCambio, className }: BuscadorProps) {
-  const { ref, pista } = useAtajoBusqueda<HTMLInputElement>();
   return (
     <div
       className={cn(
@@ -30,7 +28,6 @@ export function Buscador({ id, etiqueta, placeholder, valor, onCambio, className
         {etiqueta}
       </label>
       <input
-        ref={ref}
         id={id}
         type="search"
         value={valor}
@@ -40,7 +37,7 @@ export function Buscador({ id, etiqueta, placeholder, valor, onCambio, className
         autoComplete="off"
         className="h-full min-w-0 flex-1 bg-transparent text-body text-fg outline-none placeholder:text-fg-tertiary [&::-webkit-search-cancel-button]:hidden"
       />
-      {valor ? (
+      {valor && (
         <button
           type="button"
           aria-label="Borrar búsqueda"
@@ -49,10 +46,6 @@ export function Buscador({ id, etiqueta, placeholder, valor, onCambio, className
         >
           <X aria-hidden strokeWidth={1.6} className="size-4" />
         </button>
-      ) : (
-        <kbd className="hidden h-6 items-center rounded-theme border border-line-subtle bg-sunken px-1.5 font-body text-label text-fg-secondary lg:flex">
-          {pista}
-        </kbd>
       )}
     </div>
   );

@@ -7,6 +7,7 @@ import { leerFiltro } from "@/features/pedidos/lib/reglas";
 export const metadata: Metadata = { title: "Pedidos · Tiendly" };
 
 type PageProps = { searchParams: Promise<Record<string, string | string[] | undefined>> };
+import { herramientasDev } from "@/lib/entorno";
 
 /**
  * Pedidos (decisión 0010). Datos simulados: ?escenario=pedidos (por defecto), vacio o error.
@@ -14,7 +15,7 @@ type PageProps = { searchParams: Promise<Record<string, string | string[] | unde
  */
 export default async function PanelPedidos({ searchParams }: PageProps) {
   const { escenario, estado } = await searchParams;
-  const pedidos = await obtenerPedidos(leerEscenario(escenario));
+  const pedidos = await obtenerPedidos(leerEscenario(herramientasDev ? escenario : undefined));
   return (
     <PanelMain>
       <PedidosVista pedidos={pedidos} ahora={AHORA} filtroInicial={leerFiltro(Array.isArray(estado) ? estado[0] : estado)} />

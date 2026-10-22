@@ -1,19 +1,19 @@
 "use client";
 
-import { Archive } from "lucide-react";
+import { Pause } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
 import { useReducedMotion } from "@/components/motion/use-reduced-motion";
 import { Button } from "@/components/ui";
 import { plural } from "@/lib/formato";
 import { motionTokens } from "@/styles/tokens";
 
-type BarraSeleccionProps = { cantidad: number; onArchivar: () => void; onLimpiar: () => void };
+type BarraSeleccionProps = { cantidad: number; onPausar: () => void; onLimpiar: () => void };
 
 /**
- * Acciones masivas: aparece al marcar productos. Hoy archiva; aquí se suman las próximas
+ * Acciones masivas (solo desktop, decisión 0027): aparece al marcar productos. Hoy pausa; aquí se suman las próximas
  * (publicar, cambiar precio, ajustar stock) sin rehacer la tabla.
  */
-export function BarraSeleccion({ cantidad, onArchivar, onLimpiar }: BarraSeleccionProps) {
+export function BarraSeleccion({ cantidad, onPausar, onLimpiar }: BarraSeleccionProps) {
   const reduce = useReducedMotion();
   return (
     <AnimatePresence initial={false}>
@@ -32,10 +32,10 @@ export function BarraSeleccion({ cantidad, onArchivar, onLimpiar }: BarraSelecci
             <Button variant="ghost" size="sm" onClick={onLimpiar}>
               Quitar selección
             </Button>
-            <Button variant="secondary" size="sm" onClick={onArchivar}>
+            <Button variant="secondary" size="sm" onClick={onPausar}>
               <span className="flex items-center gap-1.5">
-                <Archive aria-hidden strokeWidth={1.6} className="size-4" />
-                Archivar
+                <Pause aria-hidden strokeWidth={1.6} className="size-4" />
+                Pausar
               </span>
             </Button>
           </div>

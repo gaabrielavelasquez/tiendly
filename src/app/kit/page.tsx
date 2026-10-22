@@ -1,9 +1,12 @@
 import { Inbox } from "lucide-react";
+import { notFound } from "next/navigation";
+import { herramientasDev } from "@/lib/entorno";
 import { Badge, Button, Card, EmptyState, Skeleton } from "@/components/ui";
 import { ChipsDemo } from "./chips-demo";
 
-/** UI Kit en vivo: verifica que cada componente consuma solo tokens. */
+/** UI Kit en vivo: verifica que cada componente consuma solo tokens. Solo fuera de producción (decisión 0027). */
 export default function Kit() {
+  if (!herramientasDev) notFound();
   return (
     <main className="mx-auto flex max-w-3xl flex-col gap-8 px-4 py-10">
       <header className="flex flex-col gap-2">

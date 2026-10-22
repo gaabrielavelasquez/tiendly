@@ -10,7 +10,7 @@ import { motionTokens } from "@/styles/tokens";
 import { useFormularioProducto } from "../../hooks/use-formulario-producto";
 import type { FormProducto } from "../../lib/formulario";
 import { BarraAcciones } from "./barra-acciones";
-import { EditorDescripcion } from "./editor-descripcion";
+import { CampoDescripcion } from "./campo-descripcion";
 import { TarjetaMedia } from "./tarjeta-media";
 import { TarjetaPrecios } from "./tarjeta-precios";
 import { TarjetaVariantes } from "./tarjeta-variantes";
@@ -55,7 +55,7 @@ export function FormularioProducto({ titulo, inicial }: FormularioProps) {
               onChange={(e) => f.set("nombre", e.target.value)}
               error={f.errores.nombre}
             />
-            <EditorDescripcion valor={f.form.descripcion} onCambio={(v) => f.set("descripcion", v)} />
+            <CampoDescripcion valor={f.form.descripcion} onCambio={(v) => f.set("descripcion", v)} />
           </Tarjeta>
           <TarjetaMedia imagenes={f.form.imagenes} onAgregar={f.agregarImagenes} onQuitar={f.quitarImagen} />
           <TarjetaPrecios form={f.form} errores={f.errores} onCambio={(k, v) => f.set(k, v)} />

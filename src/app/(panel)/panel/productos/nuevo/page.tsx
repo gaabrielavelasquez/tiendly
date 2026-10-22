@@ -5,7 +5,7 @@ import { formVacio } from "@/features/productos/lib/formulario";
 
 export const metadata: Metadata = { title: "Nuevo producto · Tiendly" };
 
-/** Crear producto. Arranca como borrador: no se ve en la tienda hasta activarlo. */
+/** Crear producto. Arranca pausado: no se ve en la tienda hasta activarlo. */
 export default function NuevoProductoPage() {
   return (
     <PanelMain className="lg:pt-0">

@@ -9,7 +9,7 @@ type HoyCardProps = { ventas: number; pedidos: number; corte: string; className?
 
 /**
  * "Hoy": la tarjeta protagonista del panel. Degradado gradient/hero (cobalto → azul medianoche),
- * filo interior de 1 px al 15 % y radio de tarjeta (12 px). Excepción a 0019 (decisión 0020). El monto sube hasta su valor (Motion Primitives).
+ * filo interior de 1 px al 15 % y radio de tarjeta. Tarjeta protagonista de la pantalla (decisiones 0020 y 0026). El monto sube hasta su valor (Motion Primitives).
  */
 export function HoyCard({ ventas, pedidos, corte, className }: HoyCardProps) {
   return (
@@ -37,13 +37,7 @@ export function HoyCard({ ventas, pedidos, corte, className }: HoyCardProps) {
           <span className="text-caption text-fg-inverse/70">{pedidos === 1 ? "pedido" : "pedidos"}</span>
         </div>
       </div>
-      {pedidos > 0 && (
-        <div className="mt-auto flex items-center justify-between rounded-theme bg-fg-inverse/10 px-4 py-2.5 ring-1 ring-fg-inverse/20 backdrop-blur-md">
-          <span className="text-caption text-fg-inverse/70">Ticket promedio</span>
-          <span className="text-body-sm font-bold tabular-nums">{formatoSoles(ventas / pedidos)}</span>
-        </div>
-      )}
-      <p className="text-caption text-fg-inverse/70">Solo cuenta pedidos pagados.</p>
+      <p className="mt-auto text-caption text-fg-inverse/70">Solo cuenta pedidos pagados.</p>
     </Card>
   );
 }

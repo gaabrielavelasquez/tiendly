@@ -31,8 +31,15 @@ export const TALLAS_CM: Record<string, string> = {
   "35": "22.5 cm", "36": "23 cm", "37": "23.5 cm", "38": "24 cm", "39": "24.5 cm", "40": "25 cm",
 };
 
-/** Portada de la vitrina: fotos de campaña (lifestyle) de la marca, titular y llamado a la acción. */
+/** Portada Free (Figma, Home): una foto con los zapatos puestos y, debajo, titular y bajada. */
 export const PORTADA = {
+  foto: { src: "/heather/chloe-silver-1.jpg", alt: "Balerinas Chloé en plata, vistas desde arriba" },
+  titulo: "Calzado de cuero hecho a mano en Lima",
+  bajada: "Modelos en cuero natural. Cada par toma alrededor de dos semanas.",
+};
+
+/** Portada Pro (V1.1): fotos de campaña con titular encima y llamado a la acción. */
+export const PORTADA_PRO = {
   temporada: "Otoño · Invierno 2026",
   titulo: "Nueva colección",
   bajada: "Calzado hecho a mano en Lima, en cuero natural y tallas del 35 al 40.",

@@ -16,7 +16,8 @@ export function CeldaProducto({ p }: { p: Producto }) {
           {p.nombre}
         </Link>
         <span className="truncate text-caption text-fg-secondary">
-          {p.sku} · {resumenVariantes(p)}
+          {p.sku ? `${p.sku} · ` : ""}
+          {resumenVariantes(p)}
         </span>
       </div>
     </div>
@@ -25,10 +26,10 @@ export function CeldaProducto({ p }: { p: Producto }) {
 
 /**
  * Estado = una sola señal. Activo: el nivel de stock (En stock / Bajo stock / Agotado).
- * Borrador: "Borrador" en neutro, porque todavía no se vende y su stock no es la noticia.
+ * Pausado: "Pausado" en neutro, porque no se ve en la tienda y su stock no es la noticia.
  */
 export function CeldaEstado({ p }: { p: Producto }) {
-  return p.estado === "borrador" ? <Badge>Borrador</Badge> : <BadgeStock nivel={nivelStock(p)} />;
+  return p.estado === "pausado" ? <Badge>Pausado</Badge> : <BadgeStock nivel={nivelStock(p)} />;
 }
 
 /** Solo números: unidades totales y, si hace falta reponer, cuántas variantes se agotaron. */
