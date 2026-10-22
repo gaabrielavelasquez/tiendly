@@ -7,6 +7,7 @@ import { PanelMain } from "@/components/panel";
 import { Button, Card, EmptyState } from "@/components/ui";
 import { STORAGE } from "../lib/borrador";
 import { cn } from "@/lib/cn";
+import type { RubroId } from "@/features/onboarding/lib/rubros";
 import { useAfiliacion } from "../hooks/use-afiliacion";
 import { AfiliacionDialogos, type Dialogo } from "./afiliacion-dialogos";
 import { AfiliacionSkeleton } from "./afiliacion-skeleton";
@@ -19,8 +20,8 @@ import { PasoRevision } from "./paso-revision";
 import { SolicitudEnviada } from "./solicitud-enviada";
 import { Stepper } from "./stepper";
 
-export function AfiliacionVista({ escenario, soporte }: { escenario?: string; soporte?: string }) {
-  const m = useAfiliacion(escenario);
+export function AfiliacionVista({ escenario, soporte, rubros }: { escenario?: string; soporte?: string; rubros: RubroId[] }) {
+  const m = useAfiliacion(escenario, rubros);
   const router = useRouter();
   const [dialogo, setDialogo] = useState<Dialogo>(null);
   const [errorSalir, setErrorSalir] = useState("");

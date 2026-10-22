@@ -1,11 +1,14 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
+import { guardarRubros } from "@/features/onboarding/lib/acciones";
+import type { RubroId } from "@/features/onboarding/lib/rubros";
 import { consultarRuc, enviarSolicitud } from "../lib/acciones";
 import { ejemplo, leerBorrador, STORAGE, VACIO } from "../lib/borrador";
 import { validarCuenta, validarNegocio, validarRepresentante, validarRuc } from "../lib/reglas";
 import type { Borrador, Datos, Errores } from "../types";
 
-export function useAfiliacion(escenario?: string) {
+/** `rubros`: los del perfil del negocio (servidor). Mandan sobre el borrador: hay una sola fuente. */
+export function useAfiliacion(escenario?: string, rubros: RubroId[] = []) {
   const [b, setB] = useState<Borrador>(VACIO);
   const [estado, setEstado] = useState<"cargando" | "lista" | "error">("cargando");
   const [errores, setErrores] = useState<Errores>({});
@@ -20,9 +23,9 @@ export function useAfiliacion(escenario?: string) {
       if (escenario === "error") throw new Error("Error simulado.");
       const guardado = sessionStorage.getItem(STORAGE);
       const datos = escenario === "vacio" ? VACIO : escenario === "observada" ? ejemplo("observada") : escenario === "revision" ? ejemplo("revision") : escenario === "aprobada" ? ejemplo("aprobada") : guardado ? leerBorrador(guardado) : VACIO;
-      setB(datos); setEstado("lista");
+      setB({ ...datos, datos: { ...datos.datos, rubros } }); setEstado("lista");
     } catch { setEstado("error"); }
-  }, [escenario]);
+  }, [escenario]); // los rubros del servidor solo se leen al cargar
   useEffect(() => {
     if (estado !== "lista") return;
     try { sessionStorage.setItem(STORAGE, JSON.stringify(b)); }
@@ -62,6 +65,11 @@ export function useAfiliacion(escenario?: string) {
     const e = b.paso === 1 ? validarNegocio(b.datos) : b.paso === 2 ? validarRepresentante(b.datos) : b.paso === 3 ? validarCuenta(b.datos) : {};
     setErrores(e);
     if (Object.keys(e).length) return;
+    if (b.paso === 1) {
+      // Los rubros editados aquí actualizan el perfil del negocio (el mismo dato que eligió en el onboarding).
+      const r = await guardarRubros(b.datos.rubros).catch(() => ({ error: "No pudimos guardar tus rubros. Inténtalo de nuevo." }));
+      if ("error" in r) { setErrores({ rubros: r.error }); return; }
+    }
     ir(editando ? 4 : b.paso + 1); setEditando(false);
   }
   async function enviar() {

@@ -1,10 +1,9 @@
 import { Check, LoaderCircle, Lock } from "lucide-react";
 import { Button, Field } from "@/components/ui";
 import type { ModeloAfiliacion } from "../hooks/use-afiliacion";
-import { OPCIONES_RUBRO } from "../lib/reglas";
-import { CampoSelect } from "./campo-select";
+import { RubroChips } from "@/features/onboarding/components/rubro-chips";
 
-/** A2 · Tu negocio (Figma 106:59): RUC → SUNAT; después, nombre de la tienda, rubro y dirección fiscal (de SUNAT, bloqueada). */
+/** A2 · Tu negocio (Figma 106:59): RUC → SUNAT; después, nombre de la tienda, rubros (los del onboarding, editables) y dirección fiscal (de SUNAT, bloqueada). */
 export function PasoNegocio({ m, ayuda, whatsapp }: { m: ModeloAfiliacion; ayuda: () => void; whatsapp: () => void }) {
   const noHabido = m.negocio?.condicion === "no-habido";
   return <div className="flex flex-col gap-5">
@@ -25,7 +24,7 @@ export function PasoNegocio({ m, ayuda, whatsapp }: { m: ModeloAfiliacion; ayuda
     </div>}
     {m.negocio && !noHabido && <>
       <Field label="Nombre de tu tienda" value={m.datos.tienda} maxLength={60} error={m.errores.tienda} hint="Es el nombre que verán tus clientes. Puede ser tu marca, no tiene que ser la razón social." onChange={e => m.cambiar("tienda", e.target.value)} />
-      <CampoSelect label="Rubro" value={m.datos.rubro} placeholder="Elige tu rubro" opciones={OPCIONES_RUBRO.map(r => ({ valor: r, texto: r }))} error={m.errores.rubro} onChange={v => m.cambiar("rubro", v)} />
+      <RubroChips value={m.datos.rubros} onChange={r => m.cambiar("rubros", r)} error={m.errores.rubros} />
       <div className="flex flex-col gap-1.5">
         <span className="text-body-sm font-semibold text-fg">Dirección fiscal</span>
         <p className="flex min-h-10 items-center gap-2 rounded-button bg-sunken px-3 py-2 text-body text-fg-secondary"><Lock aria-hidden className="size-4 shrink-0" /><span>{m.negocio.direccion}</span></p>

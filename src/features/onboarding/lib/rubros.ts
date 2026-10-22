@@ -30,3 +30,8 @@ export function alternarRubro(actuales: readonly RubroId[], id: RubroId): RubroI
   else set.add(id);
   return RUBROS.map((r) => r.id).filter((r) => set.has(r));
 }
+
+export const esRubro = (id: unknown): id is RubroId => RUBROS.some((r) => r.id === id);
+
+/** «Calzado, Accesorios»: para resúmenes. */
+export const nombresRubros = (ids: readonly RubroId[]) => RUBROS.filter((r) => ids.includes(r.id)).map((r) => r.label).join(", ");

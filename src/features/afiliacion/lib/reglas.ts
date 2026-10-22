@@ -1,4 +1,3 @@
-import { RUBROS } from "@/features/onboarding/lib/rubros";
 import { tiendaActual } from "@/lib/sesion";
 import type { Datos, Errores } from "../types";
 
@@ -8,9 +7,8 @@ export const BANCOS = [
   { id: "interbank", nombre: "Interbank", prefijo: "003" },
   { id: "bbva", nombre: "BBVA", prefijo: "011" },
 ] as const;
-/** Figma A2: el nombre de la tienda se precarga (se puede cambiar); el rubro sale de la lista del onboarding. */
-export const DATOS_VACIOS: Datos = { ruc: "", tienda: tiendaActual.nombre, rubro: "", nombre: "", dni: "", cargo: "", celular: "", correo: "", banco: "", cci: "", tipoCuenta: "" };
-export const OPCIONES_RUBRO = RUBROS.map((r) => r.label);
+/** Figma A2: el nombre de la tienda se precarga (se puede cambiar); los rubros vienen del onboarding (perfil del negocio). */
+export const DATOS_VACIOS: Datos = { ruc: "", tienda: tiendaActual.nombre, rubros: [], nombre: "", dni: "", cargo: "", celular: "", correo: "", banco: "", cci: "", tipoCuenta: "" };
 /** Figma A3. Con RUC 10 (persona natural) el cargo es «Titular». */
 export const CARGOS = ["Titular gerente", "Gerente general", "Apoderado", "Titular"] as const;
 /** Figma A4. */
@@ -21,7 +19,7 @@ export const nombreTipoCuenta = (id: Datos["tipoCuenta"]) => TIPOS_CUENTA.find((
 export function validarNegocio(datos: Datos): Errores {
   const e: Errores = {};
   if (datos.tienda.trim().length < 2) e.tienda = "Escribe el nombre de tu tienda.";
-  if (!datos.rubro) e.rubro = "Elige el rubro de tu negocio.";
+  if (!datos.rubros.length) e.rubros = "Elige al menos una opción.";
   return e;
 }
 export function validarRuc(ruc: string): string | undefined {

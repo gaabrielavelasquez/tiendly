@@ -1,14 +1,16 @@
+import { esRubro } from "@/features/onboarding/lib/rubros";
 import type { Borrador, Datos, Solicitud } from "../types";
 import { BANCOS, DATOS_VACIOS } from "./reglas";
 export const STORAGE = "tiendly:afiliacion:heather";
 export const VACIO: Borrador = { datos: DATOS_VACIOS, negocio: null, paso: 0, solicitud: null };
 export function leerBorrador(valor: string): Borrador {
   const b = JSON.parse(valor) as Borrador;
-  // Borradores guardados antes de sumar tienda, rubro, cargo y tipo de cuenta: se completan vacíos.
+  // Borradores guardados antes de sumar tienda, rubros, cargo y tipo de cuenta: se completan vacíos (el rubro único de antes se descarta).
   if (b?.datos) b.datos = { ...DATOS_VACIOS, ...b.datos };
   if (b?.solicitud?.datos) b.solicitud.datos = { ...DATOS_VACIOS, ...b.solicitud.datos };
+  if (b?.datos && !(Array.isArray(b.datos.rubros) && b.datos.rubros.every(esRubro))) b.datos.rubros = [];
   if (!b || !b.datos || !Number.isInteger(b.paso) || b.paso < 0 || b.paso > 6) throw new Error("Borrador no válido.");
-  for (const key of Object.keys(DATOS_VACIOS) as (keyof Datos)[]) if (typeof b.datos[key] !== "string") throw new Error("Datos incompletos.");
+  for (const key of Object.keys(DATOS_VACIOS) as (keyof Datos)[]) if (key !== "rubros" && typeof b.datos[key] !== "string") throw new Error("Datos incompletos.");
   if (b.datos.banco && !BANCOS.some(bank => bank.id === b.datos.banco)) throw new Error("Banco no válido.");
   if (b.paso > 1 && !b.negocio) throw new Error("Falta el negocio.");
   if (b.paso > 4 && !b.solicitud) throw new Error("Falta la solicitud.");
@@ -16,7 +18,7 @@ export function leerBorrador(valor: string): Borrador {
   return b;
 }
 export function ejemplo(estado: Solicitud["estado"]): Borrador {
-  const datos: Datos = { ruc: "20456789012", tienda: "Heather", rubro: "Calzado", nombre: "Cecilia Flores García", dni: "45678901", cargo: "Titular gerente", celular: "987654321", correo: "cecilia@example.com", banco: "bcp", cci: estado === "observada" ? "00312345678901234567" : "00212345678901234567", tipoCuenta: "corriente" };
+  const datos: Datos = { ruc: "20456789012", tienda: "Heather", rubros: ["calzado", "accesorios"], nombre: "Cecilia Flores García", dni: "45678901", cargo: "Titular gerente", celular: "987654321", correo: "cecilia@example.com", banco: "bcp", cci: estado === "observada" ? "00312345678901234567" : "00212345678901234567", tipoCuenta: "corriente" };
   const negocio = { ruc: datos.ruc, razonSocial: "Heather Calzado S. A. C.", direccion: "Av. de la Moda 123, Miraflores, Lima", tipo: "empresa" as const, condicion: "habido" as const };
   return { datos, negocio, paso: 6, solicitud: { numero: "AF-DEMO0001", enviada: "2026-10-16T15:00:00-05:00", respuesta: "2026-10-30T18:00:00-05:00", estado, datos, negocio } };
 }
