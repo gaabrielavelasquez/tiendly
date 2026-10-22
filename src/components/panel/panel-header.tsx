@@ -1,13 +1,13 @@
-import { ZonaUsuario } from "@/components/panel";
-import { avisosSinLeer } from "../lib/mock";
+import { avisosSinLeer, tiendaActual } from "@/lib/sesion";
+import { ZonaUsuario } from "./zona-usuario";
 
-type EncabezadoProps = { titulo: string; subtitulo: string; duena: string; accion?: React.ReactNode };
+type PanelHeaderProps = { titulo: string; subtitulo: string; accion?: React.ReactNode };
 
 /**
- * Cabecera de Inicio. En desktop, saludo, acciones y zona de cuenta comparten un mismo eje
- * horizontal (items-center en una sola fila). En móvil la zona de cuenta vive en la barra superior.
+ * Cabecera de cada página del panel. En desktop, título, acciones y zona de cuenta comparten un
+ * mismo eje horizontal (una sola fila, items-center). En móvil la zona de cuenta vive en la barra superior.
  */
-export function Encabezado({ titulo, subtitulo, duena, accion }: EncabezadoProps) {
+export function PanelHeader({ titulo, subtitulo, accion }: PanelHeaderProps) {
   return (
     <header className="flex items-center gap-4 lg:gap-6">
       <div className="flex flex-1 flex-col gap-1">
@@ -21,7 +21,7 @@ export function Encabezado({ titulo, subtitulo, duena, accion }: EncabezadoProps
             <span aria-hidden className="h-6 w-px bg-line-subtle" />
           </>
         )}
-        <ZonaUsuario nombre={duena} avisos={avisosSinLeer} />
+        <ZonaUsuario nombre={tiendaActual.duena} avisos={avisosSinLeer} />
       </div>
     </header>
   );

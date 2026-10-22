@@ -8,19 +8,25 @@ const tocable = "relative flex size-12 items-center justify-center rounded-butto
 
 /**
  * Zona de cuenta: avisos + avatar. Cada uno ocupa 48 × 48 aunque el ícono sea chico (Botón ícono).
- * El punto de avisos va en indicator/fill y siempre acompañado de texto para lector de pantalla.
+ * El punto de avisos va en spark (regla del 1 %, decisión 0022) con un destello breve, y siempre
+ * acompañado de texto para lector de pantalla.
  */
 export function ZonaUsuario({ nombre, avisos, className }: ZonaUsuarioProps) {
   return (
     <div className={cn("flex items-center gap-1", className)}>
       <Link href="/panel/avisos" className={tocable} aria-label={avisos ? `Avisos: ${avisos} sin leer` : "Avisos"}>
         <Bell aria-hidden strokeWidth={1.6} className="size-6 text-icon" />
-        {avisos > 0 && <span aria-hidden className="absolute top-3 right-3 size-2 rounded-full bg-indicator ring-2 ring-surface" />}
+        {avisos > 0 && (
+          <span aria-hidden className="absolute top-3 right-3 flex size-2">
+            <span className="absolute inset-0 rounded-full bg-spark motion-safe:animate-spark" />
+            <span className="relative size-2 rounded-full bg-spark ring-2 ring-surface" />
+          </span>
+        )}
       </Link>
       <Link href="/panel/configuracion" className={tocable} aria-label={`Tu cuenta, ${nombre}`}>
         <span
           aria-hidden
-          className="flex size-9 items-center justify-center rounded-full bg-selected font-display-title text-body-sm text-on-selected shadow-soft"
+          className="flex size-9 items-center justify-center rounded-full bg-selected font-display-title text-body-sm text-on-selected shadow-card"
         >
           {nombre.charAt(0).toUpperCase()}
         </span>

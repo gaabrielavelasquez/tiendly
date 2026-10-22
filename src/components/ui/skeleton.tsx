@@ -3,7 +3,7 @@ import { cn } from "@/lib/cn";
 type SkeletonProps = { shape?: "line" | "block" | "circle"; className?: string };
 
 const shapes = {
-  line: "h-3 w-full rounded-sm",
+  line: "h-3 w-full rounded-theme",
   block: "h-40 w-full rounded-card",
   circle: "size-12 rounded-full",
 } as const;

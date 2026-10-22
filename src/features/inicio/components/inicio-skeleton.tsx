@@ -33,7 +33,7 @@ export function InicioSkeleton() {
         <div className="flex h-32 items-end gap-1 lg:h-48 lg:gap-3">
           {[0, 1, 2, 3, 4, 5, 6].map((i) => (
             <div key={i} className="flex h-full flex-1 justify-center">
-              <Skeleton className="h-full w-7 rounded-full lg:w-11" />
+              <Skeleton className="h-full w-6 rounded-theme lg:w-8" />
             </div>
           ))}
         </div>

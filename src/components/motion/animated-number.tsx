@@ -1,6 +1,7 @@
 "use client";
 
-import { motion, useReducedMotion, useSpring, useTransform, type SpringOptions } from "motion/react";
+import { motion, useSpring, useTransform, type SpringOptions } from "motion/react";
+import { useReducedMotion } from "@/components/motion/use-reduced-motion";
 import { useEffect } from "react";
 import { cn } from "@/lib/cn";
 

@@ -35,7 +35,7 @@ export function PanelNav({ colapsada = false, onNavigate }: PanelNavProps) {
                 aria-current={activo ? "page" : undefined}
                 title={colapsada ? label : undefined}
                 className={cn(
-                  "flex h-11 items-center gap-3 rounded-sm px-3 text-body-sm transition-colors lg:h-9",
+                  "flex h-11 items-center gap-3 rounded-theme px-3 text-body-sm transition-colors lg:h-9",
                   activo ? "bg-sunken font-bold text-fg" : "text-fg-secondary hover:bg-sunken hover:text-fg",
                   colapsada && "justify-center px-0",
                 )}

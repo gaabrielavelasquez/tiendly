@@ -16,7 +16,7 @@ export function PasosCard({ pasos, className }: PasosCardProps) {
   return (
     <Card as="section" aria-labelledby="pasos-titulo" className={cn("flex flex-col", className)}>
       <div className="flex flex-col gap-3 pb-4">
-        <h2 id="pasos-titulo" className="text-body font-bold text-fg">
+        <h2 id="pasos-titulo" className="encabezado-seccion text-fg">
           Pasos para arrancar tu tienda
         </h2>
         <p className="text-caption text-fg-secondary">
