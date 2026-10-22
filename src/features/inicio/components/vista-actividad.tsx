@@ -8,17 +8,19 @@ import { ParaAtender } from "./para-atender";
 import { SemanaCard } from "./semana-card";
 
 /**
- * Con el nombre de la dueña (Heather: Cecilia; o el nombre de pila de Google): "Hola, Cecilia 👋".
- * Sin nombre (el onboarding no lo pide, decisión 0013): "¡Hola! 👋" y la tienda debajo (decisión 0031; en móvil la tienda ya va en la barra superior).
+ * Con el nombre de la dueña (Heather: Cecilia; o el nombre de pila de Google): "Hola, Cecilia".
+ * Sin nombre (el onboarding no lo pide, decisión 0013): "¡Hola!" y la tienda debajo (decisión 0031; en móvil la tienda
+ * ya va en la barra superior). Sin emoji desde la ronda 4.
  */
-export const saludo = (duena?: string) => (duena ? `Hola, ${duena} 👋` : "¡Hola! 👋");
+export const saludo = (duena?: string) => (duena ? `Hola, ${duena}` : "¡Hola!");
 
 /**
  * I1 / ID1 · Inicio con actividad. Orden de la decisión 0012 con el pase 0031.
  * Móvil: saludo, Hoy, Para atender, Esta semana y acciones.
  * Desktop: Hoy (a la medida de su contenido) y Para atender lado a lado, Esta semana a todo el ancho; acciones en la cabecera.
  */
-export function VistaActividad({ datos }: { datos: InicioData }) {
+/** `grano`: variante de la tarjeta Hoy con textura sutil (ronda 4, se prueba con ?hoy=grano). */
+export function VistaActividad({ datos, grano = false }: { datos: InicioData; grano?: boolean }) {
   const hoy = resumenHoy(datos);
   const semana = totalSemana(datos);
 
@@ -38,7 +40,7 @@ export function VistaActividad({ datos }: { datos: InicioData }) {
         accion={<AccionesRapidas link={datos.tienda.link} />}
       />
       <div className="grid gap-10 lg:grid-cols-5 lg:items-start lg:gap-x-8 lg:gap-y-12">
-        <HoyCard className="lg:col-span-2" ventas={hoy.ventas} pedidos={hoy.pedidos} corte={hora(datos.ahora)} />
+        <HoyCard className="lg:col-span-2" grano={grano} ventas={hoy.ventas} pedidos={hoy.pedidos} corte={hora(datos.ahora)} />
         <ParaAtender className="lg:col-span-3" filas={pendientes(datos)} />
         <SemanaCard
           className="lg:col-span-5"

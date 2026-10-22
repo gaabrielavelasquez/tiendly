@@ -5,24 +5,24 @@ import { AnimatedNumber } from "@/components/motion/animated-number";
 import { Card } from "@/components/ui";
 import { cn } from "@/lib/cn";
 import { formatoSoles } from "../lib/format";
+import { Monto } from "./monto";
 
-type HoyCardProps = { ventas: number; pedidos: number; corte: string; className?: string };
+type HoyCardProps = { ventas: number; pedidos: number; corte: string; grano?: boolean; className?: string };
 
 /**
- * "Hoy": la tarjeta protagonista del panel. Degradado gradient/hero (cobalto → azul medianoche),
- * filo interior de 1 px al 15 % y radio de tarjeta (decisiones 0020 y 0026). Halo suave elevation/celebration
- * y cifra más grande (0031). El monto sube hasta su valor (Motion Primitives) y respeta "reducir movimiento".
+ * "Hoy": la tarjeta protagonista del panel (decisiones 0020 y 0026). Ronda 4 de 0031, término medio:
+ * degradado corto de cobalto a un cobalto apenas más hondo (`bg-hero-suave`, sin marino), filo superior de 1 px
+ * en blanco al 25 % y sombra neutra corta (elevation/card), sin halo azul. Variante opcional con grano muy sutil.
  */
-export function HoyCard({ ventas, pedidos, corte, className }: HoyCardProps) {
+export function HoyCard({ ventas, pedidos, corte, grano = false, className }: HoyCardProps) {
   return (
     <Card
       as="section"
       aria-labelledby="hoy-titulo"
-      className={cn(
-        "relative flex flex-col gap-8 border-transparent bg-hero text-fg-inverse shadow-celebration ring-1 ring-fg-inverse/15 ring-inset lg:p-8",
-        className,
-      )}
+      className={cn("relative isolate flex flex-col gap-8 overflow-hidden border-0 bg-hero-suave text-fg-inverse shadow-card lg:p-8", className)}
     >
+      <span aria-hidden className="pointer-events-none absolute inset-x-0 top-0 h-px bg-fg-inverse/25" />
+      {grano && <span aria-hidden className="pointer-events-none absolute inset-0 -z-10 bg-grano opacity-40 mix-blend-overlay" />}
       <div className="flex items-center justify-between gap-3">
         <h2 id="hoy-titulo" className="text-label font-medium tracking-widest text-fg-inverse/70 uppercase">
           Hoy
@@ -37,7 +37,7 @@ export function HoyCard({ ventas, pedidos, corte, className }: HoyCardProps) {
       </p>
       <div aria-hidden className="flex items-end gap-6">
         <div className="flex flex-1 flex-col gap-2">
-          <AnimatedNumber value={ventas} format={formatoSoles} className="font-metric text-display leading-none" />
+          <Monto valor={ventas} />
           <span className="text-caption text-fg-inverse/70">vendidos</span>
         </div>
         <div className="flex flex-col gap-2 border-l border-fg-inverse/15 pl-6">

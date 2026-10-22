@@ -27,6 +27,12 @@ Con el Core Loop terminado (PR #12), el panel funciona pero se siente denso: lie
 
 **Ronda 3 (22-oct, pulido final):** en desktop, "Esta semana" lleva el resumen a la izquierda y el gráfico acotado a la derecha (128 px de alto); tarjetas de tareas con texto un paso más grande e ícono arriba con el texto abajo (sin aire vacío al pie); en móvil el subtítulo del saludo es solo la fecha; filas y tarjetas enteras son el link (≥ 44 px); el espaciador de la barra inferior suma la zona segura de iPhone, verificado en un viewport real de 390 × 844.
 
+**Ronda 4 · "des-plantillar" (22-oct, experimento solo en Inicio):**
+- Saludo sin 👋 y sin halos de fondo (se quitan `bg-halo` y `elevation/celebration` en Hoy).
+- "Para atender hoy": lista con divisores finos en móvil y desktop, sin tarjetas ni sombras; ícono fino (trazo 1.6) del color del estado, sin contenedor; chevron simple. Toda la fila es el link (≥ 44 px). La jerarquía la dan el tamaño y el peso del texto.
+- "Hoy", término medio: degradado corto de cobalto (`accent/base`) a un cobalto apenas más hondo (`accent/pressed`), sin marino (`bg-hero-suave`); filo superior de 1 px blanco al 25 %; sombra neutra corta (`elevation/card`). Variante B con grano muy sutil (`bg-grano`, ruido SVG gris al 40 % en `overlay`), visible con `?hoy=grano`.
+- Montos (`Monto`): `S/` un escalón más chico que la cifra, decimales atenuados (`.00` al 50 %) y cifras tabulares en todo Inicio.
+
 ## Consecuencias
 
 - Los tokens (lienzo, `border/card`, `font/title-style`) y el componente `Card` ya aplican en todo el panel; los patrones (cabecera con halo, tarjetas de acción, encabezados con acción silenciosa, estados sin relleno) por ahora solo en Inicio.

@@ -14,12 +14,12 @@ export function InicioSkeleton() {
           <Skeleton className="h-10 w-1/2 lg:h-14" />
           <Skeleton className="w-3/4" />
         </Card>
-        <div className="flex flex-col gap-4 lg:col-span-3 lg:gap-5">
+        <div className="flex flex-col gap-2 lg:col-span-3">
           <Skeleton className="h-6 w-1/3" />
-          <div className="flex flex-col divide-y divide-line-card rounded-card border border-line-card bg-surface shadow-card lg:grid lg:grid-cols-3 lg:gap-4 lg:divide-y-0 lg:border-0 lg:bg-transparent lg:shadow-none">
+          <div className="flex flex-col divide-y divide-line-subtle">
             {[0, 1, 2].map((i) => (
-              <div key={i} className="flex items-center gap-4 px-5 py-4 lg:flex-col lg:items-start lg:rounded-card lg:border lg:border-line-card lg:bg-surface lg:p-5 lg:shadow-card">
-                <Skeleton shape="block" className="size-10 rounded-full" />
+              <div key={i} className="flex items-start gap-4 py-4 lg:py-5">
+                <Skeleton shape="block" className="size-5 rounded-theme" />
                 <div className="flex w-full flex-1 flex-col gap-2">
                   <Skeleton className="w-2/3" />
                   <Skeleton className="w-1/2" />

@@ -67,6 +67,7 @@ La identidad visual de Tiendly combina **velocidad ultra limpia**, **lenguaje mo
 > - **Botones de la cabecera:** una sola acción fuerte (primario) y, a su lado, el secundario con la misma forma y alto (`radius/button`, 40 px). Nunca primario y píldora juntos.
 > - **Estados:** ícono chico + texto de color. Badges rellenos solo para lo urgente (vence hoy, agotado).
 > - **Gráficos:** barras de 8 px (móvil) y 10 px (desktop), punta redonda y más aire entre días; hoy en cobalto sólido sin sombra. En desktop, "Esta semana" pone el resumen a la izquierda y el gráfico en un área acotada (3/5 del ancho, 128 px de alto) a la derecha. Cifras y barras entran con movimiento (Motion Primitives) y respetan "reducir movimiento".
+> - **Ronda 4 · "des-plantillar" (experimento solo en Inicio, en evaluación):** saludo sin emoji y sin halos; "Para atender hoy" como lista con divisores finos (sin tarjetas ni sombras), íconos finos del color del estado sin contenedor y chevron simple; "Hoy" con degradado corto de cobalto a `accent/pressed` (`bg-hero-suave`, sin marino), filo superior de 1 px blanco al 25 % y sombra neutra `elevation/card`; variante con grano sutil (`bg-grano`, `?hoy=grano`); montos con `S/` más chico, decimales atenuados y cifras tabulares (`Monto`). Si se aprueba, reemplaza lo de halo, emoji y tarjetas de acción de arriba.
 > - **No se copia:** gráficos en cada tarjeta, violeta, analítica densa.
 
 ### Tarjetas (Cards)

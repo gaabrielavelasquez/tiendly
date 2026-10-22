@@ -166,17 +166,13 @@
   font-family: var(--tl-font-display);
   font-weight: var(--tl-font-title-style);
 }
-/*
-  Halo del saludo de Inicio (decisión 0031): solo degradados CSS, sin WebGL. Durazno (glow/warm) arriba a la
-  izquierda, doble capa porque el token es del 4 %, y un toque celeste (glow/sky) a la derecha.
-*/
-@utility bg-halo {
-  background-image:
-    radial-gradient(55% 90% at 18% 0%, var(--tl-glow-warm) 0%, transparent 100%),
-    radial-gradient(40% 70% at 12% 0%, var(--tl-glow-warm) 0%, transparent 100%),
-    radial-gradient(45% 80% at 88% 0%, color-mix(in srgb, var(--tl-glow-sky-from) 45%, transparent) 0%, transparent 100%);
-  /* Los lados se desvanecen: el halo nunca muestra un borde recto, mida lo que mida el contenido. */
-  mask-image: linear-gradient(90deg, transparent, black 12%, black 88%, transparent);
+/* Tarjeta Hoy, ronda 4 de 0031: degradado corto de cobalto a un cobalto apenas más hondo (sin marino). */
+@utility bg-hero-suave {
+  background-image: linear-gradient(135deg, var(--tl-accent-base) 0%, var(--tl-accent-pressed) 100%);
+}
+/* Grano muy sutil (variante de Hoy, ronda 4): ruido SVG en escala de grises; se usa con opacidad baja y mix-blend-overlay. */
+@utility bg-grano {
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='g'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix type='saturate' values='0'/></filter><rect width='100%' height='100%' filter='url(%23g)'/></svg>");
 }
 @utility font-display-title {
   font-family: var(--tl-font-display);

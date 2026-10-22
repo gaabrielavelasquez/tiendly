@@ -1,15 +1,15 @@
 "use client";
 
-// Cliente: el total sube con AnimatedNumber, que recibe el formateador (una función no cruza al servidor).
+// Cliente: el total sube con Monto (AnimatedNumber por dentro).
 import { Minus, TrendingDown, TrendingUp } from "lucide-react";
 import Link from "next/link";
 import { EncabezadoSeccion } from "@/components/panel";
-import { AnimatedNumber } from "@/components/motion/animated-number";
 import { buttonVariants, Card } from "@/components/ui";
 import { cn } from "@/lib/cn";
 import type { Comparacion } from "../lib/reglas";
 import type { DiaVentas } from "../types";
 import { formatoSoles } from "../lib/format";
+import { Monto } from "./monto";
 import { SemanaGrafico } from "./semana-grafico";
 
 type SemanaCardProps = {
@@ -45,9 +45,7 @@ export function SemanaCard({ total, pedidos, comparacion, dias, hoy, className }
         <div className="flex flex-col gap-2 lg:col-span-2 lg:self-start">
           <p className="flex items-baseline gap-2">
             <span className="sr-only">{formatoSoles(total)}</span>
-            <span aria-hidden>
-              <AnimatedNumber value={total} format={formatoSoles} className="font-metric text-h2 text-fg" />
-            </span>
+            <Monto valor={total} tamano="h2" className="text-fg" />
             <span className="text-body-sm text-fg-secondary">
               · {pedidos} {pedidos === 1 ? "pedido" : "pedidos"}
             </span>
