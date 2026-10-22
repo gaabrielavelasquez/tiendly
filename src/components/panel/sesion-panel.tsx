@@ -2,7 +2,7 @@
 
 import { createContext, useContext } from "react";
 
-// La dueña de la tienda de la sesión, leída en el servidor (layout del panel). Los componentes de cliente
+// Quien lleva la tienda de la sesión, leída en el servidor (layout del panel). Los componentes de cliente
 // no pueden leer la sesión simulada directamente: en el navegador siempre sería la tienda de demo.
 const DuenaContext = createContext("");
 

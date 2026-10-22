@@ -28,14 +28,16 @@ La identidad visual de Tiendly combina **velocidad ultra limpia**, **lenguaje mo
 
 ### Lenguaje Neutral
 - Se adopta globalmente el término **"cliente"** para referirse a la persona que compra en la tienda.
-- Evitar lenguaje marcado por género o redacciones impersonales rígidas.
+- **Sin género (0032):** "la tienda" o "quien vende" para quien vende; nunca "vendedora" ni "emprendedora". Se reformula la frase en vez de usar "@", "x" o "e" ("Te damos la bienvenida", no "Bienvenida"). Los adjetivos concuerdan con un sustantivo neutro ("¡Tu tienda está lista!"), nunca con la persona.
+- Evitar redacciones impersonales rígidas.
+- **Multirubro (0032):** ningún rubro es el predeterminado. Ejemplos, placeholders y demos mezclan rubros (impresiones 3D, decoración, cosmética, ropa, accesorios…).
 
 ### Regla del Punto Final
 - **TODOS** los textos de ayuda (*helper text*), descripciones de campos, mensajes de validación y explicaciones secundarias deben **finalizar obligatoriamente con un punto (`.`)**.
 - Los títulos, placeholders y botones directos no llevan punto final.
 
 ### Estructura de Productos
-- **Principio Unificado:** 1 modelo = 1 producto con variantes de colorway y talla.
+- **Principio Unificado (0004, actualizado por 0032):** 1 producto con variantes. Cada variante es una combinación de hasta 3 opciones genéricas (color, talla, tono, tamaño, material, aroma u otra), con su stock. La tabla de tallas solo aparece cuando una opción es talla.
 
 ---
 
@@ -91,7 +93,7 @@ La identidad visual de Tiendly combina **velocidad ultra limpia**, **lenguaje mo
   1. el **botón de acción primario (CTA)**;
   2. la **tarjeta protagonista** de la pantalla, **como máximo una por pantalla**, con su degradado corto (`bg-hero-suave`, 0031). Hoy: la tarjeta "Hoy" de Inicio.
 - Todo lo demás que indica selección o progreso va en negro carbón: `selection/*` e `indicator/*`.
-- Chips, fichas y controles seleccionados (tallas, colores, categorías, filtros, radios, tarjetas de opción, interruptores): **fondo negro carbón `#1A1A1A` con texto blanco** (estilo Shop / GOAT). Tokens `selection/bg`, `selection/fg`, `selection/border`.
+- Chips, fichas y controles seleccionados (opciones de producto, colores, categorías, filtros, radios, tarjetas de opción, interruptores): **fondo negro carbón `#1A1A1A` con texto blanco** (estilo Shop / GOAT). Tokens `selection/bg`, `selection/fg`, `selection/border`.
 - Tarjetas de opción seleccionadas: fondo blanco (`selection/subtle`) y borde negro carbón. Sin tinte azul.
 - Barras de progreso, pasos, línea de tiempo y destellos: `indicator/fill` (negro carbón). Ítem de menú activo: `bg/sunken` + `text/primary`. Casillas marcadas: `selection/*`.
 - **Excepción:** los links y el botón Fantasma siguen en cobalto (`accent/text`, `#1D4ED8`), para que se reconozcan como links.
@@ -126,7 +128,7 @@ La identidad visual de Tiendly combina **velocidad ultra limpia**, **lenguaje mo
    - Vitrina mobile-first: cabecera fija mínima (nombre al centro, carrito a la derecha con punto spark si hay productos), categorías en fila desplazable, grilla de 2 columnas (3 en tablet, 4 en desktop) con fotos 4:5 y filo de 1 px al 5 %. Sin botón "agregar" en la grilla: toda la tarjeta lleva al producto.
    - El crédito "Hecho con Tiendly" va atenuado en el pie, como en el Figma de la vitrina (el token `color-tiendly` queda disponible si se quiere en cobalto).
 2. **Editorial:** Refinado, tipo revista o catálogo D2C con tipografías de alto contraste (estilo Zara / SKIMS).
-   - *Referencia en Figma (16-oct-2026), la usa Heather:* logo en serif a la izquierda y categorías al centro; títulos en Instrument Serif; fotos sobre blanco con borde de 1 px y esquinas a 0; color con muestras redondas y talla en botones cuadrados (agotadas deshabilitadas); CTA negro "Agregar al carrito" + "Consultar por WhatsApp"; envío, pago y cambios; "Sobre el modelo" y "También te puede gustar"; pie con logo en círculo.
+   - *Referencia en Figma (16-oct-2026), la usa Heather:* logo en serif a la izquierda y categorías al centro; títulos en Instrument Serif; fotos sobre blanco con borde de 1 px y esquinas a 0; color con muestras redondas y las demás opciones (p. ej. talla) en botones cuadrados (agotadas deshabilitadas); CTA negro "Agregar al carrito" + "Consultar por WhatsApp"; envío, pago y cambios; "Sobre el modelo" y "También te puede gustar"; pie con logo en círculo.
    - El CTA de cada tema sale de su acento (`bg-cta` arma el degradado con `accent/base` → `accent/base-deep` en el elemento): negro en Editorial y Neutral, cobalto en el panel.
 3. **Suave:** Cálido, cercano y acogedor con bordes redondeados y tonos crema (estilo Blank Street / Shop).
 

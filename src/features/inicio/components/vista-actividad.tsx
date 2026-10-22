@@ -8,7 +8,7 @@ import { ParaAtender } from "./para-atender";
 import { SemanaCard } from "./semana-card";
 
 /**
- * Con el nombre de la dueña (Heather: Cecilia; o el nombre de pila de Google): "Hola, Cecilia.".
+ * Con el nombre de quien lleva la tienda (Heather: Cecilia; o el nombre de pila de Google): "Hola, Cecilia.".
  * Sin nombre (el onboarding no lo pide, decisión 0013): "¡Hola!". Sin emoji desde la ronda 4 de 0031.
  */
 export const saludo = (duena?: string) => (duena ? `Hola, ${duena}.` : "¡Hola!");

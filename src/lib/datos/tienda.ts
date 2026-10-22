@@ -14,7 +14,7 @@ import { esHeather, semillaDemo, slugDemo } from "./semillas";
 export type TiendaSesion = {
   nombre: string;
   slug: string;
-  /** Nombre de pila de la dueña, solo si entró con Google (el onboarding no lo pide, decisión 0013). */
+  /** Nombre de pila de quien lleva la tienda, solo si entró con Google (el onboarding no lo pide, decisión 0013). */
   duena?: string;
   /** El WhatsApp al que escriben los clientes desde la vitrina. */
   celularVentas: string;
