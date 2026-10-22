@@ -14,8 +14,8 @@ import { ProBloqueado } from "./pro-bloqueado";
 import { TiendaPreview } from "./tienda-preview";
 import { SalidaSinGuardar } from "./salida-sin-guardar";
 
-export function MiTiendaVista({ escenario }: { escenario?: string }) {
-  const m = useMiTienda(escenario);
+export function MiTiendaVista({ escenario, whatsappVentas, plan }: { escenario?: string; whatsappVentas: string; plan: "free" | "pro" }) {
+  const m = useMiTienda(escenario, whatsappVentas);
   const salida = useSalidaSinGuardar(m.pendiente, m.guardando);
   const [computadora, setComputadora] = useState(false);
   const preview = useRef<HTMLDialogElement>(null);
@@ -34,7 +34,7 @@ export function MiTiendaVista({ escenario }: { escenario?: string }) {
         <div className="flex min-w-0 flex-col gap-5">
           <Apariencia tienda={m.tienda} cambiar={m.cambiar} vistaPrevia={() => preview.current?.showModal()} />
           <CamposFree tienda={m.tienda} errores={m.errores} cambiar={m.cambiar} />
-          <ProBloqueado />
+          <ProBloqueado plan={plan} />
         </div>
         <aside className="sticky top-6 hidden min-w-0 xl:block" aria-label="Vista previa en vivo">
           <Card className="flex flex-col gap-4 p-4 lg:p-5">

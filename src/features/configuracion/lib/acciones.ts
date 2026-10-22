@@ -1,7 +1,7 @@
 "use server";
 
 import type { ConfigEntregas, ConfigPagos } from "../types";
-import { guardarConfig } from "./mock";
+import { configActual, guardarConfig } from "./mock";
 import { quedaAlgunMetodo, validarEntregas } from "./reglas";
 
 // Guardado simulado (memoria del servidor). Se vuelve a validar aquí: no se confía en el navegador.
@@ -21,5 +21,13 @@ export async function guardarEntregas(entregas: ConfigEntregas): Promise<{ ok: t
   if (r.regla) return { error: "Debes mantener al menos un método de entrega activo." };
   if (r.resumen) return { error: r.resumen };
   guardarConfig({ entregas });
+  return { ok: true };
+}
+
+/** WhatsApp de ventas: se edita solo en Mi tienda › Contacto; Pagos y el checkout lo leen de aquí. */
+export async function guardarWhatsappVentas(celular: string): Promise<{ ok: true } | { error: string }> {
+  if (!/^9\d{8}$/.test(celular)) return { error: "Revisa el número: son 9 dígitos y empieza con 9." };
+  const { pagos } = configActual();
+  guardarConfig({ pagos: { ...pagos, whatsapp: { ...pagos.whatsapp, celular } } });
   return { ok: true };
 }

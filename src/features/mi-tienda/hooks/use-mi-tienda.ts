@@ -1,10 +1,12 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { guardarWhatsappVentas } from "@/features/configuracion/lib/acciones";
 import { INICIAL, leerTienda, STORAGE, VACIA, validarTienda } from "../lib/config";
 import type { Errores, Tienda } from "../types";
 
-export function useMiTienda(escenario?: string) {
+/** `whatsappVentas`: el número guardado en la configuración de la tienda; manda sobre lo guardado en el navegador. */
+export function useMiTienda(escenario: string | undefined, whatsappVentas: string) {
   const [tienda, setTienda] = useState<Tienda>(INICIAL);
   const [guardada, setGuardada] = useState<Tienda>(INICIAL);
   const [estado, setEstado] = useState<"cargando" | "lista" | "error">("cargando");
@@ -16,7 +18,8 @@ export function useMiTienda(escenario?: string) {
     try {
       if (escenario === "error") throw new Error("Error simulado.");
       const valor = localStorage.getItem(STORAGE);
-      const datos = escenario === "vacio" ? VACIA : valor ? leerTienda(valor) : INICIAL;
+      const base = escenario === "vacio" ? VACIA : valor ? leerTienda(valor) : INICIAL;
+      const datos = escenario === "vacio" ? base : { ...base, whatsapp: whatsappVentas };
       setTienda(datos); setGuardada(datos); setEstado("lista");
     } catch { setEstado("error"); }
   }
@@ -38,6 +41,10 @@ export function useMiTienda(escenario?: string) {
     if (Object.keys(errores).length) { setMensaje("Revisa los campos marcados antes de guardar."); return false; }
     setGuardando(true);
     try {
+      if (tienda.whatsapp !== guardada.whatsapp) {
+        const r = await guardarWhatsappVentas(tienda.whatsapp);
+        if ("error" in r) { setErrores({ whatsapp: r.error }); setMensaje("Revisa los campos marcados antes de guardar."); return false; }
+      }
       localStorage.setItem(STORAGE, JSON.stringify(tienda));
       setGuardada(tienda); setMensaje("Cambios guardados en este navegador.");
       return true;

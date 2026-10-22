@@ -1,16 +1,31 @@
 "use client";
 import { useRef } from "react";
-import { LockKeyhole } from "lucide-react";
+import { CircleCheck, LockKeyhole } from "lucide-react";
 import { Badge, Button, Card } from "@/components/ui";
 
 const EXTRAS = ["Banner de alto impacto", "Ocultar el sello de Tiendly", "Badges de stock personalizados", "Mensajes dinámicos de WhatsApp", "Avisos de stock bajo por WhatsApp"];
-export function ProBloqueado() {
+const OPCIONES = [{ titulo: "Color personalizado", ayuda: "Cualquier color, con validador de contraste." }, { titulo: "Tipografías exclusivas", ayuda: "Elige entre una lista curada." }, { titulo: "Dominio propio", ayuda: "Por ejemplo, heathercalzado.pe." }];
+
+/**
+ * Opciones Pro de Mi tienda (todavía no funcionan: llegan en V1.1). Tienda Pro (Heather, 0030): «Incluido en
+ * tu plan Pro · Muy pronto», sin candado ni «Ver planes». Tienda Free: candado, badge PRO y «Ver planes».
+ */
+export function ProBloqueado({ plan }: { plan: "free" | "pro" }) {
   const dialog = useRef<HTMLDialogElement>(null);
+  if (plan === "pro") {
+    return <Card as="section" className="flex flex-col gap-4 bg-highlight p-5 lg:p-6">
+      <h2 className="font-display-title text-h3">Opciones de tu plan Pro</h2>
+      <p className="text-body-sm text-fg-secondary">Haz que tu tienda sea 100 % tuya.</p>
+      {OPCIONES.map(t => <div key={t.titulo} className="flex min-h-12 items-start gap-3 py-2 text-body-sm">
+        <CircleCheck aria-hidden className="mt-0.5 size-5 shrink-0 text-success" /><div className="min-w-0 flex-1"><p className="font-semibold text-fg">{t.titulo}</p><p className="mt-1 text-caption text-fg-secondary">{t.ayuda}</p><p className="mt-1 text-caption font-semibold text-fg">Incluido en tu plan Pro · Muy pronto</p></div>
+      </div>)}
+    </Card>;
+  }
   return <>
     <Card as="section" className="flex flex-col gap-4 bg-highlight p-5 lg:p-6">
       <h2 className="flex items-center gap-2 font-display-title text-h3"><LockKeyhole aria-hidden className="size-5" />Más opciones con Pro</h2>
       <p className="text-body-sm text-fg-secondary">Haz que tu tienda sea 100 % tuya.</p>
-      {[{ titulo: "Color personalizado", ayuda: "Cualquier color, con validador de contraste." }, { titulo: "Tipografías exclusivas", ayuda: "Elige entre una lista curada." }, { titulo: "Dominio propio", ayuda: "Por ejemplo, heathercalzado.pe." }].map(t => <div key={t.titulo} className="flex min-h-12 items-center gap-3 py-2 text-body-sm">
+      {OPCIONES.map(t => <div key={t.titulo} className="flex min-h-12 items-center gap-3 py-2 text-body-sm">
         <LockKeyhole aria-hidden className="size-5 shrink-0 text-icon-subtle" /><div className="min-w-0 flex-1"><p className="font-semibold text-fg">{t.titulo}</p><p className="mt-1 text-caption text-fg-secondary">{t.ayuda}</p></div><Badge>PRO</Badge>
       </div>)}
       <Button onClick={() => dialog.current?.showModal()}>Ver planes</Button>
