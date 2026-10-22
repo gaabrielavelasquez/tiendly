@@ -15,32 +15,32 @@ const ALTO_MINIMO = 12;
 type SemanaGraficoProps = { dias: DiaVentas[]; hoy: string };
 
 /**
- * Barras finas por día (24 px móvil · 32 px desktop, radio 8) sobre un riel suave, lunes a domingo, sin ejes ni montos.
- * Degradado del mismo token (chart/bar); hoy en cobalto (accent/base, decisión 0020).
- * Con mouse o teclado se ve el detalle del día.
+ * Barras finas por día (12 px móvil · 14 px desktop, decisión 0031) sobre un riel suave, lunes a domingo, sin ejes ni montos.
+ * Degradado del mismo token (chart/bar); hoy en cobalto sólido (accent/base, decisión 0020), sin sombra.
+ * Crecen al entrar, escalonadas (respeta "reducir movimiento"). Con mouse o teclado se ve el detalle del día.
  */
 export function SemanaGrafico({ dias, hoy }: SemanaGraficoProps) {
   const reduce = useReducedMotion();
   const max = Math.max(1, ...dias.map((d) => d.monto ?? 0));
 
   return (
-    <ul aria-label="Ventas por día" className="flex items-end gap-1 pt-4 lg:gap-3">
+    <ul aria-label="Ventas por día" className="flex items-end gap-1 pt-2 lg:gap-4">
       {dias.map((d, i) => {
         const esHoy = d.fecha === hoy;
         const alto = d.monto ? Math.max(ALTO_MINIMO, (d.monto / max) * 100) : 0;
         const detalle = d.monto === null ? "todavía no llega" : `${formatoSoles(d.monto)} · ${pedidosTexto(d.pedidos)}`;
         return (
-          <li key={d.fecha} className="flex flex-1 flex-col items-center gap-2">
+          <li key={d.fecha} className="flex flex-1 flex-col items-center gap-3">
             <div
               tabIndex={0}
               role="img"
               aria-label={`${fechaDia(d.fecha, true)}${esHoy ? " (hoy)" : ""}: ${detalle}.`}
-              className="group relative flex h-32 w-full justify-center rounded-theme lg:h-48"
+              className="group relative flex h-36 w-full justify-center rounded-theme lg:h-40"
             >
-              <div className="relative h-full w-6 overflow-hidden rounded-theme bg-sunken lg:w-8">
+              <div className="relative h-full w-3 overflow-hidden rounded-full bg-sunken lg:w-3.5">
                 {alto > 0 && (
                   <motion.div
-                    className={cn("absolute inset-x-0 bottom-0 rounded-theme", esHoy ? "bg-bar-today shadow-float" : "bg-bar")}
+                    className={cn("absolute inset-x-0 bottom-0 rounded-full", esHoy ? "bg-bar-today" : "bg-bar")}
                     style={{ height: `${alto}%`, originY: 1 }}
                     initial={reduce ? false : { scaleY: 0 }}
                     animate={{ scaleY: 1 }}
@@ -59,8 +59,8 @@ export function SemanaGrafico({ dias, hoy }: SemanaGraficoProps) {
             <span
               aria-hidden
               className={cn(
-                "flex h-6 min-w-6 items-center justify-center rounded-chip px-1.5 text-label",
-                esHoy ? "bg-accent font-bold text-on-accent" : "text-fg-secondary",
+                "flex h-6 min-w-6 items-center justify-center text-label",
+                esHoy ? "font-semibold text-accent-text" : "text-fg-secondary",
               )}
             >
               {INICIALES[i]}

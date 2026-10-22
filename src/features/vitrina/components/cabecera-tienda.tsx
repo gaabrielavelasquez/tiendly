@@ -59,7 +59,8 @@ export function CabeceraTienda({ nombre, logo, slug, categorias, activa, onCateg
               <Image src={logo} alt="" fill priority sizes="9rem" className="object-contain" />
             </span>
           ) : (
-            nombre
+            // Logo de texto: los nombres largos bajan de tamaño y se cortan con "…" en dos líneas, sin salirse de la barra (0031).
+            <span className={cn("block max-w-52 text-center lg:max-w-xs lg:text-left", nombre.length > 14 && "line-clamp-2 text-body leading-tight")}>{nombre}</span>
           )}
         </Link>
         <nav aria-label="Categorías" className="hidden items-center gap-8 lg:flex">

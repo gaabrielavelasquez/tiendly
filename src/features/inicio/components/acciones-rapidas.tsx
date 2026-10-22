@@ -5,13 +5,13 @@ import { CompartirWhatsApp } from "./compartir-whatsapp";
 type AccionesRapidasProps = { link: string; className?: string };
 
 /**
- * Acciones globales de Inicio: compartir (secundario) y "Nuevo producto" (primario, el único CTA
- * de la vista, con el degradado cobalto). En móvil van apiladas, el primario arriba.
+ * Acciones globales de Inicio: "Nuevo producto" es la única acción fuerte de la pantalla (CTA cobalto) y
+ * compartir va como acción silenciosa (píldora neutra, decisión 0031). En móvil van apiladas, el CTA arriba.
  */
 export function AccionesRapidas({ link, className }: AccionesRapidasProps) {
   return (
-    <div className={cn("flex flex-col-reverse gap-2 lg:flex-row lg:items-center", className)}>
-      <CompartirWhatsApp link={link} className="w-full lg:w-auto" />
+    <div className={cn("flex flex-col-reverse gap-3 lg:flex-row lg:items-center", className)}>
+      <CompartirWhatsApp link={link} texto="Compartir por WhatsApp" variante="quiet" className="w-full lg:w-auto" />
       <NuevoProducto className="w-full lg:w-auto" />
     </div>
   );

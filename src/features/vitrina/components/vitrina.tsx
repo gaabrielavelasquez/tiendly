@@ -50,9 +50,14 @@ export function Vitrina({ datos, categoriaInicial }: VitrinaProps) {
         ) : (
           <>
             <h2 className="sr-only">Productos</h2>
-            <div id="catalogo" className="sticky top-16 z-10 -mx-4 mt-12 scroll-mt-16 bg-page/90 px-4 py-3 backdrop-blur-md lg:mx-0 lg:mt-16 lg:px-0">
-              {datos.categorias.length > 1 && <CategoriasTienda categorias={datos.categorias} valor={categoria} onCambio={setCategoria} />}
-            </div>
+            {/* Con una sola categoría (o ninguna) no hay nada que filtrar: sin barra, solo el ancla #catalogo (0031). */}
+            {datos.categorias.length > 1 ? (
+              <div id="catalogo" className="sticky top-16 z-10 -mx-4 mt-12 scroll-mt-16 bg-page/90 px-4 py-3 backdrop-blur-md lg:mx-0 lg:mt-16 lg:px-0">
+                <CategoriasTienda categorias={datos.categorias} valor={categoria} onCambio={setCategoria} />
+              </div>
+            ) : (
+              <div id="catalogo" className="mt-12 scroll-mt-16 lg:mt-16" />
+            )}
             {visibles.length === 0 ? (
               <EmptyState
                 icon={PackageOpen}

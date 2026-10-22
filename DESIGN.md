@@ -56,6 +56,16 @@ La identidad visual de Tiendly combina **velocidad ultra limpia**, **lenguaje mo
 > - **Encabezados:** de sección y de columnas en Outfit SemiBold, tipo oración y `tracking-tight` (`encabezado-seccion`, `encabezado-columna`). Las mayúsculas quedan solo para etiquetas chicas de contexto ("HOY").
 > - **Sin cambios:** spark (0022), selección en carbón (0019), métricas (0021).
 
+> **Pase de diseño · Decisión 0031 (22-oct-2026, propuesta).** Aplicada en Inicio; se extiende a Pedidos, Productos y Mi tienda con el ok de Gabi. Manda sobre 0024 y lo de abajo donde se contradiga:
+> - **Aire:** más espacio entre secciones (40 px móvil · 48 px desktop) y dentro de las tarjetas protagonistas (40 px desktop). Lienzo del panel `#F8F8F6` (`bg/page` → `color/paper/50`; las vitrinas siguen en `#F4F4F3`). Borde de tarjeta casi invisible `border/card` (`#F0EFED`): separa la sombra.
+> - **Títulos de página:** Outfit Medium (`font/title-style`, utilidad `font-display-light`), un tamaño arriba (`text-display`: 40 · 56 px). El peso fuerte, solo en cifras clave (`font-metric`).
+> - **Un protagonista por pantalla.** Inicio: saludo grande y liviano sobre un halo cálido de puro CSS (`bg-halo`: `glow/warm` + `glow/sky`, sin WebGL). "Hola, {nombre} 👋" si se conoce el nombre de la dueña; si no, "¡Hola! 👋" con la tienda debajo. "Hoy" sigue en cobalto, con halo `elevation/celebration` y cifra más grande.
+> - **Tarjetas de acción** (`AccionCard`): ícono en círculo neutro, título, detalle corto y botón redondo con chevron; fila en desktop, apiladas en móvil.
+> - **Encabezados de sección** (`EncabezadoSeccion`): título a la izquierda, acciones silenciosas a la derecha (botón `quiet`: píldora neutra, la única excepción al "nunca pill"). Una sola acción fuerte por pantalla.
+> - **Estados:** ícono chico + texto de color. Badges rellenos solo para lo urgente (vence hoy, agotado).
+> - **Gráficos:** barras de 12 px (móvil) y 14 px (desktop), punta redonda y más aire; hoy en cobalto sólido sin sombra. Cifras y barras entran con movimiento (Motion Primitives) y respetan "reducir movimiento".
+> - **No se copia:** gráficos en cada tarjeta, violeta, analítica densa.
+
 ### Tarjetas (Cards)
 - Fondo blanco puro (`#FFFFFF`) sobre superficie neutra.
 - Esquinas de **`8px`** (`radius/card` → `radius/sm`). *Decisión 0024; antes 12 px (0020) y 16 px.*

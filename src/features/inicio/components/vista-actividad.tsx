@@ -1,41 +1,49 @@
-import { PanelHeader } from "@/components/panel";
 import type { InicioData } from "../types";
 import { fechaCorta, fechaLarga, hora } from "../lib/format";
 import { compararSemana, pendientes, resumenHoy, totalSemana } from "../lib/reglas";
 import { AccionesRapidas } from "./acciones-rapidas";
-import { AtenderCard } from "./atender-card";
+import { CabeceraInicio } from "./cabecera-inicio";
 import { HoyCard } from "./hoy-card";
+import { ParaAtender } from "./para-atender";
 import { SemanaCard } from "./semana-card";
 
 /**
- * I1 / ID1 · Inicio con actividad. Desktop: acciones rápidas en la cabecera, Hoy y Para atender lado a
- * lado, Esta semana a todo el ancho. Móvil: las acciones van al final, como en Figma.
+ * Con el nombre de la dueña (Heather: Cecilia; o el nombre de pila de Google): "Hola, Cecilia 👋".
+ * Sin nombre (el onboarding no lo pide, decisión 0013): "¡Hola! 👋" y la tienda debajo (decisión 0031).
  */
-/** Sin nombre de la dueña (el onboarding no lo pide, decisión 0013): "¡Hola! 👋". Con Google: su nombre de pila. */
-const saludo = (duena?: string) => (duena ? `¡Hola, ${duena}! 👋` : "¡Hola! 👋");
+export const saludo = (duena?: string) => (duena ? `Hola, ${duena} 👋` : "¡Hola! 👋");
 
+/**
+ * I1 / ID1 · Inicio con actividad (decisión 0031). Móvil: saludo, Hoy, Para atender, Esta semana y acciones.
+ * Desktop: Hoy y Esta semana lado a lado, y debajo la fila de tarjetas de Para atender; acciones en la cabecera.
+ */
 export function VistaActividad({ datos }: { datos: InicioData }) {
   const hoy = resumenHoy(datos);
   const semana = totalSemana(datos);
 
   return (
     <>
-      <PanelHeader
+      <CabeceraInicio
         titulo={saludo(datos.tienda.duena)}
-        subtitulo={`${datos.tienda.nombre} · ${fechaLarga(datos.ahora)}`}
+        subtitulo={
+          <>
+            <span className="font-medium text-fg">{datos.tienda.nombre}</span> · {fechaLarga(datos.ahora)}
+          </>
+        }
         accion={<AccionesRapidas link={datos.tienda.link} />}
       />
-      <div className="grid gap-6 lg:grid-cols-5">
-        <HoyCard className="lg:col-span-2" ventas={hoy.ventas} pedidos={hoy.pedidos} corte={hora(datos.ahora)} />
-        <AtenderCard className="lg:col-span-3" filas={pendientes(datos)} />
+      <div className="grid gap-10 lg:grid-cols-5 lg:gap-x-8 lg:gap-y-12">
+        <HoyCard className="lg:col-span-2 lg:row-start-1" ventas={hoy.ventas} pedidos={hoy.pedidos} corte={hora(datos.ahora)} />
+        <ParaAtender className="lg:col-span-5 lg:row-start-2" filas={pendientes(datos)} />
+        <SemanaCard
+          className="lg:col-span-3 lg:row-start-1"
+          total={semana.monto}
+          pedidos={semana.pedidos}
+          comparacion={compararSemana(semana.monto, datos.semanaPasadaTotal)}
+          dias={datos.semana}
+          hoy={fechaCorta(datos.ahora)}
+        />
       </div>
-      <SemanaCard
-        total={semana.monto}
-        pedidos={semana.pedidos}
-        comparacion={compararSemana(semana.monto, datos.semanaPasadaTotal)}
-        dias={datos.semana}
-        hoy={fechaCorta(datos.ahora)}
-      />
       <AccionesRapidas link={datos.tienda.link} className="lg:hidden" />
     </>
   );

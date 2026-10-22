@@ -14,5 +14,5 @@ import { herramientasDev } from "@/lib/entorno";
 export default async function PanelInicio({ searchParams }: PageProps) {
   const { escenario } = await searchParams;
   const datos = await obtenerInicio(leerEscenario(herramientasDev ? escenario : undefined));
-  return <PanelMain>{esTiendaNueva(datos) ? <VistaNueva datos={datos} /> : <VistaActividad datos={datos} />}</PanelMain>;
+  return <PanelMain className="gap-10 lg:gap-12">{esTiendaNueva(datos) ? <VistaNueva datos={datos} /> : <VistaActividad datos={datos} />}</PanelMain>;
 }

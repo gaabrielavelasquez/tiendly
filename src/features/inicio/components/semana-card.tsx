@@ -1,6 +1,11 @@
+"use client";
+
+// Cliente: el total sube con AnimatedNumber, que recibe el formateador (una función no cruza al servidor).
 import { Minus, TrendingDown, TrendingUp } from "lucide-react";
 import Link from "next/link";
-import { Badge, buttonVariants, Card } from "@/components/ui";
+import { EncabezadoSeccion } from "@/components/panel";
+import { AnimatedNumber } from "@/components/motion/animated-number";
+import { buttonVariants, Card } from "@/components/ui";
 import { cn } from "@/lib/cn";
 import type { Comparacion } from "../lib/reglas";
 import type { DiaVentas } from "../types";
@@ -13,41 +18,46 @@ type SemanaCardProps = {
   comparacion: Comparacion;
   dias: DiaVentas[];
   hoy: string;
+  className?: string;
 };
 
 const TENDENCIA = { sube: TrendingUp, baja: TrendingDown, igual: Minus } as const;
 
-/** "Esta semana": total y pedidos, comparación en badge (ícono + texto, no solo color) y barras por día. */
-export function SemanaCard({ total, pedidos, comparacion, dias, hoy }: SemanaCardProps) {
+/**
+ * "Esta semana" (decisión 0031): encabezado con una acción silenciosa, total que sube al entrar,
+ * comparación como ícono + texto de color (sin badge) y barras finas por día.
+ */
+export function SemanaCard({ total, pedidos, comparacion, dias, hoy, className }: SemanaCardProps) {
   const Tendencia = comparacion ? TENDENCIA[comparacion.direccion] : null;
   return (
-    <Card as="section" aria-labelledby="semana-titulo" className="flex flex-col gap-3">
-      <div className="flex flex-wrap items-start justify-between gap-3">
-        <div className="flex flex-col gap-1">
-          <h2 id="semana-titulo" className="encabezado-seccion text-fg">
-            Esta semana
-          </h2>
-          <p className="flex items-baseline gap-2">
-            <span className="font-metric text-h2 text-fg">{formatoSoles(total)}</span>
-            <span className="text-body-sm text-fg-secondary">
-              · {pedidos} {pedidos === 1 ? "pedido" : "pedidos"}
-            </span>
-          </p>
-        </div>
+    <Card as="section" aria-labelledby="semana-titulo" className={cn("flex flex-col gap-6 lg:p-10", className)}>
+      <EncabezadoSeccion
+        id="semana-titulo"
+        titulo="Esta semana"
+        accion={
+          <Link href="/panel/pedidos" className={cn(buttonVariants({ variant: "quiet", size: "sm" }), "rounded-full active:scale-98")}>
+            Ver pedidos
+          </Link>
+        }
+      />
+      <div className="flex flex-col gap-2">
+        <p className="flex items-baseline gap-2">
+          <span className="sr-only">{formatoSoles(total)}</span>
+          <span aria-hidden>
+            <AnimatedNumber value={total} format={formatoSoles} className="font-metric text-h2 text-fg" />
+          </span>
+          <span className="text-body-sm text-fg-secondary">
+            · {pedidos} {pedidos === 1 ? "pedido" : "pedidos"}
+          </span>
+        </p>
         {comparacion && Tendencia && (
-          <Badge tone={comparacion.direccion === "sube" ? "success" : "neutral"}>
-            <Tendencia aria-hidden strokeWidth={2} className="size-3.5" />
+          <p className={cn("flex items-center gap-1.5 text-caption", comparacion.direccion === "sube" ? "text-success" : "text-fg-secondary")}>
+            <Tendencia aria-hidden strokeWidth={1.8} className="size-4" />
             {comparacion.texto}
-          </Badge>
+          </p>
         )}
       </div>
       <SemanaGrafico dias={dias} hoy={hoy} />
-      <Link
-        href="/panel/pedidos"
-        className={cn(buttonVariants({ variant: "ghost" }), "w-full transition active:scale-98 lg:w-auto lg:self-start")}
-      >
-        Ver todos los pedidos
-      </Link>
     </Card>
   );
 }

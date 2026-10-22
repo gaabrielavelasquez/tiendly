@@ -16,5 +16,6 @@ Una decisión por archivo: contexto, decisión y consecuencias. Las anteriores a
 | 0028 | [Portada partida, productos nuevos activos, stock en la compra y números #TL-](0028-portada-stock-y-numeros.md) | Vigente |
 | 0029 | [Panel móvil: barra inferior en vez de menú hamburguesa](0029-barra-inferior-movil.md) | Vigente |
 | 0030 | [Heather es la tienda de demo Pro](0030-heather-demo-pro.md) | Vigente |
+| 0031 | [Pase de diseño: más aire, títulos livianos y un protagonista por pantalla](0031-pase-de-diseno.md) | Propuesta (aplicada en Inicio) |
 
 Para una decisión nueva: copia la estructura de 0026, usa el número siguiente y súmala a esta tabla.

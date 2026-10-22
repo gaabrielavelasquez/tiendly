@@ -91,6 +91,7 @@
   --tl-color-teal-info-900: #134E4A;
   --tl-color-navy-900: #1B365D;
   --tl-color-warm-glow: #FB923C0A;
+  --tl-color-paper-50: #F8F8F6;
   --tl-color-paper-100: #F4F4F3;
   --tl-color-paper-200: #F0EFED;
   --tl-color-ink-10: #1A1A1A1A;
@@ -120,7 +121,7 @@
   --tl-radius-chip: var(--tl-radius-xs);
   --tl-stroke-thin: 1px;
   --tl-stroke-thick: 2px;
-  --tl-bg-page: var(--tl-color-paper-100);
+  --tl-bg-page: var(--tl-color-paper-50);
   --tl-bg-surface: var(--tl-color-neutral-0);
   --tl-bg-sunken: var(--tl-color-paper-200);
   --tl-bg-inverse: var(--tl-color-neutral-1000);
@@ -128,6 +129,7 @@
   --tl-bg-scrim: var(--tl-color-scrim-50);
   --tl-bg-skeleton: var(--tl-color-neutral-200);
   --tl-border-subtle: var(--tl-color-neutral-200);
+  --tl-border-card: var(--tl-color-paper-200);
   --tl-border-default: var(--tl-color-neutral-300);
   --tl-border-strong: var(--tl-color-neutral-500);
   --tl-text-primary: var(--tl-color-neutral-1000);
@@ -197,6 +199,7 @@
   --tl-font-body: "Inter Variable", "Inter", ui-sans-serif, system-ui, sans-serif;
   --tl-font-hero-style: 600;
   --tl-font-metric-style: 600;
+  --tl-font-title-style: 500;
   --tl-glow-sky-from: var(--tl-color-cobalt-alpha-16);
   --tl-glow-sky-to: var(--tl-color-cobalt-50);
   --tl-glow-warm: var(--tl-color-warm-glow);
@@ -258,6 +261,7 @@
   --tl-radius-card: var(--tl-radius-sm);
   --tl-radius-button: var(--tl-radius-xs);
   --tl-radius-chip: var(--tl-radius-xs);
+  --tl-bg-page: var(--tl-color-paper-100);
   --tl-accent-base: var(--tl-bg-inverse);
   --tl-accent-hover: var(--tl-bg-inverse-hover);
   --tl-accent-pressed: var(--tl-bg-inverse-hover);
@@ -287,6 +291,7 @@
   --tl-radius-card: var(--tl-radius-none);
   --tl-radius-button: var(--tl-radius-none);
   --tl-radius-chip: var(--tl-radius-none);
+  --tl-bg-page: var(--tl-color-paper-100);
   --tl-accent-base: var(--tl-bg-inverse);
   --tl-accent-hover: var(--tl-bg-inverse-hover);
   --tl-accent-pressed: var(--tl-bg-inverse-hover);
@@ -316,6 +321,7 @@
   --tl-radius-card: var(--tl-radius-xl);
   --tl-radius-button: var(--tl-radius-full);
   --tl-radius-chip: var(--tl-radius-full);
+  --tl-bg-page: var(--tl-color-paper-100);
   --tl-accent-base: var(--tl-color-teal-700);
   --tl-accent-hover: var(--tl-color-teal-900);
   --tl-accent-pressed: var(--tl-color-teal-900);
@@ -345,6 +351,7 @@
   --tl-radius-card: var(--tl-radius-xl);
   --tl-radius-button: var(--tl-radius-full);
   --tl-radius-chip: var(--tl-radius-full);
+  --tl-bg-page: var(--tl-color-paper-100);
   --tl-accent-base: #F5B921;
   --tl-accent-hover: #CD9300;
   --tl-accent-pressed: #CD9300;
@@ -378,6 +385,7 @@
   --tl-bg-scrim: var(--tl-color-scrim-65);
   --tl-bg-skeleton: var(--tl-color-neutral-800);
   --tl-border-subtle: var(--tl-color-neutral-800);
+  --tl-border-card: var(--tl-color-neutral-800);
   --tl-border-default: var(--tl-color-neutral-700);
   --tl-border-strong: var(--tl-color-neutral-600);
   --tl-text-primary: var(--tl-color-neutral-100);
