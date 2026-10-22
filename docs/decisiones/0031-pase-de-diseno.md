@@ -25,6 +25,8 @@ Con el Core Loop terminado (PR #12), el panel funciona pero se siente denso: lie
 
 **Ronda 2 (22-oct, feedback de Gabi):** orden de 0012 en desktop, Para atender en una sola tarjeta en móvil, Hoy a la medida de su contenido, botones de la cabecera con la misma forma, nivel tipográfico intermedio y barras más finas.
 
+**Ronda 3 (22-oct, pulido final):** en desktop, "Esta semana" lleva el resumen a la izquierda y el gráfico acotado a la derecha (128 px de alto); tarjetas de tareas con texto un paso más grande e ícono arriba con el texto abajo (sin aire vacío al pie); en móvil el subtítulo del saludo es solo la fecha; filas y tarjetas enteras son el link (≥ 44 px); el espaciador de la barra inferior suma la zona segura de iPhone, verificado en un viewport real de 390 × 844.
+
 ## Consecuencias
 
 - Los tokens (lienzo, `border/card`, `font/title-style`) y el componente `Card` ya aplican en todo el panel; los patrones (cabecera con halo, tarjetas de acción, encabezados con acción silenciosa, estados sin relleno) por ahora solo en Inicio.

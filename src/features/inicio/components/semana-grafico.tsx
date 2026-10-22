@@ -12,19 +12,19 @@ const pedidosTexto = (n: number) => `${n} ${n === 1 ? "pedido" : "pedidos"}`;
 // Mínimo visible para que una venta chica siga leyéndose como barra y no como punto.
 const ALTO_MINIMO = 12;
 
-type SemanaGraficoProps = { dias: DiaVentas[]; hoy: string };
+type SemanaGraficoProps = { dias: DiaVentas[]; hoy: string; className?: string };
 
 /**
- * Barras finas por día (8 px móvil · 10 px desktop, decisión 0031) sobre un riel suave, lunes a domingo, sin ejes ni montos.
+ * Barras finas por día (8 px móvil · 10 px desktop, 0031; en desktop, 128 px de alto en un área acotada) sobre un riel suave, lunes a domingo, sin ejes ni montos.
  * Degradado del mismo token (chart/bar); hoy en cobalto sólido (accent/base, decisión 0020), sin sombra.
  * Crecen al entrar, escalonadas (respeta "reducir movimiento"). Con mouse o teclado se ve el detalle del día.
  */
-export function SemanaGrafico({ dias, hoy }: SemanaGraficoProps) {
+export function SemanaGrafico({ dias, hoy, className }: SemanaGraficoProps) {
   const reduce = useReducedMotion();
   const max = Math.max(1, ...dias.map((d) => d.monto ?? 0));
 
   return (
-    <ul aria-label="Ventas por día" className="flex items-end gap-1 pt-2 lg:gap-4">
+    <ul aria-label="Ventas por día" className={cn("flex items-end gap-1 pt-2 lg:gap-4", className)}>
       {dias.map((d, i) => {
         const esHoy = d.fecha === hoy;
         const alto = d.monto ? Math.max(ALTO_MINIMO, (d.monto / max) * 100) : 0;
@@ -35,7 +35,7 @@ export function SemanaGrafico({ dias, hoy }: SemanaGraficoProps) {
               tabIndex={0}
               role="img"
               aria-label={`${fechaDia(d.fecha, true)}${esHoy ? " (hoy)" : ""}: ${detalle}.`}
-              className="group relative flex h-36 w-full justify-center rounded-theme lg:h-40"
+              className="group relative flex h-36 w-full justify-center rounded-theme lg:h-32"
             >
               <div className="relative h-full w-2 overflow-hidden rounded-full bg-sunken lg:w-2.5">
                 {alto > 0 && (

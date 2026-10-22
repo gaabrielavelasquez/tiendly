@@ -31,7 +31,7 @@ export function InicioSkeleton() {
         <Card className="flex flex-col gap-6 lg:col-span-5 lg:p-10">
           <Skeleton className="h-6 w-1/4" />
           <Skeleton className="h-7 w-1/3" />
-          <div className="flex h-36 items-end gap-1 lg:h-40 lg:gap-4">
+          <div className="flex h-36 items-end gap-1 lg:h-32 lg:gap-4">
             {[0, 1, 2, 3, 4, 5, 6].map((i) => (
               <div key={i} className="flex h-full flex-1 justify-center">
                 <Skeleton className="h-full w-2 rounded-full lg:w-2.5" />

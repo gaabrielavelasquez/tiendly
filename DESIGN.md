@@ -61,11 +61,12 @@ La identidad visual de Tiendly combina **velocidad ultra limpia**, **lenguaje mo
 > - **Títulos de página:** Outfit Medium (`font/title-style`, utilidad `font-display-light`), un tamaño arriba (`text-display`: 40 · 56 px). El peso fuerte, solo en cifras clave (`font-metric`).
 > - **Un protagonista por pantalla.** Inicio: saludo grande y liviano sobre un halo cálido de puro CSS (`bg-halo`: `glow/warm` + `glow/sky`, sin WebGL). "Hola, {nombre} 👋" si se conoce el nombre de la dueña; si no, "¡Hola! 👋" con la tienda debajo. "Hoy" sigue en cobalto, con halo `elevation/celebration`, cifra más grande y alto a la medida de su contenido.
 > - **Orden de Inicio (0012):** desktop, Hoy (a la medida de su contenido) a la izquierda y Para atender hoy a la derecha; Esta semana a todo el ancho debajo. Móvil: Hoy, Para atender, Esta semana y acciones.
-> - **Para atender** (`AccionCard`): ícono en círculo neutro, título, detalle corto y botón redondo con chevron. Móvil: una sola tarjeta con filas divididas. Desktop: fila de tarjetas chicas.
+> - **Para atender** (`AccionCard`): ícono en círculo neutro, título, detalle corto y botón redondo con chevron. Móvil: una sola tarjeta con filas divididas. Desktop: fila de tarjetas chicas, texto un paso más grande (título 16, detalle 14) e ícono arriba con el texto alineado abajo. Toda la fila o tarjeta es el link, con zona táctil ≥ 44 px.
+> - **Subtítulo del saludo:** en móvil, solo la fecha (la tienda ya está en la barra superior); en desktop, tienda · fecha.
 > - **Encabezados de sección** (`EncabezadoSeccion`): nivel intermedio en Outfit Medium H3 (20 · 24 px), para que el salto desde el saludo no sea brusco. Título a la izquierda, acciones silenciosas a la derecha (botón `quiet`: píldora neutra, la única excepción al "nunca pill").
 > - **Botones de la cabecera:** una sola acción fuerte (primario) y, a su lado, el secundario con la misma forma y alto (`radius/button`, 40 px). Nunca primario y píldora juntos.
 > - **Estados:** ícono chico + texto de color. Badges rellenos solo para lo urgente (vence hoy, agotado).
-> - **Gráficos:** barras de 8 px (móvil) y 10 px (desktop), punta redonda y más aire entre días; hoy en cobalto sólido sin sombra. Cifras y barras entran con movimiento (Motion Primitives) y respetan "reducir movimiento".
+> - **Gráficos:** barras de 8 px (móvil) y 10 px (desktop), punta redonda y más aire entre días; hoy en cobalto sólido sin sombra. En desktop, "Esta semana" pone el resumen a la izquierda y el gráfico en un área acotada (3/5 del ancho, 128 px de alto) a la derecha. Cifras y barras entran con movimiento (Motion Primitives) y respetan "reducir movimiento".
 > - **No se copia:** gráficos en cada tarjeta, violeta, analítica densa.
 
 ### Tarjetas (Cards)

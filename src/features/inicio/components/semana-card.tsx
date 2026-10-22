@@ -40,24 +40,27 @@ export function SemanaCard({ total, pedidos, comparacion, dias, hoy, className }
           </Link>
         }
       />
-      <div className="flex flex-col gap-2">
-        <p className="flex items-baseline gap-2">
-          <span className="sr-only">{formatoSoles(total)}</span>
-          <span aria-hidden>
-            <AnimatedNumber value={total} format={formatoSoles} className="font-metric text-h2 text-fg" />
-          </span>
-          <span className="text-body-sm text-fg-secondary">
-            · {pedidos} {pedidos === 1 ? "pedido" : "pedidos"}
-          </span>
-        </p>
-        {comparacion && Tendencia && (
-          <p className={cn("flex items-center gap-1.5 text-caption", comparacion.direccion === "sube" ? "text-success" : "text-fg-secondary")}>
-            <Tendencia aria-hidden strokeWidth={1.8} className="size-4" />
-            {comparacion.texto}
+      {/* Desktop: resumen a la izquierda y gráfico acotado a la derecha, para que el ancho completo no quede vacío. */}
+      <div className="flex flex-col gap-6 lg:grid lg:grid-cols-5 lg:items-end lg:gap-10">
+        <div className="flex flex-col gap-2 lg:col-span-2 lg:self-start">
+          <p className="flex items-baseline gap-2">
+            <span className="sr-only">{formatoSoles(total)}</span>
+            <span aria-hidden>
+              <AnimatedNumber value={total} format={formatoSoles} className="font-metric text-h2 text-fg" />
+            </span>
+            <span className="text-body-sm text-fg-secondary">
+              · {pedidos} {pedidos === 1 ? "pedido" : "pedidos"}
+            </span>
           </p>
-        )}
+          {comparacion && Tendencia && (
+            <p className={cn("flex items-center gap-1.5 text-caption", comparacion.direccion === "sube" ? "text-success" : "text-fg-secondary")}>
+              <Tendencia aria-hidden strokeWidth={1.8} className="size-4" />
+              {comparacion.texto}
+            </p>
+          )}
+        </div>
+        <SemanaGrafico className="lg:col-span-3" dias={dias} hoy={hoy} />
       </div>
-      <SemanaGrafico dias={dias} hoy={hoy} />
     </Card>
   );
 }

@@ -9,7 +9,7 @@ import { SemanaCard } from "./semana-card";
 
 /**
  * Con el nombre de la dueña (Heather: Cecilia; o el nombre de pila de Google): "Hola, Cecilia 👋".
- * Sin nombre (el onboarding no lo pide, decisión 0013): "¡Hola! 👋" y la tienda debajo (decisión 0031).
+ * Sin nombre (el onboarding no lo pide, decisión 0013): "¡Hola! 👋" y la tienda debajo (decisión 0031; en móvil la tienda ya va en la barra superior).
  */
 export const saludo = (duena?: string) => (duena ? `Hola, ${duena} 👋` : "¡Hola! 👋");
 
@@ -28,7 +28,11 @@ export function VistaActividad({ datos }: { datos: InicioData }) {
         titulo={saludo(datos.tienda.duena)}
         subtitulo={
           <>
-            <span className="font-medium text-fg">{datos.tienda.nombre}</span> · {fechaLarga(datos.ahora)}
+            {/* En móvil la tienda ya está en la barra superior: debajo del saludo, solo la fecha. */}
+            <span className="hidden lg:inline">
+              <span className="font-medium text-fg">{datos.tienda.nombre}</span> ·{" "}
+            </span>
+            {fechaLarga(datos.ahora)}
           </>
         }
         accion={<AccionesRapidas link={datos.tienda.link} />}
