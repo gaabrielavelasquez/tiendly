@@ -1,5 +1,5 @@
+import { PanelHeader } from "@/components/panel";
 import type { InicioData } from "../types";
-import { Encabezado } from "./encabezado";
 import { LinkTiendaCard } from "./link-tienda-card";
 import { PasosCard } from "./pasos-card";
 
@@ -7,10 +7,9 @@ import { PasosCard } from "./pasos-card";
 export function VistaNueva({ datos }: { datos: InicioData }) {
   return (
     <>
-      <Encabezado
+      <PanelHeader
         titulo="Te damos la bienvenida"
         subtitulo="Tu tienda ya existe. Sigue estos pasos para recibir tu primer pedido."
-        duena={datos.tienda.duena}
       />
       <div className="grid items-start gap-6 lg:grid-cols-5">
         <PasosCard className="lg:col-span-3" pasos={datos.pasos} />

@@ -1,6 +1,7 @@
 "use client";
 
-import { motion, useReducedMotion } from "motion/react";
+import { motion } from "motion/react";
+import { useReducedMotion } from "@/components/motion/use-reduced-motion";
 import { cn } from "@/lib/cn";
 import type { DiaVentas } from "../types";
 import { fechaDia, formatoSoles } from "../lib/format";
@@ -8,13 +9,13 @@ import { crecer, ESCALON } from "../lib/motion";
 
 const INICIALES = ["L", "M", "M", "J", "V", "S", "D"];
 const pedidosTexto = (n: number) => `${n} ${n === 1 ? "pedido" : "pedidos"}`;
-// Mínimo visible para que una venta chica siga leyéndose como píldora y no como punto.
+// Mínimo visible para que una venta chica siga leyéndose como barra y no como punto.
 const ALTO_MINIMO = 12;
 
 type SemanaGraficoProps = { dias: DiaVentas[]; hoy: string };
 
 /**
- * Barras por día en píldora sobre un riel suave, lunes a domingo, sin ejes ni montos.
+ * Barras finas por día (24 px móvil · 32 px desktop, radio 8) sobre un riel suave, lunes a domingo, sin ejes ni montos.
  * Degradado del mismo token (chart/bar); hoy en cobalto (accent/base, decisión 0020).
  * Con mouse o teclado se ve el detalle del día.
  */
@@ -36,10 +37,10 @@ export function SemanaGrafico({ dias, hoy }: SemanaGraficoProps) {
               aria-label={`${fechaDia(d.fecha, true)}${esHoy ? " (hoy)" : ""}: ${detalle}.`}
               className="group relative flex h-32 w-full justify-center rounded-theme lg:h-48"
             >
-              <div className="relative h-full w-7 overflow-hidden rounded-full bg-sunken lg:w-11">
+              <div className="relative h-full w-6 overflow-hidden rounded-theme bg-sunken lg:w-8">
                 {alto > 0 && (
                   <motion.div
-                    className={cn("absolute inset-x-0 bottom-0 rounded-full", esHoy ? "bg-bar-today shadow-float" : "bg-bar")}
+                    className={cn("absolute inset-x-0 bottom-0 rounded-theme", esHoy ? "bg-bar-today shadow-float" : "bg-bar")}
                     style={{ height: `${alto}%`, originY: 1 }}
                     initial={reduce ? false : { scaleY: 0 }}
                     animate={{ scaleY: 1 }}
@@ -50,7 +51,7 @@ export function SemanaGrafico({ dias, hoy }: SemanaGraficoProps) {
               <span
                 aria-hidden
                 style={{ bottom: `calc(${alto}% + var(--tl-space-2))` }}
-                className="pointer-events-none absolute left-1/2 z-10 hidden -translate-x-1/2 rounded-sm bg-inverse px-2.5 py-1.5 text-label font-semibold whitespace-nowrap text-fg-inverse shadow-float group-focus-visible:block lg:group-hover:block"
+                className="pointer-events-none absolute left-1/2 z-10 hidden -translate-x-1/2 rounded-theme bg-inverse px-2.5 py-1.5 text-label font-semibold whitespace-nowrap text-fg-inverse shadow-float group-focus-visible:block lg:group-hover:block"
               >
                 {fechaDia(d.fecha)} · {detalle}
               </span>
