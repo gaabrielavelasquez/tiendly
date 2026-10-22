@@ -6,7 +6,7 @@ import { ResumenSolicitud } from "./resumen-solicitud";
 export function PasoRevision({ m, terminos }: { m: ModeloAfiliacion; terminos: () => void }) {
   const id = useId();
   return <div className="flex flex-col gap-5">
-    <div><h2 className="font-display-title text-h2">Revisa y envía</h2><p className="mt-2 text-body-sm text-fg-secondary">Confirma que todo esté correcto antes de enviar tu solicitud.</p></div>
+    <div><h2 className="font-display-title text-h2">Revisa y envía</h2><p className="mt-2 text-body-sm text-fg-secondary">Revisa que todo esté bien antes de enviar.</p></div>
     {m.negocio && <ResumenSolicitud datos={m.datos} negocio={m.negocio} editar={m.enviando ? undefined : m.editar} />}
     <section className="space-y-3 rounded-card border border-line-subtle bg-sunken p-4">
       <h3 className="font-semibold">Comisiones de tus cobros</h3>
@@ -22,6 +22,7 @@ export function PasoRevision({ m, terminos }: { m: ModeloAfiliacion; terminos: (
     </label>
     <Button type="button" variant="ghost" className="self-start" disabled={m.enviando} onClick={terminos}>Leer términos de afiliación</Button>
     {!m.acepto && <p className="text-caption text-fg-secondary">Acepta los términos para enviar la solicitud.</p>}
+    <p className="text-caption text-fg-secondary">Te avisaremos por correo y WhatsApp cuando esté aprobada. Tarda de 3 a 10 días hábiles.</p>
     {m.enviando && <p role="status" className="text-body-sm text-fg-secondary">Enviando solicitud... No cierres esta pantalla.</p>}
   </div>;
 }

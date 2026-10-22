@@ -2,7 +2,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { CheckCircle, CloudOff } from "lucide-react";
+import { CloudOff } from "lucide-react";
 import { PanelMain } from "@/components/panel";
 import { Button, Card, EmptyState } from "@/components/ui";
 import { STORAGE } from "../lib/borrador";
@@ -16,6 +16,7 @@ import { PasoCuenta } from "./paso-cuenta";
 import { PasoNegocio } from "./paso-negocio";
 import { PasoRepresentante } from "./paso-representante";
 import { PasoRevision } from "./paso-revision";
+import { SolicitudEnviada } from "./solicitud-enviada";
 import { Stepper } from "./stepper";
 
 export function AfiliacionVista({ escenario, soporte }: { escenario?: string; soporte?: string }) {
@@ -84,7 +85,7 @@ export function AfiliacionVista({ escenario, soporte }: { escenario?: string; so
               <Button type="submit" loading={ocupado} disabled={ocupado || rucBloqueado || (m.paso === 4 && !m.acepto)}>{m.enviando ? "Enviando solicitud…" : m.buscando ? "Buscando…" : m.paso === 4 ? "Enviar solicitud" : m.paso === 1 && !m.negocio ? "Buscar negocio" : "Continuar"}</Button>
             </div>
           </form>}
-          {m.paso === 5 && <div className="flex flex-col gap-5"><CheckCircle aria-hidden className="size-12 text-success" /><h2 className="font-display-title text-h2">Solicitud enviada</h2><p className="text-body text-fg-secondary">Recibimos tu solicitud de demostración. Puedes consultar el estado y seguir recibiendo Pedidos por WhatsApp.</p><p className="text-caption text-fg-secondary">No se enviaron mensajes ni confirmaciones.</p><Button onClick={() => m.ir(6)}>Ver estado de solicitud</Button></div>}
+          {m.paso === 5 && m.solicitud && <SolicitudEnviada solicitud={m.solicitud} verDetalle={() => m.ir(6)} />}
           {m.paso === 6 && m.solicitud && <EstadoSolicitud solicitud={m.solicitud} detalle={() => setDialogo("detalle")} corregir={() => m.editar(3)} soporte={soporte} />}
         </Card>
       </div>}

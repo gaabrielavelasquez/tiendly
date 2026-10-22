@@ -2,7 +2,7 @@
 import { useEffect, useRef, useState } from "react";
 import { consultarRuc, enviarSolicitud } from "../lib/acciones";
 import { ejemplo, leerBorrador, STORAGE, VACIO } from "../lib/borrador";
-import { validarCuenta, validarRepresentante, validarRuc } from "../lib/reglas";
+import { validarCuenta, validarNegocio, validarRepresentante, validarRuc } from "../lib/reglas";
 import type { Borrador, Datos, Errores } from "../types";
 
 export function useAfiliacion(escenario?: string) {
@@ -51,14 +51,15 @@ export function useAfiliacion(escenario?: string) {
       if (versionRuc.current !== actual) return;
       if (resultado.error || !resultado.negocio) { setErrores({ ruc: resultado.error || "No pudimos consultar tu RUC." }); return; }
       const negocio = resultado.negocio;
-      setB(prev => ({ ...prev, negocio, datos: { ...prev.datos, nombre: negocio.tipo === "persona" ? negocio.razonSocial : prev.datos.nombre } }));
+      // RUC 10: la persona es su propia representante (nombre y cargo «Titular» precargados; se pueden cambiar).
+      setB(prev => ({ ...prev, negocio, datos: { ...prev.datos, nombre: negocio.tipo === "persona" ? negocio.razonSocial : prev.datos.nombre, cargo: negocio.tipo === "persona" && !prev.datos.cargo ? "Titular" : prev.datos.cargo } }));
     } catch { setErrores({ ruc: "No pudimos consultar tu RUC. Inténtalo de nuevo." }); }
     finally { setBuscando(false); }
   }
   async function continuar() {
     if (b.paso === 1 && !b.negocio) { await buscar(); return; }
     if (b.paso === 1 && b.negocio?.condicion !== "habido") return;
-    const e = b.paso === 2 ? validarRepresentante(b.datos) : b.paso === 3 ? validarCuenta(b.datos) : {};
+    const e = b.paso === 1 ? validarNegocio(b.datos) : b.paso === 2 ? validarRepresentante(b.datos) : b.paso === 3 ? validarCuenta(b.datos) : {};
     setErrores(e);
     if (Object.keys(e).length) return;
     ir(editando ? 4 : b.paso + 1); setEditando(false);

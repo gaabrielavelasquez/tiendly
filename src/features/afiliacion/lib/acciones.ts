@@ -1,6 +1,7 @@
 "use server";
 import type { Datos, Negocio, Solicitud } from "../types";
-import { validarCuenta, validarRepresentante, validarRuc } from "./reglas";
+import { configActual, guardarConfig } from "@/features/configuracion/lib/mock";
+import { validarCuenta, validarNegocio, validarRepresentante, validarRuc } from "./reglas";
 
 /** Adaptador de demostración. Sustituir por proveedor SUNAT antes de aceptar datos reales. */
 export async function consultarRuc(ruc: string): Promise<{ negocio?: Negocio; error?: string }> {
@@ -17,7 +18,7 @@ export async function consultarRuc(ruc: string): Promise<{ negocio?: Negocio; er
 
 export async function enviarSolicitud(datos: Datos, acepto: boolean): Promise<{ solicitud?: Solicitud; error?: string }> {
   if (!acepto) return { error: "Acepta los términos para enviar la solicitud." };
-  if (validarRuc(datos.ruc) || Object.keys(validarRepresentante(datos)).length || Object.keys(validarCuenta(datos)).length) return { error: "Revisa los datos de tu solicitud antes de enviarla." };
+  if (validarRuc(datos.ruc) || [validarNegocio(datos), validarRepresentante(datos), validarCuenta(datos)].some((e) => Object.keys(e).length)) return { error: "Revisa los datos de tu solicitud antes de enviarla." };
   const consulta = await consultarRuc(datos.ruc);
   if (!consulta.negocio || consulta.negocio.condicion !== "habido") return { error: "No podemos continuar con este RUC. Revisa los datos de tu negocio." };
   await new Promise(r => setTimeout(r, 600));
@@ -25,5 +26,9 @@ export async function enviarSolicitud(datos: Datos, acepto: boolean): Promise<{ 
   const respuesta = new Date(ahora);
   let dias = 0;
   while (dias < 10) { respuesta.setDate(respuesta.getDate() + 1); if (![0, 6].includes(respuesta.getDay())) dias++; }
-  return { solicitud: { numero: `AF-${crypto.randomUUID().slice(0, 8).toUpperCase()}`, enviada: ahora.toISOString(), respuesta: respuesta.toISOString(), estado: "revision", datos: { ...datos }, negocio: consulta.negocio } };
+  const solicitud: Solicitud = { numero: `AF-${crypto.randomUUID().slice(0, 8).toUpperCase()}`, enviada: ahora.toISOString(), respuesta: respuesta.toISOString(), estado: "revision", datos: { ...datos }, negocio: consulta.negocio };
+  // Figma A7: Configuración › Pagos muestra los cobros «En revisión» junto a WhatsApp (simulado, sin cobros reales).
+  const { pagos } = configActual();
+  if (pagos.cobros.estado !== "activo") guardarConfig({ pagos: { ...pagos, cobros: { ...pagos.cobros, estado: "en-revision", solicitud: { numero: solicitud.numero, enviada: solicitud.enviada } } } });
+  return { solicitud };
 }

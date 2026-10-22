@@ -1,7 +1,8 @@
 import { cn } from "@/lib/cn";
 
 /** Icono en un círculo + nombre + "● Activo / Apagado / Sin activar" (Figma, cabecera de cada método). */
-export function CabeceraMetodo({ icono, titulo, estado }: { icono: React.ReactNode; titulo: string; estado: "Activo" | "Apagado" | "Sin activar" | "Inactivo" }) {
+export function CabeceraMetodo({ icono, titulo, estado }: { icono: React.ReactNode; titulo: string; estado: "Activo" | "En revisión" | "Apagado" | "Sin activar" | "Inactivo" }) {
+  const verde = estado === "Activo" || estado === "En revisión"; // Figma A7: «● En revisión» en verde
   return (
     <span className="flex items-center gap-3">
       <span aria-hidden className="flex size-10 shrink-0 items-center justify-center rounded-full bg-sunken text-icon">
@@ -9,8 +10,8 @@ export function CabeceraMetodo({ icono, titulo, estado }: { icono: React.ReactNo
       </span>
       <span className="flex flex-col gap-0.5">
         <span className="text-body font-semibold text-fg">{titulo}</span>
-        <span className={cn("flex items-center gap-1.5 text-caption font-normal", estado === "Activo" ? "text-success" : "text-fg-secondary")}>
-          <span aria-hidden className={cn("size-1.5 rounded-full", estado === "Activo" ? "bg-success" : "bg-fg-tertiary")} />
+        <span className={cn("flex items-center gap-1.5 text-caption font-normal", verde ? "text-success" : "text-fg-secondary")}>
+          <span aria-hidden className={cn("size-1.5 rounded-full", verde ? "bg-success" : "bg-fg-tertiary")} />
           {estado}
         </span>
       </span>

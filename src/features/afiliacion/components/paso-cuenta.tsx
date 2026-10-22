@@ -1,23 +1,29 @@
-import { useId } from "react";
-import { CheckCircle } from "lucide-react";
+import { CheckCircle, UserRound } from "lucide-react";
 import { Field } from "@/components/ui";
-import { BANCOS, detectarBanco } from "../lib/reglas";
-import type { Banco } from "../types";
+import { BANCOS, detectarBanco, TIPOS_CUENTA } from "../lib/reglas";
+import type { Banco, Datos } from "../types";
 import type { ModeloAfiliacion } from "../hooks/use-afiliacion";
+import { CampoSelect } from "./campo-select";
+
+/** A4 · ¿Dónde recibes el dinero? (Figma 106:160): titular arriba; CCI, banco (detectado con el CCI) y tipo de cuenta. */
 export function PasoCuenta({ m }: { m: ModeloAfiliacion }) {
-  const id = useId();
   const banco = m.datos.cci.length === 20 ? detectarBanco(m.datos.cci) : null;
   const valida = banco?.id === m.datos.banco;
+  function cambiarCci(v: string) {
+    m.cambiar("cci", v);
+    const detectado = v.length === 20 ? detectarBanco(v) : null;
+    if (detectado && !m.datos.banco) m.cambiar("banco", detectado.id); // se completa solo; se puede cambiar
+  }
   return <div className="flex flex-col gap-5">
-    <div><h2 className="font-display-title text-h2">Cuenta bancaria</h2><p className="mt-2 text-body-sm text-fg-secondary">Aquí recibirás los depósitos de tus ventas.</p></div>
-    <div className="flex flex-col gap-2"><label htmlFor={id} className="text-body-sm font-semibold">Banco</label>
-      <select id={id} value={m.datos.banco} aria-invalid={!!m.errores.banco} aria-describedby={m.errores.banco ? `${id}-error` : undefined}
-        className="h-10 w-full rounded-button border border-line-strong bg-surface px-3 text-body text-fg" onChange={e => m.cambiar("banco", e.target.value as Banco | "")}>
-        <option value="">Elige tu banco</option>{BANCOS.map(b => <option key={b.id} value={b.id}>{b.nombre}</option>)}
-      </select>{m.errores.banco && <p id={`${id}-error`} className="text-caption text-error">{m.errores.banco}</p>}
-    </div>
-    <Field label="CCI" inputMode="numeric" autoComplete="off" value={m.datos.cci} maxLength={20} error={m.errores.cci} hint="Tiene 20 dígitos. No es el número de tu tarjeta." onChange={e => m.cambiar("cci", e.target.value.replace(/\D/g, ""))} />
-    {banco && <p role="status" className={valida ? "flex items-center gap-2 text-body-sm text-success" : "text-body-sm text-warning"}>{valida && <CheckCircle aria-hidden className="size-5" />}{valida ? `CCI validado en la demo. Banco detectado: ${banco.nombre}.` : `Banco detectado: ${banco.nombre}. No coincide con el elegido.`}</p>}
-    <p className="rounded-card border border-line-subtle bg-sunken p-4 text-body-sm text-fg-secondary">La cuenta debe estar a nombre de <strong className="font-semibold text-fg">{m.negocio?.razonSocial}</strong>. Revisaremos que el titular coincida.</p>
+    <div><h2 className="font-display-title text-h2">¿Dónde recibes el dinero?</h2><p className="mt-2 text-body-sm text-fg-secondary">Aquí te depositamos lo que vendas con tarjeta o Yape.</p></div>
+    <section className="flex gap-3 rounded-card bg-sunken p-4">
+      <span aria-hidden className="flex size-10 shrink-0 items-center justify-center rounded-full bg-surface text-icon"><UserRound className="size-5" /></span>
+      <p className="flex flex-col gap-1 text-body-sm"><span className="text-fg-secondary">La cuenta debe estar a nombre de</span><strong className="font-semibold text-fg">{m.negocio?.razonSocial}</strong><span className="text-fg-secondary">Así el proveedor de pagos puede depositarte tus ventas sin problemas.</span></p>
+    </section>
+    <Field label="CCI (código de cuenta interbancario)" inputMode="numeric" autoComplete="off" value={m.datos.cci} maxLength={20} error={m.errores.cci} hint="Son 20 dígitos. Lo encuentras en tu estado de cuenta o en la app de tu banco. No es el número de tu tarjeta." onChange={e => cambiarCci(e.target.value.replace(/\D/g, ""))} />
+    <CampoSelect label="Banco" value={m.datos.banco} placeholder="Elige tu banco" opciones={BANCOS.map(b => ({ valor: b.id, texto: b.nombre }))} error={m.errores.banco} hint={valida ? "Lo detectamos con tu CCI." : undefined} onChange={v => m.cambiar("banco", v as Banco | "")} />
+    {banco && !valida && m.datos.banco && <p role="status" className="text-body-sm text-warning">Banco detectado con tu CCI: {banco.nombre}. No coincide con el elegido.</p>}
+    {valida && <p role="status" className="flex items-center gap-2 text-caption text-success"><CheckCircle aria-hidden className="size-4" />CCI validado en la demo.</p>}
+    <CampoSelect label="Tipo de cuenta" value={m.datos.tipoCuenta} placeholder="Elige el tipo de cuenta" opciones={TIPOS_CUENTA.map(t => ({ valor: t.id, texto: t.nombre }))} error={m.errores.tipoCuenta} onChange={v => m.cambiar("tipoCuenta", v as Datos["tipoCuenta"])} />
   </div>;
 }

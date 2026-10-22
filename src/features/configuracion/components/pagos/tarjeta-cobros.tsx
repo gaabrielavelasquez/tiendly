@@ -1,8 +1,9 @@
 "use client";
 
-import { CreditCard } from "lucide-react";
-import { useState } from "react";
-import { Button, Card, Collapsible, Switch } from "@/components/ui";
+import { ChevronRight, CreditCard } from "lucide-react";
+import Link from "next/link";
+import { buttonVariants, Card, Collapsible, Switch } from "@/components/ui";
+import { cn } from "@/lib/cn";
 import type { Cobros } from "../../types";
 import { CabeceraMetodo } from "../estado-metodo";
 import { ComoFunciona, CuentaYComisiones } from "./detalle-cobros";
@@ -11,18 +12,28 @@ type Props = { cobros: Cobros; onCambio: (c: Cobros) => void; onUltimo: () => vo
 
 /**
  * Cobros automáticos en la web (tarjeta y Yape, decisión 0007 "pagar ahora"). Sin activar: qué se
- * necesita y "Solicitar" (la solicitud es Afiliación, módulo 4). Activos: un interruptor por método.
+ * necesita y "Solicitar" (lleva a Afiliación, módulo 4). En revisión: cuándo se recibió y el detalle
+ * (Figma A7). Activos: un interruptor por método.
  */
 export function TarjetaCobros({ cobros, onCambio, onUltimo, esUltimo }: Props) {
-  const [solicitando, setSolicitando] = useState<"no" | "cargando" | "pronto">("no");
   const icono = <CreditCard strokeWidth={1.6} className="size-5" />;
 
+  if (cobros.estado === "en-revision") {
+    return (
+      <Card className="flex flex-col gap-4 p-5 lg:p-6">
+        <CabeceraMetodo icono={icono} titulo="Cobros automáticos en tu web" estado="En revisión" />
+        <p className="text-body-sm text-fg-secondary">
+          Recibimos tu solicitud{cobros.solicitud ? ` el ${diaMes(cobros.solicitud.enviada)}` : ""}. Te avisamos por correo y WhatsApp cuando tus cobros automáticos estén activos.
+        </p>
+        <Link href="/panel/configuracion/afiliacion" className="group -mx-1 flex min-h-12 items-center justify-between gap-3 rounded-theme border-t border-line-subtle px-1 pt-3 text-body-sm font-semibold text-fg">
+          Ver detalle de solicitud
+          <ChevronRight aria-hidden strokeWidth={1.6} className="size-5 text-icon transition-transform group-hover:translate-x-0.5" />
+        </Link>
+      </Card>
+    );
+  }
+
   if (cobros.estado === "sin-activar") {
-    async function solicitar() {
-      setSolicitando("cargando");
-      await new Promise((r) => setTimeout(r, 1200));
-      setSolicitando("pronto");
-    }
     return (
       <Card className="flex flex-col gap-4 p-5 lg:p-6">
         <CabeceraMetodo icono={icono} titulo="Cobros automáticos en tu web" estado="Sin activar" />
@@ -31,10 +42,9 @@ export function TarjetaCobros({ cobros, onCambio, onUltimo, esUltimo }: Props) {
           <span className="font-semibold text-fg">Qué necesitas</span>
           <span className="text-fg-secondary">RUC y una cuenta bancaria a nombre de tu RUC. La aprobación tarda de 3 a 10 días hábiles.</span>
         </div>
-        <Button block onClick={solicitar} disabled={solicitando !== "no"} aria-busy={solicitando === "cargando" || undefined}>
-          {solicitando === "cargando" ? "Preparando tu solicitud…" : "Solicitar cobros automáticos"}
-        </Button>
-        {solicitando === "pronto" && <p role="status" className="text-caption text-fg-secondary">La solicitud en línea llega muy pronto. Te avisaremos por WhatsApp cuando puedas completarla.</p>}
+        <Link href="/panel/configuracion/afiliacion" className={cn(buttonVariants({ block: true }), "active:scale-[0.98]")}>
+          Solicitar cobros automáticos
+        </Link>
         <Collapsible resumen={<span className="text-body-sm font-semibold text-fg">Ver cómo funciona</span>} claseContenido="pt-2">
           <ComoFunciona />
         </Collapsible>
@@ -77,4 +87,11 @@ export function TarjetaCobros({ cobros, onCambio, onUltimo, esUltimo }: Props) {
       )}
     </Card>
   );
+}
+
+const MESES = ["enero", "febrero", "marzo", "abril", "mayo", "junio", "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"];
+/** "13 de octubre" en hora de Lima, sin Intl (mismo texto en servidor y navegador). */
+function diaMes(iso: string) {
+  const d = new Date(new Date(iso).getTime() - 5 * 3600000);
+  return `${d.getUTCDate()} de ${MESES[d.getUTCMonth()]}`;
 }
