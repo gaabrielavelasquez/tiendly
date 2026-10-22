@@ -18,9 +18,9 @@ const pasos = (hechos: number): Paso[] =>
       id: "pagos",
       titulo: "Elige cómo te pagan",
       descripcion: "Pedidos por WhatsApp ya está activo. Suma tarjeta y Yape cuando quieras.",
-      href: "/panel/pagos",
+      href: "/panel/configuracion/pagos",
     },
-    { id: "entregas", titulo: "Define cómo entregas", descripcion: "Delivery por zona o recojo en tienda.", href: "/panel/entregas" },
+    { id: "entregas", titulo: "Define cómo entregas", descripcion: "Delivery por zona o recojo en tienda.", href: "/panel/configuracion/entregas" },
     {
       id: "compartir",
       titulo: "Comparte el link de tu tienda",
