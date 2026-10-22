@@ -95,5 +95,8 @@ export function progresoPasos(pasos: Paso[]) {
   return { hechos, total: pasos.length, mensaje: MENSAJES[hechos] ?? "", siguiente: pasos.find((p) => !p.hecho)?.id };
 }
 
-/** Mientras falte algún paso, Inicio muestra "Pasos para arrancar". Con los 4, la vista con actividad. */
-export const esTiendaNueva = (d: InicioData) => d.pasos.some((p) => !p.hecho);
+/**
+ * Mientras falte algún paso, Inicio muestra "Pasos para arrancar". Con los 4, o apenas llega el primer pedido
+ * (hay que atenderlo aunque falte configurar algo), la vista con actividad.
+ */
+export const esTiendaNueva = (d: InicioData) => d.pasos.some((p) => !p.hecho) && !d.pedidosHoy.length && !d.reservas.length;
