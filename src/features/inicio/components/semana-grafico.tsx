@@ -12,35 +12,36 @@ const pedidosTexto = (n: number) => `${n} ${n === 1 ? "pedido" : "pedidos"}`;
 // Mínimo visible para que una venta chica siga leyéndose como barra y no como punto.
 const ALTO_MINIMO = 12;
 
-type SemanaGraficoProps = { dias: DiaVentas[]; hoy: string };
+type SemanaGraficoProps = { dias: DiaVentas[]; hoy: string; className?: string };
 
 /**
- * Barras finas por día (24 px móvil · 32 px desktop, radio 8) sobre un riel suave, lunes a domingo, sin ejes ni montos.
- * Degradado del mismo token (chart/bar); hoy en cobalto (accent/base, decisión 0020).
- * Con mouse o teclado se ve el detalle del día.
+ * Barras finas y sólidas por día (8 px móvil · 16 px desktop, punta redonda, 128 px de alto en desktop; 0031), lunes a domingo,
+ * sin ejes, montos ni riel: los días que no llegan no muestran nada. Pasados en gris medio (chart/bar-muted, 3.3:1) y
+ * hoy en cobalto sólido (accent/base, decisión 0020).
+ * Crecen al entrar, escalonadas (respeta "reducir movimiento"). Con mouse o teclado se ve el detalle del día.
  */
-export function SemanaGrafico({ dias, hoy }: SemanaGraficoProps) {
+export function SemanaGrafico({ dias, hoy, className }: SemanaGraficoProps) {
   const reduce = useReducedMotion();
   const max = Math.max(1, ...dias.map((d) => d.monto ?? 0));
 
   return (
-    <ul aria-label="Ventas por día" className="flex items-end gap-1 pt-4 lg:gap-3">
+    <ul aria-label="Ventas por día" className={cn("flex items-end gap-1 pt-2 lg:gap-4", className)}>
       {dias.map((d, i) => {
         const esHoy = d.fecha === hoy;
         const alto = d.monto ? Math.max(ALTO_MINIMO, (d.monto / max) * 100) : 0;
         const detalle = d.monto === null ? "todavía no llega" : `${formatoSoles(d.monto)} · ${pedidosTexto(d.pedidos)}`;
         return (
-          <li key={d.fecha} className="flex flex-1 flex-col items-center gap-2">
+          <li key={d.fecha} className="flex flex-1 flex-col items-center gap-3">
             <div
               tabIndex={0}
               role="img"
               aria-label={`${fechaDia(d.fecha, true)}${esHoy ? " (hoy)" : ""}: ${detalle}.`}
-              className="group relative flex h-32 w-full justify-center rounded-theme lg:h-48"
+              className="group relative flex h-36 w-full justify-center rounded-theme lg:h-32"
             >
-              <div className="relative h-full w-6 overflow-hidden rounded-theme bg-sunken lg:w-8">
+              <div className="relative h-full w-2 lg:w-4">
                 {alto > 0 && (
                   <motion.div
-                    className={cn("absolute inset-x-0 bottom-0 rounded-theme", esHoy ? "bg-bar-today shadow-float" : "bg-bar")}
+                    className={cn("absolute inset-x-0 bottom-0 rounded-full", esHoy ? "bg-accent" : "bg-chart-muted")}
                     style={{ height: `${alto}%`, originY: 1 }}
                     initial={reduce ? false : { scaleY: 0 }}
                     animate={{ scaleY: 1 }}
@@ -59,8 +60,8 @@ export function SemanaGrafico({ dias, hoy }: SemanaGraficoProps) {
             <span
               aria-hidden
               className={cn(
-                "flex h-6 min-w-6 items-center justify-center rounded-chip px-1.5 text-label",
-                esHoy ? "bg-accent font-bold text-on-accent" : "text-fg-secondary",
+                "flex h-6 min-w-6 items-center justify-center text-label",
+                esHoy ? "font-semibold text-accent-text" : "text-fg-secondary",
               )}
             >
               {INICIALES[i]}

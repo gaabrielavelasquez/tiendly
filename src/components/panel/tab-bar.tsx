@@ -38,7 +38,8 @@ export function TabBar() {
   if (sinBarra(path)) return null;
   return (
     <>
-      <div aria-hidden className="h-16 lg:hidden" />
+      {/* Reserva el alto de la barra (56 px + borde) más la zona segura de iPhone, para que nunca tape contenido (0031). */}
+      <div aria-hidden className="box-content h-16 pb-[env(safe-area-inset-bottom)] lg:hidden" />
       <AnimatePresence>
         {mas && (
           <div className="fixed inset-0 z-30 lg:hidden">

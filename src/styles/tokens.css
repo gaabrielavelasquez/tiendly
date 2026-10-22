@@ -18,6 +18,7 @@
   --tl-color-neutral-200: #E5E7EB;
   --tl-color-neutral-300: #D1D5DB;
   --tl-color-neutral-400: #9CA3AF;
+  --tl-color-neutral-450: #878D97;
   --tl-color-neutral-500: #666D7A;
   --tl-color-neutral-600: #4B5563;
   --tl-color-neutral-700: #374151;
@@ -56,7 +57,9 @@
   --tl-color-scrim-50: #1A1A1A80;
   --tl-color-scrim-65: #1A1A1AA6;
   --tl-color-shadow-4: #0000000A;
+  --tl-color-shadow-7: #1A1A1A12;
   --tl-color-shadow-8: #1A1A1A14;
+  --tl-color-shadow-12: #1A1A1A1F;
   --tl-color-shadow-14: #1A1A1A24;
   --tl-color-shadow-40: #1A1A1A66;
   --tl-color-shadow-60: #1A1A1A99;
@@ -70,6 +73,7 @@
   --tl-color-tint-ice: #E0ECFF;
   --tl-color-tint-lilac: #EEF0FF;
   --tl-color-tint-mist: #F5F8FF;
+  --tl-color-highlight-25: #FFFFFF40;
   --tl-color-highlight-35: #FFFFFF59;
   --tl-color-cobalt-50: #EFF6FF;
   --tl-color-cobalt-100: #DBEAFE;
@@ -91,6 +95,7 @@
   --tl-color-teal-info-900: #134E4A;
   --tl-color-navy-900: #1B365D;
   --tl-color-warm-glow: #FB923C0A;
+  --tl-color-paper-50: #F8F8F6;
   --tl-color-paper-100: #F4F4F3;
   --tl-color-paper-200: #F0EFED;
   --tl-color-ink-10: #1A1A1A1A;
@@ -120,7 +125,7 @@
   --tl-radius-chip: var(--tl-radius-xs);
   --tl-stroke-thin: 1px;
   --tl-stroke-thick: 2px;
-  --tl-bg-page: var(--tl-color-paper-100);
+  --tl-bg-page: var(--tl-color-paper-50);
   --tl-bg-surface: var(--tl-color-neutral-0);
   --tl-bg-sunken: var(--tl-color-paper-200);
   --tl-bg-inverse: var(--tl-color-neutral-1000);
@@ -128,6 +133,7 @@
   --tl-bg-scrim: var(--tl-color-scrim-50);
   --tl-bg-skeleton: var(--tl-color-neutral-200);
   --tl-border-subtle: var(--tl-color-neutral-200);
+  --tl-border-card: var(--tl-color-paper-200);
   --tl-border-default: var(--tl-color-neutral-300);
   --tl-border-strong: var(--tl-color-neutral-500);
   --tl-text-primary: var(--tl-color-neutral-1000);
@@ -183,6 +189,7 @@
   --tl-gradient-glow-sky: radial-gradient(60% 60% at 50% 0%, var(--tl-glow-sky-from) 0%, var(--tl-glow-sky-to) 100%);
   --tl-effect-highlight: var(--tl-color-highlight-35);
   --tl-chart-bar: var(--tl-color-neutral-500);
+  --tl-chart-bar-muted: var(--tl-color-neutral-450);
   --tl-accent-base: var(--tl-color-cobalt-600);
   --tl-accent-hover: var(--tl-color-cobalt-700);
   --tl-accent-pressed: var(--tl-color-cobalt-800);
@@ -197,6 +204,8 @@
   --tl-font-body: "Inter Variable", "Inter", ui-sans-serif, system-ui, sans-serif;
   --tl-font-hero-style: 600;
   --tl-font-metric-style: 600;
+  --tl-font-title-style: 500;
+  --tl-font-section-style: 550;
   --tl-glow-sky-from: var(--tl-color-cobalt-alpha-16);
   --tl-glow-sky-to: var(--tl-color-cobalt-50);
   --tl-glow-warm: var(--tl-color-warm-glow);
@@ -224,6 +233,8 @@
   --tl-layout-block-gap: 24px;
   --tl-layout-columns: 4;
   --tl-elevation-card: 0px 1px 2px 0px var(--tl-shadow-soft), 0px 2px 8px 0px var(--tl-shadow-soft);
+  --tl-elevation-container: inset 0px 0px 0px 1px var(--tl-color-shadow-8), 0px 1px 0px 0px var(--tl-color-shadow-7);
+  --tl-elevation-layered: inset 0px 1px 0px 0px var(--tl-color-highlight-25), inset 0px 0px 0px 1px var(--tl-color-shadow-8), 0px 1px 0px 0px var(--tl-color-shadow-7), 0px 3px 1px -1px var(--tl-color-shadow-7), 0px 4px 6px -2px var(--tl-color-shadow-12);
   --tl-elevation-low: 0px 4px 20px 0px var(--tl-shadow-soft), 0px 12px 40px 0px var(--tl-glow-warm);
   --tl-elevation-celebration: 0px 0px 64px 8px var(--tl-glow-warm), 0px 16px 48px -8px var(--tl-glow-sky-from);
   --tl-elevation-medium: 0px 4px 12px -2px var(--tl-shadow-strong);
@@ -258,6 +269,7 @@
   --tl-radius-card: var(--tl-radius-sm);
   --tl-radius-button: var(--tl-radius-xs);
   --tl-radius-chip: var(--tl-radius-xs);
+  --tl-bg-page: var(--tl-color-paper-100);
   --tl-accent-base: var(--tl-bg-inverse);
   --tl-accent-hover: var(--tl-bg-inverse-hover);
   --tl-accent-pressed: var(--tl-bg-inverse-hover);
@@ -287,6 +299,7 @@
   --tl-radius-card: var(--tl-radius-none);
   --tl-radius-button: var(--tl-radius-none);
   --tl-radius-chip: var(--tl-radius-none);
+  --tl-bg-page: var(--tl-color-paper-100);
   --tl-accent-base: var(--tl-bg-inverse);
   --tl-accent-hover: var(--tl-bg-inverse-hover);
   --tl-accent-pressed: var(--tl-bg-inverse-hover);
@@ -316,6 +329,7 @@
   --tl-radius-card: var(--tl-radius-xl);
   --tl-radius-button: var(--tl-radius-full);
   --tl-radius-chip: var(--tl-radius-full);
+  --tl-bg-page: var(--tl-color-paper-100);
   --tl-accent-base: var(--tl-color-teal-700);
   --tl-accent-hover: var(--tl-color-teal-900);
   --tl-accent-pressed: var(--tl-color-teal-900);
@@ -345,6 +359,7 @@
   --tl-radius-card: var(--tl-radius-xl);
   --tl-radius-button: var(--tl-radius-full);
   --tl-radius-chip: var(--tl-radius-full);
+  --tl-bg-page: var(--tl-color-paper-100);
   --tl-accent-base: #F5B921;
   --tl-accent-hover: #CD9300;
   --tl-accent-pressed: #CD9300;
@@ -378,6 +393,7 @@
   --tl-bg-scrim: var(--tl-color-scrim-65);
   --tl-bg-skeleton: var(--tl-color-neutral-800);
   --tl-border-subtle: var(--tl-color-neutral-800);
+  --tl-border-card: var(--tl-color-neutral-800);
   --tl-border-default: var(--tl-color-neutral-700);
   --tl-border-strong: var(--tl-color-neutral-600);
   --tl-text-primary: var(--tl-color-neutral-100);
@@ -430,4 +446,5 @@
   --tl-gradient-highlight-end: var(--tl-color-tint-mist);
   --tl-effect-highlight: var(--tl-color-highlight-35);
   --tl-chart-bar: var(--tl-color-neutral-500);
+  --tl-chart-bar-muted: var(--tl-color-neutral-700);
 }

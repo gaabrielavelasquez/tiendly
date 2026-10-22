@@ -11,6 +11,8 @@ export const buttonVariants = cva(
         secondary: "border border-line-strong bg-surface text-fg hover:bg-sunken disabled:text-fg-tertiary",
         ghost: "text-accent-text hover:bg-accent-subtle disabled:text-fg-tertiary",
         danger: "bg-danger text-on-danger hover:bg-danger-hover disabled:bg-sunken disabled:text-fg-tertiary",
+        // Acción silenciosa de encabezado de sección (decisión 0031): píldora neutra. Se usa siempre con cn() para que rounded-full gane.
+        quiet: "rounded-full border border-line-subtle bg-surface font-medium text-fg hover:bg-sunken disabled:text-fg-tertiary",
       },
       size: {
         md: "h-10 px-4 text-body-sm",
