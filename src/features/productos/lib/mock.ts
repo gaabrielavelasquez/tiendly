@@ -43,6 +43,11 @@ const SEMILLA: Producto[] = [
 const g = globalThis as typeof globalThis & { __tiendlyProductos?: Producto[] };
 const catalogo = () => (g.__tiendlyProductos ??= structuredClone(SEMILLA));
 
+/** Tienda nueva (onboarding): catálogo vacío. */
+export function vaciarCatalogo() {
+  g.__tiendlyProductos = [];
+}
+
 /** Crea o reemplaza un producto (por id). */
 export function guardarEnCatalogo(p: Producto) {
   const lista = catalogo();

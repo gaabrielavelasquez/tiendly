@@ -13,6 +13,11 @@ const asignaciones = (g.__tiendlyInventario ??= {});
 
 const clave = (id: string, color: string, talla: string) => `${id}|${color}|${talla}`;
 
+/** Tienda nueva (onboarding): no hay ventas ni reservas. */
+export function reiniciarInventario() {
+  for (const id of Object.keys(asignaciones)) delete asignaciones[id];
+}
+
 /** Fija lo que un pedido consume. `null` (cancelado) lo libera. */
 export function asignarStock(pedidoId: string, a: Asignacion | null) {
   if (a) asignaciones[pedidoId] = a;

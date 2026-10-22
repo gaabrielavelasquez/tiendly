@@ -24,7 +24,7 @@ export default async function ProductoPage({ params }: PageProps) {
     <div className="flex min-h-dvh flex-col">
       <CabeceraTienda nombre={vitrina.tienda.nombre} logo={vitrina.tienda.logo} slug={tienda} categorias={vitrina.categorias} />
       <main className="mx-auto flex w-full max-w-6xl flex-col gap-16 px-4 py-6 lg:gap-24 lg:py-12">
-        <FichaProducto p={ficha} tienda={tienda} celular={datos.tienda.celular} />
+        <FichaProducto p={ficha} tienda={tienda} celular={datos.tienda.celular} demo={datos.tienda.demo} />
         {ficha.sobre && (
           <section aria-labelledby="sobre" className="flex max-w-2xl flex-col gap-3">
             <h2 id="sobre" className="font-display-hero text-h2 text-fg">Sobre el modelo</h2>

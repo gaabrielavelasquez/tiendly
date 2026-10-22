@@ -16,7 +16,8 @@ export const INICIAL: Tienda = {
   instagram: "heather.pe", whatsapp: "987654321", horario: "Lunes a sábado, de 9 a. m. a 6 p. m.",
 };
 export const VACIA: Tienda = { ...INICIAL, tema: "neutral", portada: "", bienvenida: "", instagram: "", whatsapp: "", horario: "" };
-export const STORAGE = "tiendly:mi-tienda:heather";
+/** Lo guardado en el navegador, por tienda. */
+export const storageDe = (slug: string) => `tiendly:mi-tienda:${slug}`;
 
 /** Solo reemplaza tokens de acento en la vitrina; el tema sigue controlando fuentes y radios. */
 export function estiloAcento(acento: Acento): CSSProperties {

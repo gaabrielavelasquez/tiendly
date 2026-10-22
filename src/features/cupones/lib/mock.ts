@@ -24,6 +24,11 @@ export function guardarCupon(c: Cupon) {
   else lista.unshift({ ...c });
 }
 
+/** Tienda nueva (onboarding): sin cupones. */
+export function vaciarCupones() {
+  g.__tiendlyCupones = [];
+}
+
 export function eliminarCupon(id: string) {
   g.__tiendlyCupones = almacen().filter((c) => c.id !== id);
 }

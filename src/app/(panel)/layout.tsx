@@ -1,4 +1,4 @@
-import { MobileTopbar, Sidebar, TabBar } from "@/components/panel";
+import { MobileTopbar, SesionPanel, Sidebar, TabBar } from "@/components/panel";
 import { tiendaActual } from "@/lib/sesion";
 
 /**
@@ -7,13 +7,15 @@ import { tiendaActual } from "@/lib/sesion";
  */
 export default function PanelLayout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="min-h-dvh bg-page lg:flex">
-      <Sidebar />
-      <div className="flex min-w-0 flex-1 flex-col">
-        <MobileTopbar nombreTienda={tiendaActual.nombre} duena={tiendaActual.duena} />
-        {children}
-        <TabBar />
+    <SesionPanel duena={tiendaActual.duena}>
+      <div className="min-h-dvh bg-page lg:flex">
+        <Sidebar />
+        <div className="flex min-w-0 flex-1 flex-col">
+          <MobileTopbar nombreTienda={tiendaActual.nombre} duena={tiendaActual.duena} />
+          {children}
+          <TabBar />
+        </div>
       </div>
-    </div>
+    </SesionPanel>
   );
 }

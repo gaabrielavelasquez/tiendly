@@ -4,16 +4,17 @@ import type { Tienda } from "../types";
 import { cn } from "@/lib/cn";
 
 /** La misma vitrina se utiliza en miniaturas, móvil y desktop. No modifica el tema del panel. */
-export function TiendaPreview({ tienda, mini = false, computadora = false }: { tienda: Tienda; mini?: boolean; computadora?: boolean }) {
+/** `nombre`: el de la tienda de la sesión. */
+export function TiendaPreview({ tienda, nombre, mini = false, computadora = false }: { tienda: Tienda; nombre: string; mini?: boolean; computadora?: boolean }) {
   return <div data-theme={tienda.tema} style={estiloAcento(tienda.acento)} className="overflow-hidden rounded-theme bg-surface font-body text-fg">
     <div className={cn("flex items-center justify-between border-b border-line-subtle p-4", mini && "p-2")}>
       {!mini && <Menu aria-hidden className="size-5" />}
-      {tienda.logo ? <img src={tienda.logo} alt="Heather" className={mini ? "h-5 max-w-16 object-contain" : "h-10 max-w-32 object-contain"} />
-        : <p className={cn("font-display-title text-h2", mini && "w-full text-center text-caption")}>Heather</p>}
+      {tienda.logo ? <img src={tienda.logo} alt={nombre} className={mini ? "h-5 max-w-16 object-contain" : "h-10 max-w-32 object-contain"} />
+        : <p className={cn("font-display-title text-h2", mini && "w-full text-center text-caption")}>{nombre}</p>}
       {!mini && <ShoppingBag aria-hidden className="size-5" />}
     </div>
-    {!mini && <p className="break-words px-5 py-3 text-center text-body-sm text-fg-secondary">{tienda.bienvenida || "Bienvenidos a Heather."}</p>}
-    {tienda.portada ? <img src={tienda.portada} alt="Colección de zapatos Heather" className={cn("aspect-video w-full object-cover", mini && "aspect-[2/1]")} />
+    {!mini && <p className="break-words px-5 py-3 text-center text-body-sm text-fg-secondary">{tienda.bienvenida || `Bienvenidos a ${nombre}.`}</p>}
+    {tienda.portada ? <img src={tienda.portada} alt={`Portada de ${nombre}`} className={cn("aspect-video w-full object-cover", mini && "aspect-[2/1]")} />
       : <div className="flex aspect-video items-center justify-center bg-sunken p-4 text-caption text-fg-secondary">Tu foto de portada</div>}
     <div className={cn("flex flex-col gap-4 p-5", mini && "gap-2 p-2")}>
       <h3 className={cn("font-display-title text-h2", mini && "text-label")}>{mini ? "Nueva colección" : "Tu próximo par favorito"}</h3>

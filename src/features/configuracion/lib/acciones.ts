@@ -1,6 +1,7 @@
 "use server";
 
 import type { ConfigEntregas, ConfigPagos } from "../types";
+import { marcarHecho } from "@/lib/sesion";
 import { configActual, guardarConfig } from "./mock";
 import { quedaAlgunMetodo, validarEntregas } from "./reglas";
 
@@ -12,6 +13,7 @@ export async function guardarPagos(pagos: ConfigPagos): Promise<{ ok: true } | {
   if (!quedaAlgunMetodo(pagos)) return { error: "Tiene que quedar al menos un método de cobro activo." };
   if (!/^9\d{8}$/.test(pagos.whatsapp.celular)) return { error: "Revisa el número: son 9 dígitos y empieza con 9." };
   guardarConfig({ pagos });
+  marcarHecho("pagos");
   return { ok: true };
 }
 
@@ -21,6 +23,7 @@ export async function guardarEntregas(entregas: ConfigEntregas): Promise<{ ok: t
   if (r.regla) return { error: "Debes mantener al menos un método de entrega activo." };
   if (r.resumen) return { error: r.resumen };
   guardarConfig({ entregas });
+  marcarHecho("entregas");
   return { ok: true };
 }
 

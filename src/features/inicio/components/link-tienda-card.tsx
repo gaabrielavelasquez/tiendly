@@ -4,7 +4,9 @@ import { Check, Copy } from "lucide-react";
 import { Pressable } from "@/components/motion/pressable";
 import { Card } from "@/components/ui";
 import { cn } from "@/lib/cn";
+import { useRouter } from "next/navigation";
 import { useCopiar } from "../hooks/use-copiar";
+import { marcarCompartido } from "../lib/acciones";
 import { CompartirWhatsApp } from "./compartir-whatsapp";
 
 const AVISO = { idle: "", copiado: "Link copiado.", error: "No se pudo copiar. Mantén presionado el link para copiarlo." } as const;
@@ -12,6 +14,7 @@ const AVISO = { idle: "", copiado: "Link copiado.", error: "No se pudo copiar. M
 /** "El link de tu tienda": copiar y compartir por WhatsApp (tienda nueva). `link`: URL completa. */
 export function LinkTiendaCard({ link, className }: { link: string; className?: string }) {
   const { estado, copiar } = useCopiar();
+  const router = useRouter();
   const Icono = estado === "copiado" ? Check : Copy;
 
   return (
@@ -25,7 +28,7 @@ export function LinkTiendaCard({ link, className }: { link: string; className?: 
           <Pressable
             type="button"
             aria-label="Copiar link"
-            onClick={() => copiar(link)}
+            onClick={() => (copiar(link), void marcarCompartido().then(() => router.refresh()))}
             className="flex size-12 shrink-0 items-center justify-center rounded-button text-icon transition-colors hover:bg-sunken"
           >
             <Icono aria-hidden strokeWidth={1.6} className={cn("size-6", estado === "copiado" && "text-success")} />

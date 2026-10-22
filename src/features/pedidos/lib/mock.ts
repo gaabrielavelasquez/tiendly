@@ -1,4 +1,5 @@
 import type { DetallePedido, Escenario, Pedido } from "../types";
+import { esTiendaDemo } from "@/lib/sesion";
 import { DETALLES, unidades } from "./detalle-mock";
 
 // Pedidos simulados de una tienda que vende por WhatsApp (Heather), hasta tener backend.
@@ -53,8 +54,11 @@ export async function obtenerPedidos(escenario: Escenario): Promise<Pedido[]> {
   if (escenario === "error") throw new Error("No se pudo cargar Pedidos (simulado).");
   if (escenario === "vacio") return [];
   const { pedidosCreados } = await import("./almacen"); // los de la vitrina van primero: son los más nuevos
-  return [...pedidosCreados().map((c) => c.pedido), ...PEDIDOS.map(conUnidades)];
+  return [...pedidosCreados().map((c) => c.pedido), ...demo().map(conUnidades)];
 }
+
+/** Los pedidos simulados son de Heather; una tienda nueva solo tiene los de su vitrina. */
+const demo = () => (esTiendaDemo() ? PEDIDOS : []);
 
 /** La cantidad de productos de la lista sale del detalle, así no se desalinean. */
 const conUnidades = (p: Pedido): Pedido => (DETALLES[p.id] ? { ...p, items: unidades(DETALLES[p.id]) } : p);
@@ -65,7 +69,7 @@ export async function obtenerPedido(id: string): Promise<{ pedido: Pedido; detal
   const { pedidosCreados } = await import("./almacen");
   const creado = pedidosCreados().find((c) => c.pedido.id === id);
   if (creado) return { pedido: creado.pedido, detalle: creado.detalle };
-  const pedido = PEDIDOS.find((p) => p.id === id);
+  const pedido = demo().find((p) => p.id === id);
   const detalle = DETALLES[id];
   return pedido && detalle ? { pedido: conUnidades(pedido), detalle } : null;
 }

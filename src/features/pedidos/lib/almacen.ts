@@ -21,6 +21,12 @@ export const siguienteNumero = () => `TL-${++almacen.ultimo}`;
  */
 export const horaDemo = () => new Date(AHORA).toISOString();
 
+/** Tienda nueva (onboarding): sin pedidos; la numeración arranca en #TL-1001. */
+export function reiniciarPedidos() {
+  almacen.ultimo = 1000;
+  almacen.creados = [];
+}
+
 export function agregarPedido(c: Creado) {
   almacen.creados = [c, ...almacen.creados.filter((x) => x.pedido.id !== c.pedido.id)];
 }

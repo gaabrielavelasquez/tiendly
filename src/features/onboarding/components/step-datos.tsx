@@ -5,7 +5,7 @@ import { Button, Field } from "@/components/ui";
 import { RubroChips } from "./rubro-chips";
 import { SlugStatus } from "./slug-status";
 import { useOnboarding } from "../hooks/use-onboarding";
-import { guardarRubros } from "../lib/acciones";
+import { crearTienda } from "../lib/acciones";
 import { useSlugCheck } from "../hooks/use-slug-check";
 import { errorCelular, formatear, soloDigitos } from "../lib/phone";
 
@@ -28,9 +28,14 @@ export function StepDatos() {
     setErrores(nuevos);
     if (Object.values(nuevos).some(Boolean) || slug.estado !== "listo") return;
     setCreando(true);
-    await new Promise((r) => setTimeout(r, 900)); // simulación de la creación de la tienda
-    await guardarRubros(state.rubros); // perfil del negocio: Afiliación los precarga
-    set({ slug: slug.libre ? slug.slug : slug.sugerencia ?? slug.slug, paso: "lista" });
+    const final = slug.libre ? slug.slug : slug.sugerencia ?? slug.slug;
+    // La tienda pasa a ser la de la sesión (panel y vitrina) y guarda sus rubros (Afiliación los precarga).
+    const r = await crearTienda({ nombre: state.nombre, slug: final, celularVentas: state.celularVentas, rubros: state.rubros }).catch(() => ({
+      error: "No pudimos crear tu tienda. Revisa tu conexión e inténtalo de nuevo.",
+    }));
+    setCreando(false);
+    if ("error" in r) return setErrores({ nombre: r.error });
+    set({ slug: final, paso: "lista" });
   }
 
   return (

@@ -7,8 +7,8 @@ import { ejemplo, leerBorrador, STORAGE, VACIO } from "../lib/borrador";
 import { validarCuenta, validarNegocio, validarRepresentante, validarRuc } from "../lib/reglas";
 import type { Borrador, Datos, Errores } from "../types";
 
-/** `rubros`: los del perfil del negocio (servidor). Mandan sobre el borrador: hay una sola fuente. */
-export function useAfiliacion(escenario?: string, rubros: RubroId[] = []) {
+/** `rubros`: los del perfil del negocio (servidor); mandan sobre el borrador: hay una sola fuente. `tienda`: su nombre, para precargar A2. */
+export function useAfiliacion(escenario?: string, rubros: RubroId[] = [], tienda = "") {
   const [b, setB] = useState<Borrador>(VACIO);
   const [estado, setEstado] = useState<"cargando" | "lista" | "error">("cargando");
   const [errores, setErrores] = useState<Errores>({});
@@ -23,7 +23,7 @@ export function useAfiliacion(escenario?: string, rubros: RubroId[] = []) {
       if (escenario === "error") throw new Error("Error simulado.");
       const guardado = sessionStorage.getItem(STORAGE);
       const datos = escenario === "vacio" ? VACIO : escenario === "observada" ? ejemplo("observada") : escenario === "revision" ? ejemplo("revision") : escenario === "aprobada" ? ejemplo("aprobada") : guardado ? leerBorrador(guardado) : VACIO;
-      setB({ ...datos, datos: { ...datos.datos, rubros } }); setEstado("lista");
+      setB({ ...datos, datos: { ...datos.datos, rubros, tienda: datos.datos.tienda || tienda } }); setEstado("lista");
     } catch { setEstado("error"); }
   }, [escenario]); // los rubros del servidor solo se leen al cargar
   useEffect(() => {
@@ -83,7 +83,7 @@ export function useAfiliacion(escenario?: string, rubros: RubroId[] = []) {
     } catch { setMensaje("No pudimos enviar la solicitud. No se perdió lo que escribiste. Inténtalo de nuevo."); }
     finally { setEnviando(false); }
   }
-  function reiniciar() { setB(VACIO); setErrores({}); setMensaje(""); setAcepto(false); setEditando(false); setEstado("lista"); }
+  function reiniciar() { setB({ ...VACIO, datos: { ...VACIO.datos, rubros, tienda } }); setErrores({}); setMensaje(""); setAcepto(false); setEditando(false); setEstado("lista"); }
   return { ...b, estado, errores, mensaje, buscando, enviando, acepto, setAcepto, cambiar, ir, editar, continuar, enviar, reiniciar };
 }
 export type ModeloAfiliacion = ReturnType<typeof useAfiliacion>;

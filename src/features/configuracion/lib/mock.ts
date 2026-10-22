@@ -32,6 +32,18 @@ export function guardarConfig(parcial: Partial<ConfigCompra>) {
   g.__tiendlyConfig = { ...configActual(), ...copia(parcial) };
 }
 
+/**
+ * Tienda nueva (onboarding): Pedidos por WhatsApp activo con su número; sin cobros automáticos ni recojo
+ * (no hay dirección todavía). Delivery queda con las zonas de siempre para que pueda vender desde el primer día.
+ */
+export function configNueva(celular: string) {
+  const c = copia(INICIAL);
+  c.pagos = { whatsapp: { activo: true, celular }, cobros: { estado: "sin-activar", tarjeta: false, yape: false } };
+  c.entregas.recojo = { activo: false, direccion: "", distrito: "", horario: "", nota: "" };
+  c.entregas.delivery.envioGratis = { activo: false, desde: "" };
+  g.__tiendlyConfig = c;
+}
+
 export function leerEscenario(v: string | string[] | undefined): Escenario {
   const e = Array.isArray(v) ? v[0] : v;
   return e === "sin-pasarela" || e === "en-revision" || e === "sin-entregas" || e === "error" ? e : "configurado";
