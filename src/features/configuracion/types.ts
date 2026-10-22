@@ -1,9 +1,10 @@
 // Configuración de cobro y entrega de la tienda (módulo 2; decisiones 0007 y 0009).
 
-export type Escenario = "configurado" | "sin-pasarela" | "sin-entregas" | "error";
+export type Escenario = "configurado" | "sin-pasarela" | "en-revision" | "sin-entregas" | "error";
 
 /** Cobros automáticos (tarjeta y Yape en la web): se piden en Afiliación (módulo 4). */
-export type Cobros = { estado: "sin-activar" | "activo"; tarjeta: boolean; yape: boolean; cuenta?: { banco: string; tipo: string; ultimos4: string; titular: string } };
+/** "en-revision": la solicitud de Afiliación se envió y espera respuesta (Figma A7). */
+export type Cobros = { estado: "sin-activar" | "en-revision" | "activo"; tarjeta: boolean; yape: boolean; cuenta?: { banco: string; tipo: string; ultimos4: string; titular: string }; solicitud?: { numero: string; enviada: string } };
 
 export type ConfigPagos = { whatsapp: { activo: boolean; celular: string }; cobros: Cobros };
 

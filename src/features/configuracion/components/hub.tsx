@@ -1,4 +1,4 @@
-import { ChevronRight, CreditCard, Truck, UserRound } from "lucide-react";
+import { BadgeCheck, ChevronRight, CreditCard, Truck, UserRound } from "lucide-react";
 import Link from "next/link";
 import { Card } from "@/components/ui";
 import { tiendaActual } from "@/lib/sesion";
@@ -6,13 +6,19 @@ import { formatoCelular } from "@/features/checkout/lib/reglas";
 import type { ConfigCompra } from "../types";
 import { metodosVisibles, vistaCliente } from "../lib/reglas";
 
-/** Configuración (decisión 0027): Métodos de pago, Entregas y Cuenta, con un resumen de cada una. */
+/** Configuración (decisión 0027): Métodos de pago, Entregas, Cobros automáticos (Afiliación, módulo 4) y Cuenta. */
 export function Hub({ config }: { config: ConfigCompra }) {
   const m = metodosVisibles(config.pagos);
   const entregas = vistaCliente(config.entregas);
   const filas = [
     { href: "/panel/configuracion/pagos", icono: CreditCard, titulo: "Métodos de pago", detalle: [...m.ahora, ...m.despues].join(" · ") || "Sin métodos activos" },
     { href: "/panel/configuracion/entregas", icono: Truck, titulo: "Entregas", detalle: entregas.length ? `${entregas.length} ${entregas.length === 1 ? "opción" : "opciones"} para tus clientes` : "Sin métodos de entrega activos" },
+    // Cobros automáticos (módulo 4): activos se gestionan en Pagos; si no, se piden o se sigue la solicitud.
+    config.pagos.cobros.estado === "activo"
+      ? { href: "/panel/configuracion/pagos", icono: BadgeCheck, titulo: "Cobros automáticos", detalle: "Activos: tarjeta y Yape en tu tienda" }
+      : config.pagos.cobros.estado === "en-revision"
+        ? { href: "/panel/configuracion/afiliacion", icono: BadgeCheck, titulo: "Cobros automáticos", detalle: "Solicitud en revisión" }
+        : { href: "/panel/configuracion/afiliacion", icono: BadgeCheck, titulo: "Cobros automáticos", detalle: "Solicita pagos con tarjeta y Yape" },
   ];
   return (
     <div className="flex flex-col gap-4">

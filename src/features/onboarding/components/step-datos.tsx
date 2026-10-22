@@ -5,6 +5,7 @@ import { Button, Field } from "@/components/ui";
 import { RubroChips } from "./rubro-chips";
 import { SlugStatus } from "./slug-status";
 import { useOnboarding } from "../hooks/use-onboarding";
+import { guardarRubros } from "../lib/acciones";
 import { useSlugCheck } from "../hooks/use-slug-check";
 import { errorCelular, formatear, soloDigitos } from "../lib/phone";
 
@@ -28,6 +29,7 @@ export function StepDatos() {
     if (Object.values(nuevos).some(Boolean) || slug.estado !== "listo") return;
     setCreando(true);
     await new Promise((r) => setTimeout(r, 900)); // simulación de la creación de la tienda
+    await guardarRubros(state.rubros); // perfil del negocio: Afiliación los precarga
     set({ slug: slug.libre ? slug.slug : slug.sugerencia ?? slug.slug, paso: "lista" });
   }
 

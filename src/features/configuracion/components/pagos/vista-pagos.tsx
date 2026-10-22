@@ -41,8 +41,9 @@ export function VistaPagos({ inicial }: { inicial: ConfigPagos }) {
       onUltimo={() => avisar({ texto: "Es tu único método de cobro, así que no se puede apagar. Prende Pedidos por WhatsApp primero.", tono: "error" })}
     />
   );
+  const enRevision = pagos.cobros.estado === "en-revision"; // Figma A7: va en «En proceso», con WhatsApp activo arriba
   const activos = [pagos.whatsapp.activo && whatsapp, cobrosActivos && cobros].filter(Boolean);
-  const resto = [!pagos.whatsapp.activo && whatsapp, !cobrosActivos && cobros].filter(Boolean);
+  const resto = [!pagos.whatsapp.activo && whatsapp, !cobrosActivos && !enRevision && cobros].filter(Boolean);
   const visibles = metodosVisibles(pagos);
 
   return (
@@ -55,6 +56,12 @@ export function VistaPagos({ inicial }: { inicial: ConfigPagos }) {
         <div className="flex flex-col gap-4 lg:col-span-2">
           <h2 className={grupo}>Activos</h2>
           {activos}
+          {enRevision && (
+            <>
+              <h2 className={`${grupo} pt-2`}>En proceso</h2>
+              {cobros}
+            </>
+          )}
           {resto.length > 0 && <h2 className={`${grupo} pt-2`}>{pagos.cobros.estado === "sin-activar" ? "Puedes activar" : "Apagados"}</h2>}
           {resto}
         </div>
@@ -75,6 +82,7 @@ export function VistaPagos({ inicial }: { inicial: ConfigPagos }) {
               </div>
             ) : null,
           )}
+          {enRevision && <p className="text-caption text-fg-secondary">Tarjeta y Yape aparecerán cuando se aprueben tus cobros automáticos.</p>}
         </VistaCliente>
       </div>
       <Aviso aviso={aviso} />

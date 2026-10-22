@@ -34,7 +34,7 @@ export function guardarConfig(parcial: Partial<ConfigCompra>) {
 
 export function leerEscenario(v: string | string[] | undefined): Escenario {
   const e = Array.isArray(v) ? v[0] : v;
-  return e === "sin-pasarela" || e === "sin-entregas" || e === "error" ? e : "configurado";
+  return e === "sin-pasarela" || e === "en-revision" || e === "sin-entregas" || e === "error" ? e : "configurado";
 }
 
 /** Simula la llamada al backend (se ve el esqueleto). Los escenarios muestran otros estados sin tocar lo guardado. */
@@ -43,6 +43,7 @@ export async function obtenerConfig(escenario: Escenario = "configurado"): Promi
   if (escenario === "error") throw new Error("No se pudo cargar la configuración (simulado).");
   const c = configActual();
   if (escenario === "sin-pasarela") c.pagos.cobros = { estado: "sin-activar", tarjeta: false, yape: false };
+  if (escenario === "en-revision") c.pagos.cobros = { estado: "en-revision", tarjeta: false, yape: false, solicitud: { numero: "AF-DEMO0001", enviada: "2026-10-13T15:00:00-05:00" } };
   if (escenario === "sin-entregas") (c.entregas.delivery.activo = false), (c.entregas.recojo.activo = false);
   return c;
 }
