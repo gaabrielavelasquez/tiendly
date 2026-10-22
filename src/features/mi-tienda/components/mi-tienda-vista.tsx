@@ -11,11 +11,11 @@ import { Apariencia } from "./apariencia";
 import { CamposFree } from "./campos-free";
 import { MiTiendaSkeleton } from "./mi-tienda-skeleton";
 import { ProBloqueado } from "./pro-bloqueado";
-import { TiendaPreview } from "./tienda-preview";
+import { TiendaPreview, type Muestra } from "./tienda-preview";
 import { SalidaSinGuardar } from "./salida-sin-guardar";
 
 /** `tienda`: la de la sesión (nombre y slug); una tienda nueva arranca sin la portada ni los textos de Heather. */
-export function MiTiendaVista({ escenario, whatsappVentas, plan, tienda }: { escenario?: string; whatsappVentas: string; plan: "free" | "pro"; tienda: { nombre: string; slug: string; demo: boolean } }) {
+export function MiTiendaVista({ escenario, whatsappVentas, plan, tienda }: { escenario?: string; whatsappVentas: string; plan: "free" | "pro"; tienda: { nombre: string; slug: string; demo: boolean; muestras: Muestra[] } }) {
   const m = useMiTienda(escenario, whatsappVentas, tienda);
   const salida = useSalidaSinGuardar(m.pendiente, m.guardando);
   const [computadora, setComputadora] = useState(false);
@@ -46,7 +46,7 @@ export function MiTiendaVista({ escenario, whatsappVentas, plan, tienda }: { esc
               </div>
             </div>
             <Badge tone="success" className="self-center">En vivo · los cambios se ven al instante</Badge>
-            <div className={cn("mx-auto max-h-[70dvh] w-full overflow-y-auto rounded-card border border-line-subtle bg-sunken", !computadora && "max-w-sm")}><TiendaPreview tienda={m.tienda} nombre={tienda.nombre} computadora={computadora} /></div>
+            <div className={cn("mx-auto max-h-[70dvh] w-full overflow-y-auto rounded-card border border-line-subtle bg-sunken", !computadora && "max-w-sm")}><TiendaPreview tienda={m.tienda} nombre={tienda.nombre} muestras={tienda.muestras} computadora={computadora} /></div>
           </Card>
         </aside>
       </div>
@@ -60,7 +60,7 @@ export function MiTiendaVista({ escenario, whatsappVentas, plan, tienda }: { esc
           <div><p className="text-body-sm font-semibold text-fg">Vista previa</p><p className="text-caption text-fg-secondary">{combinacion}</p></div>
           <button type="button" aria-label="Cerrar vista previa" onClick={() => preview.current?.close()} className="flex size-11 items-center justify-center rounded-button text-icon hover:bg-sunken"><X aria-hidden className="size-5" /></button>
         </header>
-        <div className="mx-auto max-w-2xl pb-32"><TiendaPreview tienda={m.tienda} nombre={tienda.nombre} /></div>
+        <div className="mx-auto max-w-2xl pb-32"><TiendaPreview tienda={m.tienda} nombre={tienda.nombre} muestras={tienda.muestras} /></div>
         <footer className="fixed inset-x-0 bottom-0 border-t border-line-subtle bg-surface p-4"><p role="status" className="mb-3 text-caption text-fg-secondary">{m.mensaje || "Así verán tu tienda tus clientes."}</p><Button block loading={m.guardando} disabled={m.guardando} onClick={async () => { if (await m.guardar()) preview.current?.close(); }}>Guardar cambios</Button></footer>
       </dialog>
       <SalidaSinGuardar abierto={salida.abierto} guardando={m.guardando} mensaje={m.mensaje} cerrar={salida.cerrar}
