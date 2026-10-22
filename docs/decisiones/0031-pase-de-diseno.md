@@ -27,11 +27,16 @@ Con el Core Loop terminado (PR #12), el panel funciona pero se siente denso: lie
 
 **Ronda 3 (22-oct, pulido final):** en desktop, "Esta semana" lleva el resumen a la izquierda y el gráfico acotado a la derecha (128 px de alto); tarjetas de tareas con texto un paso más grande e ícono arriba con el texto abajo (sin aire vacío al pie); en móvil el subtítulo del saludo es solo la fecha; filas y tarjetas enteras son el link (≥ 44 px); el espaciador de la barra inferior suma la zona segura de iPhone, verificado en un viewport real de 390 × 844.
 
-**Ronda 4 · "des-plantillar" (22-oct, experimento solo en Inicio):**
-- Saludo sin 👋 y sin halos de fondo (se quitan `bg-halo` y `elevation/celebration` en Hoy).
-- "Para atender hoy": lista con divisores finos en móvil y desktop, sin tarjetas ni sombras; ícono fino (trazo 1.6) del color del estado, sin contenedor; chevron simple. Toda la fila es el link (≥ 44 px). La jerarquía la dan el tamaño y el peso del texto.
-- "Hoy", término medio: degradado corto de cobalto (`accent/base`) a un cobalto apenas más hondo (`accent/pressed`), sin marino (`bg-hero-suave`); filo superior de 1 px blanco al 25 %; sombra neutra corta (`elevation/card`). Variante B con grano muy sutil (`bg-grano`, ruido SVG gris al 40 % en `overlay`), visible con `?hoy=grano`.
-- Montos (`Monto`): `S/` un escalón más chico que la cifra, decimales atenuados (`.00` al 50 %) y cifras tabulares en todo Inicio.
+**Ronda 4 · "des-plantillar" (22-oct, experimento solo en Inicio; DESIGN.md no cambia hasta la aprobación de Gabi):**
+Principios del nuevo Admin de Shopify (menos contenedores, la estructura de la página hace el trabajo, UI neutra y color solo para lo que pide atención) y de Stripe (tipografía de montos serena). No se copian.
+- **Saludo en dos tonos, mismo tamaño (H1, Outfit Medium):** "Hola, Cecilia." en `text/primary` + "Tienes 3 cosas para hoy." en `text/secondary` (cuenta las filas de Para atender; sin pendientes, "Todo al día por hoy."). Debajo, la fecha en texto chico; en móvil no se repite la tienda. Sin 👋 ni halos.
+- **Menos cajas:** todos los títulos de sección van fuera de los contenedores (Hoy, Para atender hoy, Esta semana). "Para atender hoy" es UN contenedor con divisores finos, en móvil y desktop.
+- **Íconos:** finos (trazo 1.5), gris neutro, sin contenedor. El color queda para lo que pide atención (el badge "Vence"). Chevron simple; toda la fila es el link (≥ 44 px). La comparación semanal también va neutra.
+- **Hoy:** degradado corto `accent/base` → `accent/pressed` (`bg-hero-suave`, sin marino) y profundidad en capas (`elevation/layered` → `shadow-capas`): filo superior blanco al 25 %, anillo interior de 1 px al 8 % y tres sombras cortas apiladas (0 1 0 · 0 3 1 −1 · 0 4 6 −2). Sin halo. Variante B con grano sutil (`?hoy=grano`).
+- **Contenedores:** `elevation/container` → `shadow-contenedor` (anillo interior de 1 px al 8 % + base de 1 px al 7 %), sin borde de tarjeta.
+- **Valores adaptados de `@shopify/polaris-tokens` 9.4.2:** `shadow-100` (0 1 0, 7 %), `shadow-200` (0 3 1 −1, 7 %), `shadow-300` (0 4 6 −2, 20 % → 12 % aquí) y `shadow-border-inset` (1 px, 8 %). Primitivos nuevos: `color/shadow/7`, `color/shadow/12` y `color/highlight/25`.
+- **Montos al estilo Stripe (`Monto`):** peso Medium; SemiBold solo en totales ("Total de la semana"); cifras tabulares en todo Inicio; "S/" más chico y atenuado; decimales atenuados; etiqueta chica en gris arriba de cada monto.
+- **Pesos:** títulos de sección en Outfit variable a 550 (`font/section-style`, utilidad `font-titulo-seccion`; paquete `@fontsource-variable/outfit`).
 
 ## Consecuencias
 

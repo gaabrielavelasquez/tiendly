@@ -56,7 +56,9 @@
   --tl-color-scrim-50: #1A1A1A80;
   --tl-color-scrim-65: #1A1A1AA6;
   --tl-color-shadow-4: #0000000A;
+  --tl-color-shadow-7: #1A1A1A12;
   --tl-color-shadow-8: #1A1A1A14;
+  --tl-color-shadow-12: #1A1A1A1F;
   --tl-color-shadow-14: #1A1A1A24;
   --tl-color-shadow-40: #1A1A1A66;
   --tl-color-shadow-60: #1A1A1A99;
@@ -70,6 +72,7 @@
   --tl-color-tint-ice: #E0ECFF;
   --tl-color-tint-lilac: #EEF0FF;
   --tl-color-tint-mist: #F5F8FF;
+  --tl-color-highlight-25: #FFFFFF40;
   --tl-color-highlight-35: #FFFFFF59;
   --tl-color-cobalt-50: #EFF6FF;
   --tl-color-cobalt-100: #DBEAFE;
@@ -200,6 +203,7 @@
   --tl-font-hero-style: 600;
   --tl-font-metric-style: 600;
   --tl-font-title-style: 500;
+  --tl-font-section-style: 550;
   --tl-glow-sky-from: var(--tl-color-cobalt-alpha-16);
   --tl-glow-sky-to: var(--tl-color-cobalt-50);
   --tl-glow-warm: var(--tl-color-warm-glow);
@@ -227,6 +231,8 @@
   --tl-layout-block-gap: 24px;
   --tl-layout-columns: 4;
   --tl-elevation-card: 0px 1px 2px 0px var(--tl-shadow-soft), 0px 2px 8px 0px var(--tl-shadow-soft);
+  --tl-elevation-container: inset 0px 0px 0px 1px var(--tl-color-shadow-8), 0px 1px 0px 0px var(--tl-color-shadow-7);
+  --tl-elevation-layered: inset 0px 1px 0px 0px var(--tl-color-highlight-25), inset 0px 0px 0px 1px var(--tl-color-shadow-8), 0px 1px 0px 0px var(--tl-color-shadow-7), 0px 3px 1px -1px var(--tl-color-shadow-7), 0px 4px 6px -2px var(--tl-color-shadow-12);
   --tl-elevation-low: 0px 4px 20px 0px var(--tl-shadow-soft), 0px 12px 40px 0px var(--tl-glow-warm);
   --tl-elevation-celebration: 0px 0px 64px 8px var(--tl-glow-warm), 0px 16px 48px -8px var(--tl-glow-sky-from);
   --tl-elevation-medium: 0px 4px 12px -2px var(--tl-shadow-strong);

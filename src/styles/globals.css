@@ -4,6 +4,8 @@
 @import "@fontsource/outfit/500.css";
 @import "@fontsource/outfit/600.css";
 @import "@fontsource/outfit/700.css";
+/* Outfit variable: solo para pesos intermedios (550 en títulos de sección, 0031 ronda 4, experimento en Inicio). */
+@import "@fontsource-variable/outfit";
 /* Familias de los temas de vitrina (Editorial, Neutral, Suave) */
 @import "@fontsource/instrument-serif/400.css";
 @import "@fontsource/bricolage-grotesque/700.css";
@@ -112,6 +114,9 @@
   --shadow-float: var(--tl-elevation-medium);
   --shadow-overlay: var(--tl-elevation-high);
   --shadow-celebration: var(--tl-elevation-celebration);
+  /* 0031, ronda 4 (experimento en Inicio): profundidad en capas adaptada de Polaris. */
+  --shadow-contenedor: var(--tl-elevation-container);
+  --shadow-capas: var(--tl-elevation-layered);
 
   /* Tipografía: Outfit (titulares) e Inter (cuerpo) */
   --font-display: var(--tl-font-display);
@@ -160,6 +165,11 @@
 @utility font-display-hero {
   font-family: var(--tl-font-display);
   font-weight: var(--tl-font-hero-style);
+}
+/* Títulos de sección (0031, ronda 4): Outfit variable a 550, entre Medium y SemiBold. */
+@utility font-titulo-seccion {
+  font-family: "Outfit Variable", var(--tl-font-display);
+  font-weight: var(--tl-font-section-style);
 }
 /* Títulos de página y saludo (decisión 0031): Outfit Medium, más grandes y livianos. */
 @utility font-display-light {

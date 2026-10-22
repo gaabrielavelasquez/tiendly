@@ -8,11 +8,13 @@ import { ParaAtender } from "./para-atender";
 import { SemanaCard } from "./semana-card";
 
 /**
- * Con el nombre de la dueña (Heather: Cecilia; o el nombre de pila de Google): "Hola, Cecilia".
- * Sin nombre (el onboarding no lo pide, decisión 0013): "¡Hola!" y la tienda debajo (decisión 0031; en móvil la tienda
- * ya va en la barra superior). Sin emoji desde la ronda 4.
+ * Con el nombre de la dueña (Heather: Cecilia; o el nombre de pila de Google): "Hola, Cecilia.".
+ * Sin nombre (el onboarding no lo pide, decisión 0013): "¡Hola!". Sin emoji desde la ronda 4 de 0031.
  */
-export const saludo = (duena?: string) => (duena ? `Hola, ${duena}` : "¡Hola!");
+export const saludo = (duena?: string) => (duena ? `Hola, ${duena}.` : "¡Hola!");
+
+/** Segundo tono del título: cuántos pendientes hay (filas de Para atender hoy). */
+export const resumenPendientes = (n: number) => (n === 0 ? "Todo al día por hoy." : `Tienes ${n} ${n === 1 ? "cosa" : "cosas"} para hoy.`);
 
 /**
  * I1 / ID1 · Inicio con actividad. Orden de la decisión 0012 con el pase 0031.
@@ -23,11 +25,16 @@ export const saludo = (duena?: string) => (duena ? `Hola, ${duena}` : "¡Hola!")
 export function VistaActividad({ datos, grano = false }: { datos: InicioData; grano?: boolean }) {
   const hoy = resumenHoy(datos);
   const semana = totalSemana(datos);
+  const filas = pendientes(datos);
 
   return (
     <>
       <CabeceraInicio
-        titulo={saludo(datos.tienda.duena)}
+        titulo={
+          <>
+            {saludo(datos.tienda.duena)} <span className="text-fg-secondary">{resumenPendientes(filas.length)}</span>
+          </>
+        }
         subtitulo={
           <>
             {/* En móvil la tienda ya está en la barra superior: debajo del saludo, solo la fecha. */}
@@ -41,7 +48,7 @@ export function VistaActividad({ datos, grano = false }: { datos: InicioData; gr
       />
       <div className="grid gap-10 lg:grid-cols-5 lg:items-start lg:gap-x-8 lg:gap-y-12">
         <HoyCard className="lg:col-span-2" grano={grano} ventas={hoy.ventas} pedidos={hoy.pedidos} corte={hora(datos.ahora)} />
-        <ParaAtender className="lg:col-span-3" filas={pendientes(datos)} />
+        <ParaAtender className="lg:col-span-3" filas={filas} />
         <SemanaCard
           className="lg:col-span-5"
           total={semana.monto}
