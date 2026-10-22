@@ -1,5 +1,5 @@
 import type { ItemCarrito } from "@/features/vitrina/lib/carrito";
-import type { CatalogoCompra, Cupon, Datos, Entrega, Linea, Totales } from "../types";
+import type { CatalogoCompra, Cupon, Datos, Entrega, Linea, Totales, TipoEntrega } from "../types";
 import { descuentoDe } from "@/features/cupones/lib/reglas";
 
 // Reglas del carrito y de la compra. Funciones puras: fáciles de probar y de mover al backend.
@@ -30,6 +30,7 @@ export function calcularTotales(todas: Linea[], cupon: Cupon | null, entrega: En
   const descuento = cupon ? descuentoDe(cupon, productos) : 0;
   const base = productos - descuento;
   const envioGratis = cupon?.tipo === "envio" || faltaEnvioGratis(base, envioGratisDesde) === 0;
+  if (entrega?.tipo === "coordinar") return { productos, unidades, descuento, envio: null, envioGratis: false, envioPorCoordinar: true, total: base };
   const envio = !entrega ? null : entrega.tipo === "recojo" || envioGratis ? 0 : entrega.distrito.costo;
   return { productos, unidades, descuento, envio, envioGratis, total: base + (envio ?? 0) };
 }
@@ -48,8 +49,8 @@ export function validarDatos(d: Datos): Partial<Record<keyof Datos, string>> {
 
 export type ErroresEntrega = Partial<Record<"distrito" | "direccion", string>>;
 
-export function validarEntrega(tipo: "delivery" | "recojo", distrito: unknown, direccion: string): ErroresEntrega {
-  if (tipo === "recojo") return {};
+export function validarEntrega(tipo: TipoEntrega, distrito: unknown, direccion: string): ErroresEntrega {
+  if (tipo !== "delivery") return {};
   const e: ErroresEntrega = {};
   if (!distrito) e.distrito = "Elige el distrito donde recibes tu pedido.";
   if (direccion.trim().length < 5) e.direccion = "Escribe tu dirección: calle, número y dpto. si tienes.";

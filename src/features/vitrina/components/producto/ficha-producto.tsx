@@ -11,10 +11,11 @@ import { Beneficios } from "./beneficios";
 import { Galeria } from "./galeria";
 import { SelectorColor, SelectorTalla } from "./selectores";
 
-type FichaProps = { p: Ficha; tienda: string; celular: string };
+/** `demo`: los beneficios (envío, pago, cambios) son textos de Heather; una tienda nueva no los promete. */
+type FichaProps = { p: Ficha; tienda: string; celular: string; demo: boolean };
 
 /** Página de producto (Figma): galería a la izquierda y compra a la derecha (apiladas en móvil). */
-export function FichaProducto({ p, tienda, celular }: FichaProps) {
+export function FichaProducto({ p, tienda, celular, demo }: FichaProps) {
   const stock = (c: string, t: string) => p.variantes.find((v) => v.color === c && v.talla === t)?.stock ?? 0;
   const conStock = p.colores.find((c) => p.tallas.some((t) => stock(c.nombre, t) > 0));
   const [color, setColor] = useState((conStock ?? p.colores[0]).nombre);
@@ -75,7 +76,7 @@ export function FichaProducto({ p, tienda, celular }: FichaProps) {
           </a>
           <p role="status" className="min-h-5 text-caption text-success">{agregado ? "Agregado al carrito." : ""}</p>
         </div>
-        <Beneficios />
+        {demo && <Beneficios />}
       </div>
     </div>
   );

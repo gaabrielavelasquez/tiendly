@@ -4,7 +4,6 @@ import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
 import { ZonaUsuario } from "@/components/panel";
 import { Badge } from "@/components/ui";
-import { tiendaActual } from "@/lib/sesion";
 import type { Pedido } from "../../types";
 import type { Accion } from "../../lib/detalle";
 import { fechaPedido } from "../../lib/format";
@@ -46,7 +45,7 @@ export function BarraPedido({ pedido, ahora, onAccion }: BarraProps) {
         <Estados p={pedido} />
         <AccionesPedido pedido={pedido} onAccion={onAccion} className="ml-auto" />
         <span aria-hidden className="mx-2 h-6 w-px bg-line-subtle" />
-        <ZonaUsuario nombre={tiendaActual.duena} />
+        <ZonaUsuario />
       </div>
 
       <header className="flex flex-col gap-2 lg:hidden">

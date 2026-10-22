@@ -2,11 +2,16 @@
 
 import { useEffect, useState } from "react";
 import { guardarWhatsappVentas } from "@/features/configuracion/lib/acciones";
-import { INICIAL, leerTienda, STORAGE, VACIA, validarTienda } from "../lib/config";
+import { INICIAL, leerTienda, storageDe, VACIA, validarTienda } from "../lib/config";
 import type { Errores, Tienda } from "../types";
 
-/** `whatsappVentas`: el número guardado en la configuración de la tienda; manda sobre lo guardado en el navegador. */
-export function useMiTienda(escenario: string | undefined, whatsappVentas: string) {
+/**
+ * `whatsappVentas`: el número guardado en la configuración de la tienda; manda sobre lo guardado en el navegador.
+ * `sesion`: Heather (demo) arranca con su portada y textos; una tienda nueva, vacía.
+ */
+export function useMiTienda(escenario: string | undefined, whatsappVentas: string, sesion: { slug: string; demo: boolean }) {
+  const STORAGE = storageDe(sesion.slug);
+  const PRIMERA = sesion.demo ? INICIAL : VACIA;
   const [tienda, setTienda] = useState<Tienda>(INICIAL);
   const [guardada, setGuardada] = useState<Tienda>(INICIAL);
   const [estado, setEstado] = useState<"cargando" | "lista" | "error">("cargando");
@@ -18,7 +23,7 @@ export function useMiTienda(escenario: string | undefined, whatsappVentas: strin
     try {
       if (escenario === "error") throw new Error("Error simulado.");
       const valor = localStorage.getItem(STORAGE);
-      const base = escenario === "vacio" ? VACIA : valor ? leerTienda(valor) : INICIAL;
+      const base = escenario === "vacio" ? VACIA : valor ? leerTienda(valor) : PRIMERA;
       const datos = escenario === "vacio" ? base : { ...base, whatsapp: whatsappVentas };
       setTienda(datos); setGuardada(datos); setEstado("lista");
     } catch { setEstado("error"); }

@@ -1,14 +1,20 @@
+"use client";
+
+import { useRouter } from "next/navigation";
 import { buttonVariants } from "@/components/ui";
 import { cn } from "@/lib/cn";
+import { marcarCompartido } from "../lib/acciones";
 import { whatsappCompartir } from "../lib/format";
 
-type CompartirProps = { slug: string; texto?: string; className?: string };
+type CompartirProps = { link: string; texto?: string; className?: string };
 
 /** Botón secundario que abre wa.me con el link de la tienda. Siempre a mano en Inicio. */
-export function CompartirWhatsApp({ slug, texto = "Compartir mi tienda por WhatsApp", className }: CompartirProps) {
+export function CompartirWhatsApp({ link, texto = "Compartir mi tienda por WhatsApp", className }: CompartirProps) {
+  const router = useRouter();
   return (
     <a
-      href={whatsappCompartir(slug)}
+      href={whatsappCompartir(link)}
+      onClick={() => void marcarCompartido().then(() => router.refresh())}
       target="_blank"
       rel="noopener noreferrer"
       className={cn(buttonVariants({ variant: "secondary" }), "transition active:scale-98", className)}

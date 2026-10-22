@@ -2,6 +2,7 @@
 
 import { asignarStock } from "@/features/productos/lib/inventario";
 import type { DetallePedido, Pedido } from "../types";
+import { mutarPanel } from "@/lib/sesion";
 import { actualizarPedido } from "./almacen";
 import { venceEl } from "./reglas";
 
@@ -11,10 +12,12 @@ import { venceEl } from "./reglas";
  * También sirve para "Deshacer": se manda el estado anterior. Los pedidos de la demo no se tocan.
  */
 export async function sincronizarPedido(pedido: Pedido, detalle: DetallePedido) {
-  const c = actualizarPedido(pedido, detalle);
-  if (!c) return;
-  const { estado } = pedido.pago;
-  if (estado === "cancelado") asignarStock(pedido.id, null);
-  else if (estado === "pagado") asignarStock(pedido.id, { tipo: "vendido", items: c.stock });
-  else asignarStock(pedido.id, { tipo: "reservado", items: c.stock, hasta: new Date(venceEl(pedido)).toISOString() });
+  await mutarPanel((d) => {
+    const c = actualizarPedido(d.pedidos, pedido, detalle);
+    if (!c) return;
+    const { estado } = pedido.pago;
+    if (estado === "cancelado") asignarStock(d.inventario, pedido.id, null);
+    else if (estado === "pagado") asignarStock(d.inventario, pedido.id, { tipo: "vendido", items: c.stock });
+    else asignarStock(d.inventario, pedido.id, { tipo: "reservado", items: c.stock, hasta: new Date(venceEl(pedido)).toISOString() });
+  });
 }

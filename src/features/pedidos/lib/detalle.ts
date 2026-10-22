@@ -76,7 +76,8 @@ export function lineaDeTiempo(p: Pedido, d: DetallePedido, ahora: string): Paso[
       ? { id: "pago", titulo: "Pago contra entrega", detalle: "Se cobra al entregar.", estado: "pendiente" }
       : { id: "pago", titulo: "Esperando el pago", detalle: `La reserva vence ${aLasHora(cuando(new Date(venceEl(p)).toISOString())!)} Si no se paga, se cancela sola.`, estado: "actual" };
   const enviado = p.entrega.estado !== "por-enviar";
-  const envio: Paso = { id: "envio", titulo: enviado ? `Enviado a ${p.entrega.distrito}` : "Envío", detalle: enviado ? undefined : `Delivery a ${p.entrega.distrito}.`, cuando: cuando(d.enviadoEl), estado: enviado ? "hecho" : pagado ? "actual" : "pendiente" };
+  const coordinar = p.entrega.metodo === "coordinar";
+  const envio: Paso = { id: "envio", titulo: enviado ? (coordinar ? "Enviado" : `Enviado a ${p.entrega.distrito}`) : "Envío", detalle: enviado ? undefined : coordinar ? "Por coordinar con tu cliente por WhatsApp." : `Delivery a ${p.entrega.distrito}.`, cuando: cuando(d.enviadoEl), estado: enviado ? "hecho" : pagado ? "actual" : "pendiente" };
   const entregado = p.entrega.estado === "entregado";
   const final: Paso = { id: "entrega", titulo: recojo ? (entregado ? "Recogido en tienda" : "Recojo en tienda") : entregado ? "Entregado" : "Entrega", cuando: cuando(d.entregadoEl), estado: entregado ? "hecho" : (recojo ? pagado : enviado) ? "actual" : "pendiente" };
   return recojo ? [recibido, pago, final] : [recibido, pago, envio, final];

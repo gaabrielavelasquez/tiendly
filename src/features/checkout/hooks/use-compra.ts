@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import type { Datos, Distrito, Entrega, MetodoPago } from "../types";
+import type { Datos, Distrito, Entrega, MetodoPago, TipoEntrega } from "../types";
 import { cobrarTarjeta, cobrarYape, FALLO_VENCIDA, validarTarjeta, type ErroresTarjeta, type FalloPago, type Tarjeta } from "../lib/pago";
 import { soloDigitos, validarDatos, validarEntrega, type ErroresEntrega } from "../lib/reglas";
 
@@ -12,12 +12,12 @@ export type Paso = "datos" | "entrega" | "pago";
  * y el pago, que se elige y se completa en la misma pantalla. `confirmar` cobra (simulado) y devuelve
  * lo necesario para crear el pedido; no navega, eso lo decide la vista.
  */
-export function useCompra(entregaInicial: "delivery" | "recojo") {
+export function useCompra(entregaInicial: TipoEntrega) {
   const [paso, setPaso] = useState<Paso>("datos");
   const [hechos, setHechos] = useState({ datos: false, entrega: false });
   const [datos, setDatos] = useState<Datos>({ nombre: "", celular: "" });
   const [erroresDatos, setErroresDatos] = useState<Partial<Record<keyof Datos, string>>>({});
-  const [tipoEntrega, setTipoEntrega] = useState<"delivery" | "recojo">(entregaInicial);
+  const [tipoEntrega, setTipoEntrega] = useState<TipoEntrega>(entregaInicial);
   const [distrito, setDistrito] = useState<Distrito | null>(null);
   const [direccion, setDireccion] = useState("");
   const [referencia, setReferencia] = useState("");
@@ -31,7 +31,7 @@ export function useCompra(entregaInicial: "delivery" | "recojo") {
   const [procesando, setProcesando] = useState(false);
 
   const entrega: Entrega | null =
-    tipoEntrega === "recojo" ? { tipo: "recojo" } : distrito ? { tipo: "delivery", distrito, direccion: direccion.trim(), referencia: referencia.trim() } : null;
+    tipoEntrega === "recojo" ? { tipo: "recojo" } : tipoEntrega === "coordinar" ? { tipo: "coordinar" } : distrito ? { tipo: "delivery", distrito, direccion: direccion.trim(), referencia: referencia.trim() } : null;
 
   function continuarDatos() {
     const e = validarDatos(datos);

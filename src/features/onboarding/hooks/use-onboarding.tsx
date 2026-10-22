@@ -14,6 +14,8 @@ export type OnboardingState = {
   slug: string;
   rubros: RubroId[];
   celularVentas: string;
+  /** Nombre de pila que da Google al entrar con Google (todavía no conectado). Sin él, el saludo es "¡Hola! 👋". */
+  nombreGoogle?: string;
 };
 
 const INICIAL: OnboardingState = {

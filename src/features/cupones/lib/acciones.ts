@@ -1,47 +1,46 @@
 "use server";
 
 import { AHORA } from "@/features/pedidos/lib/mock";
+import { datosPanel, mutarPanel } from "@/lib/sesion";
 import type { Cupon } from "../types";
-import { cuponesActuales, eliminarCupon as borrar, guardarCupon as guardar } from "./mock";
-import { tiendaActual } from "@/lib/sesion";
+import { guardarCupon as guardar } from "./mock";
 import { aCupon, cuponesEnUso, enUso, LIMITE_FREE, limiteCupones, validarCupon, type FormCupon } from "./reglas";
 
-// Cupones (decisión 0008). Simulado: memoria del servidor. Se valida todo aquí, incluido el límite del plan.
+// Cupones (decisión 0008) de la tienda del panel, guardados con sus datos. Se valida todo aquí, incluido el límite del plan.
 
 const hoy = () => AHORA.slice(0, 10);
 const LIMITE = `Llegaste al límite de ${LIMITE_FREE} cupones en uso del Plan Free. Pausa uno para activar otro.`;
 
 /** Plan Free: ¿este cambio deja más de 3 cupones en uso? Los programados también ocupan lugar. Pro: sin límite. */
-function pasaElLimite(c: Cupon, todos: Cupon[]) {
-  const limite = limiteCupones(tiendaActual.plan);
+function pasaElLimite(c: Cupon, todos: Cupon[], plan: "free" | "pro") {
+  const limite = limiteCupones(plan);
   const otros = todos.filter((x) => x.id !== c.id);
   return limite !== null && enUso(c, hoy()) && cuponesEnUso(otros, hoy()) >= limite;
 }
 
 export async function guardarCupon(f: FormCupon, id?: string): Promise<{ codigo: string } | { error: string; errores?: Record<string, string> }> {
-  await new Promise((r) => setTimeout(r, 500));
-  const todos = cuponesActuales();
+  const { cupones: todos, tienda } = await datosPanel();
   const actual = id ? todos.find((c) => c.id === id) : undefined;
   if (id && !actual) return { error: "Este cupón ya no existe." };
   const errores = validarCupon(f, todos.filter((c) => c.id !== id));
   if (Object.keys(errores).length) return { error: "Revisa los campos marcados.", errores };
   const cupon = aCupon(f, { id: actual?.id ?? `c-${Date.now()}`, usos: actual?.usos ?? 0 });
-  if (pasaElLimite(cupon, todos)) return { error: LIMITE };
-  guardar(cupon);
+  if (pasaElLimite(cupon, todos, tienda.plan)) return { error: LIMITE };
+  await mutarPanel((d) => guardar(d.cupones, cupon));
   return { codigo: cupon.codigo };
 }
 
 /** Pausar o activar desde la lista (interruptor de cada cupón). */
 export async function alternarCupon(id: string, activo: boolean): Promise<{ ok: true } | { error: string }> {
-  const todos = cuponesActuales();
+  const { cupones: todos, tienda } = await datosPanel();
   const c = todos.find((x) => x.id === id);
   if (!c) return { error: "Este cupón ya no existe." };
   const sig = { ...c, activo };
-  if (activo && pasaElLimite(sig, todos)) return { error: LIMITE };
-  guardar(sig);
+  if (activo && pasaElLimite(sig, todos, tienda.plan)) return { error: LIMITE };
+  await mutarPanel((d) => guardar(d.cupones, sig));
   return { ok: true };
 }
 
 export async function eliminarCupon(id: string) {
-  borrar(id);
+  await mutarPanel((d) => void (d.cupones = d.cupones.filter((c) => c.id !== id)));
 }

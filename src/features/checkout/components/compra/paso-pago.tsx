@@ -7,6 +7,12 @@ import { FormYape } from "./form-yape";
 import { Paso } from "./paso";
 
 const grupo = "pb-1 text-label font-semibold tracking-widest text-fg-secondary uppercase";
+/** "Tarjeta, Yape o por WhatsApp", solo con los métodos activos. */
+function resumenPagos(p: ReglasCompra["pagos"]) {
+  const m = [p.tarjeta && "Tarjeta", p.yape && "Yape", p.whatsapp && "por WhatsApp"].filter(Boolean) as string[];
+  return m.length > 1 ? `${m.slice(0, -1).join(", ")} o ${m.at(-1)}` : m[0] === "por WhatsApp" ? "Por WhatsApp" : (m[0] ?? "");
+}
+
 const inmediata = <Badge tone="success" className="w-fit tracking-wider uppercase">Confirmación inmediata</Badge>;
 
 /**
@@ -16,7 +22,7 @@ const inmediata = <Badge tone="success" className="w-fit tracking-wider uppercas
 export function PasoPago({ c, mensaje, pagos }: { c: Compra; mensaje: string; pagos: ReglasCompra["pagos"] }) {
   const estado = c.paso === "pago" ? "abierto" : "pendiente";
   return (
-    <Paso numero={3} titulo="Pago" estado={estado} resumen="Tarjeta, Yape o por WhatsApp">
+    <Paso numero={3} titulo="Pago" estado={estado} resumen={resumenPagos(pagos)}>
       <fieldset className="flex flex-col gap-3">
         <legend className="pb-3 text-body-sm font-semibold text-fg">¿Cómo quieres pagar?</legend>
         {(pagos.tarjeta || pagos.yape) && <p className={grupo}>Pagar ahora</p>}

@@ -2,11 +2,8 @@ import { obtenerProductos } from "@/features/productos/lib/mock";
 import { nivelStock, stockTotal } from "@/features/productos/lib/reglas";
 import type { Categoria, Producto, Variante } from "@/features/productos/types";
 import { DETALLE, HEX_COLOR } from "./contenido";
-import { configActual } from "@/features/configuracion/lib/mock";
-import { tiendaActual } from "@/lib/sesion";
-
-/** WhatsApp de ventas: un solo dato, se edita en Mi tienda › Contacto (lo usan la vitrina, Pagos y el checkout). */
-const celularVentas = () => configActual().pagos.whatsapp.celular;
+import { esHeather } from "@/lib/datos/semillas";
+import { datosTienda } from "@/lib/datos/tienda";
 
 // Vitrina pública: lo que ve el cliente. Lee el mismo catálogo que el panel, pero solo lo publicado.
 
@@ -27,7 +24,8 @@ export type ProductoVitrina = {
 /** Lo que agrega la página de producto. */
 export type FichaProducto = ProductoVitrina & { variantes: Variante[]; tallas: string[]; fotos: Record<string, string[]>; corto?: string; sobre?: string };
 
-export type Vitrina = { tienda: { nombre: string; slug: string; celular: string; logo?: string; plan: "free" | "pro" }; productos: ProductoVitrina[]; categorias: { id: Categoria; label: string }[] };
+/** `demo`: Heather trae su portada, fotos y beneficios; las demás tiendas muestran solo lo que cargaron. */
+export type Vitrina = { tienda: { nombre: string; slug: string; celular: string; logo?: string; plan: "free" | "pro"; demo: boolean }; productos: ProductoVitrina[]; categorias: { id: Categoria; label: string }[] };
 
 export const LABEL: Record<Categoria, string> = { balerinas: "Balerinas", tacos: "Tacos", botas: "Botas", plataformas: "Plataformas" };
 
@@ -57,7 +55,7 @@ const aFicha = (p: Producto): FichaProducto => ({
   tallas: [...new Set(p.variantes.map((x) => x.talla))],
   fotos: p.fotos ?? (p.imagen ? { [p.variantes[0]?.color ?? ""]: [p.imagen] } : {}),
   corto: DETALLE[p.id]?.corto,
-  sobre: DETALLE[p.id]?.sobre,
+  sobre: p.descripcion ?? DETALLE[p.id]?.sobre,
 });
 
 /**
@@ -65,14 +63,16 @@ const aFicha = (p: Producto): FichaProducto => ({
  * `null` si la tienda o el producto no existen, o si el producto no está publicado.
  */
 export async function obtenerFicha(tienda: string, slug: string) {
-  if (tienda !== tiendaActual.slug) return null;
-  const activos = (await obtenerProductos("catalogo")).filter((p) => p.estado === "activo");
+  const d = await datosTienda(tienda);
+  if (!d) return null;
+  const activos = (await obtenerProductos("catalogo", tienda)).filter((p) => p.estado === "activo");
   const p = activos.find((x) => slugProducto(x.nombre) === slug);
   if (!p) return null;
   const otros = activos.filter((x) => x.id !== p.id && nivelStock(x) !== "agotado");
   const misma = otros.filter((x) => x.categorias.some((c) => p.categorias.includes(c)));
   const relacionados = [...misma, ...otros.filter((x) => !misma.includes(x))].slice(0, 4).map(aVitrina);
-  return { tienda: { nombre: tiendaActual.nombre, slug: tienda, celular: celularVentas() }, ficha: aFicha(p), relacionados };
+  // WhatsApp de ventas: un solo dato, se edita en Mi tienda › Contacto (lo usan la vitrina, Pagos y el checkout).
+  return { tienda: { nombre: d.tienda.nombre, slug: tienda, celular: d.config.pagos.whatsapp.celular, demo: esHeather(tienda) }, ficha: aFicha(p), relacionados };
 }
 
 /**
@@ -81,14 +81,16 @@ export async function obtenerFicha(tienda: string, slug: string) {
  * (con su etiqueta) al final, para que la tienda no se vea vacía y el cliente sepa que vuelven.
  */
 export async function obtenerVitrina(slug: string): Promise<Vitrina | null> {
-  if (slug !== tiendaActual.slug) return null;
-  const productos = (await obtenerProductos("catalogo"))
+  const d = await datosTienda(slug);
+  if (!d) return null;
+  const productos = (await obtenerProductos("catalogo", slug))
     .filter((p) => p.estado === "activo")
     .map(aVitrina)
     .sort((a, b) => Number(a.agotado) - Number(b.agotado));
   const presentes = new Set(productos.flatMap((p) => p.categorias));
   const categorias = (Object.keys(LABEL) as Categoria[]).filter((c) => presentes.has(c)).map((id) => ({ id, label: LABEL[id] }));
-  return { tienda: { nombre: tiendaActual.nombre, slug, celular: celularVentas(), logo: tiendaActual.logo, plan: tiendaActual.plan }, productos, categorias };
+  const { nombre, logo, plan } = d.tienda;
+  return { tienda: { nombre, slug, celular: d.config.pagos.whatsapp.celular, logo, plan, demo: esHeather(slug) }, productos, categorias };
 }
 
 export const leerCategoria = (v: string | string[] | undefined, validas: Categoria[]): Categoria | "todos" => {

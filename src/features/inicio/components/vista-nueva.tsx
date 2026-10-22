@@ -13,7 +13,7 @@ export function VistaNueva({ datos }: { datos: InicioData }) {
       />
       <div className="grid items-start gap-6 lg:grid-cols-5">
         <PasosCard className="lg:col-span-3" pasos={datos.pasos} />
-        <LinkTiendaCard className="lg:col-span-2" slug={datos.tienda.slug} />
+        <LinkTiendaCard className="lg:col-span-2" link={datos.tienda.link} />
       </div>
     </>
   );

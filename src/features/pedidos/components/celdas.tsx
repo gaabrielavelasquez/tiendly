@@ -3,7 +3,7 @@ import { Badge } from "@/components/ui";
 import { formatoSoles, plural } from "@/lib/formato";
 import type { Pedido } from "../types";
 import { fechaPedido } from "../lib/format";
-import { BADGE_PAGO, badgeEntrega, celularVisible, iniciales, METODO_PAGO, tiempoRestante } from "../lib/reglas";
+import { BADGE_PAGO, badgeEntrega, celularVisible, iniciales, METODO_PAGO, tiempoRestante, textoEntrega } from "../lib/reglas";
 
 type CeldaProps = { p: Pedido; ahora: string };
 
@@ -58,7 +58,7 @@ export function CeldaEntrega({ p }: { p: Pedido }) {
     <div className="flex flex-col items-start gap-1">
       <Badge tone={tono}>{texto}</Badge>
       <span className="text-caption text-fg-secondary">
-        {p.entrega.metodo === "recojo" ? "Recojo en tienda" : `Delivery · ${p.entrega.distrito}`}
+        {textoEntrega(p)}
       </span>
     </div>
   );

@@ -1,13 +1,19 @@
+"use client";
+
 import Link from "next/link";
 import { cn } from "@/lib/cn";
+import { useDuena } from "./sesion-panel";
 
-type ZonaUsuarioProps = { nombre: string; className?: string };
+/** `nombre`: por defecto, la dueña de la sesión (SesionPanel). */
+type ZonaUsuarioProps = { nombre?: string; className?: string };
 
 /**
  * Zona de cuenta: el avatar lleva a Configuración (Pagos, Entregas y Cuenta). Ocupa 48 × 48 aunque
  * el círculo sea chico (Botón ícono). Sin campana de avisos (decisión 0027).
  */
-export function ZonaUsuario({ nombre, className }: ZonaUsuarioProps) {
+export function ZonaUsuario({ nombre: propio, className }: ZonaUsuarioProps) {
+  const deSesion = useDuena();
+  const nombre = propio ?? deSesion;
   return (
     <Link
       href="/panel/configuracion"

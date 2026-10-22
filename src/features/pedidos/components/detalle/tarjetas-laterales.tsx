@@ -1,4 +1,4 @@
-import { Mail, MapPin, Store } from "lucide-react";
+import { Mail, MapPin, Store, MessageCircle } from "lucide-react";
 import { TarjetaSeccion } from "@/components/panel";
 import { buttonVariants } from "@/components/ui";
 import { cn } from "@/lib/cn";
@@ -43,8 +43,21 @@ export function TarjetaCliente({ pedido, detalle }: Props) {
   );
 }
 
-/** Entrega: delivery con dirección, distrito y referencia, o recojo en tienda. */
+/** Entrega: delivery con dirección, distrito y referencia, recojo en tienda o por coordinar (WhatsApp). */
 export function TarjetaEntrega({ pedido, detalle }: Props) {
+  if (pedido.entrega.metodo === "coordinar") {
+    return (
+      <TarjetaSeccion titulo="Entrega">
+        <div className="flex gap-3">
+          <MessageCircle aria-hidden strokeWidth={1.6} className="mt-0.5 size-5 shrink-0 text-icon" />
+          <div className="flex flex-col gap-0.5 text-body-sm">
+            <span className="font-semibold text-fg">Por coordinar</span>
+            <span className="text-fg-secondary">Acuérdala con tu cliente por WhatsApp: cómo le llega y cuánto cuesta el envío.</span>
+          </div>
+        </div>
+      </TarjetaSeccion>
+    );
+  }
   const recojo = pedido.entrega.metodo === "recojo";
   const Icono = recojo ? Store : MapPin;
   return (

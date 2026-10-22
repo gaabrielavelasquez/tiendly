@@ -10,7 +10,9 @@ export function mensajePedido({ tienda, numero, lineas, cupon, totales, datos, e
   const lineasEntrega =
     entrega.tipo === "recojo"
       ? ["Recojo en tienda (gratis)"]
-      : [`Delivery a ${entrega.distrito.nombre} (${totales.envio ? formatoSoles(totales.envio) : "gratis"})`, `Dirección: ${entrega.direccion}${entrega.referencia ? ` (${entrega.referencia})` : ""}`];
+      : entrega.tipo === "coordinar"
+        ? ["Entrega: la coordinamos por aquí (el envío va aparte)"]
+        : [`Delivery a ${entrega.distrito.nombre} (${totales.envio ? formatoSoles(totales.envio) : "gratis"})`, `Dirección: ${entrega.direccion}${entrega.referencia ? ` (${entrega.referencia})` : ""}`];
   return [
     `¡Hola ${tienda}! Quiero hacer el Pedido #${numero}:`,
     ...productos,

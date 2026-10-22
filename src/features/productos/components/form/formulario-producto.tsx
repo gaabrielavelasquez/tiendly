@@ -18,14 +18,14 @@ import { TarjetaSeccion as Tarjeta } from "@/components/panel";
 import { TarjetaEstado, TarjetaOrganizacion } from "./tarjetas-laterales";
 import { Field } from "@/components/ui";
 
-type FormularioProps = { titulo: string; inicial: FormProducto };
+type FormularioProps = { titulo: string; inicial: FormProducto; id?: string };
 
 /**
  * Crear / editar producto en dos columnas (2/3 contenido, 1/3 ajustes) para no cansar con un
  * formulario larguísimo. En móvil, una columna con los ajustes primero.
  */
-export function FormularioProducto({ titulo, inicial }: FormularioProps) {
-  const f = useFormularioProducto(inicial);
+export function FormularioProducto({ titulo, inicial, id }: FormularioProps) {
+  const f = useFormularioProducto(inicial, id);
   const reduce = useReducedMotion();
   const [resumen, setResumen] = useState("");
 
@@ -41,6 +41,11 @@ export function FormularioProducto({ titulo, inicial }: FormularioProps) {
       {resumen && Object.keys(f.errores).length > 0 && (
         <p role="alert" className="rounded-theme border border-error-border bg-error-surface px-4 py-3 text-body-sm text-error">
           {resumen}
+        </p>
+      )}
+      {f.fallo && (
+        <p role="alert" className="rounded-theme border border-error-border bg-error-surface px-4 py-3 text-body-sm text-error">
+          {f.fallo}
         </p>
       )}
 

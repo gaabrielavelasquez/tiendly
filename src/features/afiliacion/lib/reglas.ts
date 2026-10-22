@@ -1,4 +1,3 @@
-import { tiendaActual } from "@/lib/sesion";
 import type { Datos, Errores } from "../types";
 
 /** Prefijos usados únicamente por el adaptador simulado; no validan una cuenta real. */
@@ -7,8 +6,8 @@ export const BANCOS = [
   { id: "interbank", nombre: "Interbank", prefijo: "003" },
   { id: "bbva", nombre: "BBVA", prefijo: "011" },
 ] as const;
-/** Figma A2: el nombre de la tienda se precarga (se puede cambiar); los rubros vienen del onboarding (perfil del negocio). */
-export const DATOS_VACIOS: Datos = { ruc: "", tienda: tiendaActual.nombre, rubros: [], nombre: "", dni: "", cargo: "", celular: "", correo: "", banco: "", cci: "", tipoCuenta: "" };
+/** Figma A2: el nombre de la tienda (de la sesión) y los rubros (del onboarding) los precarga useAfiliacion; se pueden cambiar. */
+export const DATOS_VACIOS: Datos = { ruc: "", tienda: "", rubros: [], nombre: "", dni: "", cargo: "", celular: "", correo: "", banco: "", cci: "", tipoCuenta: "" };
 /** Figma A3. Con RUC 10 (persona natural) el cargo es «Titular». */
 export const CARGOS = ["Titular gerente", "Gerente general", "Apoderado", "Titular"] as const;
 /** Figma A4. */

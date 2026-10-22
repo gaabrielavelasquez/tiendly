@@ -1,13 +1,14 @@
 import { BadgeCheck, ChevronRight, CreditCard, Truck, UserRound } from "lucide-react";
 import Link from "next/link";
 import { Card } from "@/components/ui";
-import { tiendaActual } from "@/lib/sesion";
+import { sinProtocolo } from "@/lib/link-tienda";
 import { formatoCelular } from "@/features/checkout/lib/reglas";
 import type { ConfigCompra } from "../types";
 import { metodosVisibles, vistaCliente } from "../lib/reglas";
 
 /** Configuración (decisión 0027): Métodos de pago, Entregas, Cobros automáticos (Afiliación, módulo 4) y Cuenta. */
-export function Hub({ config }: { config: ConfigCompra }) {
+/** `tienda`: su nombre; `link`: URL pública de la vitrina (lib/link-tienda). */
+export function Hub({ config, tienda, link }: { config: ConfigCompra; tienda: string; link: string }) {
   const m = metodosVisibles(config.pagos);
   const entregas = vistaCliente(config.entregas);
   const filas = [
@@ -39,7 +40,7 @@ export function Hub({ config }: { config: ConfigCompra }) {
           <UserRound aria-hidden strokeWidth={1.6} className="size-5 text-icon" /> Cuenta
         </h2>
         <dl className="grid gap-2 text-body-sm sm:grid-cols-3">
-          {[["Tienda", tiendaActual.nombre], ["Link", `tiendly.pe/${tiendaActual.slug}`], ["WhatsApp de pedidos", formatoCelular(config.pagos.whatsapp.celular)]].map(([k, v]) => (
+          {[["Tienda", tienda], ["Link", sinProtocolo(link)], ["WhatsApp de pedidos", formatoCelular(config.pagos.whatsapp.celular)]].map(([k, v]) => (
             <div key={k} className="flex flex-col"><dt className="text-caption text-fg-secondary">{k}</dt><dd className="font-semibold text-fg">{v}</dd></div>
           ))}
         </dl>

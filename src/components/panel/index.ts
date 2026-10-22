@@ -5,6 +5,7 @@ export { MobileTopbar } from "./mobile-topbar";
 export { NuevoProducto } from "./nuevo-producto";
 export { PanelHeader } from "./panel-header";
 export { PanelMain } from "./panel-main";
+export { SesionPanel } from "./sesion-panel";
 export { Sidebar } from "./sidebar";
 export { TabBar } from "./tab-bar";
 export { TarjetaSeccion } from "./tarjeta-seccion";

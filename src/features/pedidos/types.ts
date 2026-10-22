@@ -17,7 +17,8 @@ export type Pedido = {
   items: number;
   total: number;
   pago: { estado: EstadoPago; metodo: MetodoPago };
-  entrega: { estado: EstadoEntrega; metodo: "delivery" | "recojo"; distrito?: string };
+  /** "coordinar": la tienda aún no definió sus entregas; se acuerda con el cliente por WhatsApp. */
+  entrega: { estado: EstadoEntrega; metodo: "delivery" | "recojo" | "coordinar"; distrito?: string };
 };
 
 export type Filtro = "todos" | "para-atender" | "por-cobrar" | "reservas" | "por-enviar";

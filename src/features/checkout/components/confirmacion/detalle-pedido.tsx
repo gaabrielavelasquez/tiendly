@@ -9,6 +9,8 @@ export function DetallePedido({ p }: { p: PedidoCreado }) {
     filas.push(["Entrega", zona === "lima" ? "Delivery en Lima" : zona === "callao" ? "Delivery en Callao" : "Delivery a provincia"]);
     filas.push(["Dirección", `${p.entrega.direccion}, ${p.entrega.distrito.nombre}`]);
     if (p.pago.metodo !== "whatsapp") filas.push(["Llega en", p.entrega.distrito.plazo]);
+  } else if (p.entrega.tipo === "coordinar") {
+    filas.push(["Entrega", "Por coordinar por WhatsApp (el envío va aparte)"]);
   } else {
     filas.push(["Entrega", "Recojo en tienda"]);
     if (p.recojo) filas.push(["Recoges en", `${p.recojo.direccion}, ${p.recojo.distrito}`], ["Horario", p.recojo.horario]);

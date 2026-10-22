@@ -28,8 +28,6 @@ export const hora = (iso: string) =>
 export const fechaCorta = (iso: string) =>
   new Intl.DateTimeFormat("en-CA", { timeZone: ZONA }).format(new Date(iso));
 
-export const linkTienda = (slug: string) => `tiendly.pe/${slug}`;
-
-/** Abre WhatsApp con el mensaje para compartir la tienda (wa.me sin número: elige el chat). */
-export const whatsappCompartir = (slug: string) =>
-  `https://wa.me/?text=${encodeURIComponent(`¡Hola! Ya puedes comprar en mi tienda: ${linkTienda(slug)}`)}`;
+/** Abre WhatsApp con el mensaje para compartir la tienda (wa.me sin número: elige el chat). `link`: URL completa. */
+export const whatsappCompartir = (link: string) =>
+  `https://wa.me/?text=${encodeURIComponent(`¡Hola! Ya puedes comprar en mi tienda: ${link}`)}`;

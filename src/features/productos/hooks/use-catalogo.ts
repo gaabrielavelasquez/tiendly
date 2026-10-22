@@ -2,14 +2,15 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type { Filtro, Producto } from "../types";
-import { contarPorFiltro, duplicar, filtrarProductos } from "../lib/reglas";
+import { cambiarEstados, duplicarProducto as duplicarEnServidor } from "../lib/acciones";
+import { contarPorFiltro, filtrarProductos } from "../lib/reglas";
 
 /** Lo último que se pausó (uno o varios), tal como estaba, para poder deshacer. */
 export type Pausado = { productos: Producto[] };
 
 /**
- * Estado del catálogo en el cliente (hasta tener backend): filtro sincronizado con la URL,
- * búsqueda, selección para acciones masivas (solo desktop), pausar (con deshacer durante unos segundos) y duplicar.
+ * Estado del catálogo en el cliente: filtro sincronizado con la URL, búsqueda, selección para acciones masivas
+ * (solo desktop), pausar (con deshacer durante unos segundos) y duplicar. Pausar, deshacer y duplicar se guardan.
  */
 export function useCatalogo(inicial: Producto[], filtroInicial: Filtro) {
   const [lista, setLista] = useState(inicial);
@@ -38,6 +39,7 @@ export function useCatalogo(inicial: Producto[], filtroInicial: Filtro) {
       if (!productos.length) return;
       setPausado({ productos });
       setLista((prev) => prev.map((p) => (ids.includes(p.id) ? { ...p, estado: "pausado" } : p)));
+      void cambiarEstados(Object.fromEntries(ids.map((id) => [id, "pausado" as const])));
       setSeleccion((prev) => new Set([...prev].filter((id) => !ids.includes(id))));
       window.clearTimeout(timer.current);
       timer.current = window.setTimeout(() => setPausado(null), 6000);
@@ -50,14 +52,18 @@ export function useCatalogo(inicial: Producto[], filtroInicial: Filtro) {
     if (!pausado) return;
     const antes = new Map(pausado.productos.map((p) => [p.id, p]));
     setLista((prev) => prev.map((p) => antes.get(p.id) ?? p));
+    void cambiarEstados(Object.fromEntries(pausado.productos.map((p) => [p.id, p.estado])));
     setPausado(null);
     window.clearTimeout(timer.current);
   }, [pausado]);
 
-  const duplicarProducto = useCallback((id: string) => {
+  /** La copia la crea el servidor (pausada y sin stock) y aparece debajo del original. */
+  const duplicarProducto = useCallback(async (id: string) => {
+    const copia = await duplicarEnServidor(id).catch(() => null);
+    if (!copia || "error" in copia) return;
     setLista((prev) => {
       const i = prev.findIndex((p) => p.id === id);
-      return i < 0 ? prev : [...prev.slice(0, i + 1), duplicar(prev[i]), ...prev.slice(i + 1)];
+      return i < 0 ? [copia, ...prev] : [...prev.slice(0, i + 1), copia, ...prev.slice(i + 1)];
     });
   }, []);
 

@@ -20,8 +20,8 @@ import { PasoRevision } from "./paso-revision";
 import { SolicitudEnviada } from "./solicitud-enviada";
 import { Stepper } from "./stepper";
 
-export function AfiliacionVista({ escenario, soporte, rubros }: { escenario?: string; soporte?: string; rubros: RubroId[] }) {
-  const m = useAfiliacion(escenario, rubros);
+export function AfiliacionVista({ escenario, soporte, rubros, tienda }: { escenario?: string; soporte?: string; rubros: RubroId[]; tienda: string }) {
+  const m = useAfiliacion(escenario, rubros, tienda);
   const router = useRouter();
   const [dialogo, setDialogo] = useState<Dialogo>(null);
   const [errorSalir, setErrorSalir] = useState("");
