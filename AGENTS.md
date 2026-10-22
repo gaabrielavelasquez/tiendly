@@ -12,7 +12,7 @@ No dupliques esas reglas aquí: si algo cambia, se cambia en `CLAUDE.md` o `DESI
 
 - **El repo manda en lo visual; Figma, en flujos y estructura** (decisión 0026). Archivo `zHR0uS37OATafFq7U4NEwr`, página **Flujos** (`1:65`).
 - **Congelamiento estético:** no cambies colores, radios, sombras, tipografías ni espacios. No edites a mano `src/styles/tokens.css` ni `tokens.ts` (salen de `design/tokens.json` con `npm run tokens`). Las pantallas nuevas reutilizan componentes y tokens existentes.
-- **Copy:** tuteo, la palabra «cliente» (neutral) y punto final en ayudas, errores y descripciones.
+- **Copy:** tuteo, la palabra «cliente», punto final en ayudas, errores y descripciones. Sin género (0032): «la tienda» o «quien vende», nunca «vendedora» ni «emprendedora»; se reformula en vez de usar «@», «x» o «e». Multirubro: ejemplos de varias categorías.
 - **Cuatro estados** en cada vista: carga, vacío, con datos y error.
 - **Datos simulados:** pagos, SUNAT, bancos y envíos son mocks. No envíes mensajes, cobros ni confirmaciones reales, y no uses números de teléfono reales para pruebas.
 

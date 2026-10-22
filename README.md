@@ -33,7 +33,7 @@ Figma (variables) → design/tokens.json (DTCG) → npm run tokens → src/style
 | Selección | Chips, radios y similares en negro carbón (`bg-selected`). Links en cobalto (`text-accent-text`). |
 | Radios | Tarjetas `rounded-card` (16) · botones `rounded-button` (10) · chips y badges `rounded-chip` (pill; chip de 32 px de alto y zona táctil de 44 px). |
 | Movimiento | `Pressable`: escala 0.98 y 150 ms ease-out. Respeta "reducir movimiento". |
-| Copy | "Cliente" para quien compra. Textos de ayuda y descripciones terminan con punto; títulos y botones, no. Tuteo, sin voseo. |
+| Copy | "Cliente" para quien compra y "la tienda" o "quien vende" para quien vende, sin género (0032). Textos de ayuda y descripciones terminan con punto; títulos y botones, no. Tuteo, sin voseo. |
 | Estados | Toda vista tiene carga, vacío, con datos y error. |
 
 ## Estructura
