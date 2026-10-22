@@ -14,8 +14,9 @@ type PageProps = { searchParams: Promise<{ escenario?: string; guardado?: string
 export default async function CuponesPage({ searchParams }: PageProps) {
   const { escenario, guardado } = await searchParams;
   const e = leerEscenario(herramientasDev ? escenario : undefined);
-  const cupones = await obtenerCupones(e);
-  const plan = e === "limite" ? "free" : tiendaActual.plan;
+  const tienda = await tiendaActual();
+  const cupones = await obtenerCupones(tienda.slug, e);
+  const plan = e === "limite" ? "free" : tienda.plan;
   return (
     <PanelMain>
       <VistaCupones key={guardado ?? "lista"} inicial={cupones} hoy={AHORA.slice(0, 10)} creado={guardado} plan={plan} />

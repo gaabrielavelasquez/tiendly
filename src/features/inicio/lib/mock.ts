@@ -1,4 +1,6 @@
-import { esTiendaDemo, tiendaActual } from "@/lib/sesion";
+import { esHeather } from "@/lib/datos/semillas";
+import type { DatosTienda } from "@/lib/datos/tienda";
+import { datosPanel } from "@/lib/sesion";
 import { obtenerPedidos } from "@/features/pedidos/lib/mock";
 import { obtenerProductos } from "@/features/productos/lib/mock";
 import type { Escenario, InicioData, Paso } from "../types";
@@ -8,7 +10,7 @@ import { actividadDe } from "./datos";
 // Datos simulados hasta tener backend. Se elige el escenario con ?escenario= en /panel.
 // "actividad" (por defecto) se arma con los pedidos y el catálogo reales del servidor (ver datos.ts).
 
-const TIENDA = { nombre: "", slug: "", duena: "", link: "" }; // la tienda de la sesión y su link los pone obtenerInicio
+const TIENDA = { nombre: "", slug: "", link: "" }; // la tienda de la sesión y su link los pone obtenerInicio
 const AHORA = "2026-10-15T18:30:00-05:00";
 
 type Hechos = Record<Paso["id"], boolean>;
@@ -95,30 +97,29 @@ export function leerEscenario(valor: string | string[] | undefined): Escenario {
 }
 
 /**
- * Tienda creada en el onboarding: todo sale de sus datos reales. Mientras falte un paso, Inicio muestra
- * "Pasos para arrancar"; con los 4, la vista con actividad.
+ * Tiendas sin datos de demo (la ficticia de Vercel y las del onboarding): todo sale de sus datos reales.
+ * Mientras falte un paso, Inicio muestra "Pasos para arrancar"; con los 4 (o con el primer pedido), la actividad.
  */
-async function tiendaNueva(tienda: InicioData["tienda"]): Promise<InicioData> {
-  const [pedidos, catalogo] = await Promise.all([obtenerPedidos("pedidos"), obtenerProductos("catalogo")]);
-  const semana = SEMANA.map((d) => ({ ...d, monto: d.monto === null ? null : 0, pedidos: 0 }));
+async function deSusDatos(tienda: InicioData["tienda"], d: DatosTienda): Promise<InicioData> {
+  const [pedidos, catalogo] = await Promise.all([obtenerPedidos("pedidos", tienda.slug), obtenerProductos("catalogo", tienda.slug)]);
+  const semana = SEMANA.map((x) => ({ ...x, monto: x.monto === null ? null : 0, pedidos: 0 }));
   return {
     tienda,
     ahora: AHORA,
     ...actividadDe(pedidos, catalogo, AHORA, semana),
     semanaPasadaTotal: 0,
-    pasos: pasos({ producto: catalogo.length > 0, ...tiendaActual.hechos }, catalogo.at(-1)?.nombre),
+    pasos: pasos({ producto: catalogo.length > 0, ...d.tienda.hechos }, catalogo.at(-1)?.nombre),
   };
 }
 
-/** Simula la llamada al backend: tarda un poco (se ve el esqueleto) y puede fallar. */
+/** Inicio de la tienda del panel. Heather (demo local) suma su historia de la semana y los escenarios de prueba. */
 export async function obtenerInicio(escenario: Escenario): Promise<InicioData> {
-  await new Promise((r) => setTimeout(r, 600));
   if (escenario === "error") throw new Error("No se pudo cargar Inicio (simulado).");
-  const { nombre, slug, duena } = tiendaActual;
+  const d = await datosPanel();
+  const { nombre, slug, duena } = d.tienda;
   const tienda = { nombre, slug, duena, link: await urlTienda(slug) };
-  if (!esTiendaDemo()) return tiendaNueva(tienda);
+  if (!esHeather(slug)) return deSusDatos(tienda, d);
   if (escenario !== "actividad") return { ...ESCENARIOS[escenario], tienda };
-  const [pedidos, catalogo] = await Promise.all([obtenerPedidos("pedidos"), obtenerProductos("catalogo")]);
+  const [pedidos, catalogo] = await Promise.all([obtenerPedidos("pedidos", slug), obtenerProductos("catalogo", slug)]);
   return { ...ACTIVIDAD, ...actividadDe(pedidos, catalogo, AHORA, SEMANA), tienda };
 }
-

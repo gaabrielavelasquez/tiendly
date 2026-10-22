@@ -2,18 +2,15 @@ import type { ItemStock } from "@/features/productos/lib/inventario";
 import type { DetallePedido, Pedido } from "../types";
 import { AHORA } from "./mock";
 
-// Pedidos creados desde la vitrina, en la memoria del servidor (simulado, hasta tener backend).
-// Se borran al reiniciar el servidor. Viven en globalThis para que la acción de la vitrina y las páginas
-// del panel vean el mismo almacén, y para que una recarga en caliente no lo vacíe.
+// Pedidos creados desde la vitrina, guardados con los datos de cada tienda (lib/datos/tienda) hasta tener
+// backend. Funciones puras sobre ese almacén: quien las llama lee y guarda los datos.
 
 /** `stock`: qué variantes del catálogo lleva el pedido (para descontar o reservar). */
-type Creado = { pedido: Pedido; detalle: DetallePedido; stock: ItemStock[] };
-type Almacen = { ultimo: number; creados: Creado[] };
-const g = globalThis as typeof globalThis & { __tiendlyPedidos?: Almacen };
-const almacen = (g.__tiendlyPedidos ??= { ultimo: 1047, creados: [] });
+export type Creado = { pedido: Pedido; detalle: DetallePedido; stock: ItemStock[] };
+export type AlmacenPedidos = { ultimo: number; creados: Creado[] };
 
-/** Siguiente número después de los simulados (#TL-1047). Se reserva al llegar al pago. */
-export const siguienteNumero = () => `TL-${++almacen.ultimo}`;
+/** Siguiente número (#TL-1001 en una tienda nueva). Se reserva al llegar al pago. */
+export const siguienteNumero = (a: AlmacenPedidos) => `TL-${++a.ultimo}`;
 
 /**
  * Hora del pedido en el reloj de la demo: el panel vive en AHORA (jueves 15, 6:30 p. m.), así que un
@@ -21,22 +18,14 @@ export const siguienteNumero = () => `TL-${++almacen.ultimo}`;
  */
 export const horaDemo = () => new Date(AHORA).toISOString();
 
-/** Tienda nueva (onboarding): sin pedidos; la numeración arranca en #TL-1001. */
-export function reiniciarPedidos() {
-  almacen.ultimo = 1000;
-  almacen.creados = [];
-}
-
-export function agregarPedido(c: Creado) {
-  almacen.creados = [c, ...almacen.creados.filter((x) => x.pedido.id !== c.pedido.id)];
+export function agregarPedido(a: AlmacenPedidos, c: Creado) {
+  a.creados = [c, ...a.creados.filter((x) => x.pedido.id !== c.pedido.id)];
 }
 
 /** Reemplaza el estado de un pedido creado (acciones del panel). `null` si no es de la vitrina. */
-export function actualizarPedido(pedido: Pedido, detalle: DetallePedido) {
-  const c = almacen.creados.find((x) => x.pedido.id === pedido.id);
+export function actualizarPedido(a: AlmacenPedidos, pedido: Pedido, detalle: DetallePedido) {
+  const c = a.creados.find((x) => x.pedido.id === pedido.id);
   if (!c) return null;
   Object.assign(c, { pedido, detalle });
   return c;
 }
-
-export const pedidosCreados = () => almacen.creados;

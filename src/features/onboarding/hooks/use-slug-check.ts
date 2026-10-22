@@ -1,7 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { aSlug, revisarSlug, type ResultadoSlug } from "../lib/slug";
+import { revisarSlug } from "../lib/acciones";
+import { aSlug, type ResultadoSlug } from "../lib/slug";
 
 export type EstadoSlug = { estado: "vacio" } | { estado: "revisando"; slug: string } | ({ estado: "listo" } & ResultadoSlug);
 
@@ -18,7 +19,9 @@ export function useSlugCheck(nombre: string): EstadoSlug {
     let vigente = true;
     setRes({ estado: "revisando", slug });
     const t = setTimeout(() => {
-      revisarSlug(slug).then((r) => vigente && setRes({ estado: "listo", ...r }));
+      revisarSlug(slug)
+        .then((r) => vigente && setRes({ estado: "listo", ...r }))
+        .catch(() => vigente && setRes({ estado: "listo", slug, libre: true })); // sin conexión: lo confirma «Crear mi tienda»
     }, 400);
     return () => {
       vigente = false;

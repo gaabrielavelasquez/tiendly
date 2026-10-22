@@ -35,7 +35,7 @@ export function StepDatos() {
     }));
     setCreando(false);
     if ("error" in r) return setErrores({ nombre: r.error });
-    set({ slug: final, paso: "lista" });
+    set({ slug: r.slug, paso: "lista" }); // el servidor puede ajustar el link si alguien lo tomó recién
   }
 
   return (

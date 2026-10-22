@@ -9,12 +9,13 @@ import { tiendaActual } from "@/lib/sesion";
  */
 export default async function PanelLayout({ children }: { children: React.ReactNode }) {
   await connection();
+  const tienda = await tiendaActual();
   return (
-    <SesionPanel duena={tiendaActual.duena}>
+    <SesionPanel duena={tienda.duena ?? tienda.nombre}>
       <div className="min-h-dvh bg-page lg:flex">
         <Sidebar />
         <div className="flex min-w-0 flex-1 flex-col">
-          <MobileTopbar nombreTienda={tiendaActual.nombre} duena={tiendaActual.duena} />
+          <MobileTopbar nombreTienda={tienda.nombre} duena={tienda.duena ?? tienda.nombre} />
           {children}
           <TabBar />
         </div>

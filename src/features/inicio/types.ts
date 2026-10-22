@@ -1,7 +1,8 @@
 export type Escenario = "actividad" | "al-dia" | "nueva" | "error";
 
 /** `link`: URL pública de la vitrina (la pone la página, ver lib/link-tienda). */
-export type Tienda = { nombre: string; slug: string; duena: string; link: string };
+/** `duena`: nombre de pila, solo si entró con Google (el onboarding no lo pide, decisión 0013). */
+export type Tienda = { nombre: string; slug: string; duena?: string; link: string };
 
 export type PedidoHoy = {
   monto: number;

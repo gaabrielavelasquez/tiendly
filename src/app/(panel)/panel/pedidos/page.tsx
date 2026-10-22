@@ -8,6 +8,7 @@ export const metadata: Metadata = { title: "Pedidos · Tiendly" };
 
 type PageProps = { searchParams: Promise<Record<string, string | string[] | undefined>> };
 import { herramientasDev } from "@/lib/entorno";
+import { slugPanel } from "@/lib/sesion";
 
 /**
  * Pedidos (decisión 0010). Datos simulados: ?escenario=pedidos (por defecto), vacio o error.
@@ -15,7 +16,7 @@ import { herramientasDev } from "@/lib/entorno";
  */
 export default async function PanelPedidos({ searchParams }: PageProps) {
   const { escenario, estado } = await searchParams;
-  const pedidos = await obtenerPedidos(leerEscenario(herramientasDev ? escenario : undefined));
+  const pedidos = await obtenerPedidos(leerEscenario(herramientasDev ? escenario : undefined), await slugPanel());
   return (
     <PanelMain>
       <PedidosVista pedidos={pedidos} ahora={AHORA} filtroInicial={leerFiltro(Array.isArray(estado) ? estado[0] : estado)} />

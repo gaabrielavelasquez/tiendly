@@ -1,5 +1,6 @@
 import type { DetallePedido, Escenario, Pedido } from "../types";
-import { esTiendaDemo } from "@/lib/sesion";
+import { esHeather } from "@/lib/datos/semillas";
+import { datosTienda } from "@/lib/datos/tienda";
 import { DETALLES, unidades } from "./detalle-mock";
 
 // Pedidos simulados de una tienda que vende por WhatsApp (Heather), hasta tener backend.
@@ -48,28 +49,25 @@ export function leerEscenario(valor: string | string[] | undefined): Escenario {
   return v === "vacio" || v === "error" ? v : "pedidos";
 }
 
-/** Simula la llamada al backend: tarda un poco (se ve el esqueleto) y puede fallar. */
-export async function obtenerPedidos(escenario: Escenario): Promise<Pedido[]> {
-  await new Promise((r) => setTimeout(r, 600));
+/** Los pedidos de la lista. Los de la vitrina van primero: son los más nuevos. */
+export async function obtenerPedidos(escenario: Escenario, slug: string): Promise<Pedido[]> {
   if (escenario === "error") throw new Error("No se pudo cargar Pedidos (simulado).");
   if (escenario === "vacio") return [];
-  const { pedidosCreados } = await import("./almacen"); // los de la vitrina van primero: son los más nuevos
-  return [...pedidosCreados().map((c) => c.pedido), ...demo().map(conUnidades)];
+  const d = await datosTienda(slug);
+  return [...(d?.pedidos.creados ?? []).map((c) => c.pedido), ...demo(slug).map(conUnidades)];
 }
 
-/** Los pedidos simulados son de Heather; una tienda nueva solo tiene los de su vitrina. */
-const demo = () => (esTiendaDemo() ? PEDIDOS : []);
+/** Los pedidos simulados (#TL-1035 a #TL-1047) son de Heather; las demás tiendas solo tienen los de su vitrina. */
+const demo = (slug: string) => (esHeather(slug) ? PEDIDOS : []);
 
 /** La cantidad de productos de la lista sale del detalle, así no se desalinean. */
 const conUnidades = (p: Pedido): Pedido => (DETALLES[p.id] ? { ...p, items: unidades(DETALLES[p.id]) } : p);
 
 /** Un pedido con su detalle (para /panel/pedidos/[id]). `null` si no existe. */
-export async function obtenerPedido(id: string): Promise<{ pedido: Pedido; detalle: DetallePedido } | null> {
-  await new Promise((r) => setTimeout(r, 400));
-  const { pedidosCreados } = await import("./almacen");
-  const creado = pedidosCreados().find((c) => c.pedido.id === id);
+export async function obtenerPedido(slug: string, id: string): Promise<{ pedido: Pedido; detalle: DetallePedido } | null> {
+  const creado = (await datosTienda(slug))?.pedidos.creados.find((c) => c.pedido.id === id);
   if (creado) return { pedido: creado.pedido, detalle: creado.detalle };
-  const pedido = demo().find((p) => p.id === id);
+  const pedido = demo(slug).find((p) => p.id === id);
   const detalle = DETALLES[id];
   return pedido && detalle ? { pedido: conUnidades(pedido), detalle } : null;
 }

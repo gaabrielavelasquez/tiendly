@@ -1,6 +1,6 @@
 "use server";
 import type { Datos, Negocio, Solicitud } from "../types";
-import { configActual, guardarConfig } from "@/features/configuracion/lib/mock";
+import { mutarPanel } from "@/lib/sesion";
 import { validarCuenta, validarNegocio, validarRepresentante, validarRuc } from "./reglas";
 
 /** Adaptador de demostración. Sustituir por proveedor SUNAT antes de aceptar datos reales. */
@@ -28,7 +28,8 @@ export async function enviarSolicitud(datos: Datos, acepto: boolean): Promise<{ 
   while (dias < 10) { respuesta.setDate(respuesta.getDate() + 1); if (![0, 6].includes(respuesta.getDay())) dias++; }
   const solicitud: Solicitud = { numero: `AF-${crypto.randomUUID().slice(0, 8).toUpperCase()}`, enviada: ahora.toISOString(), respuesta: respuesta.toISOString(), estado: "revision", datos: { ...datos }, negocio: consulta.negocio };
   // Figma A7: Configuración › Pagos muestra los cobros «En revisión» junto a WhatsApp (simulado, sin cobros reales).
-  const { pagos } = configActual();
-  if (pagos.cobros.estado !== "activo") guardarConfig({ pagos: { ...pagos, cobros: { ...pagos.cobros, estado: "en-revision", solicitud: { numero: solicitud.numero, enviada: solicitud.enviada } } } });
+  await mutarPanel(({ config: { pagos } }) => {
+    if (pagos.cobros.estado !== "activo") pagos.cobros = { ...pagos.cobros, estado: "en-revision", solicitud: { numero: solicitud.numero, enviada: solicitud.enviada } };
+  });
   return { solicitud };
 }

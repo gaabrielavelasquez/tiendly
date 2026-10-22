@@ -82,6 +82,8 @@ export function useFormularioProducto(inicial: FormProducto, id?: string) {
       return 0;
     }
     idGuardado.current = r.id;
+    const urls = r.urls;
+    imagenes = imagenes.map((i, n) => ({ ...i, url: urls[n] ?? i.url }));
     // Activo pero incompleto: se guardó pausado y se avisa qué falta (decisión 0028).
     const falta = r.pausado;
     const final: FormProducto = { ...form, imagenes, estado: falta ? "pausado" : form.estado };

@@ -1,6 +1,6 @@
 import { obtenerProductos } from "@/features/productos/lib/mock";
 import { obtenerVitrina, slugProducto } from "@/features/vitrina/lib/vitrina";
-import { configActual } from "@/features/configuracion/lib/mock";
+import { configDe } from "@/features/configuracion/lib/mock";
 import type { CatalogoCompra } from "../types";
 import { reglasCompra } from "./config";
 
@@ -11,7 +11,9 @@ import { reglasCompra } from "./config";
 export async function obtenerCompra(slug: string) {
   const vitrina = await obtenerVitrina(slug);
   if (!vitrina) return null;
-  const activos = (await obtenerProductos("catalogo")).filter((p) => p.estado === "activo");
+  const [productos, config] = await Promise.all([obtenerProductos("catalogo", slug), configDe(slug)]);
+  if (!config) return null;
+  const activos = productos.filter((p) => p.estado === "activo");
   const catalogo: CatalogoCompra = Object.fromEntries(
     activos.map((p) => [
       p.id,
@@ -26,7 +28,7 @@ export async function obtenerCompra(slug: string) {
     ]),
   );
   // Lo que la tienda configuró en Pagos y Entregas (módulo 2) manda en el checkout.
-  return { tienda: vitrina.tienda, categorias: vitrina.categorias, catalogo, reglas: reglasCompra(configActual()) };
+  return { tienda: vitrina.tienda, categorias: vitrina.categorias, catalogo, reglas: reglasCompra(config) };
 }
 
 export type DatosCompra = NonNullable<Awaited<ReturnType<typeof obtenerCompra>>>;

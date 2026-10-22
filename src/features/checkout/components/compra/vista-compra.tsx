@@ -42,7 +42,7 @@ export function VistaCompra({ datos: { tienda, categorias, catalogo, reglas } }:
 
   // El número se reserva al llegar al pago: el mensaje de WhatsApp ya lo muestra.
   useEffect(() => {
-    if (c.paso === "pago" && !numero) reservarNumero().then(setNumero);
+    if (c.paso === "pago" && !numero) reservarNumero(tienda.slug).then((n) => n && setNumero(n));
   }, [c.paso, numero]);
 
   const mensaje = numero && c.entrega ? mensajePedido({ tienda: tienda.nombre, numero, lineas, cupon: carrito.cupon?.codigo, totales, datos: c.datos, entrega: c.entrega }) : "";

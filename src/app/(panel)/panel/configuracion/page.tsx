@@ -13,11 +13,12 @@ type PageProps = { searchParams: Promise<{ escenario?: string }> };
 /** Configuración: Métodos de pago, Entregas y Cuenta (decisión 0027). */
 export default async function ConfiguracionPage({ searchParams }: PageProps) {
   const { escenario } = await searchParams;
-  const config = await obtenerConfig(leerEscenario(herramientasDev ? escenario : undefined));
+  const tienda = await tiendaActual();
+  const config = await obtenerConfig(tienda.slug, leerEscenario(herramientasDev ? escenario : undefined));
   return (
     <PanelMain>
       <PanelHeader titulo="Configuración" subtitulo="Cómo te pagan, cómo entregas y los datos de tu cuenta." />
-      <Hub config={config} link={await urlTienda(tiendaActual.slug)} />
+      <Hub config={config} tienda={tienda.nombre} link={await urlTienda(tienda.slug)} />
     </PanelMain>
   );
 }
