@@ -1,4 +1,5 @@
 import { enLima } from "@/features/pedidos/lib/tiempo";
+import { conArticulo } from "@/lib/formato";
 import type { PedidoCreado } from "../types";
 import { HORAS_RESERVA } from "./config";
 
@@ -26,10 +27,10 @@ export const reservaHasta = (creadoEl: string) => new Date(new Date(creadoEl).ge
 
 const hora = (h: number, min: number) => `${h % 12 || 12}:${String(min).padStart(2, "0")} ${h < 12 ? "a. m." : "p. m."}`;
 
-/** "mañana a las 9:41 a. m." (hora de Lima, sin Intl). Ya termina en punto: no sumarle otro. */
+/** "mañana a las 9:41 a. m." o "hoy a la 1:15 p. m." (hora de Lima, sin Intl). Ya termina en punto: no sumarle otro. */
 export function textoReserva(hasta: string, desde: string) {
   const h = enLima(new Date(hasta).getTime());
   const d = enLima(new Date(desde).getTime());
   const cuando = h.dia === d.dia ? "hoy" : "mañana";
-  return `${cuando} a las ${hora(h.h, h.min)}`;
+  return `${cuando} a ${conArticulo(hora(h.h, h.min))}`;
 }

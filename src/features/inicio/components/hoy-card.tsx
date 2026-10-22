@@ -7,6 +7,7 @@ import { useReducedMotion } from "@/components/motion/use-reduced-motion";
 import { EncabezadoSeccion } from "@/components/panel";
 import { Card } from "@/components/ui";
 import { cn } from "@/lib/cn";
+import { conArticulo } from "@/lib/formato";
 import { formatoSoles } from "../lib/format";
 import { suave } from "../lib/motion";
 import { CompartirWhatsApp } from "./compartir-whatsapp";
@@ -46,7 +47,7 @@ export function HoyCard({ ventas, pedidos, corte, link, className }: HoyCardProp
         accion={
           <span className="flex items-center gap-1.5 text-caption text-fg-secondary">
             <Clock3 aria-hidden strokeWidth={1.5} className="size-3.5" />
-            Hasta las {corte}
+            Hasta {conArticulo(corte)}
           </span>
         }
       />
