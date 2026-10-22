@@ -2,15 +2,18 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type { Categoria } from "../types";
-import { faltaParaPublicar, VARIANTE_VACIA, validar, type Errores, type FormProducto, type ImagenForm, type VarianteForm } from "../lib/formulario";
+import { guardarProducto } from "../lib/acciones";
+import { fotoParaGuardar } from "../lib/foto";
+import { VARIANTE_VACIA, validar, type Errores, type FormProducto, type ImagenForm, type VarianteForm } from "../lib/formulario";
 
 const alternar = <T,>(lista: T[], v: T) => (lista.includes(v) ? lista.filter((x) => x !== v) : [...lista, v]);
 
 /**
  * Estado del formulario de producto: valores, validación (se muestra recién al intentar guardar),
- * cambios sin guardar (avisa antes de salir) y guardado simulado hasta tener backend.
+ * cambios sin guardar (avisa antes de salir) y guardado en el catálogo (simulado en el servidor).
+ * `id`: el producto que se edita; al crear, se recuerda el id nuevo para no duplicarlo al volver a guardar.
  */
-export function useFormularioProducto(inicial: FormProducto) {
+export function useFormularioProducto(inicial: FormProducto, id?: string) {
   const [form, setForm] = useState(inicial);
   const [base, setBase] = useState(() => JSON.stringify(inicial));
   const [intentoGuardar, setIntentoGuardar] = useState(false);
@@ -18,6 +21,9 @@ export function useFormularioProducto(inicial: FormProducto) {
   /** Aviso tras guardar: null si no hay; si se guardó pausado, dice qué falta. */
   const [guardado, setGuardado] = useState<{ pausado: string | null } | null>(null);
   const timer = useRef<number | undefined>(undefined);
+  const idGuardado = useRef(id ?? null);
+  /** Error al guardar (red o servidor); lo escrito no se pierde. */
+  const [fallo, setFallo] = useState("");
 
   const errores: Errores = useMemo(() => (intentoGuardar ? validar(form) : {}), [form, intentoGuardar]);
   const sinGuardar = JSON.stringify(form) !== base;
@@ -60,12 +66,25 @@ export function useFormularioProducto(inicial: FormProducto) {
       });
       return cantidad;
     }
-    // Activo pero incompleto: se guarda pausado y se avisa qué falta (decisión 0028).
-    const falta = form.estado === "activo" ? faltaParaPublicar(form) : null;
-    const final: FormProducto = falta ? { ...form, estado: "pausado" } : form;
     setGuardando(true);
-    await new Promise((r) => setTimeout(r, 800)); // simulación del guardado
+    setFallo("");
+    let r: Awaited<ReturnType<typeof guardarProducto>>;
+    let imagenes = form.imagenes;
+    try {
+      imagenes = await Promise.all(form.imagenes.map(async (i) => ({ ...i, url: await fotoParaGuardar(i.url) })));
+      r = await guardarProducto(idGuardado.current, { ...form, imagenes });
+    } catch {
+      r = { error: "No pudimos guardar el producto. Revisa tu conexión e inténtalo de nuevo." };
+    }
     setGuardando(false);
+    if ("error" in r) {
+      setFallo(r.error);
+      return 0;
+    }
+    idGuardado.current = r.id;
+    // Activo pero incompleto: se guardó pausado y se avisa qué falta (decisión 0028).
+    const falta = r.pausado;
+    const final: FormProducto = { ...form, imagenes, estado: falta ? "pausado" : form.estado };
     setForm(final);
     setBase(JSON.stringify(final));
     setGuardado({ pausado: falta });
@@ -76,6 +95,6 @@ export function useFormularioProducto(inicial: FormProducto) {
 
   return {
     form, set, alternarColor, alternarTalla, alternarCategoria, setVariante, agregarImagenes, quitarImagen,
-    errores, guardar, guardando, guardado, sinGuardar,
+    errores, guardar, guardando, guardado, sinGuardar, fallo,
   };
 }

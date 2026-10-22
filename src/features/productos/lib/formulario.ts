@@ -67,7 +67,7 @@ export function desdeProducto(p: Producto): FormProducto {
   const tallas = [...new Set(p.variantes.map((v) => v.talla))].filter((t) => t !== TALLA_UNICA);
   return {
     nombre: p.nombre,
-    descripcion: "",
+    descripcion: p.descripcion ?? "",
     precio: String(p.precio),
     precioAntes: p.precioAntes ? String(p.precioAntes) : "",
     colores,
@@ -129,4 +129,33 @@ export function faltaParaPublicar(f: FormProducto): string | null {
   ].filter(Boolean) as string[];
   if (!faltan.length) return null;
   return faltan.length === 1 ? faltan[0] : `${faltan.slice(0, -1).join(", ")} y ${faltan.at(-1)}`;
+}
+
+/**
+ * Del formulario al catálogo. Lo que el modelo aún no guarda: el precio y el SKU por variante.
+ * Las fotos que ya tenía cada color se mantienen; las nuevas se suman a todos los colores.
+ */
+export function aProducto(f: FormProducto, id: string, anterior?: Producto | null): Producto {
+  const urls = f.imagenes.map((i) => i.url);
+  const previas = new Set(Object.values(anterior?.fotos ?? {}).flat());
+  const nuevas = urls.filter((u) => !previas.has(u));
+  const fotos = Object.fromEntries(
+    combinaciones(f.colores, f.tallas).map(({ color }) => {
+      const propias = (anterior?.fotos?.[color] ?? []).filter((u) => urls.includes(u)).concat(nuevas);
+      return [color, propias.length ? propias : urls];
+    }),
+  );
+  return {
+    id,
+    nombre: f.nombre.trim(),
+    sku: anterior?.sku,
+    descripcion: f.descripcion.trim() || undefined,
+    categorias: f.categorias,
+    estado: f.estado,
+    precio: numero(f.precio) > 0 ? numero(f.precio) : 0,
+    precioAntes: numero(f.precioAntes) > 0 ? numero(f.precioAntes) : undefined,
+    variantes: filasVariantes(f.colores, f.tallas).map(({ color, talla, clave: k }) => ({ color, talla, stock: Number(f.variantes[k]?.stock || 0) })),
+    imagen: urls[0],
+    fotos: urls.length ? fotos : undefined,
+  };
 }

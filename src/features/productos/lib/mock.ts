@@ -15,7 +15,7 @@ type Base = Omit<Producto, "variantes" | "imagen"> & { stock: Record<string, num
 /** La foto principal es la primera del primer color. */
 const producto = ({ stock, ...p }: Base): Producto => ({ ...p, variantes: variantes(stock), imagen: Object.values(p.fotos ?? {})[0]?.[0] });
 
-const CATALOGO: Producto[] = [
+const SEMILLA: Producto[] = [
   producto({ id: "p1", nombre: "Balerinas Chloé", sku: "BAL-CHL", categorias: ["balerinas"], estado: "activo", precio: 360,
     fotos: { Plata: [f("chloe-silver-1.jpg"), f("chloe-silver-2.png"), f("chloe-silver-3.png")], Burdeos: [f("chloe-burgundy.png")], Negro: [f("chloe-black.png")] },
     stock: { Plata: [2, 4, 5, 3, 2, 0], Burdeos: [1, 2, 3, 2, 1, 0], Negro: [2, 3, 4, 3, 2, 1] } }),
@@ -38,6 +38,19 @@ const CATALOGO: Producto[] = [
     fotos: { Negro: [f("rouge-black-1.png"), f("rouge-black-2.png"), f("rouge-black-3.png"), f("rouge-black-4.png")] }, stock: { Negro: [0, 1, 1, 1, 0, 0] } }),
 ];
 
+// El catálogo vive en la memoria del servidor (simulado, hasta tener backend): lo que se guarda en el panel
+// se ve al instante en la vitrina y en la compra. Se reinicia con el servidor.
+const g = globalThis as typeof globalThis & { __tiendlyProductos?: Producto[] };
+const catalogo = () => (g.__tiendlyProductos ??= structuredClone(SEMILLA));
+
+/** Crea o reemplaza un producto (por id). */
+export function guardarEnCatalogo(p: Producto) {
+  const lista = catalogo();
+  const i = lista.findIndex((x) => x.id === p.id);
+  if (i >= 0) lista[i] = p;
+  else lista.unshift(p);
+}
+
 export function leerEscenario(valor: string | string[] | undefined): Escenario {
   const v = Array.isArray(valor) ? valor[0] : valor;
   return v === "vacio" || v === "error" ? v : "catalogo";
@@ -46,7 +59,7 @@ export function leerEscenario(valor: string | string[] | undefined): Escenario {
 /** Un producto por id (para editar). `null` si no existe. */
 export async function obtenerProducto(id: string): Promise<Producto | null> {
   await new Promise((r) => setTimeout(r, 400));
-  return CATALOGO.find((p) => p.id === id) ?? null;
+  return structuredClone(catalogo().find((p) => p.id === id) ?? null);
 }
 
 /** Simula la llamada al backend: tarda un poco (se ve el esqueleto) y puede fallar. */
@@ -56,5 +69,5 @@ export async function obtenerProductos(escenario: Escenario): Promise<Producto[]
   if (escenario === "vacio") return [];
   // Stock disponible en el reloj de la demo: lo vendido y reservado desde la vitrina ya no está (0010 y 0028).
   const [{ conDisponible }, { AHORA }] = await Promise.all([import("./inventario"), import("@/features/pedidos/lib/mock")]);
-  return conDisponible(CATALOGO, AHORA);
+  return conDisponible(structuredClone(catalogo()), AHORA);
 }

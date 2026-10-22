@@ -12,6 +12,8 @@ export type Producto = {
   nombre: string;
   /** Opcional (decisión 0027): se carga en "Más opciones". */
   sku?: string;
+  /** Texto de la página del producto (opcional). */
+  descripcion?: string;
   /** Una o varias; la primera define el ícono de respaldo. */
   categorias: Categoria[];
   /** Un solo interruptor (decisiones 0011 y 0027): pausado no se ve en la tienda. */

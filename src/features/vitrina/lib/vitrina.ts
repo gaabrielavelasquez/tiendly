@@ -57,7 +57,7 @@ const aFicha = (p: Producto): FichaProducto => ({
   tallas: [...new Set(p.variantes.map((x) => x.talla))],
   fotos: p.fotos ?? (p.imagen ? { [p.variantes[0]?.color ?? ""]: [p.imagen] } : {}),
   corto: DETALLE[p.id]?.corto,
-  sobre: DETALLE[p.id]?.sobre,
+  sobre: p.descripcion ?? DETALLE[p.id]?.sobre,
 });
 
 /**
