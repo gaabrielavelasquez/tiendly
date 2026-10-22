@@ -177,6 +177,20 @@
   font-family: var(--tl-font-display);
   font-weight: var(--tl-font-title-style);
 }
+/*
+  Halo de la tarjeta Hoy (0031, ronda 6): solo detrás de la tarjeta, asomando por sus bordes; nada en el fondo de la
+  página. Puros degradados radiales (sin filter: blur, así no se recalcula al hacer scroll). glow/warm es del 4 %:
+  se apila en cuatro capas para que asome; arriba a la izquierda, un poco de glow/sky. Cada capa llega a transparente
+  antes del borde de su caja, así nunca hay un corte recto.
+*/
+@utility bg-halo-hoy {
+  background-image:
+    radial-gradient(closest-side at 50% 60%, var(--tl-glow-warm) 72%, transparent 100%),
+    radial-gradient(closest-side at 50% 60%, var(--tl-glow-warm) 72%, transparent 100%),
+    radial-gradient(closest-side at 50% 60%, var(--tl-glow-warm) 72%, transparent 100%),
+    radial-gradient(closest-side at 50% 60%, var(--tl-glow-warm) 72%, transparent 100%),
+    radial-gradient(closest-side at 25% 30%, color-mix(in srgb, var(--tl-glow-sky-from) 40%, transparent) 60%, transparent 100%);
+}
 /* Tarjeta Hoy, ronda 4 de 0031: degradado corto de cobalto a un cobalto apenas más hondo (sin marino). */
 @utility bg-hero-suave {
   background-image: linear-gradient(135deg, var(--tl-accent-base) 0%, var(--tl-accent-pressed) 100%);

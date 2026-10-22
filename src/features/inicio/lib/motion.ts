@@ -5,5 +5,7 @@ export const ease = [...motionTokens.easing] as [number, number, number, number]
 export const rapido = { duration: motionTokens.durationFast, ease };
 /** Barras y barra de progreso: un poco más largas para que se lea el crecimiento. */
 export const crecer = { duration: motionTokens.durationFast * 2, ease };
+/** Apariciones suaves de fondo (halo de Hoy): más lentas, sin llamar la atención. */
+export const suave = { duration: motionTokens.durationFast * 4, ease };
 /** Separación entre elementos escalonados. */
 export const ESCALON = 0.06;

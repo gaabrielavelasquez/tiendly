@@ -18,6 +18,7 @@
   --tl-color-neutral-200: #E5E7EB;
   --tl-color-neutral-300: #D1D5DB;
   --tl-color-neutral-400: #9CA3AF;
+  --tl-color-neutral-450: #878D97;
   --tl-color-neutral-500: #666D7A;
   --tl-color-neutral-600: #4B5563;
   --tl-color-neutral-700: #374151;
@@ -188,7 +189,7 @@
   --tl-gradient-glow-sky: radial-gradient(60% 60% at 50% 0%, var(--tl-glow-sky-from) 0%, var(--tl-glow-sky-to) 100%);
   --tl-effect-highlight: var(--tl-color-highlight-35);
   --tl-chart-bar: var(--tl-color-neutral-500);
-  --tl-chart-bar-muted: var(--tl-color-neutral-300);
+  --tl-chart-bar-muted: var(--tl-color-neutral-450);
   --tl-accent-base: var(--tl-color-cobalt-600);
   --tl-accent-hover: var(--tl-color-cobalt-700);
   --tl-accent-pressed: var(--tl-color-cobalt-800);
