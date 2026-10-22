@@ -1,6 +1,6 @@
 "use server";
 
-import { AHORA } from "@/features/pedidos/lib/mock";
+import { hoyLima } from "@/lib/reloj";
 import { datosPanel, mutarPanel } from "@/lib/sesion";
 import type { Cupon } from "../types";
 import { guardarCupon as guardar } from "./mock";
@@ -8,7 +8,7 @@ import { aCupon, cuponesEnUso, enUso, LIMITE_FREE, limiteCupones, validarCupon, 
 
 // Cupones (decisión 0008) de la tienda del panel, guardados con sus datos. Se valida todo aquí, incluido el límite del plan.
 
-const hoy = () => AHORA.slice(0, 10);
+const hoy = () => hoyLima();
 const LIMITE = `Llegaste al límite de ${LIMITE_FREE} cupones en uso del Plan Free. Pausa uno para activar otro.`;
 
 /** Plan Free: ¿este cambio deja más de 3 cupones en uso? Los programados también ocupan lugar. Pro: sin límite. */

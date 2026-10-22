@@ -4,7 +4,7 @@ import { PanelMain } from "@/components/panel";
 import { FormularioCupon } from "@/features/cupones/components/formulario-cupon";
 import { obtenerCupones } from "@/features/cupones/lib/mock";
 import { estadoCupon } from "@/features/cupones/lib/reglas";
-import { AHORA } from "@/features/pedidos/lib/mock";
+import { hoyLima } from "@/lib/reloj";
 import { slugPanel } from "@/lib/sesion";
 
 export const metadata: Metadata = { title: "Editar cupón · Tiendly" };
@@ -19,7 +19,7 @@ export default async function EditarCuponPage({ params }: PageProps) {
   if (!cupon) notFound();
   return (
     <PanelMain>
-      <FormularioCupon cupon={cupon} estado={estadoCupon(cupon, AHORA.slice(0, 10))} otros={cupones.filter((c) => c.id !== id)} />
+      <FormularioCupon cupon={cupon} estado={estadoCupon(cupon, hoyLima())} otros={cupones.filter((c) => c.id !== id)} />
     </PanelMain>
   );
 }

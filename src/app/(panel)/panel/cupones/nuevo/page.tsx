@@ -6,7 +6,7 @@ import { FormularioCupon } from "@/features/cupones/components/formulario-cupon"
 import { obtenerCupones } from "@/features/cupones/lib/mock";
 import { cuponesEnUso, limiteCupones } from "@/features/cupones/lib/reglas";
 import { datosPanel } from "@/lib/sesion";
-import { AHORA } from "@/features/pedidos/lib/mock";
+import { hoyLima } from "@/lib/reloj";
 
 export const metadata: Metadata = { title: "Crear cupón · Tiendly" };
 
@@ -16,7 +16,7 @@ export default async function NuevoCuponPage() {
   const { tienda } = await datosPanel();
   const cupones = await obtenerCupones(tienda.slug);
   const limite = limiteCupones(tienda.plan);
-  if (limite !== null && cuponesEnUso(cupones, AHORA.slice(0, 10)) >= limite) redirect("/panel/cupones");
+  if (limite !== null && cuponesEnUso(cupones, hoyLima()) >= limite) redirect("/panel/cupones");
   return (
     <PanelMain>
       <FormularioCupon otros={cupones} />

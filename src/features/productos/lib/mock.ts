@@ -1,5 +1,5 @@
 import { conDisponible } from "./inventario";
-import { AHORA } from "@/features/pedidos/lib/mock";
+import { ahoraIso } from "@/lib/reloj";
 import { datosTienda } from "@/lib/datos/tienda";
 import type { Escenario, Producto } from "../types";
 
@@ -22,5 +22,5 @@ export async function obtenerProductos(escenario: Escenario, slug: string): Prom
   if (escenario === "error") throw new Error("No se pudo cargar Productos (simulado).");
   if (escenario === "vacio") return [];
   const d = await datosTienda(slug);
-  return d ? conDisponible(d.productos, d.inventario, AHORA) : [];
+  return d ? conDisponible(d.productos, d.inventario, ahoraIso()) : [];
 }

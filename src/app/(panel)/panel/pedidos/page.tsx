@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import { PanelMain } from "@/components/panel";
 import { PedidosVista } from "@/features/pedidos/components/pedidos-vista";
-import { AHORA, leerEscenario, obtenerPedidos } from "@/features/pedidos/lib/mock";
+import { leerEscenario, obtenerPedidos } from "@/features/pedidos/lib/mock";
+import { ahoraIso } from "@/lib/reloj";
 import { leerFiltro } from "@/features/pedidos/lib/reglas";
 
 export const metadata: Metadata = { title: "Pedidos · Tiendly" };
@@ -16,10 +17,11 @@ import { slugPanel } from "@/lib/sesion";
  */
 export default async function PanelPedidos({ searchParams }: PageProps) {
   const { escenario, estado } = await searchParams;
-  const pedidos = await obtenerPedidos(leerEscenario(herramientasDev ? escenario : undefined), await slugPanel());
+  const ahora = ahoraIso();
+  const pedidos = await obtenerPedidos(leerEscenario(herramientasDev ? escenario : undefined), await slugPanel(), ahora);
   return (
     <PanelMain>
-      <PedidosVista pedidos={pedidos} ahora={AHORA} filtroInicial={leerFiltro(Array.isArray(estado) ? estado[0] : estado)} />
+      <PedidosVista pedidos={pedidos} ahora={ahora} filtroInicial={leerFiltro(Array.isArray(estado) ? estado[0] : estado)} />
     </PanelMain>
   );
 }

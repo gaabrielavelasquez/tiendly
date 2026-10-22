@@ -1,6 +1,6 @@
 import type { ItemStock } from "@/features/productos/lib/inventario";
 import type { DetallePedido, Pedido } from "../types";
-import { AHORA } from "./mock";
+import { ahoraIso } from "@/lib/reloj";
 
 // Pedidos creados desde la vitrina, guardados con los datos de cada tienda (lib/datos/tienda) hasta tener
 // backend. Funciones puras sobre ese almacén: quien las llama lee y guarda los datos.
@@ -12,11 +12,8 @@ export type AlmacenPedidos = { ultimo: number; creados: Creado[] };
 /** Siguiente número (#TL-1001 en una tienda nueva). Se reserva al llegar al pago. */
 export const siguienteNumero = (a: AlmacenPedidos) => `TL-${++a.ultimo}`;
 
-/**
- * Hora del pedido en el reloj de la demo: el panel vive en AHORA (jueves 15, 6:30 p. m.), así que un
- * pedido nuevo se hizo "ahora". Así cuadran "Hoy" y la reserva de 24 h ("Vence en 24 h").
- */
-export const horaDemo = () => new Date(AHORA).toISOString();
+/** Hora real del pedido nuevo: cuenta en "Hoy" y su reserva vence en 24 h. */
+export const horaPedido = () => ahoraIso();
 
 export function agregarPedido(a: AlmacenPedidos, c: Creado) {
   a.creados = [c, ...a.creados.filter((x) => x.pedido.id !== c.pedido.id)];

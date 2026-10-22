@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { PanelMain } from "@/components/panel";
 import { VistaCupones } from "@/features/cupones/components/vista-cupones";
 import { leerEscenario, obtenerCupones } from "@/features/cupones/lib/mock";
-import { AHORA } from "@/features/pedidos/lib/mock";
+import { hoyLima } from "@/lib/reloj";
 import { herramientasDev } from "@/lib/entorno";
 import { tiendaActual } from "@/lib/sesion";
 
@@ -19,7 +19,7 @@ export default async function CuponesPage({ searchParams }: PageProps) {
   const plan = e === "limite" ? "free" : tienda.plan;
   return (
     <PanelMain>
-      <VistaCupones key={guardado ?? "lista"} inicial={cupones} hoy={AHORA.slice(0, 10)} creado={guardado} plan={plan} />
+      <VistaCupones key={guardado ?? "lista"} inicial={cupones} hoy={hoyLima()} creado={guardado} plan={plan} />
     </PanelMain>
   );
 }
