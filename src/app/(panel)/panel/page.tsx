@@ -5,6 +5,7 @@ import { leerEscenario, obtenerInicio } from "@/features/inicio/lib/mock";
 import { esTiendaNueva } from "@/features/inicio/lib/reglas";
 
 type PageProps = { searchParams: Promise<Record<string, string | string[] | undefined>> };
+import { herramientasDev } from "@/lib/entorno";
 
 /**
  * Inicio (decisión 0012). Con datos simulados: ?escenario=actividad (por defecto), al-dia, nueva o error.
@@ -12,6 +13,6 @@ type PageProps = { searchParams: Promise<Record<string, string | string[] | unde
  */
 export default async function PanelInicio({ searchParams }: PageProps) {
   const { escenario } = await searchParams;
-  const datos = await obtenerInicio(leerEscenario(escenario));
+  const datos = await obtenerInicio(leerEscenario(herramientasDev ? escenario : undefined));
   return <PanelMain>{esTiendaNueva(datos) ? <VistaNueva datos={datos} /> : <VistaActividad datos={datos} />}</PanelMain>;
 }

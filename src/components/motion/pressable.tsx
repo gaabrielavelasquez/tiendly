@@ -1,6 +1,7 @@
 "use client";
 
-import { motion, useReducedMotion, type HTMLMotionProps } from "motion/react";
+import { motion, type HTMLMotionProps } from "motion/react";
+import { useReducedMotion } from "@/components/motion/use-reduced-motion";
 import { forwardRef } from "react";
 import { motionTokens } from "@/styles/tokens";
 

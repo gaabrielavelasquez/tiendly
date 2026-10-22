@@ -1,6 +1,6 @@
 import { cva } from "class-variance-authority";
 
-// DESIGN.md §4 · El degradado cobalto es exclusivo del CTA (decisión 0019).
+// DESIGN.md §4 · Calibrado (decisión 0024): el CTA vuelve al degradado cobalto → marino, en tipo oración.
 export const buttonVariants = cva(
   // Sleek & Crisp (0020): se ve de 40/36 px; el ::after estira la zona táctil a 48/44 px.
   "group relative isolate inline-flex aria-busy:pointer-events-none items-center justify-center gap-2 rounded-button font-body font-semibold transition-colors disabled:cursor-not-allowed after:absolute after:inset-x-0 after:-inset-y-1 after:content-['']",

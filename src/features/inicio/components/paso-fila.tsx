@@ -22,7 +22,7 @@ const Configurar = ({ className }: { className: string }) => (
 );
 
 /**
- * Un paso para arrancar. Solo el siguiente pendiente se resalta y lleva "Configurar →"
+ * Un paso para arrancar. Solo el siguiente pendiente se resalta (selection/*, decisión 0027) y lleva "Configurar →"
  * (en móvil debajo del texto, en desktop a la derecha); los demás pendientes, chevron.
  */
 export function PasoFila({ paso, destacado, separador }: PasoFilaProps) {
@@ -48,8 +48,8 @@ export function PasoFila({ paso, destacado, separador }: PasoFilaProps) {
           className={cn(
             "group flex min-h-12 items-center gap-3 transition-colors",
             destacado
-              ? "rounded-sm border border-accent-border bg-accent-subtle p-3"
-              : "-mx-2 rounded-sm px-2 py-3 hover:bg-sunken",
+              ? "rounded-theme border border-selected-border bg-selected-subtle p-3"
+              : "-mx-2 rounded-theme px-2 py-3 hover:bg-sunken",
           )}
         >
           <Marca hecho={false} />

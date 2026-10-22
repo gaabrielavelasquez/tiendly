@@ -1,7 +1,8 @@
 "use client";
 
 import { Check, ShoppingBag, type LucideIcon } from "lucide-react";
-import { motion, useReducedMotion } from "motion/react";
+import { motion } from "motion/react";
+import { useReducedMotion } from "@/components/motion/use-reduced-motion";
 import { cn } from "@/lib/cn";
 import { MiniTienda } from "./mini-tienda";
 import { Sparkles } from "./sparkles";

@@ -1,17 +1,18 @@
-import { MobileTopbar, Sidebar } from "@/components/panel";
-import { avisosSinLeer, tiendaActual } from "@/features/inicio/lib/mock";
+import { MobileTopbar, Sidebar, TabBar } from "@/components/panel";
+import { tiendaActual } from "@/lib/sesion";
 
 /**
  * Panel de la tienda (tema Tiendly, valores de :root). Desktop: barra lateral; la zona de cuenta va en la
- * cabecera de cada página, alineada con el saludo. Móvil: barra superior con menú y zona de cuenta.
+ * cabecera de cada página, alineada con el saludo. Móvil: barra superior con la cuenta y barra inferior con la navegación (decisión 0029).
  */
 export default function PanelLayout({ children }: { children: React.ReactNode }) {
   return (
     <div className="min-h-dvh bg-page lg:flex">
       <Sidebar />
       <div className="flex min-w-0 flex-1 flex-col">
-        <MobileTopbar nombreTienda={tiendaActual.nombre} duena={tiendaActual.duena} avisos={avisosSinLeer} />
+        <MobileTopbar nombreTienda={tiendaActual.nombre} duena={tiendaActual.duena} />
         {children}
+        <TabBar />
       </div>
     </div>
   );

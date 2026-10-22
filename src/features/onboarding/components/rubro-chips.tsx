@@ -1,7 +1,8 @@
 "use client";
 
 import { Check } from "lucide-react";
-import { AnimatePresence, motion, useReducedMotion } from "motion/react";
+import { AnimatePresence, motion } from "motion/react";
+import { useReducedMotion } from "@/components/motion/use-reduced-motion";
 import { Chip } from "@/components/ui";
 import { motionTokens } from "@/styles/tokens";
 import { alternarRubro, RUBROS, type RubroId } from "../lib/rubros";
