@@ -56,8 +56,8 @@ export function useCarrito(slug: string, catalogo: CatalogoCompra) {
 
   const deshacer = useCallback(() => {
     if (!items || !quitado) return;
-    const { id, color, talla, cantidad } = quitado.linea;
-    guardar([...items.slice(0, quitado.indice), { id, color, talla, cantidad }, ...items.slice(quitado.indice)]);
+    const { id, variante, cantidad } = quitado.linea;
+    guardar([...items.slice(0, quitado.indice), { id, variante, cantidad }, ...items.slice(quitado.indice)]);
     setQuitado(null);
   }, [items, quitado, guardar]);
 

@@ -38,7 +38,8 @@ export function FichaProducto({ p, tienda, celular, demo }: FichaProps) {
       document.getElementById("primera-talla")?.focus();
       return;
     }
-    agregarAlCarrito(tienda, { id: p.id, color, talla });
+    const variante = p.variantes.find((v) => v.color === color && v.talla === talla)?.clave ?? "";
+    agregarAlCarrito(tienda, { id: p.id, variante });
     setError("");
     setAgregado(true);
   }

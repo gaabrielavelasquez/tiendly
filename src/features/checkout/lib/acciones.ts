@@ -3,6 +3,7 @@
 import { agregarPedido, horaPedido, siguienteNumero } from "@/features/pedidos/lib/almacen";
 import { RESERVA_HORAS } from "@/features/pedidos/lib/reglas";
 import { asignarStock } from "@/features/productos/lib/inventario";
+import { textoVariante, textoVarianteLargo } from "@/features/productos/lib/variantes";
 import type { DetallePedido, Pedido } from "@/features/pedidos/types";
 import type { ItemCarrito } from "@/features/vitrina/lib/carrito";
 import type { Datos, MetodoPago, Totales } from "../types";
@@ -40,9 +41,12 @@ export async function reservarNumero(tienda: string): Promise<string | null> {
 
 /** El stock pudo cambiar mientras el cliente compraba (otra venta o una reserva por WhatsApp). */
 function faltaStock(items: ItemCarrito[], lineas: ReturnType<typeof resolverLineas>) {
-  const l = lineas.find((x) => items.some((i) => i.id === x.id && i.color === x.color && i.talla === x.talla && i.cantidad > x.maximo));
+  const l = lineas.find((x) => items.some((i) => i.id === x.id && i.variante === x.variante && i.cantidad > x.maximo));
   if (!l) return null;
-  return l.maximo ? `Solo quedan ${l.maximo} de ${l.nombre} en talla ${l.talla}. Ajusta la cantidad en tu carrito.` : `Se agotó ${l.nombre} en talla ${l.talla}. Quítala de tu carrito para seguir.`;
+  const talla = l.detalle.find((d) => d.tipo === "talla");
+  const otras = textoVarianteLargo(l.detalle, " · ", "talla");
+  const cual = `${l.nombre}${talla ? ` en talla ${talla.valor}` : otras ? ` (${otras})` : ""}`;
+  return l.maximo ? `Solo quedan ${l.maximo} de ${cual}. Ajusta la cantidad en tu carrito.` : `Se agotó ${cual}. Quítalo de tu carrito para seguir.`;
 }
 
 /** Se llama ANTES de cobrar: si falta stock o el cupón ya no vale, no se cobra nada. */
@@ -106,14 +110,14 @@ export async function registrarPedido(e: Entrada): Promise<{ creadoEl: string; t
     entrega: { estado: "por-enviar", metodo: entrega.tipo, distrito: distrito?.nombre },
   };
   const detalle: DetallePedido = {
-    items: lineas.map((l) => ({ producto: l.nombre, variante: `${l.color} · ${l.talla}`, cantidad: l.cantidad, precio: l.precio, foto: l.foto })),
+    items: lineas.map((l) => ({ producto: l.nombre, variante: textoVariante(l.detalle), cantidad: l.cantidad, precio: l.precio, foto: l.foto })),
     envio: totales.envio ?? 0,
     cupon: totales.descuento && cupon?.ok ? { codigo: cupon.cupon.codigo, descuento: totales.descuento } : undefined,
     direccion: entrega.tipo === "delivery" ? entrega.direccion : undefined,
     referencia: entrega.tipo === "delivery" && entrega.referencia ? entrega.referencia : undefined,
     pagadoEl: pagado ? creadoEl : undefined,
   };
-  const stock = lineas.map(({ id, color, talla, cantidad }) => ({ id, color, talla, cantidad }));
+  const stock = lineas.map(({ id, variante, cantidad }) => ({ id, variante, cantidad }));
   const hasta = new Date(new Date(creadoEl).getTime() + RESERVA_HORAS * 3600000).toISOString();
   const guardado = await mutarTienda(e.tienda, (d) => {
     agregarPedido(d.pedidos, { pedido, detalle, stock });

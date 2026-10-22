@@ -1,13 +1,14 @@
 import { ImageIcon, Trash2 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { textoVarianteLargo } from "@/features/productos/lib/variantes";
 import { formatoSoles } from "@/lib/formato";
 import type { Linea } from "../../types";
 import { SelectorCantidad } from "./selector-cantidad";
 
 type Props = { linea: Linea; tienda: string; prioridad?: boolean; onCantidad: (n: number) => void; onQuitar: () => void };
 
-/** Una línea del carrito (Figma): foto, nombre, color y talla, precio, cantidad y "Quitar". */
+/** Una línea del carrito (Figma): foto, nombre, sus opciones ("Plata · Talla 36"), precio, cantidad y "Quitar". */
 export function LineaCarrito({ linea: l, tienda, prioridad, onCantidad, onQuitar }: Props) {
   const agotada = l.maximo === 0;
   return (
@@ -25,9 +26,7 @@ export function LineaCarrito({ linea: l, tienda, prioridad, onCantidad, onQuitar
             Quitar<span className="sr-only"> {l.nombre}</span>
           </button>
         </div>
-        <p className="text-body-sm text-fg-secondary">
-          {l.color} · Talla {l.talla}
-        </p>
+        {l.detalle.length > 0 && <p className="text-body-sm text-fg-secondary">{textoVarianteLargo(l.detalle)}</p>}
         <p className="text-body font-semibold text-fg tabular-nums">{formatoSoles(l.precio * l.cantidad)}</p>
         {agotada ? (
           <p className="text-caption text-error">Se agotó esta talla. Quítala para seguir con tu compra.</p>
