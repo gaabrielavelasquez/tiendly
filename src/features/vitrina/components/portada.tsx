@@ -1,22 +1,27 @@
 import Image from "next/image";
 import { buttonVariants } from "@/components/ui/button-variants";
 import { PORTADA } from "../lib/contenido";
+import type { PortadaPropia } from "../lib/vitrina";
+
+type PortadaProps = { nombre: string; demo: boolean; propia?: PortadaPropia };
 
 /**
  * Portada Free partida (decisión 0028): a la izquierda los zapatos puestos, a la derecha solo los
  * zapatos; cada foto ocupa la mitad del ancho (las de ~950 px se ven nítidas a 1440). Titular y CTA
- * debajo, nunca encima: el texto sobre la foto es el banner Pro (V1.1).
+ * debajo, nunca encima: el texto sobre la foto es el banner Pro (V1.1). Aurora usa una sola foto a todo el ancho.
  */
-export function Portada({ nombre, demo }: { nombre: string; demo: boolean }) {
+export function Portada({ nombre, demo, propia }: PortadaProps) {
   // Una tienda nueva todavía no tiene fotos de portada ni textos propios (Mi tienda aún no los publica):
-  // su nombre y una bajada neutra, sin las fotos de Heather.
-  const textos = demo ? PORTADA : { ...PORTADA, fotos: [], titulo: nombre, bajada: "Elige lo que te guste y coordina tu pedido por WhatsApp." };
+  // su nombre y una bajada neutra, sin las fotos de Heather. Con portada propia (Aurora): una sola foto a todo el ancho.
+  const neutra = { ...PORTADA, fotos: [], titulo: nombre, bajada: "Elige lo que te guste y coordina tu pedido por WhatsApp." };
+  const textos = demo ? PORTADA : propia ? { ...PORTADA, fotos: [propia], titulo: propia.titulo, bajada: propia.bajada } : neutra;
+  const unaFoto = textos.fotos.length === 1;
   return (
     <section aria-labelledby="portada-titulo">
-      <div className="grid grid-cols-2">
-        {textos.fotos.map((f, i) => (
-          <div key={f.src} className="relative aspect-4/5 lg:aspect-4/3">
-            <Image src={f.src} alt={f.alt} fill priority sizes="50vw" className="object-cover" />
+      <div className={unaFoto ? "grid" : "grid grid-cols-2"}>
+        {textos.fotos.map((f) => (
+          <div key={f.src} className={unaFoto ? "relative aspect-4/3 lg:aspect-21/9" : "relative aspect-4/5 lg:aspect-4/3"}>
+            <Image src={f.src} alt={f.alt} fill priority sizes={unaFoto ? "100vw" : "50vw"} className="object-cover" />
           </div>
         ))}
       </div>

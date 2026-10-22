@@ -1,7 +1,7 @@
 export type Escenario = "catalogo" | "vacio" | "error";
 
-/** Heather es una marca de calzado hecho a mano. */
-export type Categoria = "balerinas" | "tacos" | "botas" | "plataformas";
+/** Calzado: las de Heather (hecho a mano) y las de Aurora (sandalias, zapatillas y mocasines). */
+export type Categoria = "balerinas" | "tacos" | "botas" | "plataformas" | "sandalias" | "zapatillas" | "mocasines";
 
 /** Una combinación de colorway y talla, con su propio stock. */
 export type Variante = { color: string; talla: string; stock: number };
