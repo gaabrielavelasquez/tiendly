@@ -28,3 +28,14 @@ Chrome a 390 y 1440: secciones MT1, 15 combinaciones tema/acento con contraste �
 El registro del servidor mostró una advertencia de hidratación de `tabindex` en el `Pressable` compartido al emular «reducir movimiento». Ese componente no cambió respecto de main; queda registrado fuera del alcance de esta revisión. «Sin errores JavaScript» se refiere a las excepciones no controladas detectadas por `pageerror`, no a una consola sin advertencias.
 
 **Pendiente:** comparación visual directa de MT2 (260:6086) y MTD1 (261:5943), bloqueada por el conector de Figma. Las verificaciones funcionales y de navegador de esas vistas no equivalen a confirmar su coincidencia visual con Figma.
+
+## MT2 y MTD1 revisadas (22-oct-2026, Claude Code, con capturas de Figma)
+
+| Pantalla | Diferencia | Resultado |
+|---|---|---|
+| MTD1 | «Guardar cambios» va arriba a la derecha (Figma); el código lo tenía en una barra al pie y un badge «Plan Free» arriba. | Ajustado: botón y estado arriba en desktop; la barra de abajo queda solo en móvil (MT1). Se quita el badge (Heather es Pro, 0030). |
+| MTD1 | La vista previa se titula «Vista previa en vivo», con «Tema · Acento» debajo y el aviso «En vivo · los cambios se ven al instante». | Ajustado. Sigue fija al hacer scroll. |
+| MTD1 | Ayuda de WhatsApp: «Es el número al que llegan los pedidos.» | Ajustado. |
+| MT2 | Barra superior: «Vista previa» + «Tema · Acento» y una X para cerrar (antes «Volver» + «En vivo»). | Ajustado. |
+| MT2 / MTD1 | El contenido de la vista previa es una versión simplificada de la tienda (sin barra de anuncio ni la portada real). | Pendiente: usar los componentes reales de la vitrina en la vista previa. |
+| MTD1 | Títulos de sección: Figma usa etiquetas en mayúsculas (TEMA); el código usa títulos de tarjeta en tipo oración. | Se mantiene el código (0024 y 0026: el repo manda en lo visual). |
