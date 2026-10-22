@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import type { DetallePedido, Pedido } from "../types";
+import { sincronizarPedido } from "../lib/acciones";
 import { aplicar, inicial, type Accion } from "../lib/detalle";
 
 type Estado = { pedido: Pedido; detalle: DetallePedido };
@@ -35,6 +36,7 @@ export function useDetallePedido(p: Pedido, d: DetallePedido, ahora: string) {
       setAnterior(estado);
       const [pedido, detalle] = aplicar(estado.pedido, estado.detalle, accion, ahora);
       setEstado({ pedido, detalle });
+      void sincronizarPedido(pedido, detalle); // pedidos de la vitrina: estado y stock en el almacén
       setAviso(`Pedido #${pedido.numero} ${AVISO[accion]}.`);
       window.clearTimeout(timer.current);
       timer.current = window.setTimeout(() => (setAviso(""), setAnterior(null)), 6000);
@@ -43,7 +45,10 @@ export function useDetallePedido(p: Pedido, d: DetallePedido, ahora: string) {
   );
 
   const deshacer = useCallback(() => {
-    if (anterior) setEstado(anterior);
+    if (anterior) {
+      setEstado(anterior);
+      void sincronizarPedido(anterior.pedido, anterior.detalle);
+    }
     setAnterior(null);
     setAviso("");
     window.clearTimeout(timer.current);

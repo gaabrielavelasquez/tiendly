@@ -58,7 +58,7 @@ export function combinaciones(colores: string[], tallas: string[]) {
 
 export const formVacio = (): FormProducto => ({
   nombre: "", descripcion: "", precio: "", precioAntes: "", colores: [], tallas: [], variantes: {},
-  estado: "pausado", categorias: [], imagenes: [],
+  estado: "activo", categorias: [], imagenes: [], // se publica al guardar (decisión 0028)
 });
 
 /** Prellena el formulario para editar un producto existente. */
@@ -102,7 +102,8 @@ export function validar(f: FormProducto): Errores {
   const e: Errores = {};
   if (f.nombre.trim().length < 2) e.nombre = "Escribe el nombre del producto.";
   const precio = numero(f.precio);
-  if (!(precio > 0)) e.precio = "Escribe un precio mayor a 0.";
+  // Vacío no es error: se guarda pausado (decisión 0028). Escrito y mal, sí.
+  if (f.precio.trim() && !(precio > 0)) e.precio = "Escribe un precio mayor a 0.";
   if (f.precioAntes.trim()) {
     const antes = numero(f.precioAntes);
     if (!(antes > 0)) e.precioAntes = "Escribe un número válido o deja el campo vacío.";
@@ -114,4 +115,18 @@ export function validar(f: FormProducto): Errores {
     e.variantes = "Revisa los precios por variante: tienen que ser mayores a 0, o déjalos vacíos para usar el precio base.";
   }
   return e;
+}
+
+/**
+ * Lo que impide publicar (decisión 0028): sin foto, precio o stock, el producto se guarda pausado.
+ * Devuelve el texto para el aviso ("la foto y el precio") o null si está completo.
+ */
+export function faltaParaPublicar(f: FormProducto): string | null {
+  const faltan = [
+    !f.imagenes.length && "la foto",
+    !(numero(f.precio) > 0) && "el precio",
+    stockTotal(f) === 0 && "el stock",
+  ].filter(Boolean) as string[];
+  if (!faltan.length) return null;
+  return faltan.length === 1 ? faltan[0] : `${faltan.slice(0, -1).join(", ")} y ${faltan.at(-1)}`;
 }

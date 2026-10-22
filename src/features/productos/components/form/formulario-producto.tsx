@@ -78,7 +78,11 @@ export function FormularioProducto({ titulo, inicial }: FormularioProps) {
               className="pointer-events-auto flex w-full max-w-sm items-center gap-3 rounded-card bg-inverse py-2 pr-2 pl-4 text-body-sm text-fg-inverse shadow-overlay"
             >
               <CircleCheck aria-hidden strokeWidth={1.8} className="size-4 shrink-0" />
-              <span className="flex-1 truncate">{f.form.nombre} se guardó.</span>
+              <span className="flex-1">
+                {f.guardado.pausado
+                  ? `${f.form.nombre || "El producto"} se guardó pausado: falta ${f.guardado.pausado}. Complétalo y actívalo para venderlo.`
+                  : `${f.form.nombre} se guardó${f.form.estado === "activo" ? " y ya se ve en tu tienda" : ""}.`}
+              </span>
               <Link href="/panel/productos" className="h-9 shrink-0 rounded-theme px-3 py-2 font-semibold hover:bg-fg-inverse/10">
                 Ver productos
               </Link>

@@ -3,14 +3,15 @@ import Image from "next/image";
 import { TarjetaSeccion } from "@/components/panel";
 import { formatoSoles, plural } from "@/lib/formato";
 import type { DetallePedido, Pedido } from "../../types";
-import { subtotal, unidades } from "../../lib/detalle-mock";
+import { subtotal, totalDetalle, unidades } from "../../lib/detalle-mock";
 import { METODO_PAGO } from "../../lib/reglas";
 
 type ItemsProps = { pedido: Pedido; detalle: DetallePedido };
 
-/** Productos del pedido (foto, variante, cantidad y precio) y el resumen: subtotal, envío y total. */
+/** Productos del pedido (foto, variante, cantidad y precio) y el resumen: subtotal, cupón, envío y total. */
 export function TarjetaItems({ pedido, detalle }: ItemsProps) {
   const sub = subtotal(detalle);
+  const total = totalDetalle(detalle);
   const cancelado = pedido.pago.estado === "cancelado";
   return (
     <TarjetaSeccion titulo="Productos" descripcion={`${plural(unidades(detalle), "unidad", "unidades")} en este pedido.`}>
@@ -36,13 +37,19 @@ export function TarjetaItems({ pedido, detalle }: ItemsProps) {
           <dt className="text-fg-secondary">Subtotal</dt>
           <dd className="text-fg">{formatoSoles(sub)}</dd>
         </div>
+        {detalle.cupon && (
+          <div className="flex justify-between">
+            <dt className="text-fg-secondary">Cupón {detalle.cupon.codigo}</dt>
+            <dd className="text-success">−{formatoSoles(detalle.cupon.descuento)}</dd>
+          </div>
+        )}
         <div className="flex justify-between">
           <dt className="text-fg-secondary">{pedido.entrega.metodo === "recojo" ? "Recojo en tienda" : `Delivery a ${pedido.entrega.distrito}`}</dt>
           <dd className="text-fg">{detalle.envio ? formatoSoles(detalle.envio) : "Gratis"}</dd>
         </div>
         <div className="flex items-baseline justify-between border-t border-line-subtle pt-3">
           <dt className="font-semibold text-fg">Total</dt>
-          <dd className={cancelado ? "font-metric text-h3 text-fg-tertiary line-through" : "font-metric text-h3 text-fg"}>{formatoSoles(sub + detalle.envio)}</dd>
+          <dd className={cancelado ? "font-metric text-h3 text-fg-tertiary line-through" : "font-metric text-h3 text-fg"}>{formatoSoles(total)}</dd>
         </div>
         <p className="text-caption text-fg-secondary">
           {cancelado ? "Pedido cancelado: no se cobró." : `Pago con ${METODO_PAGO[pedido.pago.metodo]}${pedido.pago.estado === "pagado" ? " · cobrado." : " · pendiente."}`}

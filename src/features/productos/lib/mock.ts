@@ -53,5 +53,8 @@ export async function obtenerProducto(id: string): Promise<Producto | null> {
 export async function obtenerProductos(escenario: Escenario): Promise<Producto[]> {
   await new Promise((r) => setTimeout(r, 600));
   if (escenario === "error") throw new Error("No se pudo cargar Productos (simulado).");
-  return escenario === "vacio" ? [] : CATALOGO;
+  if (escenario === "vacio") return [];
+  // Stock disponible en el reloj de la demo: lo vendido y reservado desde la vitrina ya no está (0010 y 0028).
+  const [{ conDisponible }, { AHORA }] = await Promise.all([import("./inventario"), import("@/features/pedidos/lib/mock")]);
+  return conDisponible(CATALOGO, AHORA);
 }

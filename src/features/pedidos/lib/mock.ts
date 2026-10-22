@@ -8,7 +8,7 @@ import { DETALLES, unidades } from "./detalle-mock";
 export const AHORA = "2026-10-15T18:30:00-05:00";
 
 type Base = Omit<Pedido, "id" | "numero">;
-const p = (n: number, datos: Base): Pedido => ({ id: `t-${n}`, numero: `T-${n}`, ...datos });
+const p = (n: number, datos: Base): Pedido => ({ id: `tl-${n}`, numero: `TL-${n}`, ...datos });
 
 const PEDIDOS: Pedido[] = [
   // Hoy
@@ -51,7 +51,9 @@ export function leerEscenario(valor: string | string[] | undefined): Escenario {
 export async function obtenerPedidos(escenario: Escenario): Promise<Pedido[]> {
   await new Promise((r) => setTimeout(r, 600));
   if (escenario === "error") throw new Error("No se pudo cargar Pedidos (simulado).");
-  return escenario === "vacio" ? [] : PEDIDOS.map(conUnidades);
+  if (escenario === "vacio") return [];
+  const { pedidosCreados } = await import("./almacen"); // los de la vitrina van primero: son los más nuevos
+  return [...pedidosCreados().map((c) => c.pedido), ...PEDIDOS.map(conUnidades)];
 }
 
 /** La cantidad de productos de la lista sale del detalle, así no se desalinean. */
@@ -60,6 +62,9 @@ const conUnidades = (p: Pedido): Pedido => (DETALLES[p.id] ? { ...p, items: unid
 /** Un pedido con su detalle (para /panel/pedidos/[id]). `null` si no existe. */
 export async function obtenerPedido(id: string): Promise<{ pedido: Pedido; detalle: DetallePedido } | null> {
   await new Promise((r) => setTimeout(r, 400));
+  const { pedidosCreados } = await import("./almacen");
+  const creado = pedidosCreados().find((c) => c.pedido.id === id);
+  if (creado) return { pedido: creado.pedido, detalle: creado.detalle };
   const pedido = PEDIDOS.find((p) => p.id === id);
   const detalle = DETALLES[id];
   return pedido && detalle ? { pedido: conUnidades(pedido), detalle } : null;

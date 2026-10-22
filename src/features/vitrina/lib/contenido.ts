@@ -31,11 +31,15 @@ export const TALLAS_CM: Record<string, string> = {
   "35": "22.5 cm", "36": "23 cm", "37": "23.5 cm", "38": "24 cm", "39": "24.5 cm", "40": "25 cm",
 };
 
-/** Portada Free (Figma, Home): una foto con los zapatos puestos y, debajo, titular y bajada. */
+/** Portada Free partida (decisión 0028): la modelo con los zapatos puestos y, al lado, solo los zapatos. */
 export const PORTADA = {
-  foto: { src: "/heather/chloe-silver-1.jpg", alt: "Balerinas Chloé en plata, vistas desde arriba" },
+  fotos: [
+    { src: "/heather/chloe-silver-2.png", alt: "Balerinas Chloé en plata, puestas, al caminar" },
+    { src: "/heather/chloe-silver-1.jpg", alt: "Balerinas Chloé en plata, vistas desde arriba" },
+  ],
   titulo: "Calzado de cuero hecho a mano en Lima",
   bajada: "Modelos en cuero natural. Cada par toma alrededor de dos semanas.",
+  cta: "Ver la colección",
 };
 
 /** Portada Pro (V1.1): fotos de campaña con titular encima y llamado a la acción. */

@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type { Categoria } from "../types";
-import { VARIANTE_VACIA, validar, type Errores, type FormProducto, type ImagenForm, type VarianteForm } from "../lib/formulario";
+import { faltaParaPublicar, VARIANTE_VACIA, validar, type Errores, type FormProducto, type ImagenForm, type VarianteForm } from "../lib/formulario";
 
 const alternar = <T,>(lista: T[], v: T) => (lista.includes(v) ? lista.filter((x) => x !== v) : [...lista, v]);
 
@@ -15,7 +15,8 @@ export function useFormularioProducto(inicial: FormProducto) {
   const [base, setBase] = useState(() => JSON.stringify(inicial));
   const [intentoGuardar, setIntentoGuardar] = useState(false);
   const [guardando, setGuardando] = useState(false);
-  const [guardado, setGuardado] = useState(false);
+  /** Aviso tras guardar: null si no hay; si se guardó pausado, dice qué falta. */
+  const [guardado, setGuardado] = useState<{ pausado: string | null } | null>(null);
   const timer = useRef<number | undefined>(undefined);
 
   const errores: Errores = useMemo(() => (intentoGuardar ? validar(form) : {}), [form, intentoGuardar]);
@@ -59,13 +60,17 @@ export function useFormularioProducto(inicial: FormProducto) {
       });
       return cantidad;
     }
+    // Activo pero incompleto: se guarda pausado y se avisa qué falta (decisión 0028).
+    const falta = form.estado === "activo" ? faltaParaPublicar(form) : null;
+    const final: FormProducto = falta ? { ...form, estado: "pausado" } : form;
     setGuardando(true);
     await new Promise((r) => setTimeout(r, 800)); // simulación del guardado
     setGuardando(false);
-    setBase(JSON.stringify(form));
-    setGuardado(true);
+    setForm(final);
+    setBase(JSON.stringify(final));
+    setGuardado({ pausado: falta });
     window.clearTimeout(timer.current);
-    timer.current = window.setTimeout(() => setGuardado(false), 5000);
+    timer.current = window.setTimeout(() => setGuardado(null), falta ? 9000 : 5000);
     return 0;
   }, [form]);
 

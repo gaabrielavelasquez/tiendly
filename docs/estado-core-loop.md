@@ -10,17 +10,17 @@
 
 | Estado | Módulos |
 |---|---|
-| Hecho | 8 Inicio · 10 Onboarding |
+| Hecho | 1 Checkout y Carrito (pago simulado) · 8 Inicio · 10 Onboarding |
 | Parcial | 5 Home y Producto · 6 Pedidos · 7 Productos |
-| Falta | 1 Checkout y Carrito · 2 Métodos de pago y Entregas · 3 Cupones · 4 Afiliación · 9 Mi tienda |
+| Falta | 2 Métodos de pago y Entregas · 3 Cupones · 4 Afiliación · 9 Mi tienda |
 
-El Core Loop **no se puede cerrar todavía**: sin carrito y checkout (módulo 1) un cliente no puede comprar, y sin métodos de pago y entregas (módulo 2) la tienda no puede cobrar ni enviar.
+El Core Loop **no se puede cerrar todavía**: ya se puede comprar (módulo 1), pero sin Métodos de pago y Entregas (módulo 2) la tienda no puede configurar cómo cobra ni cómo envía; hoy eso vive en `checkout/lib/config.ts`.
 
 ## Por módulo
 
 | # | Módulo | Pantallas en Figma (móvil · desktop) | Ruta en código | Estado | Qué falta |
 |---|---|---|---|---|---|
-| 1 | Checkout y Carrito | **Móvil:** flujo 1 Carrito, 2 Checkout (inicio, entrega, tarjeta, Yape, WhatsApp), 3a/3b Confirmación; estados C0–C5, K0–K5, E1–E3; variantes 3a-R/3a-C/3b-R/3b-C. **Desktop:** D1, D2 (inicio, entrega, tarjeta, Yape QR, Yape código, WhatsApp), D5a/D5b; estados D1-S, D1-C1–C3c. | Ninguna. El ícono del carrito enlaza a `/[tienda]/carrito`, que da 404. Solo existe el carrito en `localStorage` (`vitrina/lib/carrito.ts`). | **Falta** | Todo el módulo: carrito con cantidades, quitar y deshacer, cupón, envío gratis; checkout en una vista (datos, entrega, pago con tarjeta, Yape o WhatsApp) con sus errores; confirmación. |
+| 1 | Checkout y Carrito | **Móvil:** flujo 1 Carrito, 2 Checkout (inicio, entrega, tarjeta, Yape, WhatsApp), 3a/3b Confirmación; estados C0–C5, K0–K5, E1–E3; variantes 3a-R/3a-C/3b-R/3b-C. **Desktop:** D1, D2, D5a/D5b; estados D1-S, D1-C1–C3c. | `/[tienda]/carrito`, `/[tienda]/checkout` y `/[tienda]/pedido/[numero]` | **Hecho** (pago simulado) | El cobro real llega con Afiliación (módulo 4). Los pedidos llegan a Panel › Pedidos por un almacén simulado en memoria (se borra al reiniciar el servidor). "Descargar resumen (PDF)" usa imprimir → guardar como PDF. |
 | 2 | Métodos de pago y Entregas | **Móvil:** Métodos de pago (sin pasarela, pagos activos) + E1–E7; Entregas (configurado, primera vez, guardado, errores, regla de al menos una). **Desktop:** los mismos + DE1–DE6. | Ninguna (`features/pagos` y `features/entregas` vacías). `/panel/configuracion` da 404. | **Falta** | Todo. Ojo: Figma no tiene un ítem "Configuración" propio; hay que definir dónde viven Pagos y Entregas en el menú. |
 | 3 | Cupones | **Móvil:** lista vacía, lista, crear, errores, creado, límite Plan Free, eliminar. **Desktop:** las mismas 7. | Ninguna (`features/cupones` vacía). `/panel/cupones` está en el menú y da 404. | **Falta** | Todo. |
 | 4 | Afiliación (cobros automáticos) | **Móvil:** A1–A7 + estados A1b–A7b. **Desktop:** AD1–AD5 + estados AD1b–AD7b. | Ninguna (`features/afiliacion` vacía). | **Falta** | Todo (RUC con SUNAT, representante, CCI, revisión, solicitud en revisión u observada). |
