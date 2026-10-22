@@ -28,7 +28,7 @@ Capturas finales en el PR del pase.
 1. **Saludo:** título en dos tonos, mismo tamaño (H1, Outfit Medium), en dos líneas: nombre en `text/primary` y contexto en `text/secondary` ("Tienes 3 cosas para hoy.", "Todo al día por hoy."). Sin emoji. Fecha chica debajo; en móvil no se repite la tienda.
 2. **De-layering:** los títulos de sección van fuera de los contenedores; cada lista vive en UN contenedor con divisores finos (`elevation/container`); la jerarquía la dan el espacio y la tipografía, no las cajas.
 3. **Íconos:** finos (trazo 1.5), gris neutro, sin contenedores circulares. El color, solo para lo que pide atención.
-4. **Urgencia y plazos:** como texto de color, sin píldora ("Vence hoy, 8:10 p. m."). Píldoras y badges, solo para estados donde hacen falta.
+4. **Urgencia y plazos:** como texto de color, sin píldora ("Vence hoy, a las 8:10 p. m."). Píldoras y badges, solo para estados donde hacen falta.
 5. **Filas de acción:** toda la fila es el link (mín. 44 px), chevron simple, sin botones circulares.
 6. **Dinero:** Regular o Medium, cifras tabulares, "S/" más chico y atenuado, decimales atenuados; SemiBold solo en totales. Etiqueta chica arriba de cada monto. **Deltas:** solo la cifra en `feedback/success` o `feedback/error`.
 7. **Tarjeta protagonista:** como máximo una por pantalla, cobalto con degradado corto (`accent/base` → `accent/pressed`) y profundidad en capas (`elevation/layered`: sombras cortas apiladas + anillo de 1 px + filo superior interior blanco), adaptada de `@shopify/polaris-tokens` 9.4.2. Sin sombra de color difuminada, sin vidrio, sin grano.
