@@ -17,7 +17,8 @@ export function PortadaPro() {
           </div>
         ))}
       </div>
-      <div aria-hidden className="absolute inset-0 bg-linear-to-t from-inverse/85 via-inverse/45 via-50% to-transparent" />
+      {/* Velo medido (WCAG): la etiqueta de 12 px llega a ≥ 5.6:1 a 390 y 1440 px, y el 15 % de arriba queda sin velo. */}
+      <div aria-hidden className="absolute inset-0 bg-linear-to-t from-inverse/85 via-inverse/62 via-55% to-transparent to-85%" />
       <div className="absolute inset-x-0 bottom-0 flex flex-col items-start gap-4 p-6 text-fg-inverse lg:p-12">
         <p className="text-label font-semibold tracking-widest uppercase">{PORTADA.temporada}</p>
         <h1 id="portada-titulo" className="font-display-hero text-display leading-none">

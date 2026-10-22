@@ -6,6 +6,9 @@ import type { Cupon, EstadoCupon } from "../types";
 /** Plan Free: hasta 3 cupones en uso a la vez (activos y programados; Figma, módulo 3). */
 export const LIMITE_FREE = 3;
 
+/** Límite de cupones en uso según el plan: Free 3, Pro sin límite (null). */
+export const limiteCupones = (plan: "free" | "pro") => (plan === "free" ? LIMITE_FREE : null);
+
 const MESES = ["ene", "feb", "mar", "abr", "may", "jun", "jul", "ago", "sep", "oct", "nov", "dic"];
 /** "2026-10-31" → "31 oct". */
 export const diaCorto = (d: string) => `${Number(d.slice(8, 10))} ${MESES[Number(d.slice(5, 7)) - 1]}`;

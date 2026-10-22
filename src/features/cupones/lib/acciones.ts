@@ -3,17 +3,19 @@
 import { AHORA } from "@/features/pedidos/lib/mock";
 import type { Cupon } from "../types";
 import { cuponesActuales, eliminarCupon as borrar, guardarCupon as guardar } from "./mock";
-import { aCupon, cuponesEnUso, enUso, LIMITE_FREE, validarCupon, type FormCupon } from "./reglas";
+import { tiendaActual } from "@/lib/sesion";
+import { aCupon, cuponesEnUso, enUso, LIMITE_FREE, limiteCupones, validarCupon, type FormCupon } from "./reglas";
 
-// Cupones (decisión 0008). Simulado: memoria del servidor. Se valida todo aquí, incluido el límite del Plan Free.
+// Cupones (decisión 0008). Simulado: memoria del servidor. Se valida todo aquí, incluido el límite del plan.
 
 const hoy = () => AHORA.slice(0, 10);
 const LIMITE = `Llegaste al límite de ${LIMITE_FREE} cupones en uso del Plan Free. Pausa uno para activar otro.`;
 
-/** ¿Este cambio deja más de 3 cupones en uso? Los programados también ocupan lugar. */
+/** Plan Free: ¿este cambio deja más de 3 cupones en uso? Los programados también ocupan lugar. Pro: sin límite. */
 function pasaElLimite(c: Cupon, todos: Cupon[]) {
+  const limite = limiteCupones(tiendaActual.plan);
   const otros = todos.filter((x) => x.id !== c.id);
-  return enUso(c, hoy()) && cuponesEnUso(otros, hoy()) >= LIMITE_FREE;
+  return limite !== null && enUso(c, hoy()) && cuponesEnUso(otros, hoy()) >= limite;
 }
 
 export async function guardarCupon(f: FormCupon, id?: string): Promise<{ codigo: string } | { error: string; errores?: Record<string, string> }> {
