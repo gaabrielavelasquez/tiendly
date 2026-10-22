@@ -1,7 +1,11 @@
 import { tiendaActual } from "@/lib/sesion";
+import { obtenerPedidos } from "@/features/pedidos/lib/mock";
+import { obtenerProductos } from "@/features/productos/lib/mock";
 import type { Escenario, InicioData, Paso } from "../types";
+import { actividadDe } from "./datos";
 
 // Datos simulados hasta tener backend. Se elige el escenario con ?escenario= en /panel.
+// "actividad" (por defecto) se arma con los pedidos y el catálogo reales del servidor (ver datos.ts).
 
 const TIENDA = tiendaActual;
 const AHORA = "2026-10-15T18:30:00-05:00";
@@ -84,6 +88,8 @@ export function leerEscenario(valor: string | string[] | undefined): Escenario {
 export async function obtenerInicio(escenario: Escenario): Promise<InicioData> {
   await new Promise((r) => setTimeout(r, 600));
   if (escenario === "error") throw new Error("No se pudo cargar Inicio (simulado).");
-  return ESCENARIOS[escenario];
+  if (escenario !== "actividad") return ESCENARIOS[escenario];
+  const [pedidos, catalogo] = await Promise.all([obtenerPedidos("pedidos"), obtenerProductos("catalogo")]);
+  return { ...ACTIVIDAD, ...actividadDe(pedidos, catalogo, AHORA, SEMANA) };
 }
 
