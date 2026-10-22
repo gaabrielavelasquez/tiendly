@@ -17,58 +17,68 @@ type SemanaGraficoProps = { dias: DiaVentas[]; hoy: string; className?: string }
 /**
  * Barras finas y sólidas por día (8 px móvil · 16 px desktop, punta redonda, 128 px de alto en desktop; 0031), lunes a domingo,
  * sin ejes, montos ni riel: los días que no llegan no muestran nada. Pasados en gris medio (chart/bar-muted, 3.3:1) y
- * hoy en cobalto sólido (accent/base, decisión 0020).
+ * hoy en cobalto sólido (accent/base, decisión 0020). Sin ventas en la semana: quedan las letras de los días y un
+ * texto corto en el lugar de las barras, sin barras de mentira (estado vacío).
  * Crecen al entrar, escalonadas (respeta "reducir movimiento"). Con mouse o teclado se ve el detalle del día.
  */
 export function SemanaGrafico({ dias, hoy, className }: SemanaGraficoProps) {
   const reduce = useReducedMotion();
   const max = Math.max(1, ...dias.map((d) => d.monto ?? 0));
+  const sinVentas = dias.every((d) => !d.monto);
 
   return (
-    <ul aria-label="Ventas por día" className={cn("flex items-end gap-1 pt-2 lg:gap-4", className)}>
-      {dias.map((d, i) => {
-        const esHoy = d.fecha === hoy;
-        const alto = d.monto ? Math.max(ALTO_MINIMO, (d.monto / max) * 100) : 0;
-        const detalle = d.monto === null ? "todavía no llega" : `${formatoSoles(d.monto)} · ${pedidosTexto(d.pedidos)}`;
-        return (
-          <li key={d.fecha} className="flex flex-1 flex-col items-center gap-3">
-            <div
-              tabIndex={0}
-              role="img"
-              aria-label={`${fechaDia(d.fecha, true)}${esHoy ? " (hoy)" : ""}: ${detalle}.`}
-              className="group relative flex h-36 w-full justify-center rounded-theme lg:h-32"
-            >
-              <div className="relative h-full w-2 lg:w-4">
-                {alto > 0 && (
-                  <motion.div
-                    className={cn("absolute inset-x-0 bottom-0 rounded-full", esHoy ? "bg-accent" : "bg-chart-muted")}
-                    style={{ height: `${alto}%`, originY: 1 }}
-                    initial={reduce ? false : { scaleY: 0 }}
-                    animate={{ scaleY: 1 }}
-                    transition={{ ...crecer, delay: i * ESCALON }}
-                  />
-                )}
+    <div className={cn("relative", className)}>
+      {sinVentas && (
+        // Ocupa el alto de las barras (las letras de los días quedan debajo, a la vista).
+        <p className="absolute inset-x-0 top-0 bottom-10 flex items-center justify-center px-4 text-center text-body-sm text-fg-secondary">
+          Aquí verás tus ventas de la semana.
+        </p>
+      )}
+      <ul aria-label="Ventas por día" className="flex items-end gap-1 pt-2 lg:gap-4">
+        {dias.map((d, i) => {
+          const esHoy = d.fecha === hoy;
+          const alto = d.monto ? Math.max(ALTO_MINIMO, (d.monto / max) * 100) : 0;
+          const detalle = d.monto === null ? "todavía no llega" : `${formatoSoles(d.monto)} · ${pedidosTexto(d.pedidos)}`;
+          return (
+            <li key={d.fecha} className="flex flex-1 flex-col items-center gap-3">
+              <div
+                tabIndex={0}
+                role="img"
+                aria-label={`${fechaDia(d.fecha, true)}${esHoy ? " (hoy)" : ""}: ${detalle}.`}
+                className="group relative flex h-36 w-full justify-center rounded-theme lg:h-32"
+              >
+                <div className="relative h-full w-2 lg:w-4">
+                  {alto > 0 && (
+                    <motion.div
+                      className={cn("absolute inset-x-0 bottom-0 rounded-full", esHoy ? "bg-accent" : "bg-chart-muted")}
+                      style={{ height: `${alto}%`, originY: 1 }}
+                      initial={reduce ? false : { scaleY: 0 }}
+                      animate={{ scaleY: 1 }}
+                      transition={{ ...crecer, delay: i * ESCALON }}
+                    />
+                  )}
+                </div>
+                <span
+                  aria-hidden
+                  style={{ bottom: `calc(${alto}% + var(--tl-space-2))` }}
+                  className="pointer-events-none absolute left-1/2 z-10 hidden -translate-x-1/2 rounded-theme bg-inverse px-2.5 py-1.5 text-label font-semibold whitespace-nowrap text-fg-inverse shadow-float group-focus-visible:block lg:group-hover:block"
+                >
+                  {fechaDia(d.fecha)} · {detalle}
+                </span>
               </div>
               <span
                 aria-hidden
-                style={{ bottom: `calc(${alto}% + var(--tl-space-2))` }}
-                className="pointer-events-none absolute left-1/2 z-10 hidden -translate-x-1/2 rounded-theme bg-inverse px-2.5 py-1.5 text-label font-semibold whitespace-nowrap text-fg-inverse shadow-float group-focus-visible:block lg:group-hover:block"
+                className={cn(
+                  "flex h-6 min-w-6 items-center justify-center text-label",
+                  esHoy ? "font-semibold text-accent-text" : "text-fg-secondary",
+                )}
               >
-                {fechaDia(d.fecha)} · {detalle}
+                {INICIALES[i]}
               </span>
-            </div>
-            <span
-              aria-hidden
-              className={cn(
-                "flex h-6 min-w-6 items-center justify-center text-label",
-                esHoy ? "font-semibold text-accent-text" : "text-fg-secondary",
-              )}
-            >
-              {INICIALES[i]}
-            </span>
-          </li>
-        );
-      })}
-    </ul>
+            </li>
+          );
+        })}
+      </ul>
+    </div>
   );
 }
