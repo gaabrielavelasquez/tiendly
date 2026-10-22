@@ -1,6 +1,6 @@
 # Test con tiendas · Core Loop
 
-Guía para una sesión de 30 a 40 minutos con una dueña o dueño de tienda real que vende por WhatsApp o Instagram. El objetivo es ver si puede armar su tienda y atender una venta sin ayuda.
+Guía para una sesión de 30 a 40 minutos con alguien que lleva una tienda real y vende por WhatsApp o Instagram. El objetivo es ver si puede armar su tienda y atender una venta sin ayuda.
 
 ## Antes de la sesión
 

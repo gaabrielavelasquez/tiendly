@@ -21,7 +21,7 @@ No existe proveedor SUNAT, banco ni pasarela integrado. Las server actions simul
 - CCI de demo BCP: `00212345678901234567`; Interbank: prefijo `003`; BBVA: `011`. La detección por prefijo no acredita que exista una cuenta ni comprueba titularidad.
 - Estados demo: `?escenario=vacio|revision|observada|aprobada|error`, solo desarrollo/previews. Fecha estimada de demo: 10 días hábiles, sin feriados; no representa un SLA contratado.
 - Comisiones y condiciones definitivas pendientes de proveedor. Los términos explican el alcance de la demostración.
-- «Escribir a Tiendly» solo se habilita con `TIENDLY_SUPPORT_WHATSAPP`, número internacional sin símbolos. Por pedido de Gabi no se incluye el número de la vendedora. No se inicia WhatsApp ni se envía ningún mensaje automáticamente.
+- «Escribir a Tiendly» solo se habilita con `TIENDLY_SUPPORT_WHATSAPP`, número internacional sin símbolos. Por pedido de Gabi no se incluye el número de quien vende. No se inicia WhatsApp ni se envía ningún mensaje automáticamente.
 - Solicitud y borrador solo en esta pestaña: no son compartidos entre dispositivos, no hay verificación real ni aprobación real.
 
 ## Integración con PR #7

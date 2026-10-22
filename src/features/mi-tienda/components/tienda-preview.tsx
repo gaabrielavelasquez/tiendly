@@ -17,7 +17,7 @@ export function TiendaPreview({ tienda, nombre, muestras, mini = false, computad
         : <p className={cn("font-display-title text-h2", mini && "w-full text-center text-caption")}>{nombre}</p>}
       {!mini && <ShoppingBag aria-hidden className="size-5" />}
     </div>
-    {!mini && <p className="break-words px-5 py-3 text-center text-body-sm text-fg-secondary">{tienda.bienvenida || `Bienvenidos a ${nombre}.`}</p>}
+    {!mini && <p className="break-words px-5 py-3 text-center text-body-sm text-fg-secondary">{tienda.bienvenida || `Te damos la bienvenida a ${nombre}.`}</p>}
     {tienda.portada ? <img src={tienda.portada} alt={`Portada de ${nombre}`} className={cn("aspect-video w-full object-cover", mini && "aspect-[2/1]")} />
       : <div className="flex aspect-video items-center justify-center bg-sunken p-4 text-caption text-fg-secondary">Tu foto de portada</div>}
     <div className={cn("flex flex-col gap-4 p-5", mini && "gap-2 p-2")}>
