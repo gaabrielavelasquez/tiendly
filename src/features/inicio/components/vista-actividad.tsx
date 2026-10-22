@@ -20,7 +20,7 @@ export function VistaActividad({ datos }: { datos: InicioData }) {
       <PanelHeader
         titulo={`Hola, ${datos.tienda.duena}`}
         subtitulo={fechaLarga(datos.ahora)}
-        accion={<AccionesRapidas slug={datos.tienda.slug} />}
+        accion={<AccionesRapidas link={datos.tienda.link} />}
       />
       <div className="grid gap-6 lg:grid-cols-5">
         <HoyCard className="lg:col-span-2" ventas={hoy.ventas} pedidos={hoy.pedidos} corte={hora(datos.ahora)} />
@@ -33,7 +33,7 @@ export function VistaActividad({ datos }: { datos: InicioData }) {
         dias={datos.semana}
         hoy={fechaCorta(datos.ahora)}
       />
-      <AccionesRapidas slug={datos.tienda.slug} className="lg:hidden" />
+      <AccionesRapidas link={datos.tienda.link} className="lg:hidden" />
     </>
   );
 }

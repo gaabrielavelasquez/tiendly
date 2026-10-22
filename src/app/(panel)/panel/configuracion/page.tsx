@@ -3,6 +3,8 @@ import { PanelHeader, PanelMain } from "@/components/panel";
 import { Hub } from "@/features/configuracion/components/hub";
 import { leerEscenario, obtenerConfig } from "@/features/configuracion/lib/mock";
 import { herramientasDev } from "@/lib/entorno";
+import { urlTienda } from "@/lib/link-tienda";
+import { tiendaActual } from "@/lib/sesion";
 
 export const metadata: Metadata = { title: "Configuración · Tiendly" };
 
@@ -15,7 +17,7 @@ export default async function ConfiguracionPage({ searchParams }: PageProps) {
   return (
     <PanelMain>
       <PanelHeader titulo="Configuración" subtitulo="Cómo te pagan, cómo entregas y los datos de tu cuenta." />
-      <Hub config={config} />
+      <Hub config={config} link={await urlTienda(tiendaActual.slug)} />
     </PanelMain>
   );
 }

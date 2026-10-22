@@ -2,12 +2,13 @@ import { tiendaActual } from "@/lib/sesion";
 import { obtenerPedidos } from "@/features/pedidos/lib/mock";
 import { obtenerProductos } from "@/features/productos/lib/mock";
 import type { Escenario, InicioData, Paso } from "../types";
+import { urlTienda } from "@/lib/link-tienda";
 import { actividadDe } from "./datos";
 
 // Datos simulados hasta tener backend. Se elige el escenario con ?escenario= en /panel.
 // "actividad" (por defecto) se arma con los pedidos y el catálogo reales del servidor (ver datos.ts).
 
-const TIENDA = tiendaActual;
+const TIENDA = { ...tiendaActual, link: "" }; // el link lo arma obtenerInicio con el dominio real
 const AHORA = "2026-10-15T18:30:00-05:00";
 
 const pasos = (hechos: number): Paso[] =>
@@ -88,8 +89,9 @@ export function leerEscenario(valor: string | string[] | undefined): Escenario {
 export async function obtenerInicio(escenario: Escenario): Promise<InicioData> {
   await new Promise((r) => setTimeout(r, 600));
   if (escenario === "error") throw new Error("No se pudo cargar Inicio (simulado).");
-  if (escenario !== "actividad") return ESCENARIOS[escenario];
+  const link = await urlTienda(TIENDA.slug);
+  if (escenario !== "actividad") return { ...ESCENARIOS[escenario], tienda: { ...TIENDA, link } };
   const [pedidos, catalogo] = await Promise.all([obtenerPedidos("pedidos"), obtenerProductos("catalogo")]);
-  return { ...ACTIVIDAD, ...actividadDe(pedidos, catalogo, AHORA, SEMANA) };
+  return { ...ACTIVIDAD, ...actividadDe(pedidos, catalogo, AHORA, SEMANA), tienda: { ...TIENDA, link } };
 }
 

@@ -1,6 +1,7 @@
 export type Escenario = "actividad" | "al-dia" | "nueva" | "error";
 
-export type Tienda = { nombre: string; slug: string; duena: string };
+/** `link`: URL pública de la vitrina (la pone la página, ver lib/link-tienda). */
+export type Tienda = { nombre: string; slug: string; duena: string; link: string };
 
 export type PedidoHoy = {
   monto: number;
