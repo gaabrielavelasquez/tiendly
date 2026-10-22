@@ -1,4 +1,4 @@
-# 0032 · Pase de diseño del registro (/registro)
+# 0033 · Pase de diseño del registro (/registro)
 
 - **Fecha:** 22-oct-2026
 - **Estado:** propuesta, pendiente de la aprobación de Gabi. Los otros pasos del onboarding esperan su ok.

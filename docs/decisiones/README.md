@@ -17,6 +17,6 @@ Una decisión por archivo: contexto, decisión y consecuencias. Las anteriores a
 | 0029 | [Panel móvil: barra inferior en vez de menú hamburguesa](0029-barra-inferior-movil.md) | Vigente |
 | 0030 | [Heather es la tienda de demo Pro](0030-heather-demo-pro.md) | Vigente |
 | 0031 | [De-layering: menos cajas, montos serenos y un protagonista por pantalla](0031-pase-de-diseno.md) | **Vigente** (actualiza 0017, 0020, 0021 y 0024) |
-| 0032 | [Pase de diseño del registro: titular en dos tonos y vista previa real](0032-pase-registro.md) | Propuesta (pendiente de Gabi) |
+| 0033 | [Pase de diseño del registro: titular en dos tonos y vista previa real](0033-pase-registro.md) | Propuesta (pendiente de Gabi) |
 
 Para una decisión nueva: copia la estructura de 0026, usa el número siguiente y súmala a esta tabla.
