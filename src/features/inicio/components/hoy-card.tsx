@@ -19,7 +19,7 @@ export function HoyCard({ ventas, pedidos, corte, className }: HoyCardProps) {
       as="section"
       aria-labelledby="hoy-titulo"
       className={cn(
-        "relative flex flex-col gap-8 border-transparent bg-hero text-fg-inverse shadow-celebration ring-1 ring-fg-inverse/15 ring-inset lg:p-10",
+        "relative flex flex-col gap-8 border-transparent bg-hero text-fg-inverse shadow-celebration ring-1 ring-fg-inverse/15 ring-inset lg:p-8",
         className,
       )}
     >
@@ -35,8 +35,7 @@ export function HoyCard({ ventas, pedidos, corte, className }: HoyCardProps) {
       <p className="sr-only">
         {formatoSoles(ventas)} vendidos en {pedidos} {pedidos === 1 ? "pedido" : "pedidos"}.
       </p>
-      {/* En desktop la tarjeta toma el alto de "Esta semana": la cifra se centra en ese alto. */}
-      <div aria-hidden className="flex items-end gap-6 lg:my-auto">
+      <div aria-hidden className="flex items-end gap-6">
         <div className="flex flex-1 flex-col gap-2">
           <AnimatedNumber value={ventas} format={formatoSoles} className="font-metric text-display leading-none" />
           <span className="text-caption text-fg-inverse/70">vendidos</span>

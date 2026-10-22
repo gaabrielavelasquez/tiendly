@@ -13,16 +13,17 @@ import { AccionCard } from "./accion-card";
 type ParaAtenderProps = { filas: Pendiente[]; className?: string };
 
 /**
- * "Para atender hoy" (decisión 0031): encabezado de sección y una fila de tarjetas de acción chicas
- * (apiladas en móvil). Atajos a las listas ya filtradas. Entrada escalonada (fade + y) que respeta "reducir movimiento".
+ * "Para atender hoy" (decisión 0031): atajos a las listas ya filtradas.
+ * Móvil: una sola tarjeta con filas divididas. Desktop: fila de tarjetas de acción chicas.
+ * Entrada escalonada (fade + y) que respeta "reducir movimiento".
  */
 export function ParaAtender({ filas, className }: ParaAtenderProps) {
   const reduce = useReducedMotion();
   return (
-    <section aria-labelledby="atender-titulo" className={cn("flex flex-col gap-4", className)}>
+    <section aria-labelledby="atender-titulo" className={cn("flex flex-col gap-4 lg:gap-5", className)}>
       <EncabezadoSeccion id="atender-titulo" titulo="Para atender hoy" />
       {filas.length === 0 ? (
-        <Card className="flex items-center gap-4 p-5 lg:p-5">
+        <Card className="flex items-center gap-4 p-5 lg:p-6">
           <span className="flex size-10 shrink-0 items-center justify-center rounded-full bg-sunken">
             <Check aria-hidden strokeWidth={1.8} className="size-5 text-success" />
           </span>
@@ -31,7 +32,7 @@ export function ParaAtender({ filas, className }: ParaAtenderProps) {
           </p>
         </Card>
       ) : (
-        <ul className="grid gap-3 md:grid-cols-2 lg:grid-cols-3 lg:gap-6">
+        <ul className="flex flex-col divide-y divide-line-card overflow-hidden rounded-card border border-line-card bg-surface shadow-card lg:grid lg:grid-cols-3 lg:gap-4 lg:divide-y-0 lg:overflow-visible lg:rounded-none lg:border-0 lg:bg-transparent lg:shadow-none">
           {filas.map((f, i) => (
             <motion.li
               key={f.id}

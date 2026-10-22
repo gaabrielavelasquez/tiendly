@@ -15,7 +15,7 @@ const ALTO_MINIMO = 12;
 type SemanaGraficoProps = { dias: DiaVentas[]; hoy: string };
 
 /**
- * Barras finas por día (12 px móvil · 14 px desktop, decisión 0031) sobre un riel suave, lunes a domingo, sin ejes ni montos.
+ * Barras finas por día (8 px móvil · 10 px desktop, decisión 0031) sobre un riel suave, lunes a domingo, sin ejes ni montos.
  * Degradado del mismo token (chart/bar); hoy en cobalto sólido (accent/base, decisión 0020), sin sombra.
  * Crecen al entrar, escalonadas (respeta "reducir movimiento"). Con mouse o teclado se ve el detalle del día.
  */
@@ -37,7 +37,7 @@ export function SemanaGrafico({ dias, hoy }: SemanaGraficoProps) {
               aria-label={`${fechaDia(d.fecha, true)}${esHoy ? " (hoy)" : ""}: ${detalle}.`}
               className="group relative flex h-36 w-full justify-center rounded-theme lg:h-40"
             >
-              <div className="relative h-full w-3 overflow-hidden rounded-full bg-sunken lg:w-3.5">
+              <div className="relative h-full w-2 overflow-hidden rounded-full bg-sunken lg:w-2.5">
                 {alto > 0 && (
                   <motion.div
                     className={cn("absolute inset-x-0 bottom-0 rounded-full", esHoy ? "bg-bar-today" : "bg-bar")}

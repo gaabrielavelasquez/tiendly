@@ -59,11 +59,13 @@ La identidad visual de Tiendly combina **velocidad ultra limpia**, **lenguaje mo
 > **Pase de diseño · Decisión 0031 (22-oct-2026, propuesta).** Aplicada en Inicio; se extiende a Pedidos, Productos y Mi tienda con el ok de Gabi. Manda sobre 0024 y lo de abajo donde se contradiga:
 > - **Aire:** más espacio entre secciones (40 px móvil · 48 px desktop) y dentro de las tarjetas protagonistas (40 px desktop). Lienzo del panel `#F8F8F6` (`bg/page` → `color/paper/50`; las vitrinas siguen en `#F4F4F3`). Borde de tarjeta casi invisible `border/card` (`#F0EFED`): separa la sombra.
 > - **Títulos de página:** Outfit Medium (`font/title-style`, utilidad `font-display-light`), un tamaño arriba (`text-display`: 40 · 56 px). El peso fuerte, solo en cifras clave (`font-metric`).
-> - **Un protagonista por pantalla.** Inicio: saludo grande y liviano sobre un halo cálido de puro CSS (`bg-halo`: `glow/warm` + `glow/sky`, sin WebGL). "Hola, {nombre} 👋" si se conoce el nombre de la dueña; si no, "¡Hola! 👋" con la tienda debajo. "Hoy" sigue en cobalto, con halo `elevation/celebration` y cifra más grande.
-> - **Tarjetas de acción** (`AccionCard`): ícono en círculo neutro, título, detalle corto y botón redondo con chevron; fila en desktop, apiladas en móvil.
-> - **Encabezados de sección** (`EncabezadoSeccion`): título a la izquierda, acciones silenciosas a la derecha (botón `quiet`: píldora neutra, la única excepción al "nunca pill"). Una sola acción fuerte por pantalla.
+> - **Un protagonista por pantalla.** Inicio: saludo grande y liviano sobre un halo cálido de puro CSS (`bg-halo`: `glow/warm` + `glow/sky`, sin WebGL). "Hola, {nombre} 👋" si se conoce el nombre de la dueña; si no, "¡Hola! 👋" con la tienda debajo. "Hoy" sigue en cobalto, con halo `elevation/celebration`, cifra más grande y alto a la medida de su contenido.
+> - **Orden de Inicio (0012):** desktop, Hoy (a la medida de su contenido) a la izquierda y Para atender hoy a la derecha; Esta semana a todo el ancho debajo. Móvil: Hoy, Para atender, Esta semana y acciones.
+> - **Para atender** (`AccionCard`): ícono en círculo neutro, título, detalle corto y botón redondo con chevron. Móvil: una sola tarjeta con filas divididas. Desktop: fila de tarjetas chicas.
+> - **Encabezados de sección** (`EncabezadoSeccion`): nivel intermedio en Outfit Medium H3 (20 · 24 px), para que el salto desde el saludo no sea brusco. Título a la izquierda, acciones silenciosas a la derecha (botón `quiet`: píldora neutra, la única excepción al "nunca pill").
+> - **Botones de la cabecera:** una sola acción fuerte (primario) y, a su lado, el secundario con la misma forma y alto (`radius/button`, 40 px). Nunca primario y píldora juntos.
 > - **Estados:** ícono chico + texto de color. Badges rellenos solo para lo urgente (vence hoy, agotado).
-> - **Gráficos:** barras de 12 px (móvil) y 14 px (desktop), punta redonda y más aire; hoy en cobalto sólido sin sombra. Cifras y barras entran con movimiento (Motion Primitives) y respetan "reducir movimiento".
+> - **Gráficos:** barras de 8 px (móvil) y 10 px (desktop), punta redonda y más aire entre días; hoy en cobalto sólido sin sombra. Cifras y barras entran con movimiento (Motion Primitives) y respetan "reducir movimiento".
 > - **No se copia:** gráficos en cada tarjeta, violeta, analítica densa.
 
 ### Tarjetas (Cards)

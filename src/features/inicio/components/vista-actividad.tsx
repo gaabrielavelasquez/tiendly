@@ -14,8 +14,9 @@ import { SemanaCard } from "./semana-card";
 export const saludo = (duena?: string) => (duena ? `Hola, ${duena} 👋` : "¡Hola! 👋");
 
 /**
- * I1 / ID1 · Inicio con actividad (decisión 0031). Móvil: saludo, Hoy, Para atender, Esta semana y acciones.
- * Desktop: Hoy y Esta semana lado a lado, y debajo la fila de tarjetas de Para atender; acciones en la cabecera.
+ * I1 / ID1 · Inicio con actividad. Orden de la decisión 0012 con el pase 0031.
+ * Móvil: saludo, Hoy, Para atender, Esta semana y acciones.
+ * Desktop: Hoy (a la medida de su contenido) y Para atender lado a lado, Esta semana a todo el ancho; acciones en la cabecera.
  */
 export function VistaActividad({ datos }: { datos: InicioData }) {
   const hoy = resumenHoy(datos);
@@ -32,11 +33,11 @@ export function VistaActividad({ datos }: { datos: InicioData }) {
         }
         accion={<AccionesRapidas link={datos.tienda.link} />}
       />
-      <div className="grid gap-10 lg:grid-cols-5 lg:gap-x-8 lg:gap-y-12">
-        <HoyCard className="lg:col-span-2 lg:row-start-1" ventas={hoy.ventas} pedidos={hoy.pedidos} corte={hora(datos.ahora)} />
-        <ParaAtender className="lg:col-span-5 lg:row-start-2" filas={pendientes(datos)} />
+      <div className="grid gap-10 lg:grid-cols-5 lg:items-start lg:gap-x-8 lg:gap-y-12">
+        <HoyCard className="lg:col-span-2" ventas={hoy.ventas} pedidos={hoy.pedidos} corte={hora(datos.ahora)} />
+        <ParaAtender className="lg:col-span-3" filas={pendientes(datos)} />
         <SemanaCard
-          className="lg:col-span-3 lg:row-start-1"
+          className="lg:col-span-5"
           total={semana.monto}
           pedidos={semana.pedidos}
           comparacion={compararSemana(semana.monto, datos.semanaPasadaTotal)}
