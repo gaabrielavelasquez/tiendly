@@ -11,6 +11,9 @@ import { SemanaCard } from "./semana-card";
  * I1 / ID1 · Inicio con actividad. Desktop: acciones rápidas en la cabecera, Hoy y Para atender lado a
  * lado, Esta semana a todo el ancho. Móvil: las acciones van al final, como en Figma.
  */
+/** Sin nombre de la dueña (el onboarding no lo pide, decisión 0013): "¡Hola! 👋". Con Google: su nombre de pila. */
+const saludo = (duena?: string) => (duena ? `¡Hola, ${duena}! 👋` : "¡Hola! 👋");
+
 export function VistaActividad({ datos }: { datos: InicioData }) {
   const hoy = resumenHoy(datos);
   const semana = totalSemana(datos);
@@ -18,8 +21,8 @@ export function VistaActividad({ datos }: { datos: InicioData }) {
   return (
     <>
       <PanelHeader
-        titulo={`Hola, ${datos.tienda.duena}`}
-        subtitulo={fechaLarga(datos.ahora)}
+        titulo={saludo(datos.tienda.duena)}
+        subtitulo={`${datos.tienda.nombre} · ${fechaLarga(datos.ahora)}`}
         accion={<AccionesRapidas link={datos.tienda.link} />}
       />
       <div className="grid gap-6 lg:grid-cols-5">

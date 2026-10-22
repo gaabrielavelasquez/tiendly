@@ -30,7 +30,7 @@ export function StepDatos() {
     setCreando(true);
     const final = slug.libre ? slug.slug : slug.sugerencia ?? slug.slug;
     // La tienda pasa a ser la de la sesión (panel y vitrina) y guarda sus rubros (Afiliación los precarga).
-    const r = await crearTienda({ nombre: state.nombre, slug: final, celularVentas: state.celularVentas, rubros: state.rubros }).catch(() => ({
+    const r = await crearTienda({ nombre: state.nombre, slug: final, celularVentas: state.celularVentas, rubros: state.rubros, duena: state.nombreGoogle?.split(/\s+/)[0] }).catch(() => ({
       error: "No pudimos crear tu tienda. Revisa tu conexión e inténtalo de nuevo.",
     }));
     setCreando(false);
