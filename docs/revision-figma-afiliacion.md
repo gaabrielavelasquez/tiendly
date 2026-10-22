@@ -22,3 +22,18 @@ Cuatro pasos, validaciones de RUC/representante/CCI, ayuda, salida con borrador,
 ## Siguiente paso
 
 Restablecer lectura de contexto y capturas, revisar campos y resúmenes, completar las diferencias anteriores y volver a verificar en navegador a 390 y 1440. Mantener tokens, mocks, datos ficticios y la restricción de no enviar mensajes ni confirmaciones.
+
+## Resuelto (22-oct-2026, Claude Code, con capturas de Figma)
+
+Con acceso de lectura a Figma se revisaron A2–A7 y se completó lo que faltaba:
+
+| Pantalla | Resuelto |
+|---|---|
+| A2 · Tu negocio | Nombre de tu tienda (precargado), Rubro (lista del onboarding) y Dirección fiscal **bloqueada**, como en Figma («Viene de SUNAT. Si cambió, actualízala allá.»). No se hace editable: Figma la muestra con candado. |
+| A3 · Representante | Cargo. Con RUC 10, «Titular» precargado. |
+| A4 · Cuenta | Orden de Figma: titular arriba, CCI, Banco (detectado con el CCI) y Tipo de cuenta. |
+| A5 · Resumen | Negocio con tienda y rubro, representante con cargo, cuenta de depósito con tipo. Comisiones siguen «Por confirmar» (0007). |
+| A6 · Enviada | Seguimiento en tres etapas, aviso de WhatsApp y «Volver al panel» (lleva a Pagos). |
+| A7 · Pagos | Configuración › Pagos muestra «En proceso · En revisión» junto a WhatsApp activo y «Ver detalle de solicitud». «Solicitar cobros automáticos» lleva a Afiliación. |
+
+Pendiente: AD2–AD5 y estados desktop se revisaron solo por estructura (el layout desktop sigue el de Codex).
