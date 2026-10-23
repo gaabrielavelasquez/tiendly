@@ -38,31 +38,34 @@ export function HojaAgregado({ foto, nombre, variante, precio, precioAntes, desc
   }, [onCerrar]);
 
   return (
-    <div className={cn("fixed inset-0 z-50 flex items-end bg-fg/40 md:items-start md:justify-end md:bg-transparent md:px-4 md:pt-20", !activa && "pointer-events-none")} onClick={onCerrar}>
-      <div role="dialog" aria-modal aria-labelledby="agregado-titulo" onClick={(e) => e.stopPropagation()}
-        className="flex w-full flex-col gap-4 rounded-t-card bg-surface px-5 pt-4 pb-[max(calc(var(--spacing)*4),env(safe-area-inset-bottom))] shadow-overlay motion-safe:animate-hoja md:max-w-sm md:rounded-card md:border md:border-line-subtle md:pb-5">
-        <header className="flex items-center justify-between gap-3">
-          <h2 id="agregado-titulo" className="flex items-center gap-2 text-body font-semibold text-fg">
-            <Check aria-hidden strokeWidth={2} className="size-4 text-success" />
-            Agregado al carrito
-          </h2>
-          <button type="button" onClick={onCerrar} aria-label="Cerrar" className="-mr-2 flex size-11 shrink-0 items-center justify-center rounded-theme text-icon hover:bg-sunken">
-            <X aria-hidden strokeWidth={1.5} className="size-5" />
-          </button>
-        </header>
-        <div className="flex items-center gap-3">
-          <div className="relative aspect-4/5 w-16 shrink-0 overflow-hidden rounded-theme border border-line-subtle bg-sunken">
-            {foto && <Image src={foto} alt="" fill sizes="4rem" className="object-cover" />}
+    <div className={cn("fixed inset-0 z-50 flex items-end bg-fg/40 md:block md:bg-transparent md:pt-20", !activa && "pointer-events-none")} onClick={onCerrar}>
+      {/* En tablet y desktop, alineado con el borde derecho del contenido: queda justo debajo del carrito. */}
+      <div className="w-full md:mx-auto md:flex md:max-w-6xl md:justify-end md:px-2 lg:px-4">
+        <div role="dialog" aria-modal aria-labelledby="agregado-titulo" onClick={(e) => e.stopPropagation()}
+          className="flex w-full flex-col gap-4 rounded-t-card bg-surface px-5 pt-4 pb-[max(calc(var(--spacing)*4),env(safe-area-inset-bottom))] shadow-overlay motion-safe:animate-hoja md:max-w-sm md:rounded-card md:border md:border-line-subtle md:pb-5">
+          <header className="flex items-center justify-between gap-3">
+            <h2 id="agregado-titulo" className="flex items-center gap-2 text-body font-semibold text-fg">
+              <Check aria-hidden strokeWidth={2} className="size-4 text-success" />
+              Agregado al carrito
+            </h2>
+            <button type="button" onClick={onCerrar} aria-label="Cerrar" className="-mr-2 flex size-11 shrink-0 items-center justify-center rounded-theme text-icon hover:bg-sunken">
+              <X aria-hidden strokeWidth={1.5} className="size-5" />
+            </button>
+          </header>
+          <div className="flex items-center gap-3">
+            <div className="relative aspect-4/5 w-16 shrink-0 overflow-hidden rounded-theme border border-line-subtle bg-sunken">
+              {foto && <Image src={foto} alt="" fill sizes="4rem" className="object-cover" />}
+            </div>
+            <div className="flex min-w-0 flex-col gap-1">
+              <p className="truncate text-body-sm font-medium text-fg">{nombre}</p>
+              {variante && <p className="truncate text-caption text-fg-secondary">{variante}</p>}
+              <PrecioTienda precio={precio} precioAntes={precioAntes} descuento={descuento} conEtiqueta={false} />
+            </div>
           </div>
-          <div className="flex min-w-0 flex-col gap-1">
-            <p className="truncate text-body-sm font-medium text-fg">{nombre}</p>
-            {variante && <p className="truncate text-caption text-fg-secondary">{variante}</p>}
-            <PrecioTienda precio={precio} precioAntes={precioAntes} descuento={descuento} conEtiqueta={false} />
+          <div className="flex flex-col gap-2">
+            <Link ref={ver} href={carrito} className={cn(buttonVariants({ block: true }), "transition active:scale-98")}>Ver carrito</Link>
+            <Button variant="secondary" block onClick={onCerrar}>Seguir comprando</Button>
           </div>
-        </div>
-        <div className="flex flex-col gap-2">
-          <Link ref={ver} href={carrito} className={cn(buttonVariants({ block: true }), "transition active:scale-98")}>Ver carrito</Link>
-          <Button variant="secondary" block onClick={onCerrar}>Seguir comprando</Button>
         </div>
       </div>
     </div>
