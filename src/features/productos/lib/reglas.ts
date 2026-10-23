@@ -14,10 +14,10 @@ export function nivelStock(p: Producto): NivelStock {
   return total <= UMBRAL_BAJO_STOCK ? "bajo-stock" : "en-stock";
 }
 
-/** "2 colores · 3 tallas". Las variantes únicas ("Única") no se cuentan como talla. */
+/** "2 colores · 3 tallas". Sin opción de color cuenta como 1 color; sin tallas, no se nombran (hasta PR 3 de la auditoría multirubro). */
 export function resumenVariantes(p: Producto) {
-  const colores = new Set(p.variantes.map((v) => v.color)).size;
-  const tallas = new Set(p.variantes.map((v) => v.talla).filter((t) => t !== "Única")).size;
+  const colores = p.opciones.find((o) => o.tipo === "color")?.valores.length || 1;
+  const tallas = p.opciones.find((o) => o.tipo === "talla")?.valores.length ?? 0;
   const partes = [plural(colores, "color", "colores")];
   if (tallas) partes.push(plural(tallas, "talla", "tallas"));
   return partes.join(" · ");

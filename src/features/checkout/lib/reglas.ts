@@ -5,19 +5,19 @@ import { descuentoDe } from "@/features/cupones/lib/reglas";
 // Reglas del carrito y de la compra. Funciones puras: fáciles de probar y de mover al backend.
 // Mensajes con punto final (regla de micro-copy) y textos de Figma (módulo 1).
 
-const claveVariante = (color: string, talla: string) => `${color}|${talla}`;
-
 /** Une lo guardado en el navegador con el catálogo publicado. Lo que ya no se vende, se descarta. */
 export function resolverLineas(items: ItemCarrito[], catalogo: CatalogoCompra): Linea[] {
   return items.flatMap((i) => {
     const p = catalogo[i.id];
     if (!p) return [];
-    const maximo = p.stock[claveVariante(i.color, i.talla)] ?? 0;
-    return [{ ...i, cantidad: Math.min(i.cantidad, Math.max(maximo, 1)), nombre: p.nombre, slug: p.slug, precio: p.precio, foto: p.fotos[i.color] ?? p.foto, maximo }];
+    // Una variante que ya no existe se muestra agotada (el carrito pide quitarla).
+    const v = p.variantes[i.variante];
+    const maximo = v?.stock ?? 0;
+    return [{ ...i, cantidad: Math.min(i.cantidad, Math.max(maximo, 1)), nombre: p.nombre, slug: p.slug, precio: p.precio, foto: v?.foto ?? p.foto, maximo, detalle: v?.detalle ?? [] }];
   });
 }
 
-export const mismaLinea = (a: ItemCarrito, b: ItemCarrito) => a.id === b.id && a.color === b.color && a.talla === b.talla;
+export const mismaLinea = (a: ItemCarrito, b: ItemCarrito) => a.id === b.id && a.variante === b.variante;
 
 /** Lo que falta para el envío gratis (0 si ya llegó). Se cuenta después del cupón. null: la tienda no lo ofrece. */
 export const faltaEnvioGratis = (base: number, desde: number | null) => (desde === null ? null : Math.max(0, desde - base));

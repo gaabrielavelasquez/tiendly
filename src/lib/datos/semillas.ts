@@ -4,6 +4,7 @@ import { CUPONES_HEATHER } from "@/features/cupones/lib/semilla-heather";
 import type { RubroId } from "@/features/onboarding/lib/rubros";
 import { CATALOGO_HEATHER } from "@/features/productos/lib/catalogo-heather";
 import type { Producto } from "@/features/productos/types";
+import { colorPorTalla } from "@/features/productos/lib/variantes";
 import type { DatosTienda } from "./tienda";
 
 // Datos de partida: la tienda de demo y las tiendas nuevas del onboarding.
@@ -18,9 +19,8 @@ export const slugDemo = () => process.env.TIENDLY_TIENDA_DEMO ?? (process.env.VE
 export const esHeather = (slug: string) => slug === "heather";
 
 const TALLAS = ["35", "36", "37", "38", "39", "40"];
-const modelo = (id: string, nombre: string, categoria: Producto["categorias"][number], precio: number, stock: Record<string, number[]>): Producto => ({
-  id, nombre, categorias: [categoria], estado: "activo", precio,
-  variantes: Object.entries(stock).flatMap(([color, s]) => TALLAS.map((talla, i) => ({ color, talla, stock: s[i] ?? 0 }))),
+const modelo = (id: string, nombre: string, categoria: string, precio: number, stock: Record<string, number[]>): Producto => ({
+  id, nombre, categorias: [categoria], estado: "activo", precio, ...colorPorTalla(stock, TALLAS),
 });
 
 /** Aurora Calzado: tienda ficticia, sin fotos (la miniatura muestra el ícono de la categoría). */
@@ -32,10 +32,10 @@ function aurora(): DatosTienda {
   return {
     tienda: { nombre: "Aurora Calzado", slug: "aurora", celularVentas: "900000000", plan: "free", hechos: { pagos: true, entregas: true, compartir: true } },
     productos: [
-      modelo("a1", "Balerinas Lía", "balerinas", 180, { Negro: [2, 3, 3, 2, 1, 1], Camel: [1, 2, 2, 1, 1, 0] }),
-      modelo("a2", "Botines Nara", "botas", 290, { Negro: [1, 2, 2, 2, 1, 0], Choco: [0, 1, 2, 1, 1, 0] }),
-      modelo("a3", "Tacos Vera", "tacos", 240, { Negro: [1, 1, 2, 1, 1, 0], Vainilla: [0, 1, 1, 1, 0, 0] }),
-      modelo("a4", "Plataformas Isla", "plataformas", 260, { Blanco: [0, 1, 2, 2, 1, 0] }),
+      modelo("a1", "Balerinas Lía", "Balerinas", 180, { Negro: [2, 3, 3, 2, 1, 1], Camel: [1, 2, 2, 1, 1, 0] }),
+      modelo("a2", "Botines Nara", "Botas", 290, { Negro: [1, 2, 2, 2, 1, 0], Choco: [0, 1, 2, 1, 1, 0] }),
+      modelo("a3", "Tacos Vera", "Tacos", 240, { Negro: [1, 1, 2, 1, 1, 0], Vainilla: [0, 1, 1, 1, 0, 0] }),
+      modelo("a4", "Plataformas Isla", "Plataformas", 260, { Blanco: [0, 1, 2, 2, 1, 0] }),
     ],
     pedidos: { ultimo: 1000, creados: [] },
     inventario: {},

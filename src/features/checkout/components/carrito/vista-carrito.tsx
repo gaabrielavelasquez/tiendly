@@ -62,7 +62,7 @@ export function VistaCarrito({ datos }: { datos: DatosCompra }) {
             <div className="flex flex-col gap-4 lg:col-span-2">
               <ul className="flex flex-col gap-4">
                 {c.lineas.map((l, i) => (
-                  <LineaCarrito key={`${l.id}-${l.color}-${l.talla}`} linea={l} tienda={tienda.slug} prioridad={i < 2} onCantidad={(n) => c.cambiarCantidad(l, n)} onQuitar={() => c.quitar(l)} />
+                  <LineaCarrito key={`${l.id}-${l.variante}`} linea={l} tienda={tienda.slug} prioridad={i < 2} onCantidad={(n) => c.cambiarCantidad(l, n)} onQuitar={() => c.quitar(l)} />
                 ))}
               </ul>
               <EnvioGratis base={totales.productos - totales.descuento} desde={reglas.envioGratisDesde} />

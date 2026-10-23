@@ -1,14 +1,15 @@
 "use client";
 
-import { Footprints, type LucideIcon } from "lucide-react";
+import { Footprints, Package, type LucideIcon } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
 import { cn } from "@/lib/cn";
 import type { Categoria } from "../types";
 
-const ICONO: Record<Categoria, LucideIcon> = { balerinas: Footprints, tacos: Footprints, botas: Footprints, plataformas: Footprints };
+/** Ícono de respaldo por categoría; las que no están aquí usan uno neutro (multirubro, 0032). */
+const ICONO: Record<string, LucideIcon> = { Balerinas: Footprints, Tacos: Footprints, Botas: Footprints, Plataformas: Footprints };
 
-type MiniaturaProps = { categoria: Categoria; imagen?: string; className?: string };
+type MiniaturaProps = { categoria?: Categoria; imagen?: string; className?: string };
 
 /**
  * Miniatura del producto: foto con object-cover, radio suave (8 px) y borde nítido de 1 px.
@@ -16,7 +17,7 @@ type MiniaturaProps = { categoria: Categoria; imagen?: string; className?: strin
  */
 export function Miniatura({ categoria, imagen, className }: MiniaturaProps) {
   const [fallo, setFallo] = useState(false);
-  const Icono = ICONO[categoria];
+  const Icono = (categoria && ICONO[categoria]) || Package;
   return (
     <span
       aria-hidden
