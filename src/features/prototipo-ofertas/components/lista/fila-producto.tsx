@@ -8,8 +8,8 @@ import { Badge } from "@/components/ui";
 import { cn } from "@/lib/cn";
 import { plural } from "@/lib/formato";
 import { stockTotal, type ProductoProto } from "../../lib/datos";
-import { vigencia } from "../../lib/oferta";
-import { PrecioOferta } from "../comunes";
+import { estadoOferta, vigencia } from "../../lib/oferta";
+import { BadgeProgramada, PrecioOferta } from "../comunes";
 
 type Props = { p: ProductoProto; hoy: string; seleccionando: boolean; marcado: boolean; onAlternar: () => void; onMantener: () => void };
 
@@ -21,11 +21,16 @@ export function Miniatura({ p }: { p: ProductoProto }) {
   );
 }
 
-/** Línea de oferta en el panel: "Hasta el domingo 25." o "Empieza el miércoles 28." (texto, sin píldora; 0031). */
-export function TextoOferta({ p, hoy }: { p: ProductoProto; hoy: string }) {
+/**
+ * Línea de oferta en el panel: "Hasta el domingo 25." o "Terminó el 20 de octubre." como texto (0031); la programada
+ * suma el badge "Programada" (ronda 2), porque es un estado. Las fechas solo se ven en el panel, nunca en la tienda.
+ */
+export function TextoOferta({ p, hoy, conBadge = true }: { p: ProductoProto; hoy: string; conBadge?: boolean }) {
   const v = vigencia(p, hoy);
   if (!v) return null;
-  return <span className={cn("text-caption", v.urgente ? "text-warning" : "text-fg-secondary")}>{v.texto}.</span>;
+  const texto = <span className={cn("text-caption", v.urgente ? "text-warning" : "text-fg-secondary")}>{v.texto}.</span>;
+  if (!conBadge || estadoOferta(p, hoy) !== "programada") return texto;
+  return <span className="inline-flex flex-wrap items-center gap-1.5"><BadgeProgramada />{texto}</span>;
 }
 
 /** Móvil: nombre, precio (con su oferta) y una línea de detalle; el nombre usa todo el ancho, sin columna de precio. */
@@ -39,11 +44,14 @@ function Contenido({ p, hoy }: { p: ProductoProto; hoy: string }) {
           <span className="truncate text-body-sm font-semibold text-fg">{p.nombre}</span>
           {p.estado === "pausado" && <Badge>Pausado</Badge>}
         </span>
-        <PrecioOferta p={p} hoy={hoy} />
+        <span className="flex items-center gap-2">
+          <PrecioOferta p={p} hoy={hoy} />
+          {estadoOferta(p, hoy) === "programada" && <BadgeProgramada />}
+        </span>
         <span className="flex flex-wrap gap-x-1.5 text-caption">
           <span className={stock === 0 ? "text-error" : "text-fg-secondary"}>{stock === 0 ? "Agotado" : plural(stock, "unidad", "unidades")}</span>
           {vigencia(p, hoy) && <span aria-hidden className="text-fg-tertiary">·</span>}
-          <TextoOferta p={p} hoy={hoy} />
+          <TextoOferta p={p} hoy={hoy} conBadge={false} />
         </span>
       </span>
     </>

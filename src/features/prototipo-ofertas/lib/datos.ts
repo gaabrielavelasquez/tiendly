@@ -24,7 +24,7 @@ export const tipoDe = (nombre: string): TipoOpcion => {
   return n === "color" ? "color" : n === "talla" ? "talla" : "otra";
 };
 
-export const SUGERIDAS = ["Color", "Talla", "Tono", "Tamaño", "Material", "Aroma"];
+export const SUGERIDAS = ["Color", "Talla", "Tamaño", "Tono", "Aroma", "Material"];
 export const TALLAS_RAPIDAS: Record<string, string[]> = {
   "XS–XXL": ["XS", "S", "M", "L", "XL", "XXL"],
   "35–45": ["35", "36", "37", "38", "39", "40", "41", "42", "43", "44", "45"],
@@ -51,7 +51,8 @@ export function ejemplosFormulario(hoy: string): Record<"zapatilla" | "serum" | 
       opciones: [{ nombre: "Tamaño", valores: ["15 ml", "30 ml"] }],
       stock: { "15 ml": 6, "30 ml": 4 },
     },
-    vela: { id: "v1", nombre: "Vela Ámbar", categoria: "Hogar", precio: 45, estado: "activo", opciones: [], stock: { "": 12 } },
+    // Producto nuevo: precio y stock vacíos, para ver los ejemplos de los campos.
+    vela: { id: "v1", nombre: "Vela Ámbar", categoria: "Hogar", precio: 0, estado: "activo", opciones: [], stock: { "": 0 } },
   };
 }
 

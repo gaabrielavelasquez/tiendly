@@ -27,6 +27,7 @@ type PrecioProps = { p: ConPrecio; hoy: string; tamano?: "lista" | "ficha"; conV
 /**
  * Precio con oferta (0034): el nuevo, el de antes tachado y la etiqueta "−26 %" (Badge existente, tono de selección:
  * carbón o el del tema). Fuera de fechas se ve el precio normal, sin tachado. Montos serenos (0031): peso Regular/Medium.
+ * `conVigencia` solo en el panel: la tienda no muestra fechas (0034, ronda 2).
  */
 export function PrecioOferta({ p, hoy, tamano = "lista", conVigencia = false, className }: PrecioProps) {
   const v = vigencia(p, hoy);
@@ -40,7 +41,7 @@ export function PrecioOferta({ p, hoy, tamano = "lista", conVigencia = false, cl
         {activa && (
           <>
             <span className={cn("text-fg-tertiary line-through", tamano === "ficha" ? "text-body-sm" : "text-caption")}>
-              <span className="sr-only">Antes: </span>
+              <span className="sr-only">Precio anterior: </span>
               {formatoSoles(p.precioAntes!)}
             </span>
             <Badge tone="selected" className="h-5 px-1.5 tabular-nums">
@@ -52,4 +53,9 @@ export function PrecioOferta({ p, hoy, tamano = "lista", conVigencia = false, cl
       {conVigencia && v && activa && <span className={cn("text-caption", v.urgente ? "text-warning" : "text-fg-secondary")}>{v.texto}.</span>}
     </span>
   );
+}
+
+/** "Programada" (0034, ronda 2): estado de una oferta que todavía no empieza. Badge neutro: es un estado, no una alerta. */
+export function BadgeProgramada() {
+  return <Badge className="h-5 px-1.5">Programada</Badge>;
 }

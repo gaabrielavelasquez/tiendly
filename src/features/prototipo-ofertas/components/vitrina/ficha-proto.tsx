@@ -12,7 +12,7 @@ const etiqueta = "text-label font-semibold tracking-widest text-fg-secondary upp
 
 /**
  * PROTOTIPO · Página de producto con oferta (0034) y opciones genéricas (0032): un selector por opción (aquí
- * "Tamaño"), el precio nuevo, el de antes tachado, "−22 %" y "Hasta el domingo 25." como texto, sin cuenta regresiva.
+ * "Tamaño"), el precio nuevo, el de antes tachado y "−22 %". Sin fechas (ronda 2: solo en el panel).
  */
 export function FichaProto({ p, hoy }: { p: ProductoProto; hoy: string }) {
   const [elegidos, setElegidos] = useState<string[]>(p.opciones.map((o) => o.valores[0]));
@@ -27,7 +27,7 @@ export function FichaProto({ p, hoy }: { p: ProductoProto; hoy: string }) {
       <div className="flex flex-col gap-6">
         <div className="flex flex-col gap-3">
           <h1 className="font-display-hero text-h1 text-fg">{p.nombre}</h1>
-          <PrecioOferta p={p} hoy={hoy} tamano="ficha" conVigencia />
+          <PrecioOferta p={p} hoy={hoy} tamano="ficha" />
         </div>
         {p.opciones.map((o, i) => (
           <fieldset key={o.nombre} className="flex flex-col gap-3">
@@ -48,7 +48,6 @@ export function FichaProto({ p, hoy }: { p: ProductoProto; hoy: string }) {
         <div className="flex flex-col gap-2">
           <Button block><span className="flex items-center gap-2"><ShoppingBag aria-hidden strokeWidth={1.5} className="size-4" />Agregar al carrito</span></Button>
           <a href="#" className={cn(buttonVariants({ variant: "secondary", block: true }), "transition active:scale-98")}>Consultar por WhatsApp</a>
-          <p className="text-caption text-fg-secondary">Si tienes un cupón, se aplica en el carrito sobre el precio de oferta.</p>
         </div>
       </div>
     </div>

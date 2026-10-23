@@ -30,7 +30,7 @@ export function TarjetaOferta({ p, hoy, prioridad = false }: { p: ProductoProto;
           <span className={cn("font-body text-body-sm text-fg", activa && "font-medium")}>{formatoSoles(precioVigente(p, hoy))}</span>
           {activa && (
             <span className="text-caption text-fg-tertiary line-through">
-              <span className="sr-only">Antes: </span>
+              <span className="sr-only">Precio anterior: </span>
               {formatoSoles(p.precioAntes!)}
             </span>
           )}

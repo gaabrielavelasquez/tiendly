@@ -27,7 +27,7 @@ export function OpcionFila({ o, i, onCambio, onQuitar, children }: Props) {
       <div className="flex items-end gap-2">
         <label className="flex flex-1 flex-col gap-1.5">
           <span className="text-body-sm font-semibold text-fg">Opción {i + 1}</span>
-          <input list="sugeridas" value={o.nombre} placeholder="Ej. Color, Talla, Tamaño" onChange={(e) => onCambio({ ...o, nombre: e.target.value })} className={CAMPO} />
+          <input list="sugeridas" autoFocus={!o.nombre} value={o.nombre} placeholder="Ej. Color, Talla, Tamaño" onChange={(e) => onCambio({ ...o, nombre: e.target.value })} className={CAMPO} />
         </label>
         <button type="button" onClick={onQuitar} aria-label={`Quitar la opción ${o.nombre || i + 1}`} className="flex size-10 items-center justify-center rounded-button text-icon transition-colors hover:bg-sunken hover:text-fg">
           <Trash2 aria-hidden strokeWidth={1.5} className="size-4" />

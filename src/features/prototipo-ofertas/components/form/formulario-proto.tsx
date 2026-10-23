@@ -4,17 +4,17 @@ import { ImagePlus } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
 import { Chip, Field, Switch } from "@/components/ui";
-import { BarraAcciones } from "@/features/productos/components/form/barra-acciones";
 import { CampoDescripcion } from "@/features/productos/components/form/campo-descripcion";
 import { ejemplosFormulario, type ProductoProto } from "../../lib/datos";
 import { Seccion } from "../comunes";
 import { ControlPrototipo } from "../control-prototipo";
+import { BarraGuardar } from "./barra-guardar";
 import { SeccionOpciones } from "./seccion-opciones";
 import { SeccionPrecio } from "./seccion-precio";
 import { SeccionVariantes } from "./seccion-variantes";
 
 type Ejemplo = "zapatilla" | "serum" | "vela";
-const NOMBRES: Record<Ejemplo, string> = { zapatilla: "Zapatilla (Color + Talla)", serum: "Sérum (Tamaño, en oferta)", vela: "Vela (sin opciones)" };
+const NOMBRES: Record<Ejemplo, string> = { zapatilla: "Zapatilla (Color + Talla)", serum: "Sérum (Tamaño, en oferta)", vela: "Vela nueva (sin opciones)" };
 const CATEGORIAS = ["Calzado", "Skincare", "Maquillaje", "Hogar", "Cuerpo"];
 
 /**
@@ -30,8 +30,8 @@ export function FormularioProto({ hoy, inicial = "zapatilla" }: { hoy: string; i
   const elegir = (e: Ejemplo) => (setEjemplo(e), setP(ejemplos[e]));
 
   return (
-    <form onSubmit={(e) => e.preventDefault()} noValidate className="flex flex-col gap-6 pb-24 lg:pb-0">
-      <BarraAcciones titulo="Editar producto" sinGuardar={false} guardando={false} />
+    <form onSubmit={(e) => e.preventDefault()} noValidate className="flex flex-col gap-6 pb-28 lg:pb-0">
+      <BarraGuardar titulo={ejemplo === "vela" ? "Nuevo producto" : "Editar producto"} />
       <ControlPrototipo etiqueta="Ejemplo">
         {(Object.keys(NOMBRES) as Ejemplo[]).map((e) => <Chip key={e} selected={ejemplo === e} onClick={() => elegir(e)} className="shrink-0">{NOMBRES[e]}</Chip>)}
       </ControlPrototipo>
@@ -42,7 +42,7 @@ export function FormularioProto({ hoy, inicial = "zapatilla" }: { hoy: string; i
             <Field id="nombre" label="Nombre" value={p.nombre} onChange={(e) => cambiar({ nombre: e.target.value })} />
             <CampoDescripcion valor={descripcion} onCambio={setDescripcion} />
           </Seccion>
-          <Seccion id="sec-fotos" titulo="Fotos" descripcion={p.opciones.length ? "Las fotos se ordenan por la opción que las cambia (ver Opciones)." : undefined}>
+          <Seccion id="sec-fotos" titulo="Fotos" descripcion="Si las fotos cambian por color, las asignas en Opciones.">
             <div className="flex gap-3">
               {p.foto && (
                 <span className="relative aspect-4/5 w-24 overflow-hidden rounded-theme bg-sunken">

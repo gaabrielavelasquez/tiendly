@@ -2,8 +2,8 @@
 
 import { Plus, Ruler } from "lucide-react";
 import { useState } from "react";
-import { Button } from "@/components/ui";
-import { tipoDe, type OpcionProto } from "../../lib/datos";
+import { Button, Chip } from "@/components/ui";
+import { SUGERIDAS, tipoDe, type OpcionProto } from "../../lib/datos";
 import { Seccion } from "../comunes";
 import { CAMPO, OpcionFila } from "./opcion-fila";
 
@@ -19,9 +19,12 @@ export function SeccionOpciones({ opciones, onCambio, otrosConTabla }: Props) {
   const conFotos = opciones.findIndex((o) => ["color", "tono"].includes(o.nombre.trim().toLowerCase()));
   const [fotosSegun, setFotosSegun] = useState(conFotos);
   const [tabla, setTabla] = useState<"ninguna" | "propia" | string>("ninguna");
+  const [eligiendo, setEligiendo] = useState(false);
   const cambiar = (i: number, o: OpcionProto) => onCambio(opciones.map((x, j) => (j === i ? o : x)));
+  const usadas = new Set(opciones.map((o) => o.nombre.trim().toLowerCase()));
+  const sumar = (nombre: string) => (onCambio([...opciones, { nombre, valores: [] }]), setEligiendo(false));
   const agregar = (
-    <Button type="button" variant="quiet" size="sm" className="rounded-full" disabled={opciones.length >= MAXIMO} onClick={() => onCambio([...opciones, { nombre: "", valores: [] }])}>
+    <Button type="button" variant="quiet" size="sm" className="rounded-full" aria-expanded={eligiendo} disabled={opciones.length >= MAXIMO} onClick={() => setEligiendo((e) => !e)}>
       <span className="flex items-center gap-1.5">
         <Plus aria-hidden strokeWidth={1.5} className="size-4" />
         Agregar opción
@@ -57,6 +60,15 @@ export function SeccionOpciones({ opciones, onCambio, otrosConTabla }: Props) {
             </OpcionFila>
           ))}
         </ul>
+      )}
+      {eligiendo && (
+        <div role="group" aria-label="Qué opción agregar" className="flex flex-col gap-2 border-t border-line-subtle pt-4">
+          <p className="text-body-sm font-semibold text-fg">¿Qué cambia entre una variante y otra?</p>
+          <div className="flex flex-wrap gap-2">
+            {SUGERIDAS.filter((s) => !usadas.has(s.toLowerCase())).map((s) => <Chip key={s} onClick={() => sumar(s)}>{s}</Chip>)}
+            <Chip className="border-dashed text-fg-secondary" onClick={() => sumar("")}>Otra</Chip>
+          </div>
+        </div>
       )}
       {opciones.length > 0 && (
         <label className="flex flex-col gap-1.5 border-t border-line-subtle pt-4">

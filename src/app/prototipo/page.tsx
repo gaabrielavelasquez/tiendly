@@ -13,7 +13,9 @@ const PANTALLAS = [
   ["1 · Formulario: sérum con Tamaño, en oferta", "/panel/prototipo/producto?ejemplo=serum"],
   ["1 · Formulario: vela sin opciones", "/panel/prototipo/producto?ejemplo=vela"],
   ["2 · Productos: filtro En oferta y Poner en oferta", "/panel/prototipo/productos"],
-  ["3 · Tienda: sección Ofertas", "/prototipo/tienda"],
+  ["3 · Mi tienda: nombre de la sección de ofertas", "/panel/prototipo/mi-tienda"],
+  ["3 · Tienda: sección de ofertas y link en el menú", "/prototipo/tienda"],
+  ["3 · Tienda: la sección desde el menú", "/prototipo/tienda?categoria=ofertas"],
   ["3 · Tienda: producto en oferta", "/prototipo/tienda/serum-calma"],
 ] as const;
 

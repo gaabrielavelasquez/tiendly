@@ -52,12 +52,12 @@ export function HojaOferta({ productos, hoy, onCerrar, onAplicar }: Props) {
             <Chip selected={modo === "porcentaje"} onClick={() => (setModo("porcentaje"), setValor("20"))}>Descuento en %</Chip>
             <Chip selected={modo === "precio"} onClick={() => (setModo("precio"), setValor(""))}>Precio fijo</Chip>
           </div>
-          <Field id="lote-valor" label={modo === "porcentaje" ? "Descuento (%)" : "Precio de oferta"} prefix={modo === "precio" ? "S/" : undefined} inputMode="decimal" value={valor}
-            onChange={(e) => setValor(e.target.value.replace(/[^\d.,]/g, ""))} error={valor ? error || undefined : undefined}
+          <Field id="lote-valor" label={modo === "porcentaje" ? "Descuento (%)" : "Precio de oferta"} prefix={modo === "precio" ? "S/" : undefined} inputMode="numeric" value={valor}
+            placeholder={modo === "porcentaje" ? "Ej.: 20" : "Ej.: 59"} onChange={(e) => setValor(e.target.value.replace(/\D/g, ""))} error={valor ? error || undefined : undefined}
             hint={modo === "porcentaje" ? "Se descuenta del precio normal de cada producto, redondeado al sol." : "El mismo precio para todos los seleccionados."} />
-          <div className="grid grid-cols-2 gap-3">
-            <Field id="lote-desde" type="date" label="Empieza" min={hoy} value={desde} onChange={(e) => setDesde(e.target.value)} hint="Vacío: hoy." />
-            <Field id="lote-hasta" type="date" label="Termina" min={desde || hoy} value={hasta} onChange={(e) => setHasta(e.target.value)} hint="Vacío: sin fin." />
+          <div className="grid gap-3 sm:grid-cols-2">
+            <Field id="lote-desde" type="date" label="Empieza" min={hoy} value={desde} onChange={(e) => setDesde(e.target.value)} hint="Si lo dejas vacío, empieza hoy." />
+            <Field id="lote-hasta" type="date" label="Termina" min={desde || hoy} value={hasta} onChange={(e) => setHasta(e.target.value)} hint="Si lo dejas vacío, dura hasta que borres el precio antes." />
           </div>
           <ul className={`${CONTENEDOR} flex flex-col divide-y divide-line-subtle`}>
             {filas.map(({ p, antes, nuevo }) => (
@@ -67,7 +67,7 @@ export function HojaOferta({ productos, hoy, onCerrar, onAplicar }: Props) {
                   {estadoOferta(p, hoy) !== "sin-oferta" && <span className="text-caption text-fg-secondary">Reemplaza su oferta actual.</span>}
                   {nuevo >= antes && <span className="text-caption text-warning">No baja el precio: queda fuera.</span>}
                 </span>
-                <span className="shrink-0 tabular-nums"><span className="text-fg-tertiary line-through">{formatoSoles(antes)}</span> <span className="font-medium text-fg">{formatoSoles(nuevo)}</span></span>
+                <span className="shrink-0 tabular-nums"><span className="text-fg-tertiary line-through"><span className="sr-only">Precio anterior: </span>{formatoSoles(antes)}</span> <span className="font-medium text-fg"><span className="sr-only">, nuevo: </span>{formatoSoles(nuevo)}</span></span>
               </li>
             ))}
           </ul>
