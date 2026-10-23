@@ -46,7 +46,7 @@ export function BarraAcciones({ titulo, sinGuardar, guardando }: BarraProps) {
           {estado}
         </div>
       </header>
-      <div className="fixed inset-x-0 bottom-0 z-20 flex gap-2 border-t border-line-subtle bg-surface/95 px-4 py-3 backdrop-blur-md lg:hidden">
+      <div className="fixed inset-x-0 bottom-0 z-20 flex gap-2 border-t border-line-subtle bg-surface/95 px-4 pt-3 pb-[max(calc(var(--spacing)*3),env(safe-area-inset-bottom))] backdrop-blur-md lg:hidden">
         <Link href="/panel/productos" className={cn(cancelar, "flex-1")}>
           Cancelar
         </Link>

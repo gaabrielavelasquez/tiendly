@@ -12,3 +12,4 @@ export { TabBar } from "./tab-bar";
 export { TarjetaSeccion } from "./tarjeta-seccion";
 export { Volver } from "./volver";
 export { ZonaUsuario } from "./zona-usuario";
+export { CONTENEDOR, Seccion } from "./seccion";

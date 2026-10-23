@@ -4,14 +4,16 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type { Categoria } from "../types";
 import { guardarProducto } from "../lib/acciones";
 import { fotoParaGuardar } from "../lib/foto";
-import { VARIANTE_VACIA, validar, type Errores, type FormProducto, type ImagenForm, type VarianteForm } from "../lib/formulario";
+import { fotosPorDefecto, validar, type Errores, type FormProducto, type ImagenForm, type OpcionForm } from "../lib/formulario";
 
 const alternar = <T,>(lista: T[], v: T) => (lista.includes(v) ? lista.filter((x) => x !== v) : [...lista, v]);
+const CAMPOS: (keyof Errores)[] = ["nombre", "precio", "precioAntes", "ofertaHasta", "opciones"];
 
 /**
- * Estado del formulario de producto: valores, validación (se muestra recién al intentar guardar),
- * cambios sin guardar (avisa antes de salir) y guardado en el catálogo (simulado en el servidor).
- * `id`: el producto que se edita; al crear, se recuerda el id nuevo para no duplicarlo al volver a guardar.
+ * Estado del formulario de producto: valores, validación (se muestra recién al intentar guardar), cambios sin
+ * guardar (avisa antes de salir) y guardado en el catálogo. `id`: el producto que se edita; al crear, se recuerda
+ * el id nuevo para no duplicarlo al volver a guardar. "Las fotos cambian según" sigue a Color o Tono hasta que
+ * la persona la elige a mano.
  */
 export function useFormularioProducto(inicial: FormProducto, id?: string) {
   const [form, setForm] = useState(inicial);
@@ -20,6 +22,7 @@ export function useFormularioProducto(inicial: FormProducto, id?: string) {
   const [guardando, setGuardando] = useState(false);
   /** Aviso tras guardar: null si no hay; si se guardó pausado, dice qué falta. */
   const [guardado, setGuardado] = useState<{ pausado: string | null } | null>(null);
+  const [fotosManual, setFotosManual] = useState(!!id);
   const timer = useRef<number | undefined>(undefined);
   const idGuardado = useRef(id ?? null);
   /** Error al guardar (red o servidor); lo escrito no se pierde. */
@@ -35,20 +38,22 @@ export function useFormularioProducto(inicial: FormProducto, id?: string) {
     window.addEventListener("beforeunload", onSalir);
     return () => window.removeEventListener("beforeunload", onSalir);
   }, [sinGuardar]);
-
   useEffect(() => () => window.clearTimeout(timer.current), []);
 
   const set = useCallback(<K extends keyof FormProducto>(k: K, v: FormProducto[K]) => setForm((f) => ({ ...f, [k]: v })), []);
-  const alternarColor = useCallback((c: string) => setForm((f) => ({ ...f, colores: alternar(f.colores, c) })), []);
-  const alternarTalla = useCallback((t: string) => setForm((f) => ({ ...f, tallas: alternar(f.tallas, t) })), []);
+  const setOpciones = useCallback((opciones: OpcionForm[]) => setForm((f) => ({
+    ...f, opciones, opcionFotos: fotosManual ? (f.opcionFotos < opciones.length ? f.opcionFotos : -1) : fotosPorDefecto(opciones),
+  })), [fotosManual]);
+  const setOpcionFotos = useCallback((i: number) => (setFotosManual(true), setForm((f) => ({ ...f, opcionFotos: i }))), []);
+  const setStock = useCallback((clave: string, v: string) => setForm((f) => ({ ...f, stock: { ...f.stock, [clave]: v.replace(/\D/g, "") } })), []);
   const alternarCategoria = useCallback((c: Categoria) => setForm((f) => ({ ...f, categorias: alternar(f.categorias, c) })), []);
-  /** Cantidad solo enteros; precio con decimales; SKU en mayúsculas. */
-  const setVariante = useCallback((k: string, campo: keyof VarianteForm, v: string) => {
-    const limpio = campo === "stock" ? v.replace(/[^\d]/g, "") : campo === "precio" ? v.replace(/[^\d.,]/g, "") : v.toUpperCase();
-    setForm((f) => ({ ...f, variantes: { ...f.variantes, [k]: { ...(f.variantes[k] ?? VARIANTE_VACIA), [campo]: limpio } } }));
-  }, []);
+  const agregarCategoria = useCallback((c: Categoria) => setForm((f) => ({ ...f, categorias: f.categorias.includes(c) ? f.categorias : [...f.categorias, c] })), []);
+  const alternarFotoValor = useCallback((valor: string, idImg: string) => setForm((f) => ({ ...f, fotosPorValor: { ...f.fotosPorValor, [valor]: alternar(f.fotosPorValor[valor] ?? [], idImg) } })), []);
   const agregarImagenes = useCallback((nuevas: ImagenForm[]) => setForm((f) => ({ ...f, imagenes: [...f.imagenes, ...nuevas] })), []);
-  const quitarImagen = useCallback((id: string) => setForm((f) => ({ ...f, imagenes: f.imagenes.filter((i) => i.id !== id) })), []);
+  const quitarImagen = useCallback((idImg: string) => setForm((f) => ({
+    ...f, imagenes: f.imagenes.filter((i) => i.id !== idImg),
+    fotosPorValor: Object.fromEntries(Object.entries(f.fotosPorValor).map(([v, ids]) => [v, ids.filter((x) => x !== idImg)])),
+  })), []);
 
   /** Devuelve la cantidad de errores; 0 si se guardó. */
   const guardar = useCallback(async () => {
@@ -57,13 +62,8 @@ export function useFormularioProducto(inicial: FormProducto, id?: string) {
     const cantidad = Object.keys(e).length;
     if (cantidad) {
       // Lleva el foco al primer campo con error para que no haya que buscarlo.
-      const primero = (["nombre", "precio", "precioAntes", "variantes"] as const).find((k) => e[k]);
-      requestAnimationFrame(() => {
-        // En la tabla de variantes, al precio que está mal (no a la primera fila).
-        // Solo el visible: en móvil es el acordeón; desde 640 px, la planilla.
-        const destino = primero === "variantes" ? [...document.querySelectorAll<HTMLElement>("[data-error-variante]")].find((el) => el.offsetParent) : null;
-        (destino ?? document.getElementById(`campo-${primero}`))?.focus();
-      });
+      const primero = CAMPOS.find((k) => e[k]);
+      requestAnimationFrame(() => document.getElementById(`campo-${primero}`)?.focus());
       return cantidad;
     }
     setGuardando(true);
@@ -96,7 +96,7 @@ export function useFormularioProducto(inicial: FormProducto, id?: string) {
   }, [form]);
 
   return {
-    form, set, alternarColor, alternarTalla, alternarCategoria, setVariante, agregarImagenes, quitarImagen,
+    form, set, setOpciones, setOpcionFotos, setStock, alternarCategoria, agregarCategoria, alternarFotoValor, agregarImagenes, quitarImagen,
     errores, guardar, guardando, guardado, sinGuardar, fallo,
   };
 }

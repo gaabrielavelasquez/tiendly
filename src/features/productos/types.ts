@@ -12,6 +12,9 @@ export type Opcion = { nombre: string; tipo: TipoOpcion; valores: string[] };
 /** Una combinación de valores, uno por opción y en el orden de `opciones`, con su stock. Sin opciones: `[]`. */
 export type Variante = { valores: string[]; stock: number };
 
+/** Fechas de una oferta (decisión 0034), días AAAA-MM-DD en Lima. Sin `desde`: desde ya; sin `hasta`: sin fin. */
+export type Oferta = { desde?: string; hasta?: string };
+
 /** 1 producto con variantes (decisión 0004, actualizada por 0032): las variantes son opciones genéricas. */
 export type Producto = {
   id: string;
@@ -24,9 +27,12 @@ export type Producto = {
   categorias: Categoria[];
   /** Un solo interruptor (decisiones 0011 y 0027): pausado no se ve en la tienda. */
   estado: "activo" | "pausado";
+  /** Soles enteros. Con oferta, es el precio de oferta. */
   precio: number;
-  /** Precio antes de la rebaja, si hay. */
+  /** El precio normal, si el producto está en oferta (0034): mayor que `precio`. Se muestra tachado. */
   precioAntes?: number;
+  /** Fechas de la oferta. Fuera de ellas se cobra `precioAntes`, sin tachado. */
+  oferta?: Oferta;
   /** Hasta 3 (decisión 0032). Vacío: el producto se vende sin opciones. */
   opciones: Opcion[];
   variantes: Variante[];
