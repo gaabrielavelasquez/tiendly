@@ -13,3 +13,4 @@ export { TarjetaSeccion } from "./tarjeta-seccion";
 export { Volver } from "./volver";
 export { ZonaUsuario } from "./zona-usuario";
 export { CONTENEDOR, Seccion } from "./seccion";
+export { useOcultarBarraInferior } from "./barra-oculta";

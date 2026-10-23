@@ -3,6 +3,7 @@ import { PanelMain } from "@/components/panel";
 import { ProductosVista } from "@/features/productos/components/productos-vista";
 import { leerEscenario, obtenerProductos } from "@/features/productos/lib/mock";
 import { leerFiltro } from "@/features/productos/lib/reglas";
+import { hoyLima } from "@/lib/reloj";
 
 export const metadata: Metadata = { title: "Productos · Tiendly" };
 
@@ -19,7 +20,7 @@ export default async function PanelProductos({ searchParams }: PageProps) {
   const productos = await obtenerProductos(leerEscenario(herramientasDev ? escenario : undefined), await slugPanel());
   return (
     <PanelMain>
-      <ProductosVista productos={productos} filtroInicial={leerFiltro(Array.isArray(estado) ? estado[0] : estado)} />
+      <ProductosVista productos={productos} hoy={hoyLima()} filtroInicial={leerFiltro(Array.isArray(estado) ? estado[0] : estado)} />
     </PanelMain>
   );
 }
