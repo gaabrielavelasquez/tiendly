@@ -103,7 +103,9 @@ export function TiendasEjemplo({ links, compacta = false }: Props & { compacta?:
   const { actual, elegir, pausar, reducir } = useRotacion(TIENDAS_EJEMPLO.length, ROTACION_MS);
   return (
     <figure
-      className={cn("relative isolate flex w-full min-w-0 flex-col gap-3", !compacta && "max-w-lg")}
+      // contain-inline-size: el ancho de la figura no depende de su contenido (links o nombres largos);
+      // la tarjeta nunca es más ancha que su columna, sea lo que sea que tenga adentro.
+      className={cn("relative isolate flex w-full max-w-full min-w-0 flex-col gap-3 contain-inline-size", !compacta && "max-w-lg")}
       onPointerEnter={() => pausar(true)}
       onPointerLeave={() => pausar(false)}
       onFocus={() => pausar(true)}
