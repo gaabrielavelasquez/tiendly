@@ -1,6 +1,6 @@
 "use client";
 
-import { Plus, Ruler, X } from "lucide-react";
+import { Plus, Ruler, Trash2 } from "lucide-react";
 import { useState } from "react";
 import { Button } from "@/components/ui";
 import { copiarTabla, filaDe, MAXIMO_MEDIDAS, tablaNueva, type TablaDeOtro } from "../../lib/tabla-tallas";
@@ -9,12 +9,13 @@ import { CAMPO } from "./opcion-fila";
 
 type Props = { tallas: string[]; tabla: TablaTallas | null; tablas: TablaDeOtro[]; onCambio: (t: TablaTallas | null) => void };
 
-const CELDA = "h-9 w-full min-w-0 rounded-button border border-line-strong bg-surface px-2 text-body-sm text-fg tabular-nums outline-2 outline-offset-1 outline-transparent placeholder:text-fg-tertiary focus:outline-focus";
+// 16 px: con menos, el iPhone hace zoom al tocar la celda.
+const CELDA = "h-10 w-full min-w-0 rounded-button border border-line-strong bg-surface px-2 text-body text-fg tabular-nums outline-2 outline-offset-1 outline-transparent placeholder:text-fg-tertiary focus:outline-focus";
 
 /**
  * Tabla de tallas del producto (parte 4 de 0034), dentro de la opción Talla: sin tabla, una propia o "Usar la de…"
- * otro producto (se copia: cambiarla aquí no cambia allá). Filas: las tallas de la opción. Columnas: hasta 4 medidas
- * con nombre editable. Celdas en cm, con rangos ("86–90"); vacío: no aplica.
+ * otro producto (se copia: cambiarla aquí no cambia allá). Primero las medidas (hasta 4, con nombre editable); debajo,
+ * la tabla: una fila por talla y una columna por medida. Celdas en cm, con rangos ("86–90"); vacío: no aplica.
  */
 export function TablaTallasCampos({ tallas, tabla, tablas, onCambio }: Props) {
   const [copiada, setCopiada] = useState("");
@@ -48,21 +49,32 @@ export function TablaTallasCampos({ tallas, tabla, tablas, onCambio }: Props) {
       </p>
       {tabla && tallas.length > 0 && (
         <>
+          <fieldset className="flex flex-col gap-2">
+            <legend className="pb-2 text-body-sm font-semibold text-fg">Medidas</legend>
+            {tabla.medidas.map((m, i) => (
+              <div key={i} className="flex items-center gap-2">
+                <input value={m} aria-label={`Nombre de la medida ${i + 1}`} placeholder="Ej.: Cintura" maxLength={20}
+                  onChange={(e) => medidas(tabla.medidas.map((x, j) => (j === i ? e.target.value : x)))} className={CAMPO} />
+                {tabla.medidas.length > 1 && (
+                  <button type="button" onClick={() => quitarMedida(i)} aria-label={`Quitar la medida ${m || i + 1}`} className="flex size-10 shrink-0 items-center justify-center rounded-button text-icon transition-colors hover:bg-surface hover:text-fg">
+                    <Trash2 aria-hidden strokeWidth={1.5} className="size-4" />
+                  </button>
+                )}
+              </div>
+            ))}
+            {tabla.medidas.length < MAXIMO_MEDIDAS && (
+              <Button type="button" variant="quiet" size="sm" className="w-fit rounded-full" onClick={() => medidas([...tabla.medidas, ""])}>
+                <span className="flex items-center gap-1.5"><Plus aria-hidden strokeWidth={1.5} className="size-4" />Agregar medida</span>
+              </Button>
+            )}
+          </fieldset>
           <table className="w-full table-fixed border-separate border-spacing-1">
+            <caption className="pb-1 text-left text-body-sm font-semibold text-fg">Medidas por talla (cm)</caption>
             <thead>
               <tr>
-                <th scope="col" className="w-10 text-left text-caption font-semibold text-fg-secondary">Talla</th>
+                <th scope="col" className="w-10 text-left align-bottom text-caption font-semibold text-fg-secondary">Talla</th>
                 {tabla.medidas.map((m, i) => (
-                  <th key={i} scope="col" className="font-normal">
-                    <span className="flex items-center gap-0.5">
-                      <input value={m} aria-label={`Nombre de la medida ${i + 1}`} placeholder="Medida" maxLength={16} onChange={(e) => medidas(tabla.medidas.map((x, j) => (j === i ? e.target.value : x)))} className={`${CELDA} font-semibold`} />
-                      {tabla.medidas.length > 1 && (
-                        <button type="button" onClick={() => quitarMedida(i)} aria-label={`Quitar la medida ${m || i + 1}`} className="relative flex size-5 shrink-0 items-center justify-center rounded-full text-icon hover:bg-surface after:absolute after:-inset-2 after:content-['']">
-                          <X aria-hidden strokeWidth={1.5} className="size-3.5" />
-                        </button>
-                      )}
-                    </span>
-                  </th>
+                  <th key={i} scope="col" className="text-left align-bottom text-caption font-semibold break-words text-fg-secondary">{m || `Medida ${i + 1}`}</th>
                 ))}
               </tr>
             </thead>
@@ -79,11 +91,6 @@ export function TablaTallasCampos({ tallas, tabla, tablas, onCambio }: Props) {
               ))}
             </tbody>
           </table>
-          {tabla.medidas.length < MAXIMO_MEDIDAS && (
-            <Button type="button" variant="quiet" size="sm" className="w-fit rounded-full" onClick={() => medidas([...tabla.medidas, ""])}>
-              <span className="flex items-center gap-1.5"><Plus aria-hidden strokeWidth={1.5} className="size-4" />Agregar medida</span>
-            </Button>
-          )}
         </>
       )}
     </div>
