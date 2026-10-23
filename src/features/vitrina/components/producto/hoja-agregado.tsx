@@ -3,7 +3,7 @@
 import { Check, X } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Button, buttonVariants } from "@/components/ui";
 import { cn } from "@/lib/cn";
 import { PrecioTienda } from "../precio-tienda";
@@ -23,22 +23,22 @@ type Props = {
 /**
  * "Agregado al carrito" (PR #26): hoja desde abajo en el celular y panel chico arriba a la derecha en desktop, debajo
  * del carrito. Muestra lo que se agregó y dos salidas: "Ver carrito" (CTA) y "Seguir comprando". El foco va a
- * "Ver carrito"; Escape o tocar fuera la cierran. Un toque fuera en el primer medio segundo no cuenta: es el segundo
- * toque de un doble toque en "Agregar", que cae sobre el fondo recién abierto.
+ * "Ver carrito"; Escape o tocar fuera la cierran. Los primeros 400 ms no recibe toques: el segundo toque de un doble
+ * toque en "Agregar" caería sobre la hoja recién abierta (el fondo o, en tablet, "Seguir comprando") y la cerraría.
  */
 export function HojaAgregado({ foto, nombre, variante, precio, precioAntes, descuento, carrito, onCerrar }: Props) {
   const ver = useRef<HTMLAnchorElement>(null);
-  const abierta = useRef(0);
+  const [activa, setActiva] = useState(false);
   useEffect(() => {
-    abierta.current = Date.now();
     ver.current?.focus();
+    const t = window.setTimeout(() => setActiva(true), 400);
     const esc = (e: KeyboardEvent) => e.key === "Escape" && onCerrar();
     window.addEventListener("keydown", esc);
-    return () => window.removeEventListener("keydown", esc);
+    return () => (window.clearTimeout(t), window.removeEventListener("keydown", esc));
   }, [onCerrar]);
 
   return (
-    <div className="fixed inset-0 z-50 flex items-end bg-fg/40 md:items-start md:justify-end md:bg-transparent md:px-4 md:pt-20" onClick={() => Date.now() - abierta.current > 500 && onCerrar()}>
+    <div className={cn("fixed inset-0 z-50 flex items-end bg-fg/40 md:items-start md:justify-end md:bg-transparent md:px-4 md:pt-20", !activa && "pointer-events-none")} onClick={onCerrar}>
       <div role="dialog" aria-modal aria-labelledby="agregado-titulo" onClick={(e) => e.stopPropagation()}
         className="flex w-full flex-col gap-4 rounded-t-card bg-surface px-5 pt-4 pb-[max(calc(var(--spacing)*4),env(safe-area-inset-bottom))] shadow-overlay motion-safe:animate-hoja md:max-w-sm md:rounded-card md:border md:border-line-subtle md:pb-5">
         <header className="flex items-center justify-between gap-3">
