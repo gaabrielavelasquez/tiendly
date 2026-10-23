@@ -75,7 +75,7 @@ export const claveLegado = (color: string, talla: string) => claveVariante(valor
 
 /** Las categorías de calzado eran ids fijos; ahora son el texto que muestra la tienda. */
 const CATEGORIA_LEGADO: Record<string, string> = {
-  balerinas: "Balerinas", tacos: "Tacos", botas: "Botas", plataformas: "Plataformas", sandalias: "Sandalias", zapatillas: "Zapatillas", mocasines: "Mocasines",
+  balerinas: "Balerinas", tacos: "Tacos", botas: "Botas", plataformas: "Plataformas", sandalias: "Sandalias", zapatillas: "Zapatillas", mocasines: "Mocasines", ropa: "Ropa",
 };
 
 type VarianteLegado = { color: string; talla: string; stock: number };
