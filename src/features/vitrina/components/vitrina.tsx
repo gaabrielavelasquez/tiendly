@@ -42,7 +42,7 @@ export function Vitrina({ datos, categoriaInicial }: VitrinaProps) {
             <PortadaPro />
           </div>
         ) : (
-          <Portada nombre={datos.tienda.nombre} demo={datos.tienda.demo} propia={datos.tienda.portada} />
+          <Portada nombre={datos.tienda.nombre} demo={datos.tienda.demo} />
         ))}
       <main className="mx-auto flex w-full max-w-6xl flex-1 flex-col px-4 pb-16">
         {datos.productos.length === 0 ? (

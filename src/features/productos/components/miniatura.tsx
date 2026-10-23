@@ -6,9 +6,7 @@ import { useState } from "react";
 import { cn } from "@/lib/cn";
 import type { Categoria } from "../types";
 
-const ICONO: Record<Categoria, LucideIcon> = {
-  balerinas: Footprints, tacos: Footprints, botas: Footprints, plataformas: Footprints, sandalias: Footprints, zapatillas: Footprints, mocasines: Footprints,
-};
+const ICONO: Record<Categoria, LucideIcon> = { balerinas: Footprints, tacos: Footprints, botas: Footprints, plataformas: Footprints };
 
 type MiniaturaProps = { categoria: Categoria; imagen?: string; className?: string };
 

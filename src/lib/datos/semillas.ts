@@ -4,7 +4,6 @@ import { CUPONES_HEATHER } from "@/features/cupones/lib/semilla-heather";
 import type { RubroId } from "@/features/onboarding/lib/rubros";
 import { CATALOGO_HEATHER } from "@/features/productos/lib/catalogo-heather";
 import type { Producto } from "@/features/productos/types";
-import { MODELOS_AURORA } from "./aurora";
 import type { DatosTienda } from "./tienda";
 
 // Datos de partida: la tienda de demo y las tiendas nuevas del onboarding.
@@ -24,7 +23,7 @@ const modelo = (id: string, nombre: string, categoria: Producto["categorias"][nu
   variantes: Object.entries(stock).flatMap(([color, s]) => TALLAS.map((talla, i) => ({ color, talla, stock: s[i] ?? 0 }))),
 });
 
-/** Aurora Calzado: tienda ficticia, con las fotos de public/aurora (las mismas de la vista previa del registro). */
+/** Aurora Calzado: tienda ficticia, sin fotos (la miniatura muestra el ícono de la categoría). */
 function aurora(): DatosTienda {
   const config: ConfigCompra = structuredClone(CONFIG_HEATHER);
   config.pagos.whatsapp.celular = "900000000";
@@ -32,12 +31,12 @@ function aurora(): DatosTienda {
   config.entregas.recojo.activo = false;
   return {
     tienda: { nombre: "Aurora Calzado", slug: "aurora", celularVentas: "900000000", plan: "free", hechos: { pagos: true, entregas: true, compartir: true } },
-    productos: MODELOS_AURORA.map((m) => ({
-      ...modelo(m.id, m.nombre, m.categoria, m.precio, { [m.color]: [...m.stock] }),
-      descripcion: m.descripcion,
-      imagen: m.foto,
-      fotos: { [m.color]: [m.foto] },
-    })),
+    productos: [
+      modelo("a1", "Balerinas Lía", "balerinas", 180, { Negro: [2, 3, 3, 2, 1, 1], Camel: [1, 2, 2, 1, 1, 0] }),
+      modelo("a2", "Botines Nara", "botas", 290, { Negro: [1, 2, 2, 2, 1, 0], Choco: [0, 1, 2, 1, 1, 0] }),
+      modelo("a3", "Tacos Vera", "tacos", 240, { Negro: [1, 1, 2, 1, 1, 0], Vainilla: [0, 1, 1, 1, 0, 0] }),
+      modelo("a4", "Plataformas Isla", "plataformas", 260, { Blanco: [0, 1, 2, 2, 1, 0] }),
+    ],
     pedidos: { ultimo: 1000, creados: [] },
     inventario: {},
     cupones: [],
