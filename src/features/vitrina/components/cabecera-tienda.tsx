@@ -6,6 +6,7 @@ import Link from "next/link";
 import { useState } from "react";
 import { cn } from "@/lib/cn";
 import type { Categoria } from "@/features/productos/types";
+import { useCajonCarrito } from "@/features/checkout/components/carrito/proveedor-carrito";
 import { useCantidadCarrito } from "../hooks/use-carrito";
 
 type CabeceraProps = {
@@ -22,11 +23,13 @@ type CabeceraProps = {
 /**
  * Cabecera de la vitrina (Figma, Home; decisión 0027). Móvil: menú a la izquierda, logo al centro y
  * carrito a la derecha. Desktop: logo a la izquierda, categorías al centro y carrito a la derecha.
- * El carrito lleva punto spark si hay productos (regla del 1 %, decisión 0022).
+ * El carrito lleva punto spark si hay productos (regla del 1 %, decisión 0022) y abre el drawer del carrito (0036);
+ * sin drawer (en /carrito y la compra), es un link a /carrito.
  */
 export function CabeceraTienda({ nombre, logo, slug, categorias, activa, onCategoria }: CabeceraProps) {
-  const cantidad = useCantidadCarrito(slug);
+  const { cantidad, pulso } = useCantidadCarrito(slug);
   const [menu, setMenu] = useState(false);
+  const cajon = useCajonCarrito();
   const enlaces = (clase: (activo: boolean) => string) =>
     categorias.map((c) =>
       onCategoria ? (
@@ -68,10 +71,13 @@ export function CabeceraTienda({ nombre, logo, slug, categorias, activa, onCateg
         </nav>
         <Link
           href={`/${slug}/carrito`}
+          onClick={cajon ? (e) => (e.preventDefault(), cajon.abrir({ volverA: e.currentTarget })) : undefined}
+          aria-haspopup={cajon ? "dialog" : undefined}
           aria-label={cantidad ? `Carrito: ${cantidad} ${cantidad === 1 ? "producto" : "productos"}` : "Carrito vacío"}
           className="relative flex size-11 items-center justify-center justify-self-end rounded-theme text-icon transition-colors hover:bg-sunken"
         >
-          <ShoppingBag aria-hidden strokeWidth={1.4} className="size-5" />
+          {/* Al agregar, el ícono da un salto: la key nueva lo remonta y la animación vuelve a empezar. */}
+          <ShoppingBag key={pulso} aria-hidden strokeWidth={1.4} className={cn("size-5", pulso > 0 && "motion-safe:animate-salto")} />
           {cantidad > 0 && (
             <span aria-hidden className="absolute top-2.5 right-2.5 flex size-2">
               <span className="absolute inset-0 rounded-full bg-spark motion-safe:animate-spark" />

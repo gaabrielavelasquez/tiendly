@@ -13,7 +13,7 @@ export function resolverLineas(items: ItemCarrito[], catalogo: CatalogoCompra): 
     // Una variante que ya no existe se muestra agotada (el carrito pide quitarla).
     const v = p.variantes[i.variante];
     const maximo = v?.stock ?? 0;
-    return [{ ...i, cantidad: Math.min(i.cantidad, Math.max(maximo, 1)), nombre: p.nombre, slug: p.slug, precio: p.precio, foto: v?.foto ?? p.foto, maximo, detalle: v?.detalle ?? [] }];
+    return [{ ...i, cantidad: Math.min(i.cantidad, Math.max(maximo, 1)), nombre: p.nombre, slug: p.slug, precio: p.precio, precioAntes: p.precioAntes, foto: v?.foto ?? p.foto, maximo, detalle: v?.detalle ?? [] }];
   });
 }
 

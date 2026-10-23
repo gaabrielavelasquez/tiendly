@@ -13,7 +13,7 @@ export const ACENTOS = [
 export const INICIAL: Tienda = {
   tema: "editorial", acento: "tema", logo: "", portada: "/mi-tienda/chloe.jpg",
   bienvenida: "Zapatos que acompañan tu día, hechos para ti.",
-  instagram: "heather.pe", whatsapp: "987654321", horario: "Lunes a sábado, de 9 a. m. a 6 p. m.",
+  instagram: "heather.pe", whatsapp: "987654321", horario: "Lunes a sábado, de 9 a. m. a 6 p. m.", nombreOfertas: "",
 };
 export const VACIA: Tienda = { ...INICIAL, tema: "neutral", portada: "", bienvenida: "", instagram: "", whatsapp: "", horario: "" };
 /** Lo guardado en el navegador, por tienda. */
@@ -36,11 +36,18 @@ export function validarTienda(tienda: Tienda): Errores {
   if (tienda.instagram && !/^@?[a-zA-Z0-9._]{1,30}$/.test(tienda.instagram)) errores.instagram = "Escribe tu usuario de Instagram, sin el enlace.";
   if (tienda.whatsapp && !/^9\d{8}$/.test(tienda.whatsapp)) errores.whatsapp = "Escribe 9 dígitos y empieza con 9.";
   if (tienda.horario.length > 160) errores.horario = "Usa hasta 160 caracteres.";
+  if (tienda.nombreOfertas.trim().length > MAX_NOMBRE_OFERTAS) errores.nombreOfertas = `Usa hasta ${MAX_NOMBRE_OFERTAS} caracteres.`;
   return errores;
 }
 
+/** Sugerencias para la sección de ofertas (0034): la tienda elige una o escribe la suya. */
+export const NOMBRES_OFERTAS = ["Ofertas", "SALE", "Cyber Wow", "Liquidación", "Fin de temporada"];
+export const MAX_NOMBRE_OFERTAS = 20;
+
 export function leerTienda(valor: string): Tienda {
-  const datos = JSON.parse(valor) as Tienda;
+  // Lo guardado antes de 0034 no tiene nombreOfertas (y igual lo pisa el del servidor).
+  const leido = JSON.parse(valor) as Partial<Tienda>;
+  const datos = { ...leido, nombreOfertas: leido.nombreOfertas ?? "" } as Tienda;
   if (!TEMAS.some(t => t.id === datos.tema) || !ACENTOS.some(a => a.id === datos.acento)) throw new Error("Configuración no válida.");
   for (const key of ["logo", "portada", "bienvenida", "instagram", "whatsapp", "horario"] as const) {
     if (typeof datos[key] !== "string") throw new Error("Configuración incompleta.");

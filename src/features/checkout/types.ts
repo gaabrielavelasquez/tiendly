@@ -5,11 +5,12 @@ import type { ItemCarrito } from "@/features/vitrina/lib/carrito";
 export type VarianteCompra = { stock: number; foto?: string; detalle: ValorOpcion[] };
 
 /** Lo que la compra necesita saber de cada producto (lo arma el servidor desde el catálogo publicado). */
-export type ProductoCompra = { nombre: string; slug: string; precio: number; foto?: string; variantes: Record<string, VarianteCompra> };
+/** `precioAntes`: el precio normal, solo si hoy tiene una oferta activa (0034); se muestra tachado en el carrito. */
+export type ProductoCompra = { nombre: string; slug: string; precio: number; precioAntes?: number; foto?: string; variantes: Record<string, VarianteCompra> };
 export type CatalogoCompra = Record<string, ProductoCompra>;
 
 /** Una línea del carrito ya resuelta: el ítem guardado + lo que se muestra y se cobra. */
-export type Linea = ItemCarrito & { nombre: string; slug: string; precio: number; foto?: string; maximo: number; detalle: ValorOpcion[] };
+export type Linea = ItemCarrito & { nombre: string; slug: string; precio: number; precioAntes?: number; foto?: string; maximo: number; detalle: ValorOpcion[] };
 
 /** El cupón ya validado en el servidor (decisión 0008): lo justo para calcular el descuento. */
 export type Cupon = { codigo: string; tipo: "porcentaje" | "monto" | "envio"; valor?: number };

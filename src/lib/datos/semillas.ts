@@ -46,6 +46,8 @@ function muna(): DatosTienda {
       return {
         id: d.id, nombre: p.nombre, descripcion: d.descripcion, categorias: [d.categoria], estado: "activo", precio: p.precio,
         ...colorPorTalla({ [d.color]: d.stock }, d.tallas),
+        // La falda está en oferta (0034): precio antes S/ 249, ahora S/ 199, sin fechas.
+        ...(p.nombre === "Falda Lluvia" ? { precio: 199, precioAntes: p.precio } : {}),
         imagen: p.foto, fotos: { [d.color]: [p.foto] },
       };
     }),
@@ -70,6 +72,40 @@ function heather(): DatosTienda {
 }
 
 export const semillaDemo = () => (slugDemo() === "heather" ? heather() : muna());
+
+/** Glow Labo (skincare y maquillaje, tema Suave): tienda de ejemplo con opciones Tono y Tamaño y dos ofertas activas. */
+function glowLabo(): DatosTienda {
+  const ejemplo = TIENDAS_EJEMPLO.find((t) => t.slug === "glow-labo")!;
+  const foto = (n: string) => ejemplo.productos.find((p) => p.nombre === n)!.foto;
+  const config: ConfigCompra = structuredClone(CONFIG_HEATHER);
+  config.pagos.whatsapp.celular = "900000001";
+  config.pagos.cobros = { estado: "activo", tarjeta: true, yape: true, cuenta: { banco: "BCP", tipo: "Cuenta corriente", ultimos4: "0001", titular: "GLOW LABO (DEMO)" } };
+  config.entregas.recojo.activo = false;
+  const conOpcion = (nombre: string, valores: string[], stock: number[]) => ({
+    opciones: [{ nombre, tipo: "otra" as const, valores }], variantes: valores.map((v, i) => ({ valores: [v], stock: stock[i] ?? 0 })),
+  });
+  const productos: Producto[] = [
+    { id: "g1", nombre: "BB cream Nube", categorias: ["Maquillaje"], estado: "activo", precio: 55, precioAntes: 75, ...conOpcion("Tono", ["Claro", "Medio", "Canela"], [3, 5, 0]),
+      descripcion: "BB cream de cobertura ligera con SPF 30. Unifica el tono sin sentirse pesada.", imagen: foto("BB cream Nube"), fotos: { "": [foto("BB cream Nube")] } },
+    { id: "g2", nombre: "Aceite Kiwano", categorias: ["Skincare"], estado: "activo", precio: 79, precioAntes: 98, ...conOpcion("Tamaño", ["15 ml", "30 ml"], [6, 4]),
+      descripcion: "Aceite facial de semilla de kiwano. Nutre de noche y deja la piel suave por la mañana.", imagen: foto("Aceite Kiwano"), fotos: { "": [foto("Aceite Kiwano")] } },
+    { id: "g3", nombre: "Base Piel", categorias: ["Maquillaje"], estado: "activo", precio: 119, ...conOpcion("Tono", ["02", "04", "06"], [2, 3, 1]),
+      descripcion: "Base líquida de larga duración, acabado natural. Tres tonos pensados para piel latina.", imagen: foto("Base Piel"), fotos: { "": [foto("Base Piel")] } },
+    { id: "g4", nombre: "Jabón Avena", categorias: ["Cuerpo"], estado: "activo", precio: 29, opciones: [], variantes: [{ valores: [], stock: 20 }],
+      descripcion: "Jabón artesanal de avena y miel. Para piel sensible, sin perfume agregado.", imagen: foto("Jabón Avena"), fotos: { "": [foto("Jabón Avena")] } },
+  ];
+  return {
+    tienda: { nombre: ejemplo.nombre, slug: ejemplo.slug, celularVentas: "900000001", plan: "free", nombreOfertas: "Cyber Wow", hechos: { pagos: true, entregas: true, compartir: true } },
+    productos, pedidos: { ultimo: 1000, creados: [] }, inventario: {}, cupones: [], config, rubros: ["belleza"],
+  };
+}
+
+/** Tiendas de ejemplo que existen de verdad en todos los entornos (además de la demo): se crean la primera vez que se piden. */
+const EJEMPLOS: Record<string, () => DatosTienda> = { "glow-labo": glowLabo };
+
+/** La semilla de una tienda (demo o ejemplo), o null si no es una de ellas. */
+export const semillaDe = (slug: string) => (slug === slugDemo() ? semillaDemo() : EJEMPLOS[slug]?.() ?? null);
+export const esEjemplo = (slug: string) => slug === slugDemo() || slug in EJEMPLOS;
 
 type Nueva = { nombre: string; slug: string; celularVentas: string; rubros: RubroId[]; duena?: string };
 
