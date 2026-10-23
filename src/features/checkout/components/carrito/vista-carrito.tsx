@@ -38,7 +38,7 @@ export function VistaCarrito({ datos }: { datos: DatosCompra }) {
         <div className="grid items-start gap-8 lg:grid-cols-3">
           <div className="min-w-0 lg:col-span-2">
             <ContenidoCarrito v={v} tienda={tienda.slug} hayCupones={datos.hayCupones}
-              vacio={<Link href={inicio} className={buttonVariants()}>Ver productos</Link>} />
+              vacio={<Link href={inicio} className={buttonVariants()}>Seguir comprando</Link>} />
           </div>
           {conProductos && (
             <>

@@ -2,11 +2,10 @@
 
 import { X } from "lucide-react";
 import { motion, useIsPresent } from "motion/react";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useReducedMotion } from "@/components/motion/use-reduced-motion";
-import { Button, buttonVariants } from "@/components/ui";
+import { Button } from "@/components/ui";
 import { cn } from "@/lib/cn";
 import { motionTokens } from "@/styles/tokens";
 import type { DatosCompra } from "../../lib/catalogo";
@@ -59,7 +58,7 @@ export function CajonCarrito({ datos, resaltar, onCerrar }: Props) {
         </header>
         <div className="flex-1 overflow-y-auto overscroll-contain px-5 py-5">
           <ContenidoCarrito v={v} tienda={datos.tienda.slug} hayCupones={datos.hayCupones} resaltar={marcada} onIr={onCerrar}
-            vacio={<Link href={inicio} onClick={onCerrar} className={buttonVariants()}>Ver productos</Link>} />
+            vacio={<Button onClick={onCerrar}>Seguir comprando</Button>} />
         </div>
         {v.lineas && v.lineas.length > 0 && (
           <footer className="border-t border-line-subtle px-5 pt-4 pb-[max(calc(var(--spacing)*4),env(safe-area-inset-bottom))]">
