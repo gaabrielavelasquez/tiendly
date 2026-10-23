@@ -23,7 +23,7 @@ El código tenía piezas que no estaban en Figma ni en ninguna decisión, y dos 
 - Estado del producto: un solo interruptor **Activo / Pausado** (0011). Se eliminan Borrador, Archivado y la acción Archivar.
 - SKU: opcional, dentro de "Más opciones" (plegado).
 - Descripción: texto simple, sin editor con formato.
-- Selección masiva y Exportar: solo en desktop.
+- Selección masiva y Exportar: solo en desktop. *Actualizado por 0034: la selección y "Poner en oferta" llegan a móvil (modo selección); Exportar sigue solo en desktop.*
 - Correo del cliente en el detalle del pedido: solo si existe.
 - Logo de la vitrina: como en Figma (móvil al centro con menú a la izquierda; desktop a la izquierda).
 - Configuración contiene **Pagos, Entregas y Cuenta**.

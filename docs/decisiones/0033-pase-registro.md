@@ -1,7 +1,7 @@
 # 0033 · Pase de diseño del registro (/registro)
 
 - **Fecha:** 22-oct-2026
-- **Estado:** propuesta, pendiente de la aprobación de Gabi. Los otros pasos del onboarding esperan su ok.
+- **Estado:** aceptada (Gabi), en producción con #20 y #21. Los otros pasos del onboarding esperan su propio pase.
 - **Aplica:** 0031 (de-layering) al paso O1 / OD1 de 0013 (registro con WhatsApp, 3 datos y directo al panel).
 
 ## Contexto
