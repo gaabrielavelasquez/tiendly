@@ -56,8 +56,8 @@ export function ProductosProto({ hoy }: { hoy: string }) {
       <div className="flex flex-col gap-3">
         <div className="flex flex-col gap-2 lg:flex-row-reverse lg:items-center lg:justify-between">
           <div className="flex items-center gap-2">
-            <Buscador id="buscar" etiqueta="Buscar productos" placeholder="Buscar por nombre" valor={busqueda} onCambio={setBusqueda} className="flex-1 lg:w-72" />
-            <Button variant="quiet" size="sm" className="rounded-full lg:hidden" onClick={() => (modo ? salir() : setModo(true))}>{modo ? "Listo" : "Seleccionar"}</Button>
+            <Buscador id="buscar" etiqueta="Buscar productos" placeholder="Buscar por nombre" valor={busqueda} onCambio={setBusqueda} className="min-w-0 flex-1 lg:w-72" />
+            <Button variant="quiet" size="sm" className="shrink-0 rounded-full lg:hidden" onClick={() => (modo ? salir() : setModo(true))}>{modo ? "Listo" : "Seleccionar"}</Button>
           </div>
           <FiltrosRapidos etiqueta="Filtrar productos" opciones={FILTROS} valor={filtro} conteos={conteos} onCambio={setFiltro} />
         </div>
