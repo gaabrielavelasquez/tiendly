@@ -6,7 +6,7 @@
 ## Decisión
 
 1. **Ficha de producto en dos columnas desde 768 px** (foto a la izquierda, compra a la derecha), como en desktop. En el celular la foto va a todo el ancho, con un alto máximo del 60 % de la pantalla visible (`svh`; con 70 %, en un iPhone el precio quedaba justo bajo el pliegue cuando hay badge de stock), para que el nombre y el precio asomen sin hacer scroll.
-2. **Al agregar al carrito:**
+2. **Al agregar al carrito** (la hoja de este punto la reemplaza el drawer del carrito: 0036):
    - El botón cambia 1,5 s a "✓ Agregado" y no suma de nuevo en ese momento (evita el doble toque).
    - El ícono del carrito de la cabecera da un salto corto, una vez. Con "reducir movimiento", no se mueve.
    - Se abre una hoja desde abajo en el celular (panel chico arriba a la derecha en desktop y tablet) con la foto, el nombre, la variante ("Plata · Talla M") y el precio, más "Ver carrito" (CTA) y "Seguir comprando".

@@ -1,9 +1,9 @@
 "use client";
 
 import { Check, ShoppingBag } from "lucide-react";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Badge, Button, buttonVariants } from "@/components/ui";
-import { detalleVariante, textoVarianteLargo } from "@/features/productos/lib/variantes";
+import { useCajonCarrito } from "@/features/checkout/components/carrito/proveedor-carrito";
 import { cn } from "@/lib/cn";
 import { agregarAlCarrito } from "../../lib/carrito";
 import type { FichaProducto as Ficha } from "../../lib/vitrina";
@@ -11,7 +11,6 @@ import { useEleccion } from "../../hooks/use-eleccion";
 import { PrecioTienda } from "../precio-tienda";
 import { Beneficios } from "./beneficios";
 import { Galeria } from "./galeria";
-import { HojaAgregado } from "./hoja-agregado";
 import { SelectorOpcion } from "./selector-opcion";
 
 /** `demo`: los beneficios (envío, pago, cambios) son textos de Heather; una tienda nueva no los promete. */
@@ -25,16 +24,17 @@ const unaOpcion = (nombre: string) => {
 };
 
 /**
- * Página de producto (Figma): galería a la izquierda y compra a la derecha desde tablet (768 px); apiladas en el celular. Un selector por opción
- * (0032), el precio con su oferta (0034, sin fechas) y las fotos de la opción que las cambia. Al agregar: el botón
- * dice "Agregado" un momento (y no suma de nuevo), el carrito de la cabecera salta y se abre la hoja con lo agregado.
+ * Página de producto (Figma): galería a la izquierda y compra a la derecha desde tablet (768 px); apiladas en el
+ * celular. Un selector por opción (0032), el precio con su oferta (0034, sin fechas) y las fotos de la opción que las
+ * cambia. Al agregar (0036): el botón dice "Agregado" un momento (y no suma de nuevo), el carrito de la cabecera salta
+ * y se abre el drawer del carrito con lo agregado resaltado.
  */
 export function FichaProducto({ p, tienda, celular, demo }: FichaProps) {
   const e = useEleccion(p);
   const [error, setError] = useState<{ i: number; texto: string } | null>(null);
-  /** `listo`: el botón dice "Agregado" (1,5 s, sin volver a sumar). `hoja`: la hoja con lo agregado está abierta. */
+  /** `listo`: el botón dice "Agregado" (1,5 s, sin volver a sumar). */
   const [listo, setListo] = useState(false);
-  const [hoja, setHoja] = useState(false);
+  const cajon = useCajonCarrito();
   const timer = useRef<number | undefined>(undefined);
   useEffect(() => () => window.clearTimeout(timer.current), []);
   const elegidosTexto = e.elegidos.filter((x, i) => x && p.opciones[i].valores.length > 1).join(" · ");
@@ -51,12 +51,10 @@ export function FichaProducto({ p, tienda, celular, demo }: FichaProps) {
     agregarAlCarrito(tienda, { id: p.id, variante: e.variante.clave });
     setError(null);
     setListo(true);
-    setHoja(true);
+    cajon?.abrir({ resaltar: `${p.id}|${e.variante.clave}`, volverA: document.getElementById("agregar-carrito") });
     window.clearTimeout(timer.current);
     timer.current = window.setTimeout(() => setListo(false), 1500);
   }
-  // Al cerrar la hoja, el foco vuelve al botón que la abrió.
-  const cerrarHoja = useCallback(() => (setHoja(false), document.getElementById("agregar-carrito")?.focus()), []);
 
   const mensaje = `Hola, quiero ${p.nombre}${elegidosTexto ? ` (${elegidosTexto})` : ""}. ¿Está disponible?`;
 
@@ -93,10 +91,6 @@ export function FichaProducto({ p, tienda, celular, demo }: FichaProps) {
         </div>
         {demo && <Beneficios />}
       </div>
-      {hoja && (
-        <HojaAgregado foto={e.fotos[0]} nombre={p.nombre} variante={e.variante ? textoVarianteLargo(detalleVariante(p.opciones, e.variante.valores)) : ""} precio={p.precio} precioAntes={p.precioAntes} descuento={p.descuento}
-          carrito={`/${tienda}/carrito`} onCerrar={cerrarHoja} />
-      )}
     </div>
   );
 }
