@@ -9,14 +9,18 @@ type FieldProps = Omit<React.InputHTMLAttributes<HTMLInputElement>, "size"> & {
   /** Mensaje de error. Termina con punto. */
   error?: string;
   prefix?: string;
+  /** Prefijo fijo separado del valor por un divisor (p. ej. "+51"): se lee como parte fija, no como placeholder. */
+  prefixFijo?: boolean;
 };
 
 /** Campo (componente Campo de Figma): etiqueta, caja de 48 px, ayuda o error. */
-export function Field({ label, hint, error, prefix, className, id, ...rest }: FieldProps) {
+export function Field({ label, hint, error, prefix, prefixFijo, className, id, ...rest }: FieldProps) {
   const autoId = useId();
   const inputId = id ?? autoId;
   const msgId = `${inputId}-msg`;
+  const prefixId = `${inputId}-prefix`;
   const message = error ?? hint;
+  const describedBy = [prefixFijo && prefix ? prefixId : "", message ? msgId : ""].filter(Boolean).join(" ") || undefined;
   return (
     <div className={cn("flex flex-col gap-1.5", className)}>
       <label htmlFor={inputId} className="text-body-sm font-semibold text-fg">
@@ -30,11 +34,18 @@ export function Field({ label, hint, error, prefix, className, id, ...rest }: Fi
           error ? "border-error" : "border-line-strong",
         )}
       >
-        {prefix && <span className="text-body text-fg-secondary">{prefix}</span>}
+        {prefix && (
+          <span
+            id={prefixId}
+            className={cn("text-body select-none", prefixFijo ? "flex h-6 items-center border-r border-line-subtle pr-3 text-fg tabular-nums" : "text-fg-secondary")}
+          >
+            {prefix}
+          </span>
+        )}
         <input
           id={inputId}
           aria-invalid={error ? true : undefined}
-          aria-describedby={message ? msgId : undefined}
+          aria-describedby={describedBy}
           className="h-full w-full bg-transparent text-body text-fg outline-none placeholder:text-fg-tertiary"
           {...rest}
         />

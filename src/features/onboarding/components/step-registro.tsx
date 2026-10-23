@@ -2,16 +2,26 @@
 
 import { useState } from "react";
 import { Button, Field } from "@/components/ui";
+import { BotonGoogle } from "./boton-google";
+import { TiendasEjemplo } from "./tiendas-ejemplo";
 import { Wordmark } from "./wordmark";
 import { useOnboarding } from "../hooks/use-onboarding";
 import { errorCelular, formatear, soloDigitos } from "../lib/phone";
 
+// Titular en dos tonos, como el saludo de Inicio (decisión 0031): mismo tamaño, primario + secundario.
+const TITULAR = {
+  crear: ["Crea tu tienda gratis.", "Lista en 2 minutos."],
+  ingresar: ["Ingresa a tu tienda.", "Con tu número de WhatsApp."],
+} as const;
+
 /** O1 / OD1 · Registro con WhatsApp o Google. */
 export function StepRegistro() {
-  const { state, set } = useOnboarding();
+  const { state, set, linksEjemplo } = useOnboarding();
   const [digitos, setDigitos] = useState(state.celular);
   const [error, setError] = useState<string>();
   const [enviando, setEnviando] = useState(false);
+  const crear = state.modo !== "ingresar";
+  const [titulo, contexto] = TITULAR[crear ? "crear" : "ingresar"];
 
   async function enviar(e: React.FormEvent) {
     e.preventDefault();
@@ -26,15 +36,17 @@ export function StepRegistro() {
   return (
     <form onSubmit={enviar} noValidate className="flex flex-1 flex-col gap-6">
       <Wordmark className="lg:hidden" />
-      <header className="flex flex-col gap-2 pt-4">
-        <h1 className="font-display-hero text-h1">{state.modo === "ingresar" ? "Ingresa a tu tienda" : "Crea tu tienda gratis"}</h1>
-        <p className="text-body text-fg-secondary">
-          En 2 minutos tienes tu link para vender por WhatsApp e Instagram. Sin tarjeta.
-        </p>
+      <header className="flex flex-col gap-3 pt-2">
+        <h1 className="font-display-light text-h1 tracking-tight text-balance">
+          <span className="block text-fg">{titulo}</span>
+          <span className="block text-fg-secondary">{contexto}</span>
+        </h1>
+        {crear && <p className="text-body text-pretty text-fg-secondary">Tu link para vender por WhatsApp e Instagram. Sin tarjeta.</p>}
       </header>
       <Field
         label="Tu número de WhatsApp"
         prefix="+51"
+        prefixFijo
         type="tel"
         inputMode="numeric"
         autoComplete="tel-national"
@@ -50,19 +62,18 @@ export function StepRegistro() {
       <div className="flex items-center gap-3 text-body-sm text-fg-secondary" aria-hidden>
         <span className="h-px flex-1 bg-line-subtle" />o<span className="h-px flex-1 bg-line-subtle" />
       </div>
-      {/* Con backend: usar el botón oficial de Google con su logo (guías de marca de Google). */}
-      <Button type="button" variant="secondary" block>
-        Continuar con Google
-      </Button>
-      <div className="mt-auto flex flex-col gap-3 pt-6 text-center lg:mt-0">
+      <BotonGoogle />
+      {/* Móvil: la vista previa compacta va después del formulario, para no empujarlo fuera de la pantalla. */}
+      {crear && (
+        <div className="pt-2 lg:hidden">
+          <TiendasEjemplo links={linksEjemplo} compacta />
+        </div>
+      )}
+      <div className="mt-auto flex flex-col gap-3 pt-2 text-center lg:mt-0 lg:pt-6">
         <p className="text-body-sm text-fg-secondary">
-          {state.modo === "ingresar" ? "¿Todavía no tienes tienda? " : "¿Ya tienes tienda? "}
-          <button
-            type="button"
-            className="link-text inline-flex min-h-11 items-center"
-            onClick={() => set({ modo: state.modo === "ingresar" ? "crear" : "ingresar" })}
-          >
-            {state.modo === "ingresar" ? "Crear una" : "Ingresar"}
+          {crear ? "¿Ya tienes tienda? " : "¿Todavía no tienes tienda? "}
+          <button type="button" className="link-text inline-flex min-h-11 items-center" onClick={() => set({ modo: crear ? "ingresar" : "crear" })}>
+            {crear ? "Ingresar" : "Crear una"}
           </button>
         </p>
         <p className="text-label text-fg-secondary">

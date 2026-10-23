@@ -7,7 +7,7 @@ import type { Inventario } from "@/features/productos/lib/inventario";
 import type { Producto } from "@/features/productos/types";
 import { existe, leer, escribir } from "./almacen";
 import { migrarDatos } from "./migrar";
-import { esHeather, semillaDemo, slugDemo } from "./semillas";
+import { esHeather, RETIRADAS, semillaDemo, slugDemo } from "./semillas";
 
 // Todos los datos de una tienda en un solo documento (hasta tener backend): la tienda, su catálogo, sus
 // pedidos e inventario, sus cupones, su configuración de cobro y entrega, y sus rubros.
@@ -41,6 +41,7 @@ const clave = (slug: string) => `${process.env.VERCEL_ENV ?? "local"}:tienda:${s
 /** Lee de nuevo (sin caché): para modificar. La tienda de demo se crea la primera vez que se pide. */
 async function cargar(slug: string): Promise<DatosTienda | null> {
   if (esHeather(slug) && slugDemo() !== "heather") return null; // Heather no es pública hasta tener su permiso
+  if (RETIRADAS.has(slug)) return null; // demo retirada: 404 aunque siga en la base
   const d = await leer<DatosTienda>(clave(slug));
   if (d) return migrarDatos(d);
   if (slug !== slugDemo()) return null;

@@ -5,7 +5,7 @@ Guía para una sesión de 30 a 40 minutos con alguien que lleva una tienda real 
 ## Antes de la sesión
 
 - **Dónde correrlo:** en el link de Vercel, cada persona desde su propio celular (remoto, en Perú). Los datos se guardan en una base compartida: sobreviven a los reinicios y el pedido que hagas desde tu celular le llega a su panel.
-- **Cada persona crea su propia tienda** desde `/registro`. Su celular la recuerda; si abre el panel desde otro navegador, ve la tienda de demo (Aurora Calzado, ficticia).
+- **Cada persona crea su propia tienda** desde `/registro`. Su celular la recuerda; si abre el panel desde otro navegador, ve la tienda de demo (MUÑA, ficticia).
 - **Todo es simulado:** el código de WhatsApp no se envía (sirve cualquier código, menos `0000`) y no hay cobros reales. Una tienda nueva solo cobra por WhatsApp: tarjeta y Yape llegan con Cobros automáticos, que necesitan aprobación. Mientras no defina sus entregas, el cliente elige "Coordinar la entrega por WhatsApp".
 - **Tú eres el cliente:** compras desde tu celular con el link que te comparte. Usa números ficticios para el cliente.
 - **Una foto de producto** de la persona, en su celular, para la tarea 2.

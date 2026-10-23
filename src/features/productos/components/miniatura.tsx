@@ -1,13 +1,13 @@
 "use client";
 
-import { Footprints, Package, type LucideIcon } from "lucide-react";
+import { Footprints, Package, Shirt, type LucideIcon } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
 import { cn } from "@/lib/cn";
 import type { Categoria } from "../types";
 
 /** Ícono de respaldo por categoría; las que no están aquí usan uno neutro (multirubro, 0032). */
-const ICONO: Record<string, LucideIcon> = { Balerinas: Footprints, Tacos: Footprints, Botas: Footprints, Plataformas: Footprints };
+const ICONO: Record<string, LucideIcon> = { Balerinas: Footprints, Tacos: Footprints, Botas: Footprints, Plataformas: Footprints, Ropa: Shirt };
 
 type MiniaturaProps = { categoria?: Categoria; imagen?: string; className?: string };
 

@@ -29,11 +29,12 @@ const INICIAL: OnboardingState = {
 };
 const KEY = "tiendly:onboarding";
 
-type Ctx = { state: OnboardingState; set: (p: Partial<OnboardingState>) => void; reset: () => void };
+/** `linksEjemplo`: el link de cada tienda de ejemplo con el formato real (TIENDLY_URL_TIENDAS), para la vista previa. */
+type Ctx = { state: OnboardingState; set: (p: Partial<OnboardingState>) => void; reset: () => void; linksEjemplo: string[] };
 const OnboardingContext = createContext<Ctx | null>(null);
 
 /** Estado del onboarding. Se guarda en sessionStorage para sobrevivir a un refresh (si se puede). */
-export function OnboardingProvider({ children }: { children: React.ReactNode }) {
+export function OnboardingProvider({ linksEjemplo, children }: { linksEjemplo: string[]; children: React.ReactNode }) {
   const [state, setState] = useState<OnboardingState>(INICIAL);
 
   useEffect(() => {
@@ -62,7 +63,7 @@ export function OnboardingProvider({ children }: { children: React.ReactNode }) 
     setState(INICIAL);
   }, []);
 
-  return <OnboardingContext.Provider value={{ state, set, reset }}>{children}</OnboardingContext.Provider>;
+  return <OnboardingContext.Provider value={{ state, set, reset, linksEjemplo }}>{children}</OnboardingContext.Provider>;
 }
 
 export function useOnboarding() {

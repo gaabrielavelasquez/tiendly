@@ -6,7 +6,7 @@ import { ChipsOpciones } from "./chips-opciones";
 import { TarjetaSeccion as Tarjeta } from "@/components/panel";
 
 /** Sugeridas hasta que el formulario permita escribir una nueva (auditoría multirubro, PR 3). */
-const SUGERIDAS: Categoria[] = ["Balerinas", "Tacos", "Botas", "Plataformas"];
+const SUGERIDAS: Categoria[] = ["Balerinas", "Tacos", "Botas", "Plataformas", "Ropa"];
 
 type EstadoProps = { estado: "activo" | "pausado"; onCambio: (e: "activo" | "pausado") => void };
 
