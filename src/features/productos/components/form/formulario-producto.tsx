@@ -85,7 +85,7 @@ export function FormularioProducto({ titulo, inicial, id, hoy, categorias }: For
               <CircleCheck aria-hidden strokeWidth={1.8} className="size-4 shrink-0" />
               <span className="flex-1">
                 {f.guardado.pausado
-                  ? `${f.form.nombre || "El producto"} se guardó pausado: falta ${f.guardado.pausado}. Complétalo y actívalo para venderlo.`
+                  ? `Guardamos ${f.form.nombre || "el producto"} en pausa: le falta ${f.guardado.pausado}.`
                   : `${f.form.nombre} se guardó${f.form.estado === "activo" ? " y ya se ve en tu tienda" : ""}.`}
               </span>
               <Link href="/panel/productos" className="h-9 shrink-0 rounded-theme px-3 py-2 font-semibold hover:bg-fg-inverse/10">

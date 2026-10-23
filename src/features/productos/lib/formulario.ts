@@ -102,7 +102,7 @@ export function validar(f: FormProducto): Errores {
 
 /** Lo que impide publicar (decisión 0028): sin foto, precio o stock, se guarda pausado. Texto para el aviso o null. */
 export function faltaParaPublicar(f: FormProducto): string | null {
-  const faltan = [!f.imagenes.length && "la foto", !(entero(f.precio) > 0) && "el precio", stockTotal(f) === 0 && "el stock"].filter(Boolean) as string[];
+  const faltan = [!f.imagenes.length && "una foto", !(entero(f.precio) > 0) && "el precio", stockTotal(f) === 0 && "el stock"].filter(Boolean) as string[];
   if (!faltan.length) return null;
   return faltan.length === 1 ? faltan[0] : `${faltan.slice(0, -1).join(", ")} y ${faltan.at(-1)}`;
 }
