@@ -45,7 +45,7 @@ export default function Kit() {
         <EmptyState
           icon={Inbox}
           title="Todavía no tienes pedidos"
-          description="Cuando un cliente compre, su pedido va a aparecer aquí."
+          description="Cuando alguien compre, su pedido va a aparecer aquí."
           action={<Button variant="secondary">Compartir mi tienda</Button>}
         />
       </Card>

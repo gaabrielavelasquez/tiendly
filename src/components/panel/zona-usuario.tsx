@@ -4,7 +4,7 @@ import Link from "next/link";
 import { cn } from "@/lib/cn";
 import { useDuena } from "./sesion-panel";
 
-/** `nombre`: por defecto, la dueña de la sesión (SesionPanel). */
+/** `nombre`: por defecto, quien lleva la tienda de la sesión (SesionPanel). */
 type ZonaUsuarioProps = { nombre?: string; className?: string };
 
 /**
