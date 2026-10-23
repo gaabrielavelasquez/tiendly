@@ -20,7 +20,7 @@ const PASOS: Record<Paso, () => React.ReactElement> = {
 };
 
 function Flujo() {
-  const { state, linkDemo } = useOnboarding();
+  const { state, linksEjemplo } = useOnboarding();
   const reduce = useReducedMotion();
   const Paso = PASOS[state.paso];
   const desplazamiento = reduce ? 0 : 16;
@@ -40,7 +40,7 @@ function Flujo() {
     </AnimatePresence>
   );
   // El registro ya tiene su pase de diseño (0031); los otros pasos siguen con el shell anterior hasta su turno.
-  if (state.paso === "registro") return <ShellRegistro linkDemo={linkDemo}>{contenido}</ShellRegistro>;
+  if (state.paso === "registro") return <ShellRegistro linksEjemplo={linksEjemplo}>{contenido}</ShellRegistro>;
   return (
     <OnboardingShell nombre={state.nombre} slug={state.slug || aSlug(state.nombre)}>
       {contenido}
@@ -49,9 +49,9 @@ function Flujo() {
 }
 
 /** Onboarding O1–O4 / OD1–OD4 (decisión 0013). Datos simulados hasta que exista el backend. */
-export function OnboardingFlow({ linkDemo }: { linkDemo: string }) {
+export function OnboardingFlow({ linksEjemplo }: { linksEjemplo: string[] }) {
   return (
-    <OnboardingProvider linkDemo={linkDemo}>
+    <OnboardingProvider linksEjemplo={linksEjemplo}>
       <Flujo />
     </OnboardingProvider>
   );

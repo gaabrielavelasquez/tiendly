@@ -7,3 +7,6 @@ next-env.d.ts
 .DS_Store
 .vercel
 .env*.local
+
+# Fotos originales (pesadas): solo se publican las versiones optimizadas de public/
+/fotos-originales/

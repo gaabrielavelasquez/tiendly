@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { Button, Field } from "@/components/ui";
 import { BotonGoogle } from "./boton-google";
-import { VitrinaAuroraCompacta } from "./vitrina-aurora";
+import { TiendasEjemplo } from "./tiendas-ejemplo";
 import { Wordmark } from "./wordmark";
 import { useOnboarding } from "../hooks/use-onboarding";
 import { errorCelular, formatear, soloDigitos } from "../lib/phone";
@@ -16,7 +16,7 @@ const TITULAR = {
 
 /** O1 / OD1 · Registro con WhatsApp o Google. */
 export function StepRegistro() {
-  const { state, set, linkDemo } = useOnboarding();
+  const { state, set, linksEjemplo } = useOnboarding();
   const [digitos, setDigitos] = useState(state.celular);
   const [error, setError] = useState<string>();
   const [enviando, setEnviando] = useState(false);
@@ -66,7 +66,7 @@ export function StepRegistro() {
       {/* Móvil: la vista previa compacta va después del formulario, para no empujarlo fuera de la pantalla. */}
       {crear && (
         <div className="pt-2 lg:hidden">
-          <VitrinaAuroraCompacta link={linkDemo} />
+          <TiendasEjemplo links={linksEjemplo} compacta />
         </div>
       )}
       <div className="mt-auto flex flex-col gap-3 pt-2 text-center lg:mt-0 lg:pt-6">

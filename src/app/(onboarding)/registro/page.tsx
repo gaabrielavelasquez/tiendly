@@ -1,12 +1,12 @@
 import type { Metadata } from "next";
 import { OnboardingFlow } from "@/features/onboarding/components/onboarding-flow";
-import { AURORA } from "@/lib/datos/aurora";
+import { TIENDAS_EJEMPLO } from "@/lib/datos/tiendas-ejemplo";
 import { sinProtocolo, urlTienda } from "@/lib/link-tienda";
 
 export const metadata: Metadata = { title: "Crea tu tienda · Tiendly" };
 
 export default async function Registro() {
-  // El link de la vista previa sale del mismo lugar que el de cualquier tienda (TIENDLY_URL_TIENDAS), no escrito a mano.
-  const linkDemo = sinProtocolo(await urlTienda(AURORA.slug));
-  return <OnboardingFlow linkDemo={linkDemo} />;
+  // Los links de la vista previa salen del mismo lugar que el de cualquier tienda (TIENDLY_URL_TIENDAS), no escritos a mano.
+  const linksEjemplo = await Promise.all(TIENDAS_EJEMPLO.map(async (t) => sinProtocolo(await urlTienda(t.slug))));
+  return <OnboardingFlow linksEjemplo={linksEjemplo} />;
 }
