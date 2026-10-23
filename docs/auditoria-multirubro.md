@@ -1,7 +1,7 @@
 # Auditoría multirubro (decisión 0032)
 
 - **Fecha:** 22-oct-2026
-- **Estado:** propuesta. No se programa nada hasta que Gabi apruebe el plan.
+- **Estado:** aprobada por Gabi el 22-oct-2026, con las respuestas del final. PR 1 y PR 4 en curso; PR 3 espera su ok sobre una propuesta a 390 y 1440 px.
 - **Alcance:** todo lo que hoy asume moda (color × talla, calzado, ejemplos de Heather) en el modelo de datos, el panel, la vitrina, la compra y los pedidos.
 
 Esfuerzo: **S** (menos de medio día), **M** (1 a 2 días), **L** (3 días o más). Riesgo: qué se puede romper.
@@ -159,10 +159,15 @@ Plan, en este orden, sin cortar el servicio:
 5. **Edición rápida de stock** (§3), ya genérica. **M**.
 6. **Demos y vista previa del registro** con 3 rubros (§9), cuando lleguen las fotos. **M**.
 
-## Preguntas para Gabi
+## Respuestas de Gabi (22-oct-2026)
 
-1. ¿Hasta 3 opciones por producto alcanza? (Es lo que usa Shopify; cubre color × talla × material).
-2. ¿Las fotos van por color siempre, o la tienda elige qué opción cambia la foto (p. ej. "Tono" en maquillaje)?
-3. ¿Tabla de tallas por tienda o por producto?
-4. ¿Vapes: fuera de la lista hasta revisar lo legal, o entran ya?
-5. ¿El PR 4 (copy, rubros y placeholders) se adelanta mientras se diseña el formulario?
+1. **Hasta 3 opciones** por producto.
+2. **La tienda elige qué opción cambia las fotos.** Por defecto, la de color o la llamada "Tono", si existe (`opcionFotos` en el modelo; -1 = una sola galería).
+3. **Tabla de tallas por producto**, con un atajo para reusar la de otro producto.
+4. **Vapes en "Otro"** hasta revisar lo legal y las pasarelas de pago.
+5. **PR 4 se adelanta.** PR 1 y PR 4 ya; PR 2 después de PR 1; PR 3 se combina con el pase de diseño de Productos (reglas 0031) y antes de programarlo se muestra una propuesta a 390 y 1440 px; PR 5 y PR 6 después (PR 6 espera las fotos).
+
+## Para la migración al backend real
+
+- **`duena`** (`TiendaSesion.duena`, `SesionPanel`, `useDuena`): no se renombra ahora porque está guardado en Redis. Al pasar al backend real, renombrarlo a un nombre sin género (p. ej. `nombreContacto`) en la misma migración de datos.
+- **Lector del formato viejo** (`migrarProducto`, `migrarItemStock`, `claveLegado` y la traducción del carrito): se quita en esa misma migración, cuando todos los datos estén en el formato nuevo.

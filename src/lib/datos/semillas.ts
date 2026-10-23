@@ -4,6 +4,7 @@ import { CUPONES_HEATHER } from "@/features/cupones/lib/semilla-heather";
 import type { RubroId } from "@/features/onboarding/lib/rubros";
 import { CATALOGO_HEATHER } from "@/features/productos/lib/catalogo-heather";
 import type { Producto } from "@/features/productos/types";
+import { colorPorTalla } from "@/features/productos/lib/variantes";
 import type { DatosTienda } from "./tienda";
 import { TIENDAS_EJEMPLO } from "./tiendas-ejemplo";
 
@@ -22,12 +23,12 @@ export const RETIRADAS = new Set(["aurora"]);
 export const esHeather = (slug: string) => slug === "heather";
 
 /** Datos de tienda de los productos de MUÑA (la vista previa del registro solo usa nombre, precio y foto). */
-const DETALLE_MUNA: Record<string, { id: string; categoria: Producto["categorias"][number]; color: string; tallas: string[]; stock: number[]; descripcion: string }> = {
-  "Botín Saya": { id: "m1", categoria: "botas", color: "Café", tallas: ["35", "36", "37", "38", "39", "40"], stock: [1, 2, 3, 2, 1, 0],
+const DETALLE_MUNA: Record<string, { id: string; categoria: string; color: string; tallas: string[]; stock: number[]; descripcion: string }> = {
+  "Botín Saya": { id: "m1", categoria: "Botas", color: "Café", tallas: ["35", "36", "37", "38", "39", "40"], stock: [1, 2, 3, 2, 1, 0],
     descripcion: "Botín de cuero liso con punta fina y taco de 5 cm. Va con jean, con falda y con vestido." },
-  "Chompa Qori": { id: "m2", categoria: "ropa", color: "Oliva", tallas: ["S", "M", "L"], stock: [2, 3, 1],
+  "Chompa Qori": { id: "m2", categoria: "Ropa", color: "Oliva", tallas: ["S", "M", "L"], stock: [2, 3, 1],
     descripcion: "Chompa tejida de cuello alto con medio cierre. Abriga sin pesar y no pica." },
-  "Falda Lluvia": { id: "m3", categoria: "ropa", color: "Plata", tallas: ["S", "M", "L"], stock: [1, 2, 2],
+  "Falda Lluvia": { id: "m3", categoria: "Ropa", color: "Plata", tallas: ["S", "M", "L"], stock: [1, 2, 2],
     descripcion: "Falda midi de lentejuelas que se mueve al caminar. Forrada por dentro, con elástico en la cintura." },
 };
 
@@ -40,11 +41,11 @@ function muna(): DatosTienda {
   config.entregas.recojo.activo = false;
   return {
     tienda: { nombre: ejemplo.nombre, slug: ejemplo.slug, celularVentas: "900000000", plan: "free", hechos: { pagos: true, entregas: true, compartir: true } },
-    productos: ejemplo.productos.map((p) => {
+    productos: ejemplo.productos.map((p): Producto => {
       const d = DETALLE_MUNA[p.nombre];
       return {
         id: d.id, nombre: p.nombre, descripcion: d.descripcion, categorias: [d.categoria], estado: "activo", precio: p.precio,
-        variantes: d.tallas.map((talla, i) => ({ color: d.color, talla, stock: d.stock[i] ?? 0 })),
+        ...colorPorTalla({ [d.color]: d.stock }, d.tallas),
         imagen: p.foto, fotos: { [d.color]: [p.foto] },
       };
     }),

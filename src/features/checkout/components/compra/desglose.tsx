@@ -1,5 +1,6 @@
 import { ImageIcon } from "lucide-react";
 import Image from "next/image";
+import { textoVarianteLargo } from "@/features/productos/lib/variantes";
 import { formatoSoles } from "@/lib/formato";
 import { cn } from "@/lib/cn";
 import type { Entrega, Linea, Totales } from "../../types";
@@ -13,19 +14,19 @@ export function textoEnvio(t: Totales) {
   return t.envio === 0 ? "Gratis" : formatoSoles(t.envio);
 }
 
-/** Productos con foto, color, talla y cantidad (Figma K0 y D2). */
+/** Productos con foto, opciones y cantidad (Figma K0 y D2). */
 export function ListaLineas({ lineas }: { lineas: Linea[] }) {
   return (
     <ul className="flex flex-col gap-3">
       {lineas.map((l) => (
-        <li key={`${l.id}-${l.color}-${l.talla}`} className="flex items-center gap-3">
+        <li key={`${l.id}-${l.variante}`} className="flex items-center gap-3">
           <span className="relative aspect-4/5 w-12 shrink-0 overflow-hidden bg-sunken">
             {l.foto ? <Image src={l.foto} alt="" fill sizes="3rem" className="object-cover" /> : <ImageIcon aria-hidden strokeWidth={1.4} className="m-auto h-full size-5 text-icon" />}
           </span>
           <span className="flex min-w-0 flex-1 flex-col">
             <span className="truncate text-body-sm font-semibold text-fg">{l.nombre}</span>
             <span className="text-caption text-fg-secondary">
-              {l.color} · Talla {l.talla} · {l.cantidad} {l.cantidad === 1 ? "unidad" : "unidades"}
+              {[textoVarianteLargo(l.detalle), `${l.cantidad} ${l.cantidad === 1 ? "unidad" : "unidades"}`].filter(Boolean).join(" · ")}
             </span>
           </span>
           <span className="text-body-sm font-semibold text-fg tabular-nums">{formatoSoles(l.precio * l.cantidad)}</span>

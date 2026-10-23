@@ -6,6 +6,7 @@ import type { AlmacenPedidos } from "@/features/pedidos/lib/almacen";
 import type { Inventario } from "@/features/productos/lib/inventario";
 import type { Producto } from "@/features/productos/types";
 import { existe, leer, escribir } from "./almacen";
+import { migrarDatos } from "./migrar";
 import { esHeather, RETIRADAS, semillaDemo, slugDemo } from "./semillas";
 
 // Todos los datos de una tienda en un solo documento (hasta tener backend): la tienda, su catálogo, sus
@@ -42,7 +43,7 @@ async function cargar(slug: string): Promise<DatosTienda | null> {
   if (esHeather(slug) && slugDemo() !== "heather") return null; // Heather no es pública hasta tener su permiso
   if (RETIRADAS.has(slug)) return null; // demo retirada: 404 aunque siga en la base
   const d = await leer<DatosTienda>(clave(slug));
-  if (d) return d;
+  if (d) return migrarDatos(d);
   if (slug !== slugDemo()) return null;
   const semilla = semillaDemo();
   await escribir(clave(slug), semilla);

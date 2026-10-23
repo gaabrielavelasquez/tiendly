@@ -1,3 +1,4 @@
+import { textoVarianteLargo } from "@/features/productos/lib/variantes";
 import { formatoSoles } from "@/lib/formato";
 import type { Datos, Entrega, Linea, Totales } from "../types";
 import { formatoCelular } from "./reglas";
@@ -6,7 +7,7 @@ type Mensaje = { tienda: string; numero: string; lineas: Linea[]; cupon?: string
 
 /** Mensaje del pedido para WhatsApp (Figma, "Pedir por WhatsApp" y K5). */
 export function mensajePedido({ tienda, numero, lineas, cupon, totales, datos, entrega }: Mensaje) {
-  const productos = lineas.map((l) => `• ${l.nombre} — ${l.color}, talla ${l.talla}${l.cantidad > 1 ? ` (x${l.cantidad})` : ""} — ${formatoSoles(l.precio * l.cantidad)}`);
+  const productos = lineas.map((l) => `• ${l.nombre}${l.detalle.length ? ` — ${textoVarianteLargo(l.detalle, ", ", "talla")}` : ""}${l.cantidad > 1 ? ` (x${l.cantidad})` : ""} — ${formatoSoles(l.precio * l.cantidad)}`);
   const lineasEntrega =
     entrega.tipo === "recojo"
       ? ["Recojo en tienda (gratis)"]

@@ -1,6 +1,7 @@
 import { obtenerProductos } from "@/features/productos/lib/mock";
 import { nivelStock, stockTotal } from "@/features/productos/lib/reglas";
-import type { Categoria, Producto, Variante } from "@/features/productos/types";
+import type { Producto } from "@/features/productos/types";
+import { claveVariante, COLOR_UNICO_LEGADO, fotosDe, TALLA_UNICA_LEGADO, valorDe } from "@/features/productos/lib/variantes";
 import { DETALLE, HEX_COLOR } from "./contenido";
 import { esHeather } from "@/lib/datos/semillas";
 import { TIENDAS_EJEMPLO } from "@/lib/datos/tiendas-ejemplo";
@@ -15,15 +16,22 @@ export type ProductoVitrina = {
   precio: number;
   precioAntes?: number;
   imagen?: string;
-  categorias: Categoria[];
+  /** Ids de sus categorías (`slugProducto` del texto), para filtrar en la vitrina. */
+  categorias: string[];
   agotado: boolean;
   /** Colores en orden, con su muestra (dato del producto). */
   colores: { nombre: string; hex?: string }[];
   stock: number;
 };
 
-/** Lo que agrega la página de producto. */
-export type FichaProducto = ProductoVitrina & { variantes: Variante[]; tallas: string[]; fotos: Record<string, string[]>; corto?: string; sobre?: string };
+/**
+ * Una variante vista como color × talla, para los selectores actuales de la ficha (hasta PR 2 de la auditoría
+ * multirubro). Sin color o sin talla, "Único" y "Única". `clave`: la que va al carrito.
+ */
+export type VarianteFicha = { color: string; talla: string; stock: number; clave: string };
+
+/** Lo que agrega la página de producto. `fotos`: por color de la ficha. */
+export type FichaProducto = ProductoVitrina & { variantes: VarianteFicha[]; tallas: string[]; fotos: Record<string, string[]>; corto?: string; sobre?: string };
 
 /** Portada de una sola foto, con su titular y bajada (hoy, la de MUÑA; Mi tienda todavía no la publica). */
 export type PortadaPropia = { src: string; alt: string; titulo: string; bajada: string };
@@ -32,13 +40,11 @@ export type PortadaPropia = { src: string; alt: string; titulo: string; bajada: 
 export type Vitrina = {
   tienda: { nombre: string; slug: string; celular: string; logo?: string; plan: "free" | "pro"; demo: boolean; portada?: PortadaPropia };
   productos: ProductoVitrina[];
-  categorias: { id: Categoria; label: string }[];
+  categorias: { id: string; label: string }[];
 };
 
 /** La portada de una tienda de ejemplo que existe de verdad (MUÑA, la demo pública): la misma de la vista previa del registro. */
 const portadaDe = (slug: string): PortadaPropia | undefined => TIENDAS_EJEMPLO.find((t) => t.slug === slug)?.portada;
-
-export const LABEL: Record<Categoria, string> = { balerinas: "Balerinas", tacos: "Tacos", botas: "Botas", plataformas: "Plataformas", ropa: "Ropa" };
 
 /** "Vestido Chloé" → "vestido-chloe" (para el link del producto). */
 export const slugProducto = (nombre: string) =>
@@ -54,20 +60,23 @@ const aVitrina = (p: Producto): ProductoVitrina => ({
   precio: p.precio,
   precioAntes: p.precioAntes,
   imagen: fotoVitrina(p.imagen),
-  categorias: p.categorias,
+  categorias: p.categorias.map(slugProducto),
   agotado: nivelStock(p) === "agotado",
-  colores: [...new Set(p.variantes.map((x) => x.color))].map((nombre) => ({ nombre, hex: HEX_COLOR[nombre] })),
+  colores: [...new Set(p.variantes.map((v) => valorDe(p, v, "color") ?? COLOR_UNICO_LEGADO))].map((nombre) => ({ nombre, hex: HEX_COLOR[nombre] })),
   stock: stockTotal(p),
 });
 
-const aFicha = (p: Producto): FichaProducto => ({
-  ...aVitrina(p),
-  variantes: p.variantes,
-  tallas: [...new Set(p.variantes.map((x) => x.talla))],
-  fotos: p.fotos ?? (p.imagen ? { [p.variantes[0]?.color ?? ""]: [p.imagen] } : {}),
-  corto: DETALLE[p.id]?.corto,
-  sobre: p.descripcion ?? DETALLE[p.id]?.sobre,
-});
+function aFicha(p: Producto): FichaProducto {
+  const variantes = p.variantes.map((v) => ({
+    color: valorDe(p, v, "color") ?? COLOR_UNICO_LEGADO,
+    talla: valorDe(p, v, "talla") ?? TALLA_UNICA_LEGADO,
+    stock: v.stock,
+    clave: claveVariante(v.valores),
+  }));
+  // Fotos por color de la ficha: las de la primera variante de ese color (la opción de fotos manda).
+  const fotos = Object.fromEntries(variantes.map((v, i) => [v.color, fotosDe(p, p.variantes[i].valores)]).reverse());
+  return { ...aVitrina(p), variantes, tallas: [...new Set(variantes.map((v) => v.talla))], fotos, corto: DETALLE[p.id]?.corto, sobre: p.descripcion ?? DETALLE[p.id]?.sobre };
+}
 
 /**
  * Página de producto: la ficha y 4 relacionados (primero de la misma categoría, sin agotados).
@@ -94,17 +103,18 @@ export async function obtenerFicha(tienda: string, slug: string) {
 export async function obtenerVitrina(slug: string): Promise<Vitrina | null> {
   const d = await datosTienda(slug);
   if (!d) return null;
-  const productos = (await obtenerProductos("catalogo", slug))
-    .filter((p) => p.estado === "activo")
+  const activos = (await obtenerProductos("catalogo", slug)).filter((p) => p.estado === "activo");
+  const productos = activos
     .map(aVitrina)
     .sort((a, b) => Number(a.agotado) - Number(b.agotado));
-  const presentes = new Set(productos.flatMap((p) => p.categorias));
-  const categorias = (Object.keys(LABEL) as Categoria[]).filter((c) => presentes.has(c)).map((id) => ({ id, label: LABEL[id] }));
+  // Las categorías de la tienda, en el orden en que aparecen en su catálogo (texto libre, decisión 0032).
+  const textos = [...new Set(activos.flatMap((p) => p.categorias))];
+  const categorias = [...new Map(textos.map((label) => [slugProducto(label), { id: slugProducto(label), label }])).values()];
   const { nombre, logo, plan } = d.tienda;
   return { tienda: { nombre, slug, celular: d.config.pagos.whatsapp.celular, logo, plan, demo: esHeather(slug), portada: portadaDe(slug) }, productos, categorias };
 }
 
-export const leerCategoria = (v: string | string[] | undefined, validas: Categoria[]): Categoria | "todos" => {
+export const leerCategoria = (v: string | string[] | undefined, validas: string[]): string | "todos" => {
   const c = Array.isArray(v) ? v[0] : v;
-  return validas.includes(c as Categoria) ? (c as Categoria) : "todos";
+  return c && validas.includes(c) ? c : "todos";
 };

@@ -54,7 +54,7 @@ export function VistaCompra({ datos: { tienda, categorias, catalogo, reglas } }:
     const ventana = c.metodo === "whatsapp" ? window.open("", "_blank") : null;
     if (ventana) ventana.opener = null;
     const fallar = (m: string) => (ventana?.close(), setError(m));
-    const items = lineas.map(({ id, color, talla, cantidad }) => ({ id, color, talla, cantidad }));
+    const items = lineas.map(({ id, variante, cantidad }) => ({ id, variante, cantidad }));
     const sinStock = await revisarStock(tienda.slug, items, carrito.cupon?.codigo);
     if (sinStock) return fallar(sinStock);
     let pago: Awaited<ReturnType<typeof c.confirmar>> = { metodo: "whatsapp" };

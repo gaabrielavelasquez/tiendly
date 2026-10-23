@@ -1,4 +1,5 @@
-import type { Categoria, Producto } from "../types";
+import type { Categoria, Opcion, Producto } from "../types";
+import { FOTOS_GENERAL, valorDe } from "./variantes";
 
 // Modelo y reglas del formulario de producto. Funciones puras, sin React.
 
@@ -61,10 +62,15 @@ export const formVacio = (): FormProducto => ({
   estado: "activo", categorias: [], imagenes: [], // se publica al guardar (decisión 0028)
 });
 
-/** Prellena el formulario para editar un producto existente. */
+/**
+ * Prellena el formulario para editar un producto existente. El formulario todavía arma color × talla
+ * (auditoría multirubro, PR 3): sin color o sin talla usa "Único" y "Única" solo como claves internas.
+ */
 export function desdeProducto(p: Producto): FormProducto {
-  const colores = [...new Set(p.variantes.map((v) => v.color))];
-  const tallas = [...new Set(p.variantes.map((v) => v.talla))].filter((t) => t !== TALLA_UNICA);
+  const color = (v: Producto["variantes"][number]) => valorDe(p, v, "color") ?? COLOR_UNICO;
+  const talla = (v: Producto["variantes"][number]) => valorDe(p, v, "talla") ?? TALLA_UNICA;
+  const colores = p.opciones.find((o) => o.tipo === "color")?.valores ?? [];
+  const tallas = p.opciones.find((o) => o.tipo === "talla")?.valores ?? [];
   return {
     nombre: p.nombre,
     descripcion: p.descripcion ?? "",
@@ -72,7 +78,7 @@ export function desdeProducto(p: Producto): FormProducto {
     precioAntes: p.precioAntes ? String(p.precioAntes) : "",
     colores,
     tallas,
-    variantes: Object.fromEntries(p.variantes.map((v) => [clave(v.color, v.talla), { ...VARIANTE_VACIA, stock: String(v.stock) }])),
+    variantes: Object.fromEntries(p.variantes.map((v) => [clave(color(v), talla(v)), { ...VARIANTE_VACIA, stock: String(v.stock) }])),
     estado: p.estado,
     categorias: p.categorias,
     // Todas las fotos del producto (de todos los colores), sin repetir.
@@ -139,12 +145,20 @@ export function aProducto(f: FormProducto, id: string, anterior?: Producto | nul
   const urls = f.imagenes.map((i) => i.url);
   const previas = new Set(Object.values(anterior?.fotos ?? {}).flat());
   const nuevas = urls.filter((u) => !previas.has(u));
+  // Fotos por color; sin colores, una sola galería.
+  const claves = f.colores.length ? f.colores : [FOTOS_GENERAL];
   const fotos = Object.fromEntries(
-    combinaciones(f.colores, f.tallas).map(({ color }) => {
-      const propias = (anterior?.fotos?.[color] ?? []).filter((u) => urls.includes(u)).concat(nuevas);
-      return [color, propias.length ? propias : urls];
+    claves.map((k) => {
+      const propias = (anterior?.fotos?.[k] ?? []).filter((u) => urls.includes(u)).concat(nuevas);
+      return [k, propias.length ? propias : urls];
     }),
   );
+  const opciones: Opcion[] = [
+    ...(f.colores.length ? [{ nombre: "Color", tipo: "color" as const, valores: f.colores }] : []),
+    ...(f.tallas.length ? [{ nombre: "Talla", tipo: "talla" as const, valores: f.tallas }] : []),
+  ];
+  // "Único" y "Única" son claves internas del formulario: no se guardan como valores.
+  const valores = (color: string, talla: string) => [f.colores.length && color, f.tallas.length && talla].filter((x): x is string => !!x);
   return {
     id,
     nombre: f.nombre.trim(),
@@ -154,7 +168,8 @@ export function aProducto(f: FormProducto, id: string, anterior?: Producto | nul
     estado: f.estado,
     precio: numero(f.precio) > 0 ? numero(f.precio) : 0,
     precioAntes: numero(f.precioAntes) > 0 ? numero(f.precioAntes) : undefined,
-    variantes: filasVariantes(f.colores, f.tallas).map(({ color, talla, clave: k }) => ({ color, talla, stock: Number(f.variantes[k]?.stock || 0) })),
+    opciones,
+    variantes: filasVariantes(f.colores, f.tallas).map(({ color, talla, clave: k }) => ({ valores: valores(color, talla), stock: Number(f.variantes[k]?.stock || 0) })),
     imagen: urls[0],
     fotos: urls.length ? fotos : undefined,
   };
