@@ -31,13 +31,21 @@ export function useCajon(onCerrar: () => void, presente: boolean) {
       if (e.shiftKey && (actual === primero || actual === panel.current)) (e.preventDefault(), ultimo.focus());
       else if (!e.shiftKey && actual === ultimo) (e.preventDefault(), primero.focus());
     };
-    const adentro = (e: FocusEvent) => panel.current && !panel.current.contains(e.target as Node) && panel.current.focus();
+    // El foco vuelve al panel si algo de atrás lo toma (focusin) o si se pierde en la página (focusout hacia nada).
+    let vivo = true;
+    const volver = () => requestAnimationFrame(() => vivo && panel.current?.focus());
+    const adentro = (e: FocusEvent) => panel.current && !panel.current.contains(e.target as Node) && volver();
+    const afuera = (e: FocusEvent) => panel.current && !panel.current.contains(e.relatedTarget as Node | null) && volver();
     window.addEventListener("keydown", tecla);
     document.addEventListener("focusin", adentro);
+    panel.current?.addEventListener("focusout", afuera);
+    const nodo = panel.current;
     return () => {
+      vivo = false;
       window.clearTimeout(t);
       window.removeEventListener("keydown", tecla);
       document.removeEventListener("focusin", adentro);
+      nodo?.removeEventListener("focusout", afuera);
       document.body.style.overflow = overflow;
     };
   }, [onCerrar, presente]);
