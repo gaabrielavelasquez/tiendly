@@ -15,16 +15,20 @@ type ShellRegistroProps = { linksEjemplo: string[]; children: React.ReactNode };
 export function ShellRegistro({ linksEjemplo, children }: ShellRegistroProps) {
   return (
     <div className="min-h-dvh bg-page lg:grid lg:grid-cols-[5fr_4fr]">
-      <aside className="hidden flex-col bg-sunken px-16 py-12 lg:flex">
+      <aside className="hidden flex-col bg-sunken px-16 py-10 lg:flex">
         <Wordmark />
-        <div className="flex flex-1 flex-col items-center justify-center gap-10 py-10">
-          <TiendasEjemplo links={linksEjemplo} />
-          {/* Legibles en desktop: tamaño de cuerpo y color primario (antes, chicos y en gris). */}
-          <ul className="flex w-full max-w-lg flex-col gap-2.5 text-body text-fg">
-            {BENEFICIOS.map((b) => (
-              <li key={b}>{b}</li>
-            ))}
-          </ul>
+        <div className="flex flex-1 flex-col items-center justify-center py-6">
+          {/* Ancho atado al alto de la pantalla (la tarjeta crece con el ancho): vista previa y beneficios entran sin scroll
+              desde 1280 × 720; 1440 × 900 incluido. Tope: 32rem. */}
+          <div className="flex w-full max-w-[min(var(--container-lg),calc(100dvh_-_var(--spacing)*126))] flex-col gap-6">
+            <TiendasEjemplo links={linksEjemplo} />
+            {/* Legibles en desktop: tamaño de cuerpo y color primario (antes, chicos y en gris). */}
+            <ul className="flex flex-col gap-2.5 text-body text-fg">
+              {BENEFICIOS.map((b) => (
+                <li key={b}>{b}</li>
+              ))}
+            </ul>
+          </div>
         </div>
       </aside>
       <main className="flex min-h-dvh flex-col px-6 py-6 lg:justify-center lg:bg-surface lg:px-16 lg:py-12">

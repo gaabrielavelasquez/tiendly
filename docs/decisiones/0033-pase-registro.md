@@ -22,6 +22,7 @@ El registro tenía las mismas huellas "de plantilla" que Inicio antes de 0031: d
    - Los links usan el formato real (`urlTienda`, que lee `TIENDLY_URL_TIENDAS`).
    - **Movimiento:** con "reducir movimiento" queda fija en la primera. La rotación se pausa con el puntero o el foco encima, y se detiene al elegir una tienda con sus puntos (WCAG 2.2.2).
    - **Desktop:** es la protagonista, a la izquierda, sobre `bg/sunken`; el formulario va directo sobre blanco, sin tarjeta. Los beneficios van en `text/primary` a tamaño de cuerpo, para que se lean.
+   - **Desktop, alto:** el ancho de la vista previa depende del alto de la pantalla (`min(32rem, 100dvh − 126 × espaciado)`), así la vista previa y los 3 beneficios entran sin scroll en 1440 × 900.
    - **Móvil:** versión compacta (nombre, link y 4 productos) **después** del formulario, para no empujarlo fuera de la pantalla.
 6. **Halo:** ninguno de fondo. Solo el halo cálido (`bg-halo-hoy`) detrás de la vista previa en desktop.
 
