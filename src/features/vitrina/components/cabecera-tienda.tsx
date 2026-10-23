@@ -25,7 +25,7 @@ type CabeceraProps = {
  * El carrito lleva punto spark si hay productos (regla del 1 %, decisión 0022).
  */
 export function CabeceraTienda({ nombre, logo, slug, categorias, activa, onCategoria }: CabeceraProps) {
-  const cantidad = useCantidadCarrito(slug);
+  const { cantidad, pulso } = useCantidadCarrito(slug);
   const [menu, setMenu] = useState(false);
   const enlaces = (clase: (activo: boolean) => string) =>
     categorias.map((c) =>
@@ -71,7 +71,8 @@ export function CabeceraTienda({ nombre, logo, slug, categorias, activa, onCateg
           aria-label={cantidad ? `Carrito: ${cantidad} ${cantidad === 1 ? "producto" : "productos"}` : "Carrito vacío"}
           className="relative flex size-11 items-center justify-center justify-self-end rounded-theme text-icon transition-colors hover:bg-sunken"
         >
-          <ShoppingBag aria-hidden strokeWidth={1.4} className="size-5" />
+          {/* Al agregar, el ícono da un salto: la key nueva lo remonta y la animación vuelve a empezar. */}
+          <ShoppingBag key={pulso} aria-hidden strokeWidth={1.4} className={cn("size-5", pulso > 0 && "motion-safe:animate-salto")} />
           {cantidad > 0 && (
             <span aria-hidden className="absolute top-2.5 right-2.5 flex size-2">
               <span className="absolute inset-0 rounded-full bg-spark motion-safe:animate-spark" />

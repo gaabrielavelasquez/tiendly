@@ -1,8 +1,9 @@
 "use client";
 
-import { ShoppingBag } from "lucide-react";
-import { useState } from "react";
+import { Check, ShoppingBag } from "lucide-react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { Badge, Button, buttonVariants } from "@/components/ui";
+import { detalleVariante, textoVarianteLargo } from "@/features/productos/lib/variantes";
 import { cn } from "@/lib/cn";
 import { agregarAlCarrito } from "../../lib/carrito";
 import type { FichaProducto as Ficha } from "../../lib/vitrina";
@@ -10,6 +11,7 @@ import { useEleccion } from "../../hooks/use-eleccion";
 import { PrecioTienda } from "../precio-tienda";
 import { Beneficios } from "./beneficios";
 import { Galeria } from "./galeria";
+import { HojaAgregado } from "./hoja-agregado";
 import { SelectorOpcion } from "./selector-opcion";
 
 /** `demo`: los beneficios (envío, pago, cambios) son textos de Heather; una tienda nueva no los promete. */
@@ -23,16 +25,22 @@ const unaOpcion = (nombre: string) => {
 };
 
 /**
- * Página de producto (Figma): galería a la izquierda y compra a la derecha (apiladas en móvil). Un selector por opción
- * (0032), el precio con su oferta (0034, sin fechas) y las fotos de la opción que las cambia.
+ * Página de producto (Figma): galería a la izquierda y compra a la derecha desde tablet (768 px); apiladas en el celular. Un selector por opción
+ * (0032), el precio con su oferta (0034, sin fechas) y las fotos de la opción que las cambia. Al agregar: el botón
+ * dice "Agregado" un momento (y no suma de nuevo), el carrito de la cabecera salta y se abre la hoja con lo agregado.
  */
 export function FichaProducto({ p, tienda, celular, demo }: FichaProps) {
   const e = useEleccion(p);
   const [error, setError] = useState<{ i: number; texto: string } | null>(null);
-  const [agregado, setAgregado] = useState(false);
+  /** `listo`: el botón dice "Agregado" (1,5 s, sin volver a sumar). `hoja`: la hoja con lo agregado está abierta. */
+  const [listo, setListo] = useState(false);
+  const [hoja, setHoja] = useState(false);
+  const timer = useRef<number | undefined>(undefined);
+  useEffect(() => () => window.clearTimeout(timer.current), []);
   const elegidosTexto = e.elegidos.filter((x, i) => x && p.opciones[i].valores.length > 1).join(" · ");
 
   function agregar() {
+    if (listo) return; // evita sumar dos veces con un doble toque
     const falta = e.elegidos.findIndex((x) => x === null);
     if (falta >= 0) {
       setError({ i: falta, texto: `Elige ${unaOpcion(p.opciones[falta].nombre)}.` });
@@ -42,13 +50,18 @@ export function FichaProducto({ p, tienda, celular, demo }: FichaProps) {
     if (!e.variante) return;
     agregarAlCarrito(tienda, { id: p.id, variante: e.variante.clave });
     setError(null);
-    setAgregado(true);
+    setListo(true);
+    setHoja(true);
+    window.clearTimeout(timer.current);
+    timer.current = window.setTimeout(() => setListo(false), 1500);
   }
+  // Al cerrar la hoja, el foco vuelve al botón que la abrió.
+  const cerrarHoja = useCallback(() => (setHoja(false), document.getElementById("agregar-carrito")?.focus()), []);
 
   const mensaje = `Hola, quiero ${p.nombre}${elegidosTexto ? ` (${elegidosTexto})` : ""}. ¿Está disponible?`;
 
   return (
-    <div className="grid gap-8 lg:grid-cols-2 lg:gap-14">
+    <div className="grid gap-8 md:grid-cols-2 md:gap-10 lg:gap-14">
       <Galeria key={e.claveFotos} fotos={e.fotos} nombre={p.nombre} color={e.claveFotos} />
       <div className="flex min-w-0 flex-col gap-6">
         <div className="flex flex-col gap-2">
@@ -64,23 +77,26 @@ export function FichaProducto({ p, tienda, celular, demo }: FichaProps) {
         {p.opciones.map((o, i) =>
           o.valores.length > 1 ? (
             <SelectorOpcion key={o.nombre} opcion={o} i={i} valor={e.elegidos[i]} agotados={e.agotados[i]} error={error?.i === i ? error.texto : undefined}
-              onCambio={(v) => (e.elegir(i, v), setError(null), setAgregado(false))} />
+              onCambio={(v) => (e.elegir(i, v), setError(null))} />
           ) : null,
         )}
         <div className="flex flex-col gap-2">
-          <Button block onClick={agregar} disabled={p.agotado}>
+          <Button id="agregar-carrito" block onClick={agregar} disabled={p.agotado} aria-disabled={listo || undefined} className={cn(listo && "pointer-events-none")}>
             <span className="flex items-center gap-2">
-              <ShoppingBag aria-hidden strokeWidth={1.6} className="size-4" />
-              {p.agotado ? "Agotado" : "Agregar al carrito"}
+              {listo ? <Check aria-hidden strokeWidth={2} className="size-4" /> : <ShoppingBag aria-hidden strokeWidth={1.6} className="size-4" />}
+              {p.agotado ? "Agotado" : listo ? "Agregado" : "Agregar al carrito"}
             </span>
           </Button>
           <a href={`https://wa.me/51${celular}?text=${encodeURIComponent(mensaje)}`} target="_blank" rel="noopener noreferrer" className={cn(buttonVariants({ variant: "secondary", block: true }), "transition active:scale-98")}>
             {p.agotado ? "Avísame cuando vuelva" : "Consultar por WhatsApp"}
           </a>
-          <p role="status" className="min-h-5 text-caption text-success">{agregado ? "Agregado al carrito." : ""}</p>
         </div>
         {demo && <Beneficios />}
       </div>
+      {hoja && (
+        <HojaAgregado foto={e.fotos[0]} nombre={p.nombre} variante={e.variante ? textoVarianteLargo(detalleVariante(p.opciones, e.variante.valores)) : ""} precio={p.precio} precioAntes={p.precioAntes} descuento={p.descuento}
+          carrito={`/${tienda}/carrito`} onCerrar={cerrarHoja} />
+      )}
     </div>
   );
 }

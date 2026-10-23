@@ -296,6 +296,24 @@
   animation: spark-ping 1.6s var(--tl-motion-easing-standard) 3;
 }
 
+/* Agregar al carrito: el ícono del carrito da un salto corto, una vez. Siempre con motion-safe:. */
+@keyframes carrito-salto {
+  0%, 100% { transform: scale(1); }
+  40% { transform: scale(1.25) translateY(-10%); }
+}
+@utility animate-salto {
+  animation: carrito-salto 0.4s var(--tl-motion-easing-standard);
+}
+
+/* Hoja "Agregado al carrito": entra desde abajo (móvil) o con un fundido corto (desktop). Siempre con motion-safe:. */
+@keyframes hoja-entra {
+  from { transform: translateY(1.5rem); opacity: 0; }
+  to { transform: none; opacity: 1; }
+}
+@utility animate-hoja {
+  animation: hoja-entra var(--tl-motion-duration-fast) var(--tl-motion-easing-standard);
+}
+
 /*
   Encabezados (decisión 0024 · Calibrado): Outfit SemiBold en tipo oración con tracking-tight.
   Sección = título de tarjeta (16 px); columna = encabezado de tabla (13 px, atenuado).
