@@ -1,7 +1,7 @@
 "use client";
 
 import { X } from "lucide-react";
-import { motion } from "motion/react";
+import { motion, useIsPresent } from "motion/react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -28,7 +28,8 @@ export function CajonCarrito({ datos, resaltar, onCerrar }: Props) {
   const v = useVistaCarrito(datos);
   const router = useRouter();
   const reduce = useReducedMotion();
-  const { panel, activo } = useCajon(onCerrar);
+  const presente = useIsPresent();
+  const { panel, activo } = useCajon(onCerrar, presente);
   const [marcada, setMarcada] = useState(resaltar);
   const [movil] = useState(() => !window.matchMedia("(min-width: 48rem)").matches);
   useEffect(() => {
@@ -42,7 +43,7 @@ export function CajonCarrito({ datos, resaltar, onCerrar }: Props) {
   const finalizar = () => (router.push(`${inicio}/checkout`), onCerrar());
 
   return (
-    <div className={cn("fixed inset-0 z-50", !activo && "pointer-events-none")}>
+    <div className={cn("fixed inset-0 z-50", (!activo || !presente) && "pointer-events-none")}>
       <motion.div aria-hidden className="absolute inset-0 bg-fg/30" onClick={onCerrar}
         initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={transicion} />
       <motion.div ref={panel} role="dialog" aria-modal aria-labelledby="carrito-titulo" tabIndex={-1}
