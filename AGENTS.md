@@ -22,7 +22,8 @@ No dupliques esas reglas aquí: si algo cambia, se cambia en `CLAUDE.md` o `DESI
 2. Mobile-first: primero 390 px, después 1440 px.
 3. Antes del PR: `npm run check:tokens` y `npm run build` sin errores.
 4. Revisa las pantallas en el navegador a 390 y 1440 px y adjunta capturas al PR.
-5. **Nunca hagas merge sin la aprobación de Gabi.** Para integrar ramas apiladas se usa *merge commit*, no squash. No hagas force-push.
+5. Prueba con datos reales y largos (URLs de preview de Vercel, nombres y precios largos) y confirma que no hay scroll horizontal en 360 y 390 px antes de abrir el PR.
+6. **Nunca hagas merge sin la aprobación de Gabi.** Para integrar ramas apiladas se usa *merge commit*, no squash. No hagas force-push.
 
 ## Trabajo en paralelo entre agentes
 

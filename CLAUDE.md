@@ -88,5 +88,6 @@ Vigente hasta completar el Core Loop (onboarding → productos → vitrina → p
 3. **Cuatro estados en cada vista:** carga, vacío, con datos y error.
 4. **Antes de abrir el PR:** `npm run check:tokens` y `npm run build`, los dos sin errores.
 5. **Revisar las pantallas en el navegador** a 390 px y a 1440 px.
-6. **Abrir un PR con capturas** de cada pantalla en los dos tamaños.
-7. **Nunca hacer merge sin la aprobación de Gabi.**
+6. **Probar con datos reales y largos, y sin scroll horizontal en móvil:** antes de abrir el PR, revisar cada pantalla con URLs largas (p. ej. la de una preview de Vercel, no `localhost`), nombres de tienda y de producto largos y precios altos. En 360 px y 390 px, `document.documentElement.scrollWidth` no puede pasar del ancho de la pantalla. Textos que no cortan (links, nombres): una línea con `truncate`, y `min-w-0` en sus contenedores flex o grid (en una grilla, columnas `minmax(0, 1fr)`, p. ej. `grid-cols-1`).
+7. **Abrir un PR con capturas** de cada pantalla en los dos tamaños.
+8. **Nunca hacer merge sin la aprobación de Gabi.**

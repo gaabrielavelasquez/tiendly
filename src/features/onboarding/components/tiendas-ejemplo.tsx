@@ -68,7 +68,7 @@ function Tarjeta({ t, link, compacta, prioridad }: { t: TiendaEjemplo; link: str
       </div>
       <p className="flex items-center gap-2 border-t border-line-subtle px-5 py-3 text-caption text-fg-secondary">
         <Link2 aria-hidden strokeWidth={1.5} className="size-4 shrink-0 text-icon" />
-        <span className="truncate">{link}</span>
+        <span className="min-w-0 truncate">{link}</span>
       </p>
     </div>
   );
@@ -103,7 +103,9 @@ export function TiendasEjemplo({ links, compacta = false }: Props & { compacta?:
   const { actual, elegir, pausar, reducir } = useRotacion(TIENDAS_EJEMPLO.length, ROTACION_MS);
   return (
     <figure
-      className={cn("relative isolate flex w-full flex-col gap-3", !compacta && "max-w-lg")}
+      // contain-inline-size: el ancho de la figura no depende de su contenido (links o nombres largos);
+      // la tarjeta nunca es más ancha que su columna, sea lo que sea que tenga adentro.
+      className={cn("relative isolate flex w-full max-w-full min-w-0 flex-col gap-3 contain-inline-size", !compacta && "max-w-lg")}
       onPointerEnter={() => pausar(true)}
       onPointerLeave={() => pausar(false)}
       onFocus={() => pausar(true)}
@@ -114,11 +116,13 @@ export function TiendasEjemplo({ links, compacta = false }: Props & { compacta?:
         <figcaption className="text-body-sm text-fg-secondary">Así se verá tu tienda.</figcaption>
         <Puntos actual={actual} elegir={elegir} />
       </div>
-      <div className="grid">
+      {/* Una columna minmax(0, 1fr): sin esto, la celda crece hasta el ancho del link entero (una URL larga de
+          Vercel) y toda la página se desborda en móvil. Lo mismo min-w-0 en cada tarjeta. */}
+      <div className="grid grid-cols-1">
         {TIENDAS_EJEMPLO.map((t, i) => (
           <motion.div
             key={t.slug}
-            className="self-start [grid-area:1/1]"
+            className="min-w-0 self-start [grid-area:1/1]"
             initial={false}
             animate={{ opacity: i === actual ? 1 : 0 }}
             transition={reducir ? { duration: 0 } : fundido}
