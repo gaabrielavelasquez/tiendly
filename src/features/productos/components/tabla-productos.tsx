@@ -14,6 +14,8 @@ const th = "px-4 py-3 text-left encabezado-columna text-fg-secondary";
 
 type TablaProps = {
   productos: Producto[];
+  /** Día de Lima: la oferta se calcula al mostrar (0034). */
+  hoy: string;
   seleccion: Set<string>;
   onAlternar: (id: string) => void;
   onAlternarTodos: () => void;
@@ -24,7 +26,7 @@ type TablaProps = {
  * Tabla de desktop: casilla por fila + maestro, datos en Inter, encabezados en Outfit SemiBold,
  * filas con aire (py-4). Entrada escalonada sutil y salida suave al cambiar de filtro.
  */
-export function TablaProductos({ productos, seleccion, onAlternar, onAlternarTodos, onDuplicar }: TablaProps) {
+export function TablaProductos({ productos, hoy, seleccion, onAlternar, onAlternarTodos, onDuplicar }: TablaProps) {
   const reduce = useReducedMotion();
   const marcados = productos.filter((p) => seleccion.has(p.id)).length;
   return (
@@ -79,7 +81,7 @@ export function TablaProductos({ productos, seleccion, onAlternar, onAlternarTod
                   <CeldaInventario p={p} />
                 </td>
                 <td className="px-4 py-4 text-right">
-                  <CeldaPrecio p={p} />
+                  <CeldaPrecio p={p} hoy={hoy} />
                 </td>
                 <td className="w-px py-4 pr-6 pl-4">
                   <AccionesFila id={p.id} nombre={p.nombre} onDuplicar={() => onDuplicar(p.id)} />

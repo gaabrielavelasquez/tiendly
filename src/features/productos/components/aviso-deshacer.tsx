@@ -3,17 +3,17 @@
 import { AnimatePresence, motion } from "motion/react";
 import { useReducedMotion } from "@/components/motion/use-reduced-motion";
 import { motionTokens } from "@/styles/tokens";
-import type { Pausado } from "../hooks/use-catalogo";
+import type { Aviso } from "../hooks/use-catalogo";
 
 const ease = [...motionTokens.easing] as [number, number, number, number];
 
-/** Aviso tras pausar, con "Deshacer" durante 6 segundos. role="status": el lector lo anuncia. */
-export function AvisoDeshacer({ pausado, onDeshacer }: { pausado: Pausado | null; onDeshacer: () => void }) {
+/** Aviso tras una acción en lote (pausar, poner o quitar oferta), con "Deshacer". role="status": el lector lo anuncia. */
+export function AvisoDeshacer({ aviso, onDeshacer }: { aviso: Aviso | null; onDeshacer: () => void }) {
   const reduce = useReducedMotion();
   return (
     <div role="status" className="pointer-events-none fixed inset-x-4 bottom-20 z-30 flex justify-center lg:inset-x-auto lg:right-8 lg:bottom-8">
       <AnimatePresence>
-        {pausado && (
+        {aviso && (
           <motion.div
             initial={reduce ? false : { opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
@@ -21,11 +21,7 @@ export function AvisoDeshacer({ pausado, onDeshacer }: { pausado: Pausado | null
             transition={{ duration: motionTokens.durationFast, ease }}
             className="pointer-events-auto flex w-full max-w-sm items-center justify-between gap-4 rounded-card bg-inverse py-2 pr-2 pl-4 text-body-sm text-fg-inverse shadow-overlay"
           >
-            <span className="truncate">
-              {pausado.productos.length === 1
-                ? `${pausado.productos[0].nombre} se pausó. Ya no se ve en tu tienda.`
-                : `${pausado.productos.length} productos se pausaron. Ya no se ven en tu tienda.`}
-            </span>
+            <span>{aviso.texto}</span>
             <button
               type="button"
               onClick={onDeshacer}

@@ -8,6 +8,7 @@ import { useEffect, useState } from "react";
 import { useReducedMotion } from "@/components/motion/use-reduced-motion";
 import { cn } from "@/lib/cn";
 import { motionTokens } from "@/styles/tokens";
+import { useBarraInferiorOculta } from "./barra-oculta";
 import { esActivo, ITEMS } from "./panel-nav";
 
 const transicion = { duration: motionTokens.durationFast, ease: [...motionTokens.easing] as [number, number, number, number] };
@@ -35,7 +36,8 @@ export function TabBar() {
     return () => window.removeEventListener("keydown", onKey);
   }, [mas]);
 
-  if (sinBarra(path)) return null;
+  const oculta = useBarraInferiorOculta();
+  if (sinBarra(path) || oculta) return null;
   return (
     <>
       {/* Reserva el alto de la barra (56 px + borde) más la zona segura de iPhone, para que nunca tape contenido (0031). */}

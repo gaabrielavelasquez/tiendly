@@ -47,6 +47,6 @@ export type Producto = {
   fotos?: Record<string, string[]>;
 };
 
-export type Filtro = "todos" | "activos" | "bajo-stock" | "agotados" | "pausados";
+export type Filtro = "todos" | "activos" | "en-oferta" | "bajo-stock" | "agotados" | "pausados";
 
 export type NivelStock = "en-stock" | "bajo-stock" | "agotado";

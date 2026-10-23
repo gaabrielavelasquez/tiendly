@@ -1,19 +1,19 @@
 "use client";
 
-import { Pause } from "lucide-react";
+import { Pause, Tag } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
 import { useReducedMotion } from "@/components/motion/use-reduced-motion";
 import { Button } from "@/components/ui";
 import { plural } from "@/lib/formato";
 import { motionTokens } from "@/styles/tokens";
 
-type BarraSeleccionProps = { cantidad: number; onPausar: () => void; onLimpiar: () => void };
+type BarraSeleccionProps = { cantidad: number; conOferta: number; onPausar: () => void; onQuitarOferta: () => void; onPonerEnOferta: () => void; onLimpiar: () => void };
 
 /**
- * Acciones masivas (solo desktop, decisión 0027): aparece al marcar productos. Hoy pausa; aquí se suman las próximas
- * (publicar, cambiar precio, ajustar stock) sin rehacer la tabla.
+ * Acciones en lote en desktop (0027 y 0034): aparece al marcar productos. Pausar, Quitar oferta (si alguno tiene) y
+ * Poner en oferta. En móvil, la barra fija de abajo (BarraSeleccionMovil).
  */
-export function BarraSeleccion({ cantidad, onPausar, onLimpiar }: BarraSeleccionProps) {
+export function BarraSeleccion({ cantidad, conOferta, onPausar, onQuitarOferta, onPonerEnOferta, onLimpiar }: BarraSeleccionProps) {
   const reduce = useReducedMotion();
   return (
     <AnimatePresence initial={false}>
@@ -36,6 +36,15 @@ export function BarraSeleccion({ cantidad, onPausar, onLimpiar }: BarraSeleccion
               <span className="flex items-center gap-1.5">
                 <Pause aria-hidden strokeWidth={1.6} className="size-4" />
                 Pausar
+              </span>
+            </Button>
+            <Button variant="secondary" size="sm" onClick={onQuitarOferta} disabled={!conOferta}>
+              Quitar oferta
+            </Button>
+            <Button variant="secondary" size="sm" onClick={onPonerEnOferta}>
+              <span className="flex items-center gap-1.5">
+                <Tag aria-hidden strokeWidth={1.6} className="size-4" />
+                Poner en oferta
               </span>
             </Button>
           </div>

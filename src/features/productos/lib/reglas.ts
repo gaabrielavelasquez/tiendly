@@ -1,5 +1,6 @@
 import { formatoSoles, plural } from "@/lib/formato";
 import type { Filtro, NivelStock, Producto } from "../types";
+import { estadoOferta, precioEnLote } from "./ofertas";
 
 // Reglas de inventario. Funciones puras: fáciles de probar y de mover al backend.
 
@@ -34,29 +35,34 @@ export const textoStock = (p: Producto) => plural(stockTotal(p), "unidad", "unid
 
 export const textoPrecio = (p: Producto) => formatoSoles(p.precio);
 
-const CUMPLE: Record<Filtro, (p: Producto) => boolean> = {
+/** "En oferta" (0034): activas y programadas. Depende del día de Lima, por eso las reglas reciben `hoy`. */
+const cumple = (hoy: string): Record<Filtro, (p: Producto) => boolean> => ({
   todos: () => true,
   activos: (p) => p.estado === "activo",
+  "en-oferta": (p) => ["activa", "programada"].includes(estadoOferta(p, hoy)),
   "bajo-stock": (p) => nivelStock(p) === "bajo-stock",
   agotados: (p) => nivelStock(p) === "agotado",
   pausados: (p) => p.estado === "pausado",
-};
+});
 
-export function contarPorFiltro(lista: Producto[]): Record<Filtro, number> {
-  const contar = (f: Filtro) => lista.filter(CUMPLE[f]).length;
-  return { todos: lista.length, activos: contar("activos"), "bajo-stock": contar("bajo-stock"), agotados: contar("agotados"), pausados: contar("pausados") };
+export const FILTROS: Filtro[] = ["todos", "activos", "en-oferta", "bajo-stock", "agotados", "pausados"];
+
+export function contarPorFiltro(lista: Producto[], hoy: string): Record<Filtro, number> {
+  const c = cumple(hoy);
+  return Object.fromEntries(FILTROS.map((f) => [f, lista.filter(c[f]).length])) as Record<Filtro, number>;
 }
 
 /** Busca por nombre o SKU, sin distinguir mayúsculas ni tildes. */
 const normalizar = (s: string) => s.normalize("NFD").replace(/\p{Diacritic}/gu, "").toLowerCase().trim();
 
-export function filtrarProductos(lista: Producto[], filtro: Filtro, busqueda: string) {
+export function filtrarProductos(lista: Producto[], filtro: Filtro, busqueda: string, hoy: string) {
   const q = normalizar(busqueda);
-  return lista.filter((p) => CUMPLE[filtro](p) && (!q || normalizar(p.nombre).includes(q) || normalizar(p.sku ?? "").includes(q)));
+  const c = cumple(hoy)[filtro];
+  return lista.filter((p) => c(p) && (!q || normalizar(p.nombre).includes(q) || normalizar(p.sku ?? "").includes(q)));
 }
 
 export function leerFiltro(valor: string | null | undefined): Filtro {
-  return valor === "activos" || valor === "bajo-stock" || valor === "agotados" || valor === "pausados" ? valor : "todos";
+  return FILTROS.includes(valor as Filtro) ? (valor as Filtro) : "todos";
 }
 
 /** Copia pausada y sin stock: duplicar un modelo no duplica su inventario ni lo publica. */
@@ -70,3 +76,22 @@ export function duplicar(p: Producto): Producto {
     variantes: p.variantes.map((v) => ({ ...v, stock: 0 })),
   };
 }
+
+/** El precio normal: el "precio antes" si está en oferta; si no, el precio. */
+export const precioNormal = (p: Producto) => (p.precioAntes && p.precioAntes > p.precio ? p.precioAntes : p.precio);
+
+export type OfertaEnLote = { modo: "porcentaje" | "precio"; valor: number; desde?: string; hasta?: string };
+
+/**
+ * Poner en oferta en lote (0034): sobre el precio normal de cada uno, redondeado al sol. Si no baja el precio,
+ * el producto queda igual (null). Reemplaza la oferta que tuviera.
+ */
+export function conOferta(p: Producto, o: OfertaEnLote): Producto | null {
+  const normal = precioNormal(p);
+  const nuevo = precioEnLote(normal, o.modo, o.valor);
+  if (!(nuevo > 0) || nuevo >= normal) return null;
+  return { ...p, precio: nuevo, precioAntes: normal, oferta: o.desde || o.hasta ? { desde: o.desde, hasta: o.hasta } : undefined };
+}
+
+/** Quitar la oferta: vuelve al precio normal, sin precio antes ni fechas. */
+export const sinOferta = (p: Producto): Producto => ({ ...p, precio: precioNormal(p), precioAntes: undefined, oferta: undefined });
