@@ -23,13 +23,20 @@ export const RETIRADAS = new Set(["aurora"]);
 export const esHeather = (slug: string) => slug === "heather";
 
 /** Datos de tienda de los productos de MUÑA (la vista previa del registro solo usa nombre, precio y foto). */
-const DETALLE_MUNA: Record<string, { id: string; categoria: string; color: string; tallas: string[]; stock: number[]; descripcion: string }> = {
+/** Sin `tallas` (carteras y bolsos), el producto tiene solo la opción Color y `stock` es una cantidad. */
+const DETALLE_MUNA: Record<string, { id: string; categoria: string; color: string; tallas?: string[]; stock: number[]; descripcion: string }> = {
   "Botín Saya": { id: "m1", categoria: "Botas", color: "Café", tallas: ["35", "36", "37", "38", "39", "40"], stock: [1, 2, 3, 2, 1, 0],
     descripcion: "Botín de cuero liso con punta fina y taco de 5 cm. Va con jean, con falda y con vestido." },
   "Chompa Qori": { id: "m2", categoria: "Ropa", color: "Oliva", tallas: ["S", "M", "L"], stock: [2, 3, 1],
     descripcion: "Chompa tejida de cuello alto con medio cierre. Abriga sin pesar y no pica." },
   "Falda Lluvia": { id: "m3", categoria: "Ropa", color: "Plata", tallas: ["S", "M", "L"], stock: [1, 2, 2],
     descripcion: "Falda midi de lentejuelas que se mueve al caminar. Forrada por dentro, con elástico en la cintura." },
+  "Conjunto Arena": { id: "m4", categoria: "Ropa", color: "Arena", tallas: ["S", "M", "L"], stock: [2, 2, 1],
+    descripcion: "Chaqueta corta de drill con cuello camisero y pantalón ancho de tiro alto. Se venden juntos." },
+  "Bolso Puyu": { id: "m5", categoria: "Accesorios", color: "Gris", stock: [4],
+    descripcion: "Bolso acolchado de cuero sintético con cadena dorada. Entran el celular, la billetera y las llaves." },
+  "Cartera Wari": { id: "m6", categoria: "Accesorios", color: "Vino", stock: [3],
+    descripcion: "Cartera de cuero vino con correa regulable y hebilla plateada. Se lleva al hombro o cruzada." },
 };
 
 /** MUÑA: la tienda de demo pública (moda, ficticia). Mismos productos y fotos que la vista previa del registro. */
@@ -45,7 +52,9 @@ function muna(): DatosTienda {
       const d = DETALLE_MUNA[p.nombre];
       return {
         id: d.id, nombre: p.nombre, descripcion: d.descripcion, categorias: [d.categoria], estado: "activo", precio: p.precio,
-        ...colorPorTalla({ [d.color]: d.stock }, d.tallas),
+        ...(d.tallas
+          ? colorPorTalla({ [d.color]: d.stock }, d.tallas)
+          : { opciones: [{ nombre: "Color", tipo: "color" as const, valores: [d.color] }], variantes: [{ valores: [d.color], stock: d.stock[0] ?? 0 }] }),
         imagen: p.foto, fotos: { [d.color]: [p.foto] },
       };
     }),
@@ -53,7 +62,7 @@ function muna(): DatosTienda {
     inventario: {},
     cupones: [],
     config,
-    rubros: ["moda", "calzado"],
+    rubros: ["accesorios", "calzado", "moda"],
   };
 }
 

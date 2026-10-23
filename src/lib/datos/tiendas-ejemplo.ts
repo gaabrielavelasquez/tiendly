@@ -4,7 +4,6 @@ import type { Tema } from "@/features/onboarding/lib/rubros";
 // con su tema. Ficticias: nombres (cortos, para que entren en una línea) y precios inventados. Fotos reales de Unsplash y Pexels, optimizadas en
 // public/tiendas-ejemplo (portada 16:9 a 1280 × 720, la de MUÑA a 1920 × 1080 porque también es la de su tienda;
 // productos 4:5 a 480 × 600, WebP). Originales: fotos-originales/. Paleta en tonos tierra: sin fotos rosadas.
-// MUÑA tiene 3 productos: su cuarta foto (la cartera) es la portada y no se repite en la fila.
 
 export type ProductoEjemplo = { nombre: string; precio: number; foto: string; alt: string };
 /** `titulo` y `bajada`: los de su portada, si la tienda existe de verdad (MUÑA es la tienda de demo pública). */
@@ -19,14 +18,18 @@ export const TIENDAS_EJEMPLO: TiendaEjemplo[] = [
     tema: "editorial",
     portada: {
       src: f("muna", "portada"),
-      alt: "Cartera de cuero vino con hebilla plateada colgada en una pared clara, junto a una planta",
+      alt: "Seis personas en fila contra una pared de concreto, con ropa en tonos tierra, negro y beige",
       titulo: "Piezas para usar mucho",
-      bajada: "Botines, tejidos y faldas en pocas unidades. Pide por WhatsApp y coordinamos la entrega.",
+      bajada: "Ropa, carteras y botines en pocas unidades. Pide por WhatsApp y coordinamos la entrega.",
     },
+    // Los 4 primeros salen en la vista previa del registro; la tienda muestra los 6.
     productos: [
+      { nombre: "Conjunto Arena", precio: 389, foto: f("muna", "conjunto-arena"), alt: "Conjunto beige de chaqueta corta y pantalón ancho, frente a una pared de concreto" },
+      { nombre: "Bolso Puyu", precio: 199, foto: f("muna", "bolso-puyu"), alt: "Bolso acolchado gris con cadena dorada, colgado de una mano" },
       { nombre: "Botín Saya", precio: 289, foto: f("muna", "botin-saya"), alt: "Botín de cuero marrón oscuro con taco, sobre un banco metálico" },
-      { nombre: "Chompa Qori", precio: 189, foto: f("muna", "chompa-qori"), alt: "Chompa tejida verde oliva con cierre, sobre una silla transparente" },
       { nombre: "Falda Lluvia", precio: 249, foto: f("muna", "falda-lluvia"), alt: "Falda de lentejuelas plateadas en movimiento, con un blazer de jean" },
+      { nombre: "Chompa Qori", precio: 189, foto: f("muna", "chompa-qori"), alt: "Chompa tejida verde oliva con cierre, sobre una silla transparente" },
+      { nombre: "Cartera Wari", precio: 219, foto: f("muna", "cartera-wari"), alt: "Cartera de cuero vino con hebilla plateada colgada en una pared clara, junto a una planta" },
     ],
   },
   {
