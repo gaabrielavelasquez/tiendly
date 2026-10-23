@@ -3,7 +3,7 @@ import type { ConfigCompra } from "@/features/configuracion/types";
 import { CUPONES_HEATHER } from "@/features/cupones/lib/semilla-heather";
 import type { RubroId } from "@/features/onboarding/lib/rubros";
 import { CATALOGO_HEATHER } from "@/features/productos/lib/catalogo-heather";
-import type { Producto } from "@/features/productos/types";
+import type { Producto, TablaTallas } from "@/features/productos/types";
 import { colorPorTalla } from "@/features/productos/lib/variantes";
 import type { DatosTienda } from "./tienda";
 import { TIENDAS_EJEMPLO } from "./tiendas-ejemplo";
@@ -23,13 +23,16 @@ export const RETIRADAS = new Set(["aurora"]);
 export const esHeather = (slug: string) => slug === "heather";
 
 /** Datos de tienda de los productos de MUÑA (la vista previa del registro solo usa nombre, precio y foto). */
-const DETALLE_MUNA: Record<string, { id: string; categoria: string; color: string; tallas: string[]; stock: number[]; descripcion: string }> = {
+/** Tabla de tallas (parte 4 de 0034): el botín y la falda la tienen; la chompa no, para probar "Usar la de…". */
+const DETALLE_MUNA: Record<string, { id: string; categoria: string; color: string; tallas: string[]; stock: number[]; descripcion: string; tabla?: TablaTallas }> = {
   "Botín Saya": { id: "m1", categoria: "Botas", color: "Café", tallas: ["35", "36", "37", "38", "39", "40"], stock: [1, 2, 3, 2, 1, 0],
-    descripcion: "Botín de cuero liso con punta fina y taco de 5 cm. Va con jean, con falda y con vestido." },
+    descripcion: "Botín de cuero liso con punta fina y taco de 5 cm. Va con jean, con falda y con vestido.",
+    tabla: { medidas: ["Largo del pie"], filas: { "35": ["22.5"], "36": ["23"], "37": ["23.5"], "38": ["24"], "39": ["24.5"], "40": ["25"] } } },
   "Chompa Qori": { id: "m2", categoria: "Ropa", color: "Oliva", tallas: ["S", "M", "L"], stock: [2, 3, 1],
     descripcion: "Chompa tejida de cuello alto con medio cierre. Abriga sin pesar y no pica." },
   "Falda Lluvia": { id: "m3", categoria: "Ropa", color: "Plata", tallas: ["S", "M", "L"], stock: [1, 2, 2],
-    descripcion: "Falda midi de lentejuelas que se mueve al caminar. Forrada por dentro, con elástico en la cintura." },
+    descripcion: "Falda midi de lentejuelas que se mueve al caminar. Forrada por dentro, con elástico en la cintura.",
+    tabla: { medidas: ["Cintura", "Cadera", "Largo"], filas: { S: ["64–68", "90", "78"], M: ["68–72", "94", "79"], L: ["72–76", "98", "80"] } } },
 };
 
 /** MUÑA: la tienda de demo pública (moda, ficticia). Mismos productos y fotos que la vista previa del registro. */
@@ -48,7 +51,7 @@ function muna(): DatosTienda {
         ...colorPorTalla({ [d.color]: d.stock }, d.tallas),
         // La falda está en oferta (0034): precio antes S/ 249, ahora S/ 199, sin fechas.
         ...(p.nombre === "Falda Lluvia" ? { precio: 199, precioAntes: p.precio } : {}),
-        imagen: p.foto, fotos: { [d.color]: [p.foto] },
+        imagen: p.foto, fotos: { [d.color]: [p.foto] }, tablaTallas: d.tabla,
       };
     }),
     pedidos: { ultimo: 1000, creados: [] },

@@ -11,6 +11,7 @@ import { plural } from "@/lib/formato";
 import { motionTokens } from "@/styles/tokens";
 import { useFormularioProducto } from "../../hooks/use-formulario-producto";
 import type { FormProducto } from "../../lib/formulario";
+import type { TablaDeOtro } from "../../lib/tabla-tallas";
 import type { Categoria } from "../../types";
 import { BarraAcciones } from "./barra-acciones";
 import { CampoDescripcion } from "./campo-descripcion";
@@ -20,15 +21,15 @@ import { SeccionOpciones } from "./seccion-opciones";
 import { SeccionPrecio } from "./seccion-precio";
 import { SeccionStock } from "./seccion-stock";
 
-/** `hoy`: día de Lima (para la oferta); `categorias`: las que ya usa la tienda. */
-type FormularioProps = { titulo: string; inicial: FormProducto; id?: string; hoy: string; categorias: Categoria[] };
+/** `hoy`: día de Lima (para la oferta); `categorias`: las que ya usa la tienda; `tablas`: las tablas de tallas de sus otros productos. */
+type FormularioProps = { titulo: string; inicial: FormProducto; id?: string; hoy: string; categorias: Categoria[]; tablas: TablaDeOtro[] };
 
 /**
  * Crear / editar producto con el pase 0031: títulos de sección fuera de los contenedores, un contenedor por sección y
  * 40 · 48 px entre secciones. Desktop: 2/3 contenido y 1/3 ajustes (Estado y Categoría); móvil: una columna, con
  * "Guardar producto" fijo abajo (la barra de pestañas no se muestra aquí). Opciones genéricas (0032) y oferta (0034).
  */
-export function FormularioProducto({ titulo, inicial, id, hoy, categorias }: FormularioProps) {
+export function FormularioProducto({ titulo, inicial, id, hoy, categorias, tablas }: FormularioProps) {
   const f = useFormularioProducto(inicial, id);
   const reduce = useReducedMotion();
   const [resumen, setResumen] = useState("");
@@ -63,7 +64,7 @@ export function FormularioProducto({ titulo, inicial, id, hoy, categorias }: For
           <SeccionFotos imagenes={f.form.imagenes} onAgregar={f.agregarImagenes} onQuitar={f.quitarImagen} />
           <SeccionPrecio form={f.form} errores={f.errores} hoy={hoy} onCambio={(k, v) => f.set(k, v)} />
           <SeccionOpciones form={f.form} error={f.errores.opciones} imagenes={f.form.imagenes}
-            onOpciones={f.setOpciones} onOpcionFotos={f.setOpcionFotos} onFotoValor={f.alternarFotoValor} />
+            onOpciones={f.setOpciones} onOpcionFotos={f.setOpcionFotos} onFotoValor={f.alternarFotoValor} tablas={tablas} onTabla={f.setTabla} />
           <SeccionStock form={f.form} onStock={f.setStock} />
         </div>
         <aside className="flex flex-col gap-10 lg:sticky lg:top-24 lg:gap-12">

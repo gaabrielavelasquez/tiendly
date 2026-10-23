@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import { PanelMain } from "@/components/panel";
 import { FormularioProducto } from "@/features/productos/components/form/formulario-producto";
 import { desdeProducto } from "@/features/productos/lib/formulario";
-import { categoriasDeTienda, obtenerProducto } from "@/features/productos/lib/mock";
+import { categoriasDeTienda, obtenerProducto, tablasDeTienda } from "@/features/productos/lib/mock";
 import { hoyLima } from "@/lib/reloj";
 import { slugPanel } from "@/lib/sesion";
 
@@ -15,11 +15,11 @@ type PageProps = { params: Promise<{ id: string }> };
 export default async function EditarProductoPage({ params }: PageProps) {
   const { id } = await params;
   const slug = await slugPanel();
-  const [producto, categorias] = await Promise.all([obtenerProducto(slug, id), categoriasDeTienda(slug)]);
+  const [producto, categorias, tablas] = await Promise.all([obtenerProducto(slug, id), categoriasDeTienda(slug), tablasDeTienda(slug, id)]);
   if (!producto) notFound();
   return (
     <PanelMain className="lg:pt-0">
-      <FormularioProducto titulo={producto.nombre} inicial={desdeProducto(producto)} id={producto.id} hoy={hoyLima()} categorias={categorias} />
+      <FormularioProducto titulo={producto.nombre} inicial={desdeProducto(producto)} id={producto.id} hoy={hoyLima()} categorias={categorias} tablas={tablas} />
     </PanelMain>
   );
 }

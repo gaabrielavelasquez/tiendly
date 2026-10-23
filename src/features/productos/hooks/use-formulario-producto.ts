@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import type { Categoria } from "../types";
+import type { Categoria, TablaTallas } from "../types";
 import { guardarProducto } from "../lib/acciones";
 import { fotoParaGuardar } from "../lib/foto";
 import { fotosPorDefecto, validar, type Errores, type FormProducto, type ImagenForm, type OpcionForm } from "../lib/formulario";
@@ -46,6 +46,7 @@ export function useFormularioProducto(inicial: FormProducto, id?: string) {
   })), [fotosManual]);
   const setOpcionFotos = useCallback((i: number) => (setFotosManual(true), setForm((f) => ({ ...f, opcionFotos: i }))), []);
   const setStock = useCallback((clave: string, v: string) => setForm((f) => ({ ...f, stock: { ...f.stock, [clave]: v.replace(/\D/g, "") } })), []);
+  const setTabla = useCallback((tabla: TablaTallas | null) => setForm((f) => ({ ...f, tabla })), []);
   const alternarCategoria = useCallback((c: Categoria) => setForm((f) => ({ ...f, categorias: alternar(f.categorias, c) })), []);
   const agregarCategoria = useCallback((c: Categoria) => setForm((f) => ({ ...f, categorias: f.categorias.includes(c) ? f.categorias : [...f.categorias, c] })), []);
   const alternarFotoValor = useCallback((valor: string, idImg: string) => setForm((f) => ({ ...f, fotosPorValor: { ...f.fotosPorValor, [valor]: alternar(f.fotosPorValor[valor] ?? [], idImg) } })), []);
@@ -96,7 +97,7 @@ export function useFormularioProducto(inicial: FormProducto, id?: string) {
   }, [form]);
 
   return {
-    form, set, setOpciones, setOpcionFotos, setStock, alternarCategoria, agregarCategoria, alternarFotoValor, agregarImagenes, quitarImagen,
+    form, set, setOpciones, setOpcionFotos, setStock, setTabla, alternarCategoria, agregarCategoria, alternarFotoValor, agregarImagenes, quitarImagen,
     errores, guardar, guardando, guardado, sinGuardar, fallo,
   };
 }

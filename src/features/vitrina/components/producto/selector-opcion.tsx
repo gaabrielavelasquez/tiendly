@@ -1,8 +1,9 @@
 "use client";
 
 import { cn } from "@/lib/cn";
-import type { Opcion } from "@/features/productos/types";
-import { HEX_COLOR, TALLAS_CM } from "../../lib/contenido";
+import type { Opcion, TablaTallas as Tabla } from "@/features/productos/types";
+import { HEX_COLOR } from "../../lib/contenido";
+import { TablaTallas } from "./tabla-tallas";
 
 const etiqueta = "text-label font-semibold tracking-widest text-fg-secondary uppercase";
 
@@ -13,15 +14,17 @@ type Props = {
   /** Valores sin stock con lo que ya se eligió en las otras opciones: se ven pero no se pueden elegir. */
   agotados: Set<string>;
   error?: string;
+  /** La tabla de tallas del producto (solo en la opción Talla). */
+  tabla?: Tabla;
   onCambio: (v: string) => void;
 };
 
 /**
  * Un selector por opción (0032). Color: muestras redondas si todos los valores tienen color conocido; si no, botones.
- * Talla, Tono, Tamaño y el resto: botones (elegido en selection/*). Talla con medidas conocidas: "Ver tabla de tallas"
- * (la tabla por producto llega con la parte 4). Grupo de radio accesible.
+ * Talla, Tono, Tamaño y el resto: botones (elegido en selection/*). Talla con tabla cargada en el producto: "Ver tabla
+ * de tallas" (parte 4 de 0034). Grupo de radio accesible.
  */
-export function SelectorOpcion({ opcion, i, valor, agotados, error, onCambio }: Props) {
+export function SelectorOpcion({ opcion, i, valor, agotados, error, tabla, onCambio }: Props) {
   const muestras = opcion.tipo === "color" && opcion.valores.every((v) => HEX_COLOR[v]);
   const idError = `error-opcion-${i}`;
   return (
@@ -54,16 +57,7 @@ export function SelectorOpcion({ opcion, i, valor, agotados, error, onCambio }: 
         })}
       </div>
       {error && <p id={idError} className="text-caption text-error">{error}</p>}
-      {opcion.tipo === "talla" && opcion.valores.some((v) => TALLAS_CM[v]) && (
-        <details className="text-caption text-fg-secondary">
-          <summary className="w-fit cursor-pointer underline underline-offset-4 hover:text-fg">Ver tabla de tallas</summary>
-          <dl className="mt-3 grid grid-cols-2 gap-x-6 gap-y-1 sm:grid-cols-3">
-            {opcion.valores.map((v) => (
-              <div key={v} className="flex justify-between gap-3 tabular-nums"><dt className="font-semibold text-fg">{v}</dt><dd>{TALLAS_CM[v] ?? "—"}</dd></div>
-            ))}
-          </dl>
-        </details>
-      )}
+      {tabla && <TablaTallas tabla={tabla} tallas={opcion.valores} elegida={valor} />}
     </fieldset>
   );
 }

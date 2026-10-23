@@ -1,5 +1,6 @@
-import type { Categoria, Opcion, Producto } from "../types";
+import type { Categoria, Opcion, Producto, TablaTallas } from "../types";
 import { descuento } from "./ofertas";
+import { limpiarTabla } from "./tabla-tallas";
 import { claveVariante, combinaciones, FOTOS_GENERAL, opcionDeFotos, tipoDeNombre } from "./variantes";
 
 // Modelo y reglas del formulario de producto (0032 opciones genéricas, 0034 ofertas). Funciones puras, sin React.
@@ -24,6 +25,8 @@ export type FormProducto = {
   fotosPorValor: Record<string, string[]>;
   /** Cantidad por variante (clave "Blanco|38"; sin opciones, ""), solo dígitos. */
   stock: Record<string, string>;
+  /** Tabla de tallas (solo cuenta si hay una opción Talla). null: sin tabla. */
+  tabla: TablaTallas | null;
   estado: "activo" | "pausado";
   categorias: Categoria[];
   imagenes: ImagenForm[];
@@ -53,7 +56,7 @@ export const fotosPorDefecto = (opciones: OpcionForm[]) => opciones.findIndex((o
 
 export const formVacio = (): FormProducto => ({
   nombre: "", descripcion: "", precio: "", precioAntes: "", ofertaDesde: "", ofertaHasta: "", opciones: [], opcionFotos: -1,
-  fotosPorValor: {}, stock: {}, estado: "activo", categorias: [], imagenes: [], // se publica al guardar (decisión 0028)
+  fotosPorValor: {}, stock: {}, tabla: null, estado: "activo", categorias: [], imagenes: [], // se publica al guardar (decisión 0028)
 });
 
 /** Prellena el formulario para editar un producto existente (ya migrado a opciones genéricas). */
@@ -74,6 +77,7 @@ export function desdeProducto(p: Producto): FormProducto {
     opcionFotos: iFotos,
     fotosPorValor,
     stock: Object.fromEntries(p.variantes.map((v) => [claveVariante(v.valores), String(v.stock)])),
+    tabla: p.tablaTallas ? structuredClone(p.tablaTallas) : null,
     estado: p.estado,
     categorias: p.categorias,
     imagenes,
@@ -122,6 +126,7 @@ export function aProducto(f: FormProducto, id: string, anterior?: Producto | nul
         return [v, propias.length ? propias : urls];
       }));
   const precio = entero(f.precio) > 0 ? entero(f.precio) : 0;
+  const talla = opciones.find((o) => o.tipo === "talla");
   const antes = entero(f.precioAntes) > precio ? entero(f.precioAntes) : undefined;
   return {
     id,
@@ -138,5 +143,6 @@ export function aProducto(f: FormProducto, id: string, anterior?: Producto | nul
     opcionFotos: iFotos,
     imagen: urls[0],
     fotos: urls.length ? fotos : undefined,
+    tablaTallas: f.tabla && talla ? limpiarTabla(f.tabla, talla.valores) : undefined,
   };
 }
