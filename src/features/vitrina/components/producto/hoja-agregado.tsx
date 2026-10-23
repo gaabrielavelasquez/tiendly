@@ -23,11 +23,14 @@ type Props = {
 /**
  * "Agregado al carrito" (PR #26): hoja desde abajo en el celular y panel chico arriba a la derecha en desktop, debajo
  * del carrito. Muestra lo que se agregó y dos salidas: "Ver carrito" (CTA) y "Seguir comprando". El foco va a
- * "Ver carrito"; Escape o tocar fuera la cierran.
+ * "Ver carrito"; Escape o tocar fuera la cierran. Un toque fuera en el primer medio segundo no cuenta: es el segundo
+ * toque de un doble toque en "Agregar", que cae sobre el fondo recién abierto.
  */
 export function HojaAgregado({ foto, nombre, variante, precio, precioAntes, descuento, carrito, onCerrar }: Props) {
   const ver = useRef<HTMLAnchorElement>(null);
+  const abierta = useRef(0);
   useEffect(() => {
+    abierta.current = Date.now();
     ver.current?.focus();
     const esc = (e: KeyboardEvent) => e.key === "Escape" && onCerrar();
     window.addEventListener("keydown", esc);
@@ -35,7 +38,7 @@ export function HojaAgregado({ foto, nombre, variante, precio, precioAntes, desc
   }, [onCerrar]);
 
   return (
-    <div className="fixed inset-0 z-50 flex items-end bg-fg/40 md:items-start md:justify-end md:bg-transparent md:px-4 md:pt-20" onClick={onCerrar}>
+    <div className="fixed inset-0 z-50 flex items-end bg-fg/40 md:items-start md:justify-end md:bg-transparent md:px-4 md:pt-20" onClick={() => Date.now() - abierta.current > 500 && onCerrar()}>
       <div role="dialog" aria-modal aria-labelledby="agregado-titulo" onClick={(e) => e.stopPropagation()}
         className="flex w-full flex-col gap-4 rounded-t-card bg-surface px-5 pt-4 pb-[max(calc(var(--spacing)*4),env(safe-area-inset-bottom))] shadow-overlay motion-safe:animate-hoja md:max-w-sm md:rounded-card md:border md:border-line-subtle md:pb-5">
         <header className="flex items-center justify-between gap-3">
