@@ -31,7 +31,7 @@ const DETALLE_MUNA: Record<string, { id: string; categoria: string; color: strin
     descripcion: "Chompa tejida de cuello alto con medio cierre. Abriga sin pesar y no pica." },
   "Falda Lluvia": { id: "m3", categoria: "Ropa", color: "Plata", tallas: ["S", "M", "L"], stock: [1, 2, 2],
     descripcion: "Falda midi de lentejuelas que se mueve al caminar. Forrada por dentro, con elástico en la cintura." },
-  "Conjunto Arena": { id: "m4", categoria: "Ropa", color: "Arena", tallas: ["S", "M", "L"], stock: [2, 2, 1],
+  "Traje Arena": { id: "m4", categoria: "Ropa", color: "Arena", tallas: ["S", "M", "L"], stock: [2, 2, 1],
     descripcion: "Chaqueta corta de drill con cuello camisero y pantalón ancho de tiro alto. Se venden juntos." },
   "Bolso Puyu": { id: "m5", categoria: "Accesorios", color: "Gris", stock: [4],
     descripcion: "Bolso acolchado de cuero sintético con cadena dorada. Entran el celular, la billetera y las llaves." },

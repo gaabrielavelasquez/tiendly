@@ -24,7 +24,7 @@ export const TIENDAS_EJEMPLO: TiendaEjemplo[] = [
     },
     // Los 4 primeros salen en la vista previa del registro; la tienda muestra los 6.
     productos: [
-      { nombre: "Conjunto Arena", precio: 389, foto: f("muna", "conjunto-arena"), alt: "Conjunto beige de chaqueta corta y pantalón ancho, frente a una pared de concreto" },
+      { nombre: "Traje Arena", precio: 389, foto: f("muna", "conjunto-arena"), alt: "Conjunto beige de chaqueta corta y pantalón ancho, frente a una pared de concreto" },
       { nombre: "Bolso Puyu", precio: 199, foto: f("muna", "bolso-puyu"), alt: "Bolso acolchado gris con cadena dorada, colgado de una mano" },
       { nombre: "Botín Saya", precio: 289, foto: f("muna", "botin-saya"), alt: "Botín de cuero marrón oscuro con taco, sobre un banco metálico" },
       { nombre: "Falda Lluvia", precio: 249, foto: f("muna", "falda-lluvia"), alt: "Falda de lentejuelas plateadas en movimiento, con un blazer de jean" },
