@@ -7,7 +7,7 @@ import type { Inventario } from "@/features/productos/lib/inventario";
 import type { Producto } from "@/features/productos/types";
 import { existe, leer, escribir } from "./almacen";
 import { migrarDatos } from "./migrar";
-import { esHeather, RETIRADAS, semillaDemo, slugDemo } from "./semillas";
+import { esEjemplo, esHeather, RETIRADAS, semillaDe, slugDemo } from "./semillas";
 
 // Todos los datos de una tienda en un solo documento (hasta tener backend): la tienda, su catálogo, sus
 // pedidos e inventario, sus cupones, su configuración de cobro y entrega, y sus rubros.
@@ -15,6 +15,8 @@ import { esHeather, RETIRADAS, semillaDemo, slugDemo } from "./semillas";
 export type TiendaSesion = {
   nombre: string;
   slug: string;
+  /** Nombre de la sección de ofertas en la tienda y en su menú (Mi tienda, Plan Free; 0034). Vacío: "Ofertas". */
+  nombreOfertas?: string;
   /** Nombre de pila de quien lleva la tienda, solo si entró con Google (el onboarding no lo pide, decisión 0013). */
   duena?: string;
   /** El WhatsApp al que escriben los clientes desde la vitrina. */
@@ -44,8 +46,8 @@ async function cargar(slug: string): Promise<DatosTienda | null> {
   if (RETIRADAS.has(slug)) return null; // demo retirada: 404 aunque siga en la base
   const d = await leer<DatosTienda>(clave(slug));
   if (d) return migrarDatos(d);
-  if (slug !== slugDemo()) return null;
-  const semilla = semillaDemo();
+  const semilla = semillaDe(slug);
+  if (!semilla) return null;
   await escribir(clave(slug), semilla);
   return semilla;
 }
@@ -53,7 +55,7 @@ async function cargar(slug: string): Promise<DatosTienda | null> {
 /** Los datos de una tienda, una sola lectura por pedido de página. `null` si no existe. */
 export const datosTienda = cache(cargar);
 
-export const existeTienda = (slug: string) => (slug === slugDemo() ? Promise.resolve(true) : existe(clave(slug)));
+export const existeTienda = (slug: string) => (esEjemplo(slug) ? Promise.resolve(true) : existe(clave(slug)));
 
 export async function guardarTienda(d: DatosTienda) {
   await escribir(clave(d.tienda.slug), d);

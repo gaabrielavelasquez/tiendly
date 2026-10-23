@@ -1,8 +1,8 @@
 import { obtenerProductos } from "@/features/productos/lib/mock";
 import { nivelStock, stockTotal } from "@/features/productos/lib/reglas";
-import type { Producto } from "@/features/productos/types";
-import { claveVariante, COLOR_UNICO_LEGADO, fotosDe, TALLA_UNICA_LEGADO, valorDe } from "@/features/productos/lib/variantes";
-import { estadoOferta, precioVigente } from "@/features/productos/lib/ofertas";
+import type { Opcion, Producto } from "@/features/productos/types";
+import { claveVariante, COLOR_UNICO_LEGADO, FOTOS_GENERAL, opcionDeFotos, valorDe } from "@/features/productos/lib/variantes";
+import { descuento, estadoOferta, precioVigente } from "@/features/productos/lib/ofertas";
 import { hoyLima } from "@/lib/reloj";
 import { DETALLE, HEX_COLOR } from "./contenido";
 import { esHeather } from "@/lib/datos/semillas";
@@ -17,6 +17,8 @@ export type ProductoVitrina = {
   nombre: string;
   precio: number;
   precioAntes?: number;
+  /** "−22 %" si la oferta está activa hoy (0034); 0 si no. */
+  descuento: number;
   imagen?: string;
   /** Ids de sus categorías (`slugProducto` del texto), para filtrar en la vitrina. */
   categorias: string[];
@@ -26,22 +28,34 @@ export type ProductoVitrina = {
   stock: number;
 };
 
-/**
- * Una variante vista como color × talla, para los selectores actuales de la ficha (hasta PR 2 de la auditoría
- * multirubro). Sin color o sin talla, "Único" y "Única". `clave`: la que va al carrito.
- */
-export type VarianteFicha = { color: string; talla: string; stock: number; clave: string };
+/** Una variante a la venta: sus valores (uno por opción), su clave (la que va al carrito) y su stock. */
+export type VarianteFicha = { valores: string[]; clave: string; stock: number };
 
-/** Lo que agrega la página de producto. `fotos`: por color de la ficha. */
-export type FichaProducto = ProductoVitrina & { variantes: VarianteFicha[]; tallas: string[]; fotos: Record<string, string[]>; corto?: string; sobre?: string };
+/**
+ * Lo que agrega la página de producto (opciones genéricas, 0032): un selector por opción, las variantes y las fotos
+ * de cada valor de la opción que cambia las fotos (`opcionFotos`, -1 = una sola galería en la clave "").
+ */
+export type FichaProducto = ProductoVitrina & {
+  opciones: Opcion[];
+  variantes: VarianteFicha[];
+  opcionFotos: number;
+  fotos: Record<string, string[]>;
+  corto?: string;
+  sobre?: string;
+};
+
+/** Id de la sección de ofertas en el menú y en ?categoria= (0034). */
+export const OFERTAS = "ofertas";
 
 /** Portada de una sola foto, con su titular y bajada (hoy, la de MUÑA; Mi tienda todavía no la publica). */
 export type PortadaPropia = { src: string; alt: string; titulo: string; bajada: string };
 
 /** `demo`: Heather trae su portada, fotos y beneficios; las demás tiendas muestran solo lo que cargaron. */
 export type Vitrina = {
-  tienda: { nombre: string; slug: string; celular: string; logo?: string; plan: "free" | "pro"; demo: boolean; portada?: PortadaPropia };
+  /** `nombreOfertas`: el nombre de la sección de ofertas (Mi tienda; "Ofertas" por defecto). */
+  tienda: { nombre: string; slug: string; celular: string; logo?: string; plan: "free" | "pro"; demo: boolean; portada?: PortadaPropia; nombreOfertas: string };
   productos: ProductoVitrina[];
+  /** El menú: la sección de ofertas primero (si hay ofertas hoy), después las categorías. */
   categorias: { id: string; label: string }[];
 };
 
@@ -62,6 +76,7 @@ const aVitrina = (p: Producto, hoy: string): ProductoVitrina => ({
   nombre: p.nombre,
   precio: precioVigente(p, hoy),
   precioAntes: estadoOferta(p, hoy) === "activa" ? p.precioAntes : undefined,
+  descuento: estadoOferta(p, hoy) === "activa" ? descuento(p.precio, p.precioAntes) : 0,
   imagen: fotoVitrina(p.imagen),
   categorias: p.categorias.map(slugProducto),
   agotado: nivelStock(p) === "agotado",
@@ -70,15 +85,18 @@ const aVitrina = (p: Producto, hoy: string): ProductoVitrina => ({
 });
 
 function aFicha(p: Producto, hoy: string): FichaProducto {
-  const variantes = p.variantes.map((v) => ({
-    color: valorDe(p, v, "color") ?? COLOR_UNICO_LEGADO,
-    talla: valorDe(p, v, "talla") ?? TALLA_UNICA_LEGADO,
-    stock: v.stock,
-    clave: claveVariante(v.valores),
-  }));
-  // Fotos por color de la ficha: las de la primera variante de ese color (la opción de fotos manda).
-  const fotos = Object.fromEntries(variantes.map((v, i) => [v.color, fotosDe(p, p.variantes[i].valores)]).reverse());
-  return { ...aVitrina(p, hoy), variantes, tallas: [...new Set(variantes.map((v) => v.talla))], fotos, corto: DETALLE[p.id]?.corto, sobre: p.descripcion ?? DETALLE[p.id]?.sobre };
+  const iFotos = opcionDeFotos(p);
+  const claves = iFotos < 0 ? [FOTOS_GENERAL] : p.opciones[iFotos].valores;
+  const fotos = Object.fromEntries(claves.map((k) => [k, (p.fotos?.[k] ?? p.fotos?.[FOTOS_GENERAL] ?? (p.imagen ? [p.imagen] : [])).map((u) => fotoVitrina(u)!)]));
+  return {
+    ...aVitrina(p, hoy),
+    opciones: p.opciones,
+    variantes: p.variantes.map((v) => ({ valores: v.valores, clave: claveVariante(v.valores), stock: v.stock })),
+    opcionFotos: iFotos,
+    fotos,
+    corto: DETALLE[p.id]?.corto,
+    sobre: p.descripcion ?? DETALLE[p.id]?.sobre,
+  };
 }
 
 /**
@@ -114,9 +132,12 @@ export async function obtenerVitrina(slug: string): Promise<Vitrina | null> {
     .sort((a, b) => Number(a.agotado) - Number(b.agotado));
   // Las categorías de la tienda, en el orden en que aparecen en su catálogo (texto libre, decisión 0032).
   const textos = [...new Set(activos.flatMap((p) => p.categorias))];
-  const categorias = [...new Map(textos.map((label) => [slugProducto(label), { id: slugProducto(label), label }])).values()];
+  const cats = [...new Map(textos.map((label) => [slugProducto(label), { id: slugProducto(label), label }])).values()];
   const { nombre, logo, plan } = d.tienda;
-  return { tienda: { nombre, slug, celular: d.config.pagos.whatsapp.celular, logo, plan, demo: esHeather(slug), portada: portadaDe(slug) }, productos, categorias };
+  const nombreOfertas = d.tienda.nombreOfertas?.trim() || "Ofertas";
+  // La sección de ofertas va primera en el menú, con su nombre, solo si hay ofertas hoy (0034).
+  const categorias = productos.some((p) => p.descuento > 0 && !p.agotado) ? [{ id: OFERTAS, label: nombreOfertas }, ...cats] : cats;
+  return { tienda: { nombre, slug, celular: d.config.pagos.whatsapp.celular, logo, plan, demo: esHeather(slug), portada: portadaDe(slug), nombreOfertas }, productos, categorias };
 }
 
 export const leerCategoria = (v: string | string[] | undefined, validas: string[]): string | "todos" => {

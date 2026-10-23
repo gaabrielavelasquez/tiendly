@@ -32,3 +32,11 @@ export async function guardarWhatsappVentas(celular: string): Promise<{ ok: true
   await mutarPanel((d) => void ((d.config.pagos.whatsapp.celular = celular), (d.tienda.celularVentas = celular)));
   return { ok: true };
 }
+
+/** Nombre de la sección de ofertas (Mi tienda, 0034): hasta 20 caracteres; vacío vuelve a "Ofertas". */
+export async function guardarNombreOfertas(nombre: string): Promise<{ ok: true } | { error: string }> {
+  const limpio = nombre.trim().replace(/\s+/g, " ");
+  if (limpio.length > 20) return { error: "Usa hasta 20 caracteres." };
+  await mutarPanel((d) => void (d.tienda.nombreOfertas = limpio || undefined));
+  return { ok: true };
+}

@@ -1,7 +1,7 @@
 "use client";
 import { useRef, useState } from "react";
 import { CloudOff, Monitor, Smartphone, X } from "lucide-react";
-import { PanelMain } from "@/components/panel";
+import { PanelMain, useOcultarBarraInferior } from "@/components/panel";
 import { Badge, Button, Card, EmptyState } from "@/components/ui";
 import { cn } from "@/lib/cn";
 import { ACENTOS, TEMAS } from "../lib/config";
@@ -11,13 +11,16 @@ import { Apariencia } from "./apariencia";
 import { CamposFree } from "./campos-free";
 import { MiTiendaSkeleton } from "./mi-tienda-skeleton";
 import { ProBloqueado } from "./pro-bloqueado";
+import { SeccionOfertas } from "./seccion-ofertas";
 import { TiendaPreview, type Muestra } from "./tienda-preview";
 import { SalidaSinGuardar } from "./salida-sin-guardar";
 
 /** `tienda`: la de la sesión (nombre y slug); una tienda nueva arranca sin la portada ni los textos de Heather. */
-export function MiTiendaVista({ escenario, whatsappVentas, plan, tienda }: { escenario?: string; whatsappVentas: string; plan: "free" | "pro"; tienda: { nombre: string; slug: string; demo: boolean; muestras: Muestra[] } }) {
-  const m = useMiTienda(escenario, whatsappVentas, tienda);
+export function MiTiendaVista({ escenario, whatsappVentas, plan, tienda }: { escenario?: string; whatsappVentas: string; plan: "free" | "pro"; tienda: { nombre: string; slug: string; demo: boolean; muestras: Muestra[]; nombreOfertas: string; categorias: string[] } }) {
+  const m = useMiTienda(escenario, whatsappVentas, tienda, tienda.nombreOfertas);
   const salida = useSalidaSinGuardar(m.pendiente, m.guardando);
+  // Con cambios sin guardar, la barra de guardar reemplaza a la de pestañas en móvil (antes la tapaba y no se podía guardar).
+  useOcultarBarraInferior(m.pendiente);
   const [computadora, setComputadora] = useState(false);
   const preview = useRef<HTMLDialogElement>(null);
   // Figma MT2 / MTD1: la vista previa dice qué tema y acento muestra («Editorial · Terracota»).
@@ -35,6 +38,7 @@ export function MiTiendaVista({ escenario, whatsappVentas, plan, tienda }: { esc
         <div className="flex min-w-0 flex-col gap-5">
           <Apariencia tienda={m.tienda} nombre={tienda.nombre} cambiar={m.cambiar} vistaPrevia={() => preview.current?.showModal()} />
           <CamposFree tienda={m.tienda} errores={m.errores} cambiar={m.cambiar} />
+          <SeccionOfertas tienda={m.tienda} errores={m.errores} cambiar={m.cambiar} categorias={tienda.categorias} />
           <ProBloqueado plan={plan} />
         </div>
         <aside className="sticky top-6 hidden min-w-0 xl:block" aria-label="Vista previa en vivo">
