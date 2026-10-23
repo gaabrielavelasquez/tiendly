@@ -4,7 +4,7 @@ import type { Categoria } from "@/features/productos/types";
 
 type PieProps = { nombre: string; logo?: string; slug: string; celular: string; categorias: { id: Categoria; label: string }[] };
 
-/** Iniciales de las dos primeras palabras ("Aurora Calzado" → "AC"): siempre caben en el círculo. */
+/** Iniciales de las dos primeras palabras ("Glow Labo" → "GL"): siempre caben en el círculo. */
 const iniciales = (nombre: string) =>
   nombre.split(/\s+/).filter(Boolean).slice(0, 2).map((p) => p[0]).join("");
 

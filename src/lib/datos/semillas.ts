@@ -5,43 +5,54 @@ import type { RubroId } from "@/features/onboarding/lib/rubros";
 import { CATALOGO_HEATHER } from "@/features/productos/lib/catalogo-heather";
 import type { Producto } from "@/features/productos/types";
 import type { DatosTienda } from "./tienda";
+import { TIENDAS_EJEMPLO } from "./tiendas-ejemplo";
 
 // Datos de partida: la tienda de demo y las tiendas nuevas del onboarding.
 
 /**
- * La tienda de demo: Heather en local; en Vercel, Aurora Calzado (ficticia), porque Heather todavía no dio
- * permiso para publicar su tienda. `TIENDLY_TIENDA_DEMO` la fija a mano.
+ * La tienda de demo: Heather en local; en Vercel, MUÑA (ficticia, la misma de la vista previa del registro),
+ * porque Heather todavía no dio permiso para publicar su tienda. `TIENDLY_TIENDA_DEMO` la fija a mano.
  */
-export const slugDemo = () => process.env.TIENDLY_TIENDA_DEMO ?? (process.env.VERCEL ? "aurora" : "heather");
+export const slugDemo = () => process.env.TIENDLY_TIENDA_DEMO ?? (process.env.VERCEL ? "muna" : "heather");
+
+/** Tiendas de demo retiradas: ya no existen aunque sigan guardadas (Aurora Calzado, reemplazada por MUÑA en 0033). */
+export const RETIRADAS = new Set(["aurora"]);
 
 /** Contenido propio de Heather (portada, fotos, beneficios, pedidos de demo): solo en su tienda. */
 export const esHeather = (slug: string) => slug === "heather";
 
-const TALLAS = ["35", "36", "37", "38", "39", "40"];
-const modelo = (id: string, nombre: string, categoria: Producto["categorias"][number], precio: number, stock: Record<string, number[]>): Producto => ({
-  id, nombre, categorias: [categoria], estado: "activo", precio,
-  variantes: Object.entries(stock).flatMap(([color, s]) => TALLAS.map((talla, i) => ({ color, talla, stock: s[i] ?? 0 }))),
-});
+/** Datos de tienda de los productos de MUÑA (la vista previa del registro solo usa nombre, precio y foto). */
+const DETALLE_MUNA: Record<string, { id: string; categoria: Producto["categorias"][number]; color: string; tallas: string[]; stock: number[]; descripcion: string }> = {
+  "Botín Saya": { id: "m1", categoria: "botas", color: "Café", tallas: ["35", "36", "37", "38", "39", "40"], stock: [1, 2, 3, 2, 1, 0],
+    descripcion: "Botín de cuero liso con punta fina y taco de 5 cm. Va con jean, con falda y con vestido." },
+  "Chompa Qori": { id: "m2", categoria: "ropa", color: "Oliva", tallas: ["S", "M", "L"], stock: [2, 3, 1],
+    descripcion: "Chompa tejida de cuello alto con medio cierre. Abriga sin pesar y no pica." },
+  "Falda Lluvia": { id: "m3", categoria: "ropa", color: "Plata", tallas: ["S", "M", "L"], stock: [1, 2, 2],
+    descripcion: "Falda midi de lentejuelas que se mueve al caminar. Forrada por dentro, con elástico en la cintura." },
+};
 
-/** Aurora Calzado: tienda ficticia, sin fotos (la miniatura muestra el ícono de la categoría). */
-function aurora(): DatosTienda {
+/** MUÑA: la tienda de demo pública (moda, ficticia). Mismos productos y fotos que la vista previa del registro. */
+function muna(): DatosTienda {
+  const ejemplo = TIENDAS_EJEMPLO.find((t) => t.slug === "muna")!;
   const config: ConfigCompra = structuredClone(CONFIG_HEATHER);
   config.pagos.whatsapp.celular = "900000000";
-  config.pagos.cobros = { estado: "activo", tarjeta: true, yape: true, cuenta: { banco: "BCP", tipo: "Cuenta corriente", ultimos4: "0000", titular: "AURORA CALZADO (DEMO)" } };
+  config.pagos.cobros = { estado: "activo", tarjeta: true, yape: true, cuenta: { banco: "BCP", tipo: "Cuenta corriente", ultimos4: "0000", titular: "MUÑA (DEMO)" } };
   config.entregas.recojo.activo = false;
   return {
-    tienda: { nombre: "Aurora Calzado", slug: "aurora", celularVentas: "900000000", plan: "free", hechos: { pagos: true, entregas: true, compartir: true } },
-    productos: [
-      modelo("a1", "Balerinas Lía", "balerinas", 180, { Negro: [2, 3, 3, 2, 1, 1], Camel: [1, 2, 2, 1, 1, 0] }),
-      modelo("a2", "Botines Nara", "botas", 290, { Negro: [1, 2, 2, 2, 1, 0], Choco: [0, 1, 2, 1, 1, 0] }),
-      modelo("a3", "Tacos Vera", "tacos", 240, { Negro: [1, 1, 2, 1, 1, 0], Vainilla: [0, 1, 1, 1, 0, 0] }),
-      modelo("a4", "Plataformas Isla", "plataformas", 260, { Blanco: [0, 1, 2, 2, 1, 0] }),
-    ],
+    tienda: { nombre: ejemplo.nombre, slug: ejemplo.slug, celularVentas: "900000000", plan: "free", hechos: { pagos: true, entregas: true, compartir: true } },
+    productos: ejemplo.productos.map((p) => {
+      const d = DETALLE_MUNA[p.nombre];
+      return {
+        id: d.id, nombre: p.nombre, descripcion: d.descripcion, categorias: [d.categoria], estado: "activo", precio: p.precio,
+        variantes: d.tallas.map((talla, i) => ({ color: d.color, talla, stock: d.stock[i] ?? 0 })),
+        imagen: p.foto, fotos: { [d.color]: [p.foto] },
+      };
+    }),
     pedidos: { ultimo: 1000, creados: [] },
     inventario: {},
     cupones: [],
     config,
-    rubros: ["calzado"],
+    rubros: ["moda", "calzado"],
   };
 }
 
@@ -57,7 +68,7 @@ function heather(): DatosTienda {
   };
 }
 
-export const semillaDemo = () => (slugDemo() === "heather" ? heather() : aurora());
+export const semillaDemo = () => (slugDemo() === "heather" ? heather() : muna());
 
 type Nueva = { nombre: string; slug: string; celularVentas: string; rubros: RubroId[]; duena?: string };
 

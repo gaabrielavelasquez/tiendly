@@ -71,6 +71,8 @@ export function SelectorTalla({ tallas, valor, agotadas, error, onCambio }: Tall
           {error}
         </p>
       )}
+      {/* Solo con medidas cargadas: sin ellas (p. ej. S, M, L) la tabla sería una lista de guiones. */}
+      {tallas.some((t) => TALLAS_CM[t]) && (
       <details className="text-caption text-fg-secondary">
         <summary className="w-fit cursor-pointer underline underline-offset-4 hover:text-fg">Ver tabla de tallas</summary>
         <dl className="mt-3 grid grid-cols-2 gap-x-6 gap-y-1 sm:grid-cols-3">
@@ -82,6 +84,7 @@ export function SelectorTalla({ tallas, valor, agotadas, error, onCambio }: Tall
           ))}
         </dl>
       </details>
+      )}
     </fieldset>
   );
 }

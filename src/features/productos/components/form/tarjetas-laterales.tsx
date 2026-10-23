@@ -10,6 +10,7 @@ const CATEGORIAS: { id: Categoria; label: string }[] = [
   { id: "tacos", label: "Tacos" },
   { id: "botas", label: "Botas" },
   { id: "plataformas", label: "Plataformas" },
+  { id: "ropa", label: "Ropa" },
 ];
 
 type EstadoProps = { estado: "activo" | "pausado"; onCambio: (e: "activo" | "pausado") => void };

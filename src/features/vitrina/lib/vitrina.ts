@@ -3,6 +3,7 @@ import { nivelStock, stockTotal } from "@/features/productos/lib/reglas";
 import type { Categoria, Producto, Variante } from "@/features/productos/types";
 import { DETALLE, HEX_COLOR } from "./contenido";
 import { esHeather } from "@/lib/datos/semillas";
+import { TIENDAS_EJEMPLO } from "@/lib/datos/tiendas-ejemplo";
 import { datosTienda } from "@/lib/datos/tienda";
 
 // Vitrina pública: lo que ve el cliente. Lee el mismo catálogo que el panel, pero solo lo publicado.
@@ -24,10 +25,20 @@ export type ProductoVitrina = {
 /** Lo que agrega la página de producto. */
 export type FichaProducto = ProductoVitrina & { variantes: Variante[]; tallas: string[]; fotos: Record<string, string[]>; corto?: string; sobre?: string };
 
-/** `demo`: Heather trae su portada, fotos y beneficios; las demás tiendas muestran solo lo que cargaron. */
-export type Vitrina = { tienda: { nombre: string; slug: string; celular: string; logo?: string; plan: "free" | "pro"; demo: boolean }; productos: ProductoVitrina[]; categorias: { id: Categoria; label: string }[] };
+/** Portada de una sola foto, con su titular y bajada (hoy, la de MUÑA; Mi tienda todavía no la publica). */
+export type PortadaPropia = { src: string; alt: string; titulo: string; bajada: string };
 
-export const LABEL: Record<Categoria, string> = { balerinas: "Balerinas", tacos: "Tacos", botas: "Botas", plataformas: "Plataformas" };
+/** `demo`: Heather trae su portada, fotos y beneficios; las demás tiendas muestran solo lo que cargaron. */
+export type Vitrina = {
+  tienda: { nombre: string; slug: string; celular: string; logo?: string; plan: "free" | "pro"; demo: boolean; portada?: PortadaPropia };
+  productos: ProductoVitrina[];
+  categorias: { id: Categoria; label: string }[];
+};
+
+/** La portada de una tienda de ejemplo que existe de verdad (MUÑA, la demo pública): la misma de la vista previa del registro. */
+const portadaDe = (slug: string): PortadaPropia | undefined => TIENDAS_EJEMPLO.find((t) => t.slug === slug)?.portada;
+
+export const LABEL: Record<Categoria, string> = { balerinas: "Balerinas", tacos: "Tacos", botas: "Botas", plataformas: "Plataformas", ropa: "Ropa" };
 
 /** "Vestido Chloé" → "vestido-chloe" (para el link del producto). */
 export const slugProducto = (nombre: string) =>
@@ -90,7 +101,7 @@ export async function obtenerVitrina(slug: string): Promise<Vitrina | null> {
   const presentes = new Set(productos.flatMap((p) => p.categorias));
   const categorias = (Object.keys(LABEL) as Categoria[]).filter((c) => presentes.has(c)).map((id) => ({ id, label: LABEL[id] }));
   const { nombre, logo, plan } = d.tienda;
-  return { tienda: { nombre, slug, celular: d.config.pagos.whatsapp.celular, logo, plan, demo: esHeather(slug) }, productos, categorias };
+  return { tienda: { nombre, slug, celular: d.config.pagos.whatsapp.celular, logo, plan, demo: esHeather(slug), portada: portadaDe(slug) }, productos, categorias };
 }
 
 export const leerCategoria = (v: string | string[] | undefined, validas: Categoria[]): Categoria | "todos" => {

@@ -1,7 +1,7 @@
 export type Escenario = "catalogo" | "vacio" | "error";
 
-/** Heather es una marca de calzado hecho a mano. */
-export type Categoria = "balerinas" | "tacos" | "botas" | "plataformas";
+/** Calzado de Heather y la ropa de MUÑA (tienda de demo). Pasan a texto libre con la decisión 0032 (PR #18). */
+export type Categoria = "balerinas" | "tacos" | "botas" | "plataformas" | "ropa";
 
 /** Una combinación de colorway y talla, con su propio stock. */
 export type Variante = { color: string; talla: string; stock: number };

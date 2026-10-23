@@ -15,9 +15,9 @@ El registro tenía las mismas huellas "de plantilla" que Inicio antes de 0031: d
 3. **Google:** el logo "G" oficial a todo color, a la izquierda de "Continuar con Google", en el botón secundario neutro (guías de marca de Google).
 4. **Beneficios:** máximo 3, en texto plano, sin íconos. El tercero, multirubro: "Tus productos con sus opciones, en un solo link.".
 5. **Vista previa: tres tiendas de ejemplo de rubros distintos** (decisión 0032), que se turnan cada 5 s con un fundido suave. Rótulo visible: "Así se verá tu tienda.". Cada una con su tema y sus productos (nombres y precios inventados, fotos reales de Unsplash y Pexels):
-   - **MUÑA**, moda, tema Editorial.
+   - **MUÑA**, moda, tema Editorial. Portada: la cartera; 3 productos (botín, chompa y falda).
    - **keyhaus**, teclados mecánicos y setup, tema Neutral.
-   - **Glow Labo**, skincare y maquillaje, tema Suave.
+   - **Glow Labo**, skincare y maquillaje, tema Suave. Portada: el sérum sobre la piedra. Tonos tierra: sin fotos rosadas.
    - Fotos en `public/tiendas-ejemplo` (WebP; portada 16:9 a 1280 × 720, productos 4:5 a 480 × 600). Los originales quedan fuera del repo (`fotos-originales/`, ignorada por git).
    - Los links usan el formato real (`urlTienda`, que lee `TIENDLY_URL_TIENDAS`).
    - **Movimiento:** con "reducir movimiento" queda fija en la primera. La rotación se pausa con el puntero o el foco encima, y se detiene al elegir una tienda con sus puntos (WCAG 2.2.2).
@@ -30,4 +30,5 @@ El registro tenía las mismas huellas "de plantilla" que Inicio antes de 0031: d
 - Sin tokens nuevos. `Field` suma la prop opcional `prefixFijo`; los demás campos con prefijo no cambian.
 - Los pasos código, datos y lista siguen con el shell anterior (`OnboardingShell`) hasta su propio pase.
 - Las tiendas de ejemplo viven en `src/lib/datos/tiendas-ejemplo.ts`; no son tiendas reales del almacén.
-- Se retiran las fotos de Aurora generadas con IA (`public/aurora`) y su uso en la tienda de demo: Aurora vuelve a como está en `main`, sin fotos.
+- Se retiran las fotos de Aurora generadas con IA (`public/aurora`).
+- **MUÑA reemplaza a Aurora como tienda de demo pública** (`/muna`, con su portada, productos, tema Editorial y descripciones). `/aurora` da 404 aunque siga guardada en Redis (`RETIRADAS` en `semillas.ts`); la clave `production:tienda:aurora` se puede borrar después del merge. Los slugs `muna`, `keyhaus`, `glow-labo` y `aurora` quedan reservados.

@@ -114,8 +114,8 @@ type Producto = { …; opciones: Opcion[]; variantes: Variante[]; categorias: st
 | Onboarding, mini tienda | "Nueva colección" | "Novedades" | S |
 | Mi tienda, Pro | "Por ejemplo, heathercalzado.pe." | "Por ejemplo, tutienda.pe." | S |
 | Mi tienda, bienvenida de ejemplo | "Zapatos que acompañan tu día, hechos para ti." | Solo para Heather; neutra para el resto | S |
-| Registro, vista previa | Aurora Calzado (rama `feat/registro-diseno`, en pausa) | Tres tiendas de rubros distintos; fotos pendientes de Gabi | M |
-| Demo en Vercel | Aurora Calzado (solo calzado) | Mantener Aurora y sumar 2 tiendas de demo de otros rubros (mismas de la vista previa) | M |
+| Registro, vista previa | Aurora Calzado | **Hecho en #20:** MUÑA, keyhaus y Glow Labo | M |
+| Demo en Vercel | Aurora Calzado (solo calzado) | **Hecho en #20:** MUÑA reemplaza a Aurora (`/muna`); keyhaus y Glow Labo pueden sumarse como tiendas de verdad después | M |
 | Heather (local) | Calzado de mujer | Se queda: es una tienda real de calzado | — |
 
 **Riesgo:** bajo. Las fotos de las tiendas nuevas son el cuello de botella.
@@ -134,8 +134,8 @@ type Producto = { …; opciones: Opcion[]; variantes: Variante[]; categorias: st
 
 Datos que hay hoy:
 
-- **Redis (producción y preview):** Aurora (demo) y las tiendas creadas en pruebas, cada una en `<entorno>:tienda:<slug>`, con productos, inventario y pedidos.
-- **Código:** Heather (local) y Aurora se siembran desde `catalogo-heather.ts` y `semillas.ts`.
+- **Redis (producción y preview):** la tienda de demo (MUÑA desde #20; Aurora queda retirada) y las tiendas creadas en pruebas, cada una en `<entorno>:tienda:<slug>`, con productos, inventario y pedidos.
+- **Código:** Heather (local) y MUÑA se siembran desde `catalogo-heather.ts` y `semillas.ts`.
 - **Navegador del cliente:** carrito en `localStorage`.
 
 Plan, en este orden, sin cortar el servicio:
@@ -144,7 +144,7 @@ Plan, en este orden, sin cortar el servicio:
 2. **Inventario.** `ItemStock { id, color, talla }` → `{ id, variante }`. Como `variante` es `"Plata|36"`, las claves internas son las mismas. Para productos con "Único/Única" se usa `claveLegado(p, color, talla)`, que traduce al valor nuevo (`""`, `"Plata"` o `"36"`). Las asignaciones viejas se leen con esa función.
 3. **Carrito.** `leerCarrito` traduce `{ color, talla }` igual que el inventario.
 4. **Categorías.** `"balerinas"` → `"Balerinas"` con el `LABEL` actual, una vez, al leer. Las tiendas nuevas escriben texto libre.
-5. **Semillas.** `catalogo-heather.ts` y `aurora.ts` pasan a escribir el formato nuevo directo.
+5. **Semillas.** `catalogo-heather.ts` y la de MUÑA (`semillas.ts`) pasan a escribir el formato nuevo directo.
 6. **Pruebas antes del PR:** un JSON real de producción (exportado de Redis) pasado por `migrarProducto`, comparando stock disponible y textos de variante antes y después: tienen que ser idénticos. Más el recorrido del core loop en Heather y Aurora (compra pagada, por WhatsApp, reserva vencida, stock 20 → 18).
 7. **Limpieza** (otro PR, cuando todas las tiendas se hayan guardado al menos una vez o con un script de una sola vez): quitar el lector viejo.
 
@@ -152,7 +152,7 @@ Plan, en este orden, sin cortar el servicio:
 
 ## Orden propuesto (PRs)
 
-1. **Modelo + migración + adaptadores** (§1, §11): sin cambios visibles. Heather y Aurora se ven idénticas. **M**.
+1. **Modelo + migración + adaptadores** (§1, §11): sin cambios visibles. Heather y la tienda de demo se ven idénticas. **M**.
 2. **Vitrina, carrito, compra** (§5–§8): genéricos, con capturas antes y después. **M**.
 3. **Formulario de producto + lista** (§2, §4): necesita diseño aprobado de "Agregar opción". **L**.
 4. **Copy, rubros y placeholders** (§9, §10): se puede adelantar, es independiente. **S**.
