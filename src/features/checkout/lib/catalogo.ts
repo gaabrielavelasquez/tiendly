@@ -2,6 +2,8 @@ import { obtenerProductos } from "@/features/productos/lib/mock";
 import { obtenerVitrina, slugProducto } from "@/features/vitrina/lib/vitrina";
 import { configDe } from "@/features/configuracion/lib/mock";
 import { claveVariante, detalleVariante, fotosDe } from "@/features/productos/lib/variantes";
+import { precioVigente } from "@/features/productos/lib/ofertas";
+import { hoyLima } from "@/lib/reloj";
 import type { CatalogoCompra } from "../types";
 import { reglasCompra } from "./config";
 
@@ -15,13 +17,15 @@ export async function obtenerCompra(slug: string) {
   const [productos, config] = await Promise.all([obtenerProductos("catalogo", slug), configDe(slug)]);
   if (!config) return null;
   const activos = productos.filter((p) => p.estado === "activo");
+  const hoy = hoyLima();
   const catalogo: CatalogoCompra = Object.fromEntries(
     activos.map((p) => [
       p.id,
       {
         nombre: p.nombre,
         slug: slugProducto(p.nombre),
-        precio: p.precio,
+        // El precio de hoy (0034): con la oferta activa, el de oferta; si no, el normal. El cupón se aplica encima.
+        precio: precioVigente(p, hoy),
         foto: p.imagen,
         variantes: Object.fromEntries(
           p.variantes.map((v) => [claveVariante(v.valores), { stock: v.stock, foto: fotosDe(p, v.valores)[0], detalle: detalleVariante(p.opciones, v.valores) }]),

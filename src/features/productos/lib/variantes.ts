@@ -6,6 +6,17 @@ import type { Opcion, Producto, TipoOpcion, Variante } from "../types";
 /** Un valor elegido, con el nombre y el tipo de su opción ("Talla", talla, "36"). */
 export type ValorOpcion = { nombre: string; tipo: TipoOpcion; valor: string };
 
+/** El tipo de una opción sale de su nombre (0034): "Color" lleva muestras; "Talla", tabla de tallas; el resto, botones. */
+export function tipoDeNombre(nombre: string): TipoOpcion {
+  const n = nombre.trim().toLowerCase();
+  return n === "color" ? "color" : n === "talla" ? "talla" : "otra";
+}
+
+/** Combinaciones de valores, en el orden de las opciones (la primera agrupa). Sin opciones: una sola, []. */
+export function combinaciones(opciones: readonly { valores: readonly string[] }[]): string[][] {
+  return opciones.filter((o) => o.valores.length).reduce<string[][]>((acc, o) => acc.flatMap((c) => o.valores.map((v) => [...c, v])), [[]]);
+}
+
 /** Clave de una variante: sus valores unidos. Para color × talla queda igual que antes ("Plata|36"). */
 export const claveVariante = (valores: readonly string[]) => valores.join("|");
 

@@ -6,17 +6,17 @@ import { useRef, useState } from "react";
 import { Badge } from "@/components/ui";
 import { cn } from "@/lib/cn";
 import type { ImagenForm } from "../../lib/formulario";
-import { TarjetaSeccion as Tarjeta } from "@/components/panel";
+import { Seccion } from "@/components/panel";
 
 const MAX_MB = 5;
 
 type MediaProps = { imagenes: ImagenForm[]; onAgregar: (i: ImagenForm[]) => void; onQuitar: (id: string) => void };
 
 /**
- * Fotos: zona para soltar o elegir archivos (punteada sobre bg/page). Valida tipo y peso; la primera
- * foto es la principal. Hasta tener backend, las vistas previas viven solo en este navegador.
+ * Fotos (pase 0031: título fuera, ícono fino sin círculo): zona para soltar o elegir archivos. Valida tipo y peso;
+ * la primera es la principal. Si cambian por color, se asignan en Opciones (0034).
  */
-export function TarjetaMedia({ imagenes, onAgregar, onQuitar }: MediaProps) {
+export function SeccionFotos({ imagenes, onAgregar, onQuitar }: MediaProps) {
   const input = useRef<HTMLInputElement>(null);
   const [encima, setEncima] = useState(false);
   const [error, setError] = useState("");
@@ -30,7 +30,7 @@ export function TarjetaMedia({ imagenes, onAgregar, onQuitar }: MediaProps) {
   }
 
   return (
-    <Tarjeta titulo="Fotos" descripcion="La primera es la principal. Usa fondo claro y buena luz.">
+    <Seccion id="sec-fotos" titulo="Fotos" descripcion="La primera es la principal. Si las fotos cambian por color, las asignas en Opciones.">
       <div
         onDragOver={(e) => (e.preventDefault(), setEncima(true))}
         onDragLeave={() => setEncima(false)}
@@ -40,9 +40,7 @@ export function TarjetaMedia({ imagenes, onAgregar, onQuitar }: MediaProps) {
           encima ? "border-selected-border bg-sunken" : "border-line bg-page",
         )}
       >
-        <span className="flex size-11 items-center justify-center rounded-full border border-line-subtle bg-surface shadow-card">
-          <ImagePlus aria-hidden strokeWidth={1.6} className="size-5 text-icon" />
-        </span>
+        <ImagePlus aria-hidden strokeWidth={1.5} className="size-6 text-icon" />
         <p className="text-body-sm text-fg">
           <button type="button" onClick={() => input.current?.click()} className="link-text relative after:absolute after:-inset-3 after:content-['']">
             Elige fotos
@@ -78,6 +76,6 @@ export function TarjetaMedia({ imagenes, onAgregar, onQuitar }: MediaProps) {
           ))}
         </ul>
       )}
-    </Tarjeta>
+    </Seccion>
   );
 }

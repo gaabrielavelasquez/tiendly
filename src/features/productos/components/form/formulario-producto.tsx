@@ -5,26 +5,30 @@ import { AnimatePresence, motion } from "motion/react";
 import { useReducedMotion } from "@/components/motion/use-reduced-motion";
 import Link from "next/link";
 import { useState } from "react";
+import { Seccion } from "@/components/panel";
+import { Field } from "@/components/ui";
 import { plural } from "@/lib/formato";
 import { motionTokens } from "@/styles/tokens";
 import { useFormularioProducto } from "../../hooks/use-formulario-producto";
 import type { FormProducto } from "../../lib/formulario";
+import type { Categoria } from "../../types";
 import { BarraAcciones } from "./barra-acciones";
 import { CampoDescripcion } from "./campo-descripcion";
-import { TarjetaMedia } from "./tarjeta-media";
-import { TarjetaPrecios } from "./tarjeta-precios";
-import { TarjetaVariantes } from "./tarjeta-variantes";
-import { TarjetaSeccion as Tarjeta } from "@/components/panel";
-import { TarjetaEstado, TarjetaOrganizacion } from "./tarjetas-laterales";
-import { Field } from "@/components/ui";
+import { SeccionFotos } from "./seccion-fotos";
+import { SeccionCategoria, SeccionEstado } from "./seccion-laterales";
+import { SeccionOpciones } from "./seccion-opciones";
+import { SeccionPrecio } from "./seccion-precio";
+import { SeccionStock } from "./seccion-stock";
 
-type FormularioProps = { titulo: string; inicial: FormProducto; id?: string };
+/** `hoy`: día de Lima (para la oferta); `categorias`: las que ya usa la tienda. */
+type FormularioProps = { titulo: string; inicial: FormProducto; id?: string; hoy: string; categorias: Categoria[] };
 
 /**
- * Crear / editar producto en dos columnas (2/3 contenido, 1/3 ajustes) para no cansar con un
- * formulario larguísimo. En móvil, una columna con los ajustes primero.
+ * Crear / editar producto con el pase 0031: títulos de sección fuera de los contenedores, un contenedor por sección y
+ * 40 · 48 px entre secciones. Desktop: 2/3 contenido y 1/3 ajustes (Estado y Categoría); móvil: una columna, con
+ * "Guardar producto" fijo abajo (la barra de pestañas no se muestra aquí). Opciones genéricas (0032) y oferta (0034).
  */
-export function FormularioProducto({ titulo, inicial, id }: FormularioProps) {
+export function FormularioProducto({ titulo, inicial, id, hoy, categorias }: FormularioProps) {
   const f = useFormularioProducto(inicial, id);
   const reduce = useReducedMotion();
   const [resumen, setResumen] = useState("");
@@ -49,26 +53,22 @@ export function FormularioProducto({ titulo, inicial, id }: FormularioProps) {
         </p>
       )}
 
-      <div className="grid items-start gap-6 lg:grid-cols-3">
-        <div className="order-2 flex flex-col gap-6 lg:order-1 lg:col-span-2">
-          <Tarjeta titulo="Información general">
-            <Field
-              id="campo-nombre"
-              label="Nombre"
-              placeholder="Ej. Vestido Chloé"
-              value={f.form.nombre}
-              onChange={(e) => f.set("nombre", e.target.value)}
-              error={f.errores.nombre}
-            />
+      <div className="grid items-start gap-10 lg:grid-cols-3 lg:gap-12">
+        <div className="flex flex-col gap-10 lg:col-span-2 lg:gap-12">
+          <Seccion id="sec-info" titulo="Información">
+            <Field id="campo-nombre" label="Nombre" placeholder="Ej.: Lámpara lunar impresa en 3D" value={f.form.nombre}
+              onChange={(e) => f.set("nombre", e.target.value)} error={f.errores.nombre} />
             <CampoDescripcion valor={f.form.descripcion} onCambio={(v) => f.set("descripcion", v)} />
-          </Tarjeta>
-          <TarjetaMedia imagenes={f.form.imagenes} onAgregar={f.agregarImagenes} onQuitar={f.quitarImagen} />
-          <TarjetaPrecios form={f.form} errores={f.errores} onCambio={(k, v) => f.set(k, v)} />
-          <TarjetaVariantes form={f.form} errores={f.errores} onColor={f.alternarColor} onTalla={f.alternarTalla} onVariante={f.setVariante} />
+          </Seccion>
+          <SeccionFotos imagenes={f.form.imagenes} onAgregar={f.agregarImagenes} onQuitar={f.quitarImagen} />
+          <SeccionPrecio form={f.form} errores={f.errores} hoy={hoy} onCambio={(k, v) => f.set(k, v)} />
+          <SeccionOpciones form={f.form} error={f.errores.opciones} imagenes={f.form.imagenes}
+            onOpciones={f.setOpciones} onOpcionFotos={f.setOpcionFotos} onFotoValor={f.alternarFotoValor} />
+          <SeccionStock form={f.form} onStock={f.setStock} />
         </div>
-        <aside className="order-1 flex flex-col gap-6 lg:sticky lg:top-24 lg:order-2">
-          <TarjetaEstado estado={f.form.estado} onCambio={(e) => f.set("estado", e)} />
-          <TarjetaOrganizacion categorias={f.form.categorias} onAlternar={f.alternarCategoria} />
+        <aside className="flex flex-col gap-10 lg:sticky lg:top-24 lg:gap-12">
+          <SeccionEstado estado={f.form.estado} onCambio={(e) => f.set("estado", e)} />
+          <SeccionCategoria elegidas={f.form.categorias} deLaTienda={categorias} onAlternar={f.alternarCategoria} onAgregar={f.agregarCategoria} />
         </aside>
       </div>
 
@@ -85,7 +85,7 @@ export function FormularioProducto({ titulo, inicial, id }: FormularioProps) {
               <CircleCheck aria-hidden strokeWidth={1.8} className="size-4 shrink-0" />
               <span className="flex-1">
                 {f.guardado.pausado
-                  ? `${f.form.nombre || "El producto"} se guardó pausado: falta ${f.guardado.pausado}. Complétalo y actívalo para venderlo.`
+                  ? `Guardamos ${f.form.nombre || "el producto"} en pausa: le falta ${f.guardado.pausado}.`
                   : `${f.form.nombre} se guardó${f.form.estado === "activo" ? " y ya se ve en tu tienda" : ""}.`}
               </span>
               <Link href="/panel/productos" className="h-9 shrink-0 rounded-theme px-3 py-2 font-semibold hover:bg-fg-inverse/10">

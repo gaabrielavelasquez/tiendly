@@ -24,3 +24,9 @@ export async function obtenerProductos(escenario: Escenario, slug: string): Prom
   const d = await datosTienda(slug);
   return d ? conDisponible(d.productos, d.inventario, ahoraIso()) : [];
 }
+
+/** Las categorías que ya usa la tienda, en orden de aparición (para elegir en el formulario de producto). */
+export async function categoriasDeTienda(slug: string): Promise<string[]> {
+  const d = await datosTienda(slug);
+  return [...new Set((d?.productos ?? []).flatMap((p) => p.categorias))];
+}

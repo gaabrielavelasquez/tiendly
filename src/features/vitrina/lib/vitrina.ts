@@ -2,6 +2,8 @@ import { obtenerProductos } from "@/features/productos/lib/mock";
 import { nivelStock, stockTotal } from "@/features/productos/lib/reglas";
 import type { Producto } from "@/features/productos/types";
 import { claveVariante, COLOR_UNICO_LEGADO, fotosDe, TALLA_UNICA_LEGADO, valorDe } from "@/features/productos/lib/variantes";
+import { estadoOferta, precioVigente } from "@/features/productos/lib/ofertas";
+import { hoyLima } from "@/lib/reloj";
 import { DETALLE, HEX_COLOR } from "./contenido";
 import { esHeather } from "@/lib/datos/semillas";
 import { TIENDAS_EJEMPLO } from "@/lib/datos/tiendas-ejemplo";
@@ -53,12 +55,13 @@ export const slugProducto = (nombre: string) =>
 /** Las fotos de Pexels venían en 160 × 160 para el panel; la vitrina las pide en 4:5. Las locales pasan igual. */
 const fotoVitrina = (url?: string) => url?.replace(/w=\d+&h=\d+/, "w=640&h=800");
 
-const aVitrina = (p: Producto): ProductoVitrina => ({
+/** `hoy` (Lima): la oferta se calcula al pedir la página (0034). Fuera de fechas, precio normal y sin tachado. */
+const aVitrina = (p: Producto, hoy: string): ProductoVitrina => ({
   id: p.id,
   slug: slugProducto(p.nombre),
   nombre: p.nombre,
-  precio: p.precio,
-  precioAntes: p.precioAntes,
+  precio: precioVigente(p, hoy),
+  precioAntes: estadoOferta(p, hoy) === "activa" ? p.precioAntes : undefined,
   imagen: fotoVitrina(p.imagen),
   categorias: p.categorias.map(slugProducto),
   agotado: nivelStock(p) === "agotado",
@@ -66,7 +69,7 @@ const aVitrina = (p: Producto): ProductoVitrina => ({
   stock: stockTotal(p),
 });
 
-function aFicha(p: Producto): FichaProducto {
+function aFicha(p: Producto, hoy: string): FichaProducto {
   const variantes = p.variantes.map((v) => ({
     color: valorDe(p, v, "color") ?? COLOR_UNICO_LEGADO,
     talla: valorDe(p, v, "talla") ?? TALLA_UNICA_LEGADO,
@@ -75,7 +78,7 @@ function aFicha(p: Producto): FichaProducto {
   }));
   // Fotos por color de la ficha: las de la primera variante de ese color (la opción de fotos manda).
   const fotos = Object.fromEntries(variantes.map((v, i) => [v.color, fotosDe(p, p.variantes[i].valores)]).reverse());
-  return { ...aVitrina(p), variantes, tallas: [...new Set(variantes.map((v) => v.talla))], fotos, corto: DETALLE[p.id]?.corto, sobre: p.descripcion ?? DETALLE[p.id]?.sobre };
+  return { ...aVitrina(p, hoy), variantes, tallas: [...new Set(variantes.map((v) => v.talla))], fotos, corto: DETALLE[p.id]?.corto, sobre: p.descripcion ?? DETALLE[p.id]?.sobre };
 }
 
 /**
@@ -83,6 +86,7 @@ function aFicha(p: Producto): FichaProducto {
  * `null` si la tienda o el producto no existen, o si el producto no está publicado.
  */
 export async function obtenerFicha(tienda: string, slug: string) {
+  const hoy = hoyLima();
   const d = await datosTienda(tienda);
   if (!d) return null;
   const activos = (await obtenerProductos("catalogo", tienda)).filter((p) => p.estado === "activo");
@@ -90,9 +94,9 @@ export async function obtenerFicha(tienda: string, slug: string) {
   if (!p) return null;
   const otros = activos.filter((x) => x.id !== p.id && nivelStock(x) !== "agotado");
   const misma = otros.filter((x) => x.categorias.some((c) => p.categorias.includes(c)));
-  const relacionados = [...misma, ...otros.filter((x) => !misma.includes(x))].slice(0, 4).map(aVitrina);
+  const relacionados = [...misma, ...otros.filter((x) => !misma.includes(x))].slice(0, 4).map((x) => aVitrina(x, hoy));
   // WhatsApp de ventas: un solo dato, se edita en Mi tienda › Contacto (lo usan la vitrina, Pagos y el checkout).
-  return { tienda: { nombre: d.tienda.nombre, slug: tienda, celular: d.config.pagos.whatsapp.celular, demo: esHeather(tienda) }, ficha: aFicha(p), relacionados };
+  return { tienda: { nombre: d.tienda.nombre, slug: tienda, celular: d.config.pagos.whatsapp.celular, demo: esHeather(tienda) }, ficha: aFicha(p, hoy), relacionados };
 }
 
 /**
@@ -101,11 +105,12 @@ export async function obtenerFicha(tienda: string, slug: string) {
  * (con su etiqueta) al final, para que la tienda no se vea vacía y el cliente sepa que vuelven.
  */
 export async function obtenerVitrina(slug: string): Promise<Vitrina | null> {
+  const hoy = hoyLima();
   const d = await datosTienda(slug);
   if (!d) return null;
   const activos = (await obtenerProductos("catalogo", slug)).filter((p) => p.estado === "activo");
   const productos = activos
-    .map(aVitrina)
+    .map((p) => aVitrina(p, hoy))
     .sort((a, b) => Number(a.agotado) - Number(b.agotado));
   // Las categorías de la tienda, en el orden en que aparecen en su catálogo (texto libre, decisión 0032).
   const textos = [...new Set(activos.flatMap((p) => p.categorias))];
