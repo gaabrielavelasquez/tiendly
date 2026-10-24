@@ -15,6 +15,6 @@ Ambas previews usan Heather solo en ese despliegue para mostrar sus cinco cupone
 | Error | [390](before/error-390.jpg) · [1440](before/error-1440.jpg) | [390](after/error-390.jpg) · [1440](after/error-1440.jpg) |
 | Validación | [390](before/validacion-390.jpg) · [1440](before/validacion-1440.jpg) | [390](after/validacion-390.jpg) · [1440](after/validacion-1440.jpg) |
 
-Carga: [390](after/carga-390.jpg) · [1440](after/carga-1440.jpg). Capturas completas conservan la posición inicial de la barra fija; el padding permite llegar al final por encima de ella. La barra de pestañas se oculta en formulario/lista con acción fija.
+Carga SSR reteniendo el tramo final de datos de la respuesta de Vercel, antes de hidratar: [390](after/carga-390.jpg) · [1440](after/carga-1440.jpg). Capturas completas conservan la posición inicial de la barra fija; el padding permite llegar al final por encima de ella. La barra de pestañas se oculta en formulario/lista con acción fija.
 
 Chrome/WebKit locales: crear con 30,90 y preview/guardado 30.90, eliminar con foco seguro, error de red y reintento; límite Free de tres validado por servidor, y pausar libera un lugar. Chrome/WebKit Vercel: lista, vacío, límite, error, crear/validación, editar y confirmación a 390/1440; WebKit también 360 sin scroll. Switch encendido con check. Ninguna acción de guardado en Vercel. Solo memoria local en 3207, sin Redis. Tokens y build pasan; sin merge.
