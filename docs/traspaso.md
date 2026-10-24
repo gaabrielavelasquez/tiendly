@@ -21,15 +21,15 @@ Para el agente que sigue (Codex) y para Gabi. Antes de tocar código, lee [`AGEN
 | PR | Rama | Estado | Preview |
 |---|---|---|---|
 | **#27** · Tabla de tallas por producto (ofertas 4/4) | `feat/tabla-tallas` | Listo, **espera revisión de Gabi**. Sin conflictos. | Verde |
-| **#29** · MUÑA: ocho productos, galerías por color y Terracota | `feat/muna-catalogo` | Reemplaza al #23, cerrado. Espera revisión de Gabi. | Verde |
+| **#29** · MUÑA: ocho productos, galerías por color y Terracota | `feat/muna-catalogo` | Reemplaza al #23, cerrado. Merge y reset autorizados; resultado final en el PR. | Verde |
 | **#19** · Multirubro: rubros, placeholders y textos | `feat/multirubro-copy` | **Conflicto con `main`** en `formulario-producto.tsx`, `productos-vista.tsx` y `portada.tsx`. Parte de sus textos ya entró por otros PR. | Verde |
 | **#22** · Prototipo de ofertas | `proto/productos-ofertas` | **No mergear.** Ya está implementado (#24 a #27). Cerrarlo y borrar la rama cuando Gabi diga. | Verde |
 
 ## Próximas tareas, en orden
 
 1. **Terminar y revisar el #27 (tabla de tallas).** Ajustar lo que pida Gabi y mergear con su ok. Decisión 0037, que viaja en ese PR.
-2. **Revisar MUÑA en el #29**, que reemplaza al #23: fotos nuevas, ocho productos, Editorial/Terracota y miniaturas de color con agotadas tachadas. La oferta de la falda y las tablas existentes se conservan. No se muestra selector para opciones de un solo valor.
-3. Tras el merge aprobado por Gabi, reiniciar únicamente `production:tienda:muna` (ver Riesgos) y verificar catálogo, Ofertas y galerías. No se ha ejecutado.
+2. **Consultar el registro final de MUÑA en el #29**, que reemplaza al #23: fotos nuevas, ocho productos, Editorial/Terracota y miniaturas de color con agotadas tachadas. La oferta de la falda y las tablas existentes se conservan. No se muestra selector para opciones de un solo valor.
+3. Gabi autorizó el merge y el reinicio de `production:tienda:muna` al cerrar el #29. Consultar su registro final antes de repetir esa operación.
 4. Las tablas por producto siguen en el #27; no se integró esa rama abierta como parte de esta tarea.
 5. **Pase de diseño de Pedidos y Mi tienda** con las reglas de 0031 (`CLAUDE.md` §5 y `DESIGN.md` §3–4). Igual que en Inicio: propuesta con capturas, ok de Gabi y después código.
 
@@ -37,9 +37,9 @@ Pendiente sin fecha: precio y SKU por variante (`docs/backlog.md`); renombrar el
 
 ## Riesgos conocidos
 
-- **MUÑA en producción tiene datos viejos.**
-  - Los datos viven en Upstash Redis (`production:tienda:muna`) y se crearon antes de la oferta de la falda y de las tablas de tallas. Por eso en producción MUÑA no muestra la sección de ofertas ni las tablas.
-  - Arreglo: borrar esa clave para que se vuelva a sembrar. **Solo con el ok de Gabi.** Conviene hacerlo una sola vez, después del #29.
+- **MUÑA: actualización del catálogo en producción (#29).**
+  - Los datos viven en Upstash Redis (`production:tienda:muna`) y, antes del cierre del #29, contenían tres productos sin la oferta de la falda. El resultado del reset autorizado y su verificación se registra en la descripción del #29.
+  - Gabi autorizó reiniciar únicamente esa clave después del merge del #29. Consultar el resultado y el respaldo en el registro final del PR antes de repetir un reset; las demás tiendas quedan fuera.
   - Glow Labo no tiene este problema.
 - **En los previews de Vercel no hay Redis:** los datos viven en la memoria de cada instancia.
   - Algo que se guarda en el panel (un cupón, un producto) puede no verse en la tienda si la otra página cae en otra instancia.
@@ -104,3 +104,4 @@ Pagos, bancos, entregas y WhatsApp siguen simulados. No se enviaron mensajes, co
 - Muestras de color de 14 px con borde fino. Se reconoce Camel (gamuza) como camel y Vino (cuero) como vino; los grupos sin colores conocidos se omiten.
 - La ejecución final del merge, la copia de respaldo del documento de MUÑA, el reset y la captura de producción a 390 px se registran en la descripción del [PR #29](https://github.com/gaabrielavelasquez/tiendly-web/pull/29). Consultar ese registro antes de repetir un reset.
 - Pagos, bancos, envíos y WhatsApp siguen simulados. Solo se autoriza reiniciar MUÑA; no otras tiendas ni claves de Redis.
+- Ajustes finales: `check:tokens` y build local pasan. Las capturas finales de Vercel a 390/1440 están en `tabla-tallas-*.jpg`, `catalogo-muestras-*.jpg` y `muestras-botin-390.png`; verificaciones a 360/390/1440 en Chrome y WebKit.
