@@ -13,9 +13,9 @@ export function MiniaturaTema({ tienda, tema, nombre, muestras }: { tienda: Tien
     <div className="grid min-w-0 grid-cols-2 gap-1 p-1">
       {muestras.slice(0, 2).map(p => <div key={p.nombre} className="min-w-0">
         {p.foto ? <img src={p.foto} alt={p.nombre} className="aspect-[4/5] w-full rounded-theme object-cover" /> : <div className="flex aspect-[4/5] items-center justify-center"><Package aria-hidden strokeWidth={1.5} className="size-4 text-icon" /></div>}
-        <p className="mt-1 truncate text-label">{p.nombre}</p><p className="truncate text-label font-normal tabular-nums">{p.precio}</p>
+        <p className="mt-1 break-words text-label">{p.nombre}</p><p className="break-words text-label font-normal tabular-nums">{p.precio}</p>
       </div>)}
     </div>
-    <span aria-hidden className="mx-1 mb-1 rounded-button bg-accent py-1 text-center text-label text-on-accent">Ver productos</span>
+    <span aria-hidden className="mx-1 mb-1 shrink-0 whitespace-nowrap rounded-button bg-accent py-1 text-center text-label text-on-accent">Ver productos</span>
   </div>;
 }

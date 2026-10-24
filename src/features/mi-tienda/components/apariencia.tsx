@@ -10,9 +10,9 @@ import { Button } from "@/components/ui";
 type Props = { tienda: Tienda; nombre: string; muestras: Muestra[]; muestrasEjemplo: boolean; cambiar: <K extends keyof Tienda>(key: K, valor: Tienda[K]) => void; vistaPrevia: () => void };
 export function Apariencia({ tienda, nombre, muestras, muestrasEjemplo, cambiar, vistaPrevia }: Props) {
   return <><Seccion titulo="Tema">
-    <fieldset><legend className="sr-only">Tema</legend>
-      <div className="grid grid-cols-3 gap-2">
-        {TEMAS.map(t => <label key={t.id} className={cn("relative cursor-pointer rounded-card border p-2", tienda.tema === t.id ? "border-selected-border ring-1 ring-selected-border" : "border-line-subtle")}>
+    <fieldset className="min-w-0"><legend className="sr-only">Tema</legend>
+      <div className="sin-scrollbar flex snap-x snap-mandatory gap-2 overflow-x-auto p-1 md:grid md:grid-cols-3 md:overflow-visible">
+        {TEMAS.map(t => <label key={t.id} className={cn("relative min-w-0 basis-2/5 shrink-0 snap-start cursor-pointer rounded-card border p-2 md:basis-auto", tienda.tema === t.id ? "border-selected-border ring-1 ring-selected-border" : "border-line-subtle")}>
           <input type="radio" name="tema" value={t.id} checked={tienda.tema === t.id} onChange={() => cambiar("tema", t.id)} className="peer sr-only" />
           <div className="rounded-theme ring-focus peer-focus-visible:ring-2"><MiniaturaTema tienda={tienda} tema={t.id} nombre={nombre} muestras={muestras} /></div>
           <span className="mt-2 flex items-center justify-between gap-1 text-caption font-semibold">{t.nombre}{tienda.tema === t.id && <Check aria-hidden className="size-4 shrink-0" />}</span>
