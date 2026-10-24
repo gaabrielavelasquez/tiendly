@@ -29,13 +29,13 @@ Para el agente que sigue (Codex) y para Gabi. Antes de tocar código, lee [`AGEN
 
 | PR | Rama | Estado | Preview |
 |---|---|---|---|
-| **Cerrar sesión** · PR nuevo | `feat/cerrar-sesion` | En preparación para revisión; sin merge autorizado. | Por publicar |
+| **#32** · Cerrar sesión | `feat/cerrar-sesion` | Pendiente de revisión de Gabi; **sin merge autorizado**. | Verde |
 
 | **#22** · Prototipo de ofertas | `proto/productos-ofertas` | **No mergear.** Ya está implementado (#24 a #27). Cerrarlo y borrar la rama cuando Gabi diga. | Verde |
 
 ## Próximas tareas, en orden
 
-1. **Terminar y revisar el #27 (tabla de tallas).** Ajustar lo que pida Gabi y mergear con su ok. Decisión 0037, que viaja en ese PR.
+1. **Revisar #32 (Cerrar sesión).** Espera el ok de Gabi; no mergear ni iniciar onboarding 2–4 antes de su revisión. #27 ya está integrado (`03902bb`).
 2. **MUÑA ya está publicada y verificada (#29)**, que reemplaza al #23: fotos nuevas, ocho productos, Editorial/Terracota y miniaturas de color con agotadas tachadas. La oferta de la falda y las tablas existentes se conservan. No se muestra selector para opciones de un solo valor.
 3. El merge y el reinicio de MUÑA se completaron. No repetir esa operación; las capturas y mediciones de producción están en la rama de evidencia enlazada desde el #29.
 4. Las tablas por producto siguen en el #27; no se integró esa rama abierta como parte de esta tarea.
@@ -219,3 +219,10 @@ Pagos, bancos, entregas y WhatsApp siguen simulados. No se enviaron mensajes, co
 - Nueva rama `feat/cerrar-sesion` desde ese main actualizado; worktree /private/tmp/tiendly-cerrar-sesion. No se modifica el checkout principal ni el servidor 3100. Build/tokens locales pasan. Pruebas en 3203, sin Redis.
 - Menú de cuenta conserva Configuración y agrega Cerrar sesión. Confirmación nativa con foco seguro; cookie HttpOnly borrada en servidor, borrador del onboarding borrado en esta pestaña y navegación completa a /registro. Sin borrar datos de tienda, carritos u otros datos del navegador. Carga, error y reintento; Escape bloqueado mientras confirma. Decisión 0040.
 - Este PR nuevo **no se mergea**: Gabi pidió detenerse para revisión. Onboarding 2–4 queda pendiente para después, sin iniciar su pase en esta sesión.
+
+- PR único de Cerrar sesión: [#32](https://github.com/gaabrielavelasquez/tiendly-web/pull/32), desde main `03902bb`, código `78d905b`. Preview: https://tiendly-auginlbq2-gaabrielavelasquez-8525s-projects.vercel.app/panel/pedidos. Build habitual Vercel y tokens verdes; sin tokens o dependencias nuevos.
+- Chrome/WebKit locales pasan 360×844, 390×844 y 1440×1000: menú y Configuración, Escape/clic fuera, foco seguro, Conservar, carga con Escape bloqueado, fallo de red y reintento, cookie borrada, primer paso del registro tras recarga. Se conservan carritos, otra cookie y otras claves de almacenamiento. Solo memoria local, sin Redis.
+- Se usa cookies.delete del servidor con path /, compatible con el entorno HTTP local y HTTPS del preview. La limpieza de la cookie y del borrador solo ocurre al confirmar con éxito.
+
+- Verificación final Vercel de #32 completada en Chrome/WebKit a 360×844, 390×844 y 1440×1000: confirmación, carga/error/reintento, Set-Cookie real de borrado, primer paso tras recarga y conservación de datos ajenos, sin scroll horizontal. Capturas a 390/1440 de menú, hoja, carga, error y registro en `docs/capturas/cerrar-sesion/`, inspeccionadas y enlazadas en el PR.
+- Servidor propio 3203 cerrado tras comprobar PID y carpeta. El 3100 de Gabi sigue activo. No hubo escrituras de prueba de producción ni reset de Redis. #27 integrado y producción confirmada; **#32 queda abierto, sin merge, para revisión de Gabi**. Se detiene la sesión; no se inicia onboarding 2–4.
