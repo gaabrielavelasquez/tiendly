@@ -21,6 +21,8 @@ export type TiendaSesion = {
   duena?: string;
   /** El WhatsApp al que escriben los clientes desde la vitrina. */
   celularVentas: string;
+  /** Número de ingreso verificado en el registro simulado; independiente del contacto público. */
+  celularIngreso?: string;
   logo?: string;
   /** Identidad publicada desde Mi tienda; sin valor se conservan los datos originales de la tienda. */
   apariencia?: Omit<import("@/features/mi-tienda/types").Tienda, "whatsapp" | "nombreOfertas">;

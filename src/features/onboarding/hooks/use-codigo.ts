@@ -1,13 +1,12 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { useRouter } from "next/navigation";
+import { ingresarTienda } from "../lib/acciones";
 import { useOnboarding } from "./use-onboarding";
 import { useCountdown } from "./use-countdown";
 
 /** Verificación simulada: 0000 no coincide; el código dura cinco minutos. No envía mensajes reales. */
 export function useCodigo() {
-  const router = useRouter();
   const { state, set } = useOnboarding();
   const inicial = useRef(Date.now());
   const enviado = state.codigoEnviadoEl ?? inicial.current;
@@ -28,13 +27,22 @@ export function useCodigo() {
     ocupado.current = true;
     setVerificando(true);
     setError("");
-    await new Promise((r) => setTimeout(r, 700));
-    ocupado.current = false;
-    setVerificando(false);
-    if (Date.now() >= enviado + 300000) return expirar();
-    if (valor === "0000") { setError("El código no coincide. Revisa el mensaje de WhatsApp e inténtalo otra vez."); setCodigo(""); return; }
-    if (state.modo === "ingresar") router.push("/panel");
-    else set({ paso: "datos" });
+    try {
+      await new Promise((r) => setTimeout(r, 700));
+      if (Date.now() >= enviado + 300000) return expirar();
+      if (valor === "0000") { setError("El código no coincide. Revisa el mensaje de WhatsApp e inténtalo otra vez."); setCodigo(""); return; }
+      if (state.modo === "ingresar") {
+        const r = await ingresarTienda(state.celular);
+        if ("error" in r) { setError(r.error); setCodigo(""); return; }
+        window.location.replace("/panel"); // Recarga con la cookie nueva, sin reutilizar el panel anterior.
+      } else set({ paso: "datos" });
+    } catch {
+      setError("No pudimos ingresar. Revisa tu conexión e inténtalo de nuevo.");
+      setCodigo("");
+    } finally {
+      ocupado.current = false;
+      setVerificando(false);
+    }
   }
   useEffect(() => {
     if (codigo.length === 4) void verificar(codigo);
