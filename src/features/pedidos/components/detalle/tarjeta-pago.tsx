@@ -1,3 +1,4 @@
+import { CorregirPago } from "./corregir-pago";
 import { CreditCard } from "lucide-react";
 import { Seccion } from "@/components/panel";
 import type { Pedido } from "../../types";
@@ -5,7 +6,7 @@ import { plazoReserva } from "../../lib/format";
 import { BADGE_PAGO, METODO_PAGO } from "../../lib/reglas";
 
 /** El pago ya existente, separado del resumen: método, estado y plazo de reserva, sin confirmaciones automáticas. */
-export function TarjetaPago({ pedido, ahora }: { pedido: Pedido; ahora: string }) {
+export function TarjetaPago({ pedido, ahora, onDesmarcar }: { pedido: Pedido; ahora: string; onDesmarcar: () => void }) {
   const vence = plazoReserva(pedido, ahora);
   const cancelado = pedido.pago.estado === "cancelado";
   return (
@@ -21,6 +22,7 @@ export function TarjetaPago({ pedido, ahora }: { pedido: Pedido; ahora: string }
       <p className="text-caption text-fg-secondary">
         {cancelado ? "Pedido cancelado: no se cobró." : pedido.pago.estado === "pagado" ? "El pago está registrado." : pedido.pago.metodo === "contra-entrega" ? "Se cobra al entregar." : "Verifica el abono antes de marcar el pedido como pagado. La reserva dura 24 h."}
       </p>
+      {pedido.pago.estado === "pagado" && <CorregirPago pedido={pedido} onConfirmar={onDesmarcar} />}
     </Seccion>
   );
 }

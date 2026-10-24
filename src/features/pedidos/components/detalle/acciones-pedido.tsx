@@ -5,9 +5,9 @@ import { Button } from "@/components/ui";
 import { HojaModal } from "@/features/afiliacion/components/hoja-modal";
 import { cn } from "@/lib/cn";
 import type { Pedido } from "../../types";
-import { puedeCancelar, siguienteAccion, type Accion } from "../../lib/detalle";
+import { puedeCancelar, siguienteAccion, type AccionPedido } from "../../lib/detalle";
 
-type AccionesProps = { pedido: Pedido; onAccion: (a: Accion | "cancelar") => void; className?: string };
+type AccionesProps = { pedido: Pedido; onAccion: (a: AccionPedido) => void; className?: string };
 
 /** Cancelación irreversible con diálogo nativo; las demás acciones conservan su siguiente paso. */
 export function AccionesPedido({ pedido, onAccion, className }: AccionesProps) {
@@ -32,7 +32,7 @@ export function AccionesPedido({ pedido, onAccion, className }: AccionesProps) {
       <HojaModal titulo="Cancelar pedido" abierto={confirmando} cerrar={() => setConfirmando(false)}>
         <p className="text-body text-fg-secondary">Se cancelará el pedido #{pedido.numero}. Esta acción no se puede deshacer.</p>
         <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:justify-end">
-          <Button variant="secondary" onClick={() => setConfirmando(false)}>Conservar pedido</Button>
+          <Button autoFocus variant="secondary" onClick={() => setConfirmando(false)}>Conservar pedido</Button>
           <Button variant="danger" onClick={() => { setConfirmando(false); onAccion("cancelar"); }}>Sí, cancelar pedido</Button>
         </div>
       </HojaModal>

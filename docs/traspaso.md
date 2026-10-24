@@ -178,3 +178,11 @@ Pagos, bancos, entregas y WhatsApp siguen simulados. No se enviaron mensajes, co
 - Evidencia final del código `b5a3143`: https://tiendly-2xu5w1h1h-gaabrielavelasquez-8525s-projects.vercel.app/panel/pedidos. Preview aislado Heather, build Turbopack y check:tokens verdes. Capturas actuales 390/1440 y mediciones en `docs/capturas/pedidos-corregidos/`; la comparación inicial queda en `pedidos-0031/`.
 - Chrome y WebKit completaron el preview a 360×844, 390×844 y 1440×1000, sin scroll horizontal. Comprobados soles enteros, tachado, paso actual, orden móvil, plazo único, fotos, diálogo, vacío/error/inexistente y acciones sin mutaciones remotas. A 390×844: Notas termina aproximadamente en y=676, barra fija empieza en y=779; última fila termina en y=740, tab bar empieza en y=787. Se inspeccionaron las capturas de viewport, historial, modal y desktop.
 - Servidor propio 3202 cerrado después de verificar PID y carpeta. El 3100 de Gabi sigue activo; checkout principal, Redis y producción intactos. **Sin merge** de #31; se actualiza el PR y se detiene para esperar revisión. No se inicia otra tarea.
+
+
+## Aprobación de #31 y corrección permanente del pago · 24-oct-2026
+
+- Gabi autorizó integrar #31 después de tres ajustes y preview verde: aviso Deshacer de 8 segundos pausado con hover/foco; corrección permanente de pago con hoja y auditoría; foco inicial de cancelación en Conservar pedido.
+- Implementado sin renovar la reserva: se conserva creadoEl + 24 h; si ya venció, se cancela al corregir. Contra entrega no vence. Se advierte si ya salió o se entregó, sin cambiar la etapa de entrega. La auditoría se conserva al volver a pagar. Las marcas usan la hora real de la acción.
+- Validación local en worktree 3202: reglas puras, tokens y build pasan. Chrome y WebKit a 360/390/1440 pasan foco seguro, corrección, aviso de envío y reserva vencida. Reloj del navegador comprueba 8 segundos efectivos y pausa independiente de hover/foco.
+- #30 ya estaba integrado (31edb41); no repetir su merge. Tras integrar #31, actualizar #27 desde main y su evidencia, sin merge de #27. No iniciar otra tarea.

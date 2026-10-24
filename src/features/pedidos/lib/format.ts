@@ -12,6 +12,12 @@ function hora(h: number, min: number) {
   return `${h % 12 || 12}:${String(min).padStart(2, "0")} ${h < 12 ? "a. m." : "p. m."}`;
 }
 
+/** Hora de Lima con artículo: "las 5:52 p. m." o "la 1:11 p. m.". */
+export function horaConArticulo(iso: string) {
+  const f = enLima(Date.parse(iso));
+  return conArticulo(hora(f.h, f.min));
+}
+
 /** "Hoy, 5:52 p. m.", "Ayer, 10:45 p. m." o "13 oct, 9:30 p. m.". */
 export function fechaPedido(iso: string, ahora: string) {
   const p = enLima(new Date(iso).getTime());

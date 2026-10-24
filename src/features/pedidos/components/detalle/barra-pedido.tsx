@@ -5,12 +5,12 @@ import Link from "next/link";
 import { ZonaUsuario } from "@/components/panel";
 import { Badge } from "@/components/ui";
 import type { Pedido } from "../../types";
-import type { Accion } from "../../lib/detalle";
+import type { AccionPedido } from "../../lib/detalle";
 import { fechaPedido } from "../../lib/format";
 import { BADGE_PAGO, badgeEntrega } from "../../lib/reglas";
 import { AccionesPedido } from "./acciones-pedido";
 
-type BarraProps = { pedido: Pedido; ahora: string; onAccion: (a: Accion | "cancelar") => void };
+type BarraProps = { pedido: Pedido; ahora: string; onAccion: (a: AccionPedido) => void };
 
 const volver = "flex items-center justify-center rounded-theme text-icon transition-colors hover:bg-sunken";
 

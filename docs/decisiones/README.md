@@ -25,6 +25,6 @@ Una decisión por archivo: contexto, decisión y consecuencias. Las anteriores a
 | 0037 | Tabla de tallas por producto | Propuesta, en el PR #27 |
 | 0038 | [MUÑA: catálogo y miniaturas de color](0038-muna-catalogo-y-miniaturas.md) | Solicitada por Gabi |
 
-| 0039 | [Pedidos adopta las reglas de 0031](0039-pedidos-pase-0031.md) | Propuesta visual, pendiente de revisión de Gabi |
+| 0039 | [Pedidos adopta las reglas de 0031](0039-pedidos-pase-0031.md) | Aprobada por Gabi para #31, con preview verde |
 
 Para una decisión nueva: copia la estructura de 0026, usa el número siguiente y súmala a esta tabla.
