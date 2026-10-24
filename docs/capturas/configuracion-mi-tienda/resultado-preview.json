@@ -1,0 +1,463 @@
+{
+  "preview": "https://tiendly-e452gb7qz-gaabrielavelasquez-8525s-projects.vercel.app",
+  "source": "3a6e3ce",
+  "writes": "solo localStorage del navegador; ningún guardado del servidor",
+  "tests": [
+    {
+      "engine": "chrome",
+      "label": "configuracion",
+      "w": 390,
+      "s": 390
+    },
+    {
+      "engine": "chrome",
+      "label": "pagos",
+      "w": 390,
+      "s": 390
+    },
+    {
+      "engine": "chrome",
+      "label": "pagos-revision",
+      "w": 390,
+      "s": 390
+    },
+    {
+      "engine": "chrome",
+      "label": "entregas",
+      "w": 390,
+      "s": 390
+    },
+    {
+      "engine": "chrome",
+      "label": "entregas-vacio",
+      "w": 390,
+      "s": 390
+    },
+    {
+      "engine": "chrome",
+      "label": "mi-tienda",
+      "w": 390,
+      "s": 390
+    },
+    {
+      "engine": "chrome",
+      "label": "mi-tienda-vacio",
+      "w": 390,
+      "s": 390
+    },
+    {
+      "engine": "chrome",
+      "label": "mi-tienda-error",
+      "w": 390,
+      "s": 390
+    },
+    {
+      "engine": "chrome",
+      "label": "configuracion-error",
+      "w": 390,
+      "s": 390
+    },
+    {
+      "engine": "chrome",
+      "label": "delivery sin zonas",
+      "w": 390,
+      "s": 390
+    },
+    {
+      "engine": "chrome",
+      "label": "preview modal",
+      "w": 390,
+      "s": 390
+    },
+    {
+      "engine": "chrome",
+      "label": "mi tienda dirty",
+      "w": 390,
+      "s": 390
+    },
+    {
+      "engine": "chrome",
+      "label": "guardado solo navegador",
+      "w": 390,
+      "s": 390
+    },
+    {
+      "engine": "chrome",
+      "label": "configuracion",
+      "w": 1440,
+      "s": 1440
+    },
+    {
+      "engine": "chrome",
+      "label": "pagos",
+      "w": 1440,
+      "s": 1440
+    },
+    {
+      "engine": "chrome",
+      "label": "pagos-revision",
+      "w": 1440,
+      "s": 1440
+    },
+    {
+      "engine": "chrome",
+      "label": "entregas",
+      "w": 1440,
+      "s": 1440
+    },
+    {
+      "engine": "chrome",
+      "label": "entregas-vacio",
+      "w": 1440,
+      "s": 1440
+    },
+    {
+      "engine": "chrome",
+      "label": "mi-tienda",
+      "w": 1440,
+      "s": 1440
+    },
+    {
+      "engine": "chrome",
+      "label": "mi-tienda-vacio",
+      "w": 1440,
+      "s": 1440
+    },
+    {
+      "engine": "chrome",
+      "label": "mi-tienda-error",
+      "w": 1440,
+      "s": 1440
+    },
+    {
+      "engine": "chrome",
+      "label": "configuracion-error",
+      "w": 1440,
+      "s": 1440
+    },
+    {
+      "engine": "chrome",
+      "label": "delivery sin zonas",
+      "w": 1440,
+      "s": 1440
+    },
+    {
+      "engine": "chrome",
+      "label": "mi tienda dirty",
+      "w": 1440,
+      "s": 1440
+    },
+    {
+      "engine": "chrome",
+      "label": "guardado solo navegador",
+      "w": 1440,
+      "s": 1440
+    },
+    {
+      "engine": "chrome",
+      "label": "configuracion",
+      "w": 360,
+      "s": 360
+    },
+    {
+      "engine": "chrome",
+      "label": "pagos",
+      "w": 360,
+      "s": 360
+    },
+    {
+      "engine": "chrome",
+      "label": "pagos-revision",
+      "w": 360,
+      "s": 360
+    },
+    {
+      "engine": "chrome",
+      "label": "entregas",
+      "w": 360,
+      "s": 360
+    },
+    {
+      "engine": "chrome",
+      "label": "entregas-vacio",
+      "w": 360,
+      "s": 360
+    },
+    {
+      "engine": "chrome",
+      "label": "mi-tienda",
+      "w": 360,
+      "s": 360
+    },
+    {
+      "engine": "chrome",
+      "label": "mi-tienda-vacio",
+      "w": 360,
+      "s": 360
+    },
+    {
+      "engine": "chrome",
+      "label": "mi-tienda-error",
+      "w": 360,
+      "s": 360
+    },
+    {
+      "engine": "chrome",
+      "label": "configuracion-error",
+      "w": 360,
+      "s": 360
+    },
+    {
+      "engine": "chrome",
+      "label": "delivery sin zonas",
+      "w": 360,
+      "s": 360
+    },
+    {
+      "engine": "chrome",
+      "label": "preview modal",
+      "w": 360,
+      "s": 360
+    },
+    {
+      "engine": "chrome",
+      "label": "mi tienda dirty",
+      "w": 360,
+      "s": 360
+    },
+    {
+      "engine": "chrome",
+      "label": "guardado solo navegador",
+      "w": 360,
+      "s": 360
+    },
+    {
+      "engine": "webkit",
+      "label": "configuracion",
+      "w": 390,
+      "s": 390
+    },
+    {
+      "engine": "webkit",
+      "label": "pagos",
+      "w": 390,
+      "s": 390
+    },
+    {
+      "engine": "webkit",
+      "label": "pagos-revision",
+      "w": 390,
+      "s": 390
+    },
+    {
+      "engine": "webkit",
+      "label": "entregas",
+      "w": 390,
+      "s": 390
+    },
+    {
+      "engine": "webkit",
+      "label": "entregas-vacio",
+      "w": 390,
+      "s": 390
+    },
+    {
+      "engine": "webkit",
+      "label": "mi-tienda",
+      "w": 390,
+      "s": 390
+    },
+    {
+      "engine": "webkit",
+      "label": "mi-tienda-vacio",
+      "w": 390,
+      "s": 390
+    },
+    {
+      "engine": "webkit",
+      "label": "mi-tienda-error",
+      "w": 390,
+      "s": 390
+    },
+    {
+      "engine": "webkit",
+      "label": "configuracion-error",
+      "w": 390,
+      "s": 390
+    },
+    {
+      "engine": "webkit",
+      "label": "delivery sin zonas",
+      "w": 390,
+      "s": 390
+    },
+    {
+      "engine": "webkit",
+      "label": "preview modal",
+      "w": 390,
+      "s": 390
+    },
+    {
+      "engine": "webkit",
+      "label": "mi tienda dirty",
+      "w": 390,
+      "s": 390
+    },
+    {
+      "engine": "webkit",
+      "label": "guardado solo navegador",
+      "w": 390,
+      "s": 390
+    },
+    {
+      "engine": "webkit",
+      "label": "configuracion",
+      "w": 1440,
+      "s": 1440
+    },
+    {
+      "engine": "webkit",
+      "label": "pagos",
+      "w": 1440,
+      "s": 1440
+    },
+    {
+      "engine": "webkit",
+      "label": "pagos-revision",
+      "w": 1440,
+      "s": 1440
+    },
+    {
+      "engine": "webkit",
+      "label": "entregas",
+      "w": 1440,
+      "s": 1440
+    },
+    {
+      "engine": "webkit",
+      "label": "entregas-vacio",
+      "w": 1440,
+      "s": 1440
+    },
+    {
+      "engine": "webkit",
+      "label": "mi-tienda",
+      "w": 1440,
+      "s": 1440
+    },
+    {
+      "engine": "webkit",
+      "label": "mi-tienda-vacio",
+      "w": 1440,
+      "s": 1440
+    },
+    {
+      "engine": "webkit",
+      "label": "mi-tienda-error",
+      "w": 1440,
+      "s": 1440
+    },
+    {
+      "engine": "webkit",
+      "label": "configuracion-error",
+      "w": 1440,
+      "s": 1440
+    },
+    {
+      "engine": "webkit",
+      "label": "delivery sin zonas",
+      "w": 1440,
+      "s": 1440
+    },
+    {
+      "engine": "webkit",
+      "label": "mi tienda dirty",
+      "w": 1440,
+      "s": 1440
+    },
+    {
+      "engine": "webkit",
+      "label": "guardado solo navegador",
+      "w": 1440,
+      "s": 1440
+    },
+    {
+      "engine": "webkit",
+      "label": "configuracion",
+      "w": 360,
+      "s": 360
+    },
+    {
+      "engine": "webkit",
+      "label": "pagos",
+      "w": 360,
+      "s": 360
+    },
+    {
+      "engine": "webkit",
+      "label": "pagos-revision",
+      "w": 360,
+      "s": 360
+    },
+    {
+      "engine": "webkit",
+      "label": "entregas",
+      "w": 360,
+      "s": 360
+    },
+    {
+      "engine": "webkit",
+      "label": "entregas-vacio",
+      "w": 360,
+      "s": 360
+    },
+    {
+      "engine": "webkit",
+      "label": "mi-tienda",
+      "w": 360,
+      "s": 360
+    },
+    {
+      "engine": "webkit",
+      "label": "mi-tienda-vacio",
+      "w": 360,
+      "s": 360
+    },
+    {
+      "engine": "webkit",
+      "label": "mi-tienda-error",
+      "w": 360,
+      "s": 360
+    },
+    {
+      "engine": "webkit",
+      "label": "configuracion-error",
+      "w": 360,
+      "s": 360
+    },
+    {
+      "engine": "webkit",
+      "label": "delivery sin zonas",
+      "w": 360,
+      "s": 360
+    },
+    {
+      "engine": "webkit",
+      "label": "preview modal",
+      "w": 360,
+      "s": 360
+    },
+    {
+      "engine": "webkit",
+      "label": "mi tienda dirty",
+      "w": 360,
+      "s": 360
+    },
+    {
+      "engine": "webkit",
+      "label": "guardado solo navegador",
+      "w": 360,
+      "s": 360
+    }
+  ]
+}

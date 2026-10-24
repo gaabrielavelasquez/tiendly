@@ -95,6 +95,7 @@ La identidad visual de Tiendly combina **velocidad ultra limpia**, **lenguaje mo
 - Todo lo demás que indica selección o progreso va en negro carbón: `selection/*` e `indicator/*`.
 - Chips, fichas y controles seleccionados (opciones de producto, colores, categorías, filtros, radios, tarjetas de opción, interruptores): **fondo negro carbón `#1A1A1A` con texto blanco** (estilo Shop / GOAT). Tokens `selection/bg`, `selection/fg`, `selection/border`.
 - Tarjetas de opción seleccionadas: fondo blanco (`selection/subtle`) y borde negro carbón. Sin tinte azul.
+- **Interruptores (0042):** al encender, el pomo incluye un Check visible además de `aria-checked`; el estado no depende solo del color. El riel conserva selección carbón y el ícono contrasta con el pomo.
 - Barras de progreso, pasos, línea de tiempo y destellos: `indicator/fill` (negro carbón). Ítem de menú activo: `bg/sunken` + `text/primary`. Casillas marcadas: `selection/*`.
 - **Excepción:** los links y el botón Fantasma siguen en cobalto (`accent/text`, `#1D4ED8`), para que se reconozcan como links.
 - **Gráficos:** ver §4 · 0031 (barras sólidas de 8 · 16 px, sin riel). *Reemplaza a 0021: 24 · 32 px sobre riel `bg/sunken`.*
