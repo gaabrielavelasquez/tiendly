@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import { Button, buttonVariants, EmptyState, Skeleton } from "@/components/ui";
 import { CabeceraTienda } from "@/features/vitrina/components/cabecera-tienda";
 import { formatoSoles } from "@/lib/formato";
+import { estiloCompra } from "../../lib/presentacion";
 import { cn } from "@/lib/cn";
 import type { DatosCompra } from "../../lib/catalogo";
 import { aplicarCupon, registrarPedido, reservarNumero, revisarStock } from "../../lib/acciones";
@@ -100,7 +101,7 @@ export function VistaCompra({ datos: { tienda, categorias, catalogo, reglas } }:
   };
 
   return (
-    <div className="flex min-h-dvh flex-col">
+    <div style={estiloCompra} className="flex min-h-dvh flex-col">
       <div className="hidden lg:block">
         <CabeceraTienda nombre={tienda.nombre} logo={tienda.logo} slug={tienda.slug} categorias={categorias} />
       </div>

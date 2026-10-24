@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { Button, buttonVariants, EmptyState, Skeleton } from "@/components/ui";
 import { MontoPedido as Monto } from "@/features/pedidos/components/monto-pedido";
+import { estiloCompra } from "../../lib/presentacion";
 import { cn } from "@/lib/cn";
 import { leerPedido, textoReserva } from "../../lib/pedido";
 import { formatoCelular } from "../../lib/reglas";
@@ -54,7 +55,7 @@ export function VistaConfirmacion({ tienda, numero }: Props) {
   const enlace = cn(buttonVariants({ variant: "ghost" }), "h-12 text-fg");
 
   return (
-    <div className="flex w-full min-w-0 max-w-xl flex-col gap-10 pb-32 lg:gap-12 lg:pb-0">
+    <div style={estiloCompra} className="flex w-full min-w-0 max-w-xl flex-col gap-10 pb-32 lg:gap-12 lg:pb-0">
       <div className="flex flex-col items-start gap-3">
         {pagado ? <Check aria-hidden strokeWidth={1.5} className="size-8 text-icon" /> : <Clock3 aria-hidden strokeWidth={1.5} className="size-8 text-icon" />}
         <h1 className="font-display-light text-h1 text-fg">{pagado ? "Pedido confirmado" : "Pedido registrado"}<span className="block text-fg-secondary">{pagado ? "Tu pedido está pagado." : "Coordina el pago por WhatsApp."}</span></h1>
