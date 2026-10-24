@@ -12,7 +12,7 @@ export function CampoDescripcion({ valor, onCambio }: CampoProps) {
         value={valor}
         onChange={(e) => onCambio(e.target.value)}
         rows={6}
-        placeholder="Cuenta de qué está hecho, cómo queda y cómo cuidarlo."
+        placeholder="Cuenta de qué está hecho, qué incluye y cómo usarlo."
         aria-describedby="ayuda-descripcion"
         className="block w-full resize-y rounded-button border border-line-strong bg-surface px-3 py-2.5 text-body text-fg transition outline-2 outline-offset-2 outline-transparent placeholder:text-fg-tertiary focus:outline-focus"
       />
