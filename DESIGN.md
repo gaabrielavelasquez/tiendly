@@ -117,6 +117,11 @@ La identidad visual de Tiendly combina **velocidad ultra limpia**, **lenguaje mo
 - **Cuándo (0031):** solo para estados donde hacen falta. La urgencia y los plazos van como texto de color, sin píldora.
 - **Compactos** en el panel, con esquinas de **6 px** (`radius/chip` → `radius/xs`, decisión 0024): chip de filtro de **28 px** de alto (relleno 12 a los lados, texto 14) y badge de **24 px** (relleno 4 × 8, texto 12). *Alturas de 0020; antes, chip de 32 px (0018).* En la vitrina, las categorías van en pill (es un control, no una tarjeta).
 - **Área táctil:** el chip se ve de 28 px, pero en código su zona de toque llega a 44 px (padding invisible o `::after`), para no perder la regla de objetivos táctiles.
+- **Descuento (0034):** "−22 %" en `Badge tone="selected"`: el color de selección del tema (carbón en Neutral y Editorial), **nunca rojo**. Va junto al precio normal tachado. "Programada" va en el badge neutro. En la tienda no se muestran fechas.
+
+### Tienda: ficha y carrito (0035 y 0036)
+- **Ficha:** dos columnas desde 768 px (foto a la izquierda). En el celular, la foto ocupa como máximo el 60 % del alto visible (`svh`), para que el nombre y el precio se vean sin scroll.
+- **Carrito como drawer:** panel de 420 px desde la derecha en tablet y desktop, con un velo suave sobre la tienda; pantalla completa en el celular. Pie fijo con el subtotal, "Finalizar compra" (CTA) y "Seguir comprando". Las líneas van en UN contenedor con divisores (0031).
 
 ---
 
