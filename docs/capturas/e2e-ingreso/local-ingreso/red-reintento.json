@@ -1,0 +1,9 @@
+{
+  "status": "PASS",
+  "tests": [
+    "0000 rechazado",
+    "red fallida visible sin cookie",
+    "código limpio permite reintentar",
+    "reintento restaura tienda"
+  ]
+}

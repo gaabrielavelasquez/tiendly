@@ -1,0 +1,41 @@
+{
+  "preview": "https://tiendly-j6tvajdlo-gaabrielavelasquez-8525s-projects.vercel.app",
+  "checks": [
+    {
+      "browser": "chromium",
+      "width": 390,
+      "status": "PASS",
+      "url": "https://tiendly-j6tvajdlo-gaabrielavelasquez-8525s-projects.vercel.app/panel"
+    },
+    {
+      "browser": "chromium",
+      "width": 1440,
+      "status": "PASS",
+      "url": "https://tiendly-j6tvajdlo-gaabrielavelasquez-8525s-projects.vercel.app/panel"
+    },
+    {
+      "browser": "chromium",
+      "width": 360,
+      "status": "PASS",
+      "url": "https://tiendly-j6tvajdlo-gaabrielavelasquez-8525s-projects.vercel.app/panel"
+    },
+    {
+      "browser": "webkit",
+      "width": 390,
+      "status": "PASS",
+      "url": "https://tiendly-j6tvajdlo-gaabrielavelasquez-8525s-projects.vercel.app/panel"
+    },
+    {
+      "browser": "webkit",
+      "width": 1440,
+      "status": "PASS",
+      "url": "https://tiendly-j6tvajdlo-gaabrielavelasquez-8525s-projects.vercel.app/panel"
+    },
+    {
+      "browser": "webkit",
+      "width": 360,
+      "status": "PASS",
+      "url": "https://tiendly-j6tvajdlo-gaabrielavelasquez-8525s-projects.vercel.app/panel"
+    }
+  ]
+}
