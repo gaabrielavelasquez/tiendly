@@ -1,4 +1,6 @@
-# Auth y onboarding — evidencia de #33
+# Auth y onboarding — evidencia inicial de #33
+
+Los ajustes vigentes de código/datos/logro y halos están en la [ronda siguiente](../auth-ajustes/README.md). Esta galería conserva la evidencia inicial.
 
 Antes: preview Vercel de #32, código `78d905b`, equivalente funcional de main `c0f4682`.
 https://tiendly-auginlbq2-gaabrielavelasquez-8525s-projects.vercel.app/registro

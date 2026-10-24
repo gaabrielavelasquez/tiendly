@@ -1,0 +1,402 @@
+{
+  "preview": "https://tiendly-qnzrju0m5-gaabrielavelasquez-8525s-projects.vercel.app",
+  "source": "6eea253052f339eca2f657b8d334bb1af298e785",
+  "tests": [
+    {
+      "engine": "chrome",
+      "label": "registro halo desktop",
+      "w": 390,
+      "s": 390
+    },
+    {
+      "engine": "chrome",
+      "label": "codigo enfocado",
+      "w": 390,
+      "s": 390
+    },
+    {
+      "engine": "chrome",
+      "label": "codigo incorrecto",
+      "w": 390,
+      "s": 390
+    },
+    {
+      "engine": "chrome",
+      "label": "datos propios hogar",
+      "w": 390,
+      "s": 390
+    },
+    {
+      "engine": "chrome",
+      "label": "datos largos",
+      "w": 390,
+      "s": 390
+    },
+    {
+      "engine": "chrome",
+      "label": "datos reposteria",
+      "w": 390,
+      "s": 390
+    },
+    {
+      "engine": "chrome",
+      "label": "datos multirrubro",
+      "w": 390,
+      "s": 390
+    },
+    {
+      "engine": "chrome",
+      "label": "logro centrado",
+      "w": 390,
+      "s": 390
+    },
+    {
+      "engine": "chrome",
+      "label": "error copia",
+      "w": 390,
+      "s": 390
+    },
+    {
+      "engine": "chrome",
+      "label": "abre formulario producto",
+      "w": 390,
+      "s": 390
+    },
+    {
+      "engine": "chrome",
+      "label": "codigo vencido",
+      "w": 390,
+      "s": 390
+    },
+    {
+      "engine": "chrome",
+      "label": "registro halo desktop",
+      "w": 1440,
+      "s": 1440
+    },
+    {
+      "engine": "chrome",
+      "label": "codigo enfocado",
+      "w": 1440,
+      "s": 1440
+    },
+    {
+      "engine": "chrome",
+      "label": "codigo incorrecto",
+      "w": 1440,
+      "s": 1440
+    },
+    {
+      "engine": "chrome",
+      "label": "datos propios hogar",
+      "w": 1440,
+      "s": 1440
+    },
+    {
+      "engine": "chrome",
+      "label": "datos largos",
+      "w": 1440,
+      "s": 1440
+    },
+    {
+      "engine": "chrome",
+      "label": "datos reposteria",
+      "w": 1440,
+      "s": 1440
+    },
+    {
+      "engine": "chrome",
+      "label": "datos multirrubro",
+      "w": 1440,
+      "s": 1440
+    },
+    {
+      "engine": "chrome",
+      "label": "logro centrado",
+      "w": 1440,
+      "s": 1440
+    },
+    {
+      "engine": "chrome",
+      "label": "error copia",
+      "w": 1440,
+      "s": 1440
+    },
+    {
+      "engine": "chrome",
+      "label": "abre formulario producto",
+      "w": 1440,
+      "s": 1440
+    },
+    {
+      "engine": "chrome",
+      "label": "codigo vencido",
+      "w": 1440,
+      "s": 1440
+    },
+    {
+      "engine": "chrome",
+      "label": "registro halo desktop",
+      "w": 360,
+      "s": 360
+    },
+    {
+      "engine": "chrome",
+      "label": "codigo enfocado",
+      "w": 360,
+      "s": 360
+    },
+    {
+      "engine": "chrome",
+      "label": "codigo incorrecto",
+      "w": 360,
+      "s": 360
+    },
+    {
+      "engine": "chrome",
+      "label": "datos propios hogar",
+      "w": 360,
+      "s": 360
+    },
+    {
+      "engine": "chrome",
+      "label": "datos largos",
+      "w": 360,
+      "s": 360
+    },
+    {
+      "engine": "chrome",
+      "label": "datos reposteria",
+      "w": 360,
+      "s": 360
+    },
+    {
+      "engine": "chrome",
+      "label": "datos multirrubro",
+      "w": 360,
+      "s": 360
+    },
+    {
+      "engine": "chrome",
+      "label": "logro centrado",
+      "w": 360,
+      "s": 360
+    },
+    {
+      "engine": "chrome",
+      "label": "error copia",
+      "w": 360,
+      "s": 360
+    },
+    {
+      "engine": "chrome",
+      "label": "abre formulario producto",
+      "w": 360,
+      "s": 360
+    },
+    {
+      "engine": "chrome",
+      "label": "codigo vencido",
+      "w": 360,
+      "s": 360
+    },
+    {
+      "engine": "webkit",
+      "label": "registro halo desktop",
+      "w": 390,
+      "s": 390
+    },
+    {
+      "engine": "webkit",
+      "label": "codigo enfocado",
+      "w": 390,
+      "s": 390
+    },
+    {
+      "engine": "webkit",
+      "label": "codigo incorrecto",
+      "w": 390,
+      "s": 390
+    },
+    {
+      "engine": "webkit",
+      "label": "datos propios hogar",
+      "w": 390,
+      "s": 390
+    },
+    {
+      "engine": "webkit",
+      "label": "datos largos",
+      "w": 390,
+      "s": 390
+    },
+    {
+      "engine": "webkit",
+      "label": "datos reposteria",
+      "w": 390,
+      "s": 390
+    },
+    {
+      "engine": "webkit",
+      "label": "datos multirrubro",
+      "w": 390,
+      "s": 390
+    },
+    {
+      "engine": "webkit",
+      "label": "logro centrado",
+      "w": 390,
+      "s": 390
+    },
+    {
+      "engine": "webkit",
+      "label": "error copia",
+      "w": 390,
+      "s": 390
+    },
+    {
+      "engine": "webkit",
+      "label": "abre formulario producto",
+      "w": 390,
+      "s": 390
+    },
+    {
+      "engine": "webkit",
+      "label": "codigo vencido",
+      "w": 390,
+      "s": 390
+    },
+    {
+      "engine": "webkit",
+      "label": "registro halo desktop",
+      "w": 1440,
+      "s": 1440
+    },
+    {
+      "engine": "webkit",
+      "label": "codigo enfocado",
+      "w": 1440,
+      "s": 1440
+    },
+    {
+      "engine": "webkit",
+      "label": "codigo incorrecto",
+      "w": 1440,
+      "s": 1440
+    },
+    {
+      "engine": "webkit",
+      "label": "datos propios hogar",
+      "w": 1440,
+      "s": 1440
+    },
+    {
+      "engine": "webkit",
+      "label": "datos largos",
+      "w": 1440,
+      "s": 1440
+    },
+    {
+      "engine": "webkit",
+      "label": "datos reposteria",
+      "w": 1440,
+      "s": 1440
+    },
+    {
+      "engine": "webkit",
+      "label": "datos multirrubro",
+      "w": 1440,
+      "s": 1440
+    },
+    {
+      "engine": "webkit",
+      "label": "logro centrado",
+      "w": 1440,
+      "s": 1440
+    },
+    {
+      "engine": "webkit",
+      "label": "error copia",
+      "w": 1440,
+      "s": 1440
+    },
+    {
+      "engine": "webkit",
+      "label": "abre formulario producto",
+      "w": 1440,
+      "s": 1440
+    },
+    {
+      "engine": "webkit",
+      "label": "codigo vencido",
+      "w": 1440,
+      "s": 1440
+    },
+    {
+      "engine": "webkit",
+      "label": "registro halo desktop",
+      "w": 360,
+      "s": 360
+    },
+    {
+      "engine": "webkit",
+      "label": "codigo enfocado",
+      "w": 360,
+      "s": 360
+    },
+    {
+      "engine": "webkit",
+      "label": "codigo incorrecto",
+      "w": 360,
+      "s": 360
+    },
+    {
+      "engine": "webkit",
+      "label": "datos propios hogar",
+      "w": 360,
+      "s": 360
+    },
+    {
+      "engine": "webkit",
+      "label": "datos largos",
+      "w": 360,
+      "s": 360
+    },
+    {
+      "engine": "webkit",
+      "label": "datos reposteria",
+      "w": 360,
+      "s": 360
+    },
+    {
+      "engine": "webkit",
+      "label": "datos multirrubro",
+      "w": 360,
+      "s": 360
+    },
+    {
+      "engine": "webkit",
+      "label": "logro centrado",
+      "w": 360,
+      "s": 360
+    },
+    {
+      "engine": "webkit",
+      "label": "error copia",
+      "w": 360,
+      "s": 360
+    },
+    {
+      "engine": "webkit",
+      "label": "abre formulario producto",
+      "w": 360,
+      "s": 360
+    },
+    {
+      "engine": "webkit",
+      "label": "codigo vencido",
+      "w": 360,
+      "s": 360
+    }
+  ]
+}
