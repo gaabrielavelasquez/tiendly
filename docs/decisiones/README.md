@@ -19,7 +19,6 @@ Una decisión por archivo: contexto, decisión y consecuencias. Las anteriores a
 | 0031 | [De-layering: menos cajas, montos serenos y un protagonista por pantalla](0031-pase-de-diseno.md) | **Vigente** (actualiza 0017, 0020, 0021 y 0024) |
 | 0032 | [Tiendly es multirubro y no tiene género: lenguaje neutral y variantes como opciones](0032-multirubro-sin-genero.md) | **Vigente** (actualiza 0004) |
 | 0033 | [Pase de diseño del registro: titular en dos tonos y tres tiendas de ejemplo](0033-pase-registro.md) | Propuesta (pendiente de Gabi) |
-
 | 0037 | [MUÑA: catálogo y miniaturas de color](0037-muna-catalogo-y-miniaturas.md) | Solicitada por Gabi |
 
 Para una decisión nueva: copia la estructura de 0026, usa el número siguiente y súmala a esta tabla.

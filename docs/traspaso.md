@@ -2,6 +2,7 @@
 
 ## MUÑA · actualización del catálogo
 
+- PR único: [#29](https://github.com/gaabrielavelasquez/tiendly-web/pull/29), reemplaza al #23.
 - Rama: `feat/muna-catalogo`, creada desde `origin/main` actualizado (`3882c00`). Worktree: `/private/tmp/tiendly-muna-catalogo`. La rama y el servidor de Gabi se mantuvieron intactos.
 - Se integró `origin/feat/muna-fotos` (PR #23) con merge commit en la nueva rama. Conflicto de `semillas.ts` resuelto conservando la oferta de Falda Lluvia (S/ 199, antes S/ 249), las tallas de ropa y calzado y los bolsos sin talla.
 - Catálogo de ocho productos. Botín Saya (S/ 289): Color Camel (gamuza), Vino (cuero), y Talla 35–40; galerías de tres y dos fotos. Guantes Killa (S/ 159): Burdeos, S/M/L, tres fotos. Slingback Inti (S/ 269): Burdeos, 35–39, tres fotos. Cartera Wari: dos fotos.
@@ -20,7 +21,7 @@
 
 ## Pendiente tras aprobación
 
-1. Gabi revisa el PR nuevo que reemplaza al #23. **No se hizo merge.**
+1. Gabi revisa el PR #29 que reemplaza al #23. **No se hizo merge.**
 2. Tras su aprobación explícita y el merge, esperar a que producción termine de desplegar.
 3. Reiniciar únicamente `production:tienda:muna` en Redis para que la siguiente visita cargue los ocho productos y Ofertas. **No se modificaron datos de producción.** Esta acción sigue pendiente hasta el ok de Gabi.
 4. Verificar en producción catálogo, oferta de la falda y galerías por color.
