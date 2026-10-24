@@ -31,7 +31,6 @@ Para el agente que sigue (Codex) y para Gabi. Antes de tocar código, lee [`AGEN
 |---|---|---|---|
 | **#27** · Tabla de tallas por producto (ofertas 4/4) | `feat/tabla-tallas` | Listo, **espera revisión de Gabi**. Sin conflictos. | Verde |
 
-| **#31** · Pase visual de Pedidos | `feat/pedidos-diseno-0031` | Integrado con autorización de Gabi (`b6cf172`). | Verde |
 | **#22** · Prototipo de ofertas | `proto/productos-ofertas` | **No mergear.** Ya está implementado (#24 a #27). Cerrarlo y borrar la rama cuando Gabi diga. | Verde |
 
 ## Próximas tareas, en orden
@@ -40,7 +39,7 @@ Para el agente que sigue (Codex) y para Gabi. Antes de tocar código, lee [`AGEN
 2. **MUÑA ya está publicada y verificada (#29)**, que reemplaza al #23: fotos nuevas, ocho productos, Editorial/Terracota y miniaturas de color con agotadas tachadas. La oferta de la falda y las tablas existentes se conservan. No se muestra selector para opciones de un solo valor.
 3. El merge y el reinicio de MUÑA se completaron. No repetir esa operación; las capturas y mediciones de producción están en la rama de evidencia enlazada desde el #29.
 4. Las tablas por producto siguen en el #27; no se integró esa rama abierta como parte de esta tarea.
-5. **Revisar el pase de Pedidos en #31** (0031/0039). Mi tienda queda fuera de esta sesión: no iniciar otra tarea hasta la revisión de Gabi.
+5. **#31 integrado y verificado en producción** (0031/0039, `b6cf172`). #27 queda para revisión de Gabi. Mi tienda y cualquier otra tarea quedan fuera de esta sesión.
 
 Pendiente sin fecha: precio y SKU por variante (`docs/backlog.md`); renombrar el campo `duena` cuando llegue el backend; cerrar #22 y borrar `src/features/prototipo-ofertas`.
 
@@ -59,7 +58,7 @@ Pendiente sin fecha: precio y SKU por variante (`docs/backlog.md`); renombrar el
 - **El preview de una rama aparece recién al abrir el PR.** Los previews están protegidos: para Playwright, usa respuestas autenticadas mediante el comando oficial `vercel curl` y un proxy de solo lectura. No exportes variables de entorno ni credenciales.
 - **iPhone:** los campos con texto de menos de 16 px hacen zoom al tocarlos. En el panel, los campos usan `text-body`.
 - **`.next/types` viejo** rompe el build después de borrar páginas: `rm -rf .next/types`.
-- **#23 quedó reemplazado por #29; #19 se cerró por reemplazo en #30.** #30 está integrado; #27 y #31 siguen abiertos y esperan revisión, sin merge.
+- **#23 quedó reemplazado por #29; #19 se cerró por reemplazo en #30.** #30 y #31 están integrados con autorización; #27 sigue abierto y espera revisión, sin merge.
 - Redis tiene una clave vieja, `preview:tienda:aurora`. No molesta, pero se puede borrar con el ok de Gabi.
 
 ## Sesión MUÑA · 24 de octubre de 2026
@@ -197,3 +196,9 @@ Pagos, bancos, entregas y WhatsApp siguen simulados. No se enviaron mensajes, co
 - #30 ya estaba integrado (`31edb41`); no se repite el merge.
 - #27 se actualiza desde ese main, sin force-push. El único conflicto es este traspaso: se conservó el registro completo más reciente de #31 y los ajustes/validaciones anteriores de #27. No hay conflictos de código.
 - Se conservan los tres requisitos de #27 ya implementados: números/rangos sin unidades, medidas sin Talla y Ver en la tienda activo/pausado. Se renueva la verificación y evidencia desde el main actualizado. **#27 no se mergea**; al actualizarlo se detiene para esperar revisión de Gabi.
+
+- Producción de #31 READY en el commit `b6cf172`. https://tiendly-web-sigma.vercel.app/panel/pedidos responde 200 y se confirmó a 390×844 en Chrome/WebKit: MUÑA sin pedidos, estado vacío correcto, tab bar visible y sin scroll horizontal. Verificación solo GET; sin pedidos ficticios en producción, sin reset ni escrituras de prueba en Redis. Capturas y resultados en `docs/capturas/pr-27-tras-main/pedidos-produccion-*`.
+- #27 actualizado mediante merge commit `2e60539`; tokens y build local pasan. Chrome/WebKit locales a 360/390/1440 pasan las tres ampliaciones y guardado/recarga, rango inválido, slug guardado y pestaña nueva. Servidor propio 3201 cerrado tras verificar PID/carpeta; el 3100 de Gabi permanece activo.
+
+- Preview renovado de #27, código `2e60539`: https://tiendly-csokdlogy-gaabrielavelasquez-8525s-projects.vercel.app/panel/productos/m6. Build habitual y tokens verdes. Capturas actuales a 390/1440 en `docs/capturas/pr-27-tras-main/`, inspeccionadas y para enlazar en #27. Chrome/WebKit completan 360/390/1440 sin scroll horizontal.
+- Cierre: #31 y #30 integrados y producción de #31 verificada; #27 actualizado y abierto para revisión, sin merge. No iniciar otras tareas. Sin datos de prueba en producción ni reset de Redis. Checkout principal y servidor 3100 intactos.

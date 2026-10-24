@@ -1,0 +1,23 @@
+{
+  "commit": "b6cf172754bd727147bac54c771ec9bdd9de1f2a",
+  "results": [
+    {
+      "engine": "chrome",
+      "url": "https://tiendly-web-sigma.vercel.app/panel/pedidos",
+      "status": 200,
+      "width": 390,
+      "height": 844,
+      "scrollWidth": 390,
+      "text": "Pedidos\n\nAquí vas a ver los pedidos que te hagan por tu tienda y por WhatsApp.\n\nTodavía no tienes pedidos\n\nComparte el link de tu tienda por WhatsApp e Instagram. Cada pedido nuevo aparece aquí, con su pago y su entrega."
+    },
+    {
+      "engine": "webkit",
+      "url": "https://tiendly-web-sigma.vercel.app/panel/pedidos",
+      "status": 200,
+      "width": 390,
+      "height": 844,
+      "scrollWidth": 390,
+      "text": "Pedidos\n\nAquí vas a ver los pedidos que te hagan por tu tienda y por WhatsApp.\n\nTodavía no tienes pedidos\n\nComparte el link de tu tienda por WhatsApp e Instagram. Cada pedido nuevo aparece aquí, con su pago y su entrega."
+    }
+  ]
+}
