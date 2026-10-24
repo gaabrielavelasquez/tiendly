@@ -98,7 +98,7 @@ function Puntos({ actual, elegir }: { actual: number; elegir: (i: number) => voi
 /**
  * Vista previa del registro: tres tiendas de ejemplo de rubros distintos que se turnan con un fundido suave
  * (0032 y 0033). Las tres están montadas y apiladas en la misma celda, así las fotos ya cargaron cuando
- * aparecen; cada una con su alto natural, sin espacio vacío dentro. Con "reducir movimiento", queda fija en la primera. Desktop: protagonista con halo; móvil: compacta.
+ * aparecen; cada una con su alto natural, sin espacio vacío dentro. Con "reducir movimiento", queda fija en la primera. Desktop: portada y productos; móvil: compacta.
  */
 export function TiendasEjemplo({ links, compacta = false }: Props & { compacta?: boolean }) {
   const { actual, elegir, pausar, reducir } = useRotacion(TIENDAS_EJEMPLO.length, ROTACION_MS);
