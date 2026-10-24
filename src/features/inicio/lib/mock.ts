@@ -22,7 +22,7 @@ const pasos = (hechos: Hechos, producto = "Chloé"): Paso[] =>
     {
       id: "producto",
       titulo: "Agrega tu primer producto",
-      descripcion: hechos.producto ? `Hecho: ${producto}.` : "Con foto, precio y tallas ya se puede vender.",
+      descripcion: hechos.producto ? `Hecho: ${producto}.` : "Con foto y precio ya se puede vender.",
       href: "/panel/productos/nuevo",
     },
     {
