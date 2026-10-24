@@ -29,7 +29,7 @@ Para el agente que sigue (Codex) y para Gabi. Antes de tocar código, lee [`AGEN
 
 | PR | Rama | Estado | Preview |
 |---|---|---|---|
-| **#27** · Tabla de tallas por producto (ofertas 4/4) | `feat/tabla-tallas` | Listo, **espera revisión de Gabi**. Sin conflictos. | Verde |
+| **Cerrar sesión** · PR nuevo | `feat/cerrar-sesion` | En preparación para revisión; sin merge autorizado. | Por publicar |
 
 | **#22** · Prototipo de ofertas | `proto/productos-ofertas` | **No mergear.** Ya está implementado (#24 a #27). Cerrarlo y borrar la rama cuando Gabi diga. | Verde |
 
@@ -211,3 +211,11 @@ Pagos, bancos, entregas y WhatsApp siguen simulados. No se enviaron mensajes, co
 - Siguiente tarea autorizada: un PR nuevo desde main para Cerrar sesión, con confirmación, borrar la tienda recordada y volver a /registro. **Detenerse para revisión de ese PR**; onboarding 2–4 queda después de la revisión.
 
 - Preview final `1834d47`: https://tiendly-14ble200s-gaabrielavelasquez-8525s-projects.vercel.app/panel/productos/m6. Tokens y build local/Vercel verdes. Chrome y WebKit a 360/390/1440 pasan los cuatro nombres de opción, enlace con/sin Talla, título genérico y plegado; sin scroll horizontal. Capturas finales a 390/1440 en `docs/capturas/pr-27-final/`. No se guardaron cambios de prueba.
+
+
+## #27 integrado y PR de Cerrar sesión · 24-oct-2026
+
+- #27 integrado con autorización de Gabi y preview verde: merge commit `03902bbcd3edcfe6325e66a01717f028039d2e75`, head `5a63229`. Producción READY y /muna/cartera-cher confirmada en Chrome/WebKit a 390×844: HTTP 200, sin scroll horizontal ni fotos rotas. La ficha guardada no tiene medidas; no se inyectaron valores de la semilla ni se reinició Redis. Capturas locales en /private/tmp/tiendly-pr27-produccion/ y comentario final en #27.
+- Nueva rama `feat/cerrar-sesion` desde ese main actualizado; worktree /private/tmp/tiendly-cerrar-sesion. No se modifica el checkout principal ni el servidor 3100. Build/tokens locales pasan. Pruebas en 3203, sin Redis.
+- Menú de cuenta conserva Configuración y agrega Cerrar sesión. Confirmación nativa con foco seguro; cookie HttpOnly borrada en servidor, borrador del onboarding borrado en esta pestaña y navegación completa a /registro. Sin borrar datos de tienda, carritos u otros datos del navegador. Carga, error y reintento; Escape bloqueado mientras confirma. Decisión 0040.
+- Este PR nuevo **no se mergea**: Gabi pidió detenerse para revisión. Onboarding 2–4 queda pendiente para después, sin iniciar su pase en esta sesión.

@@ -1,6 +1,7 @@
 "use client";
 
 import { createContext, useCallback, useContext, useEffect, useState } from "react";
+import { CLAVE_ONBOARDING } from "../lib/recuerdo";
 import type { RubroId } from "../lib/rubros";
 
 export type Paso = "registro" | "codigo" | "datos" | "lista";
@@ -27,7 +28,6 @@ const INICIAL: OnboardingState = {
   rubros: [],
   celularVentas: "",
 };
-const KEY = "tiendly:onboarding";
 
 /** `linksEjemplo`: el link de cada tienda de ejemplo con el formato real (TIENDLY_URL_TIENDAS), para la vista previa. */
 type Ctx = { state: OnboardingState; set: (p: Partial<OnboardingState>) => void; reset: () => void; linksEjemplo: string[] };
@@ -39,7 +39,7 @@ export function OnboardingProvider({ linksEjemplo, children }: { linksEjemplo: s
 
   useEffect(() => {
     try {
-      const raw = sessionStorage.getItem(KEY);
+      const raw = sessionStorage.getItem(CLAVE_ONBOARDING);
       if (raw) setState({ ...INICIAL, ...JSON.parse(raw) });
     } catch {
       /* sin storage: el flujo funciona igual en memoria */
@@ -50,7 +50,7 @@ export function OnboardingProvider({ linksEjemplo, children }: { linksEjemplo: s
     setState((prev) => {
       const next = { ...prev, ...p };
       try {
-        sessionStorage.setItem(KEY, JSON.stringify(next));
+        sessionStorage.setItem(CLAVE_ONBOARDING, JSON.stringify(next));
       } catch {}
       return next;
     });
@@ -58,7 +58,7 @@ export function OnboardingProvider({ linksEjemplo, children }: { linksEjemplo: s
 
   const reset = useCallback(() => {
     try {
-      sessionStorage.removeItem(KEY);
+      sessionStorage.removeItem(CLAVE_ONBOARDING);
     } catch {}
     setState(INICIAL);
   }, []);
