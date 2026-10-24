@@ -8,8 +8,8 @@ export function CamposFree({ tienda, errores, cambiar }: { tienda: Tienda; error
   return <>
     <Seccion titulo="Identidad">
       <div className="divide-y divide-line-subtle [&>div]:py-5 [&>div:first-child]:pt-0 [&>div:last-child]:pb-0">
-      <CampoImagen label="Logo" ayuda="PNG o JPG cuadrado." valor={tienda.logo} onChange={v => cambiar("logo", v)} />
-      <CampoImagen label="Foto de portada" ayuda="Para lanzamientos o promos." valor={tienda.portada} onChange={v => cambiar("portada", v)} />
+      <CampoImagen label="Logo" ayuda="Cuadrado, JPG, PNG o WebP. Hasta 1 MB." valor={tienda.logo} onChange={v => cambiar("logo", v)} />
+      <CampoImagen label="Foto de portada" ayuda="Horizontal, JPG, PNG o WebP. Hasta 1 MB." valor={tienda.portada} onChange={v => cambiar("portada", v)} />
       <Field label="Texto de bienvenida" value={tienda.bienvenida} maxLength={80} onChange={e => cambiar("bienvenida", e.target.value)}
         error={errores.bienvenida} hint={`${tienda.bienvenida.length}/80 caracteres. Se ve debajo de tu logo.`} />
       </div>

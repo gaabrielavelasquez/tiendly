@@ -16,8 +16,6 @@ export const INICIAL: Tienda = {
   instagram: "heather.pe", whatsapp: "987654321", horario: "Lunes a sábado, de 9 a. m. a 6 p. m.", nombreOfertas: "",
 };
 export const VACIA: Tienda = { ...INICIAL, tema: "neutral", portada: "", bienvenida: "", instagram: "", whatsapp: "", horario: "" };
-/** Lo guardado en el navegador, por tienda. */
-export const storageDe = (slug: string) => `tiendly:mi-tienda:${slug}`;
 
 /** Solo reemplaza tokens de acento en la vitrina; el tema sigue controlando fuentes y radios. */
 export function estiloAcento(acento: Acento): CSSProperties {
@@ -44,17 +42,24 @@ export function validarTienda(tienda: Tienda): Errores {
 export const NOMBRES_OFERTAS = ["Ofertas", "SALE", "Cyber Wow", "Liquidación", "Fin de temporada"];
 export const MAX_NOMBRE_OFERTAS = 20;
 
+/** Valida también imágenes propias ya publicadas y cargas de hasta 1 MB. */
 export function leerTienda(valor: string): Tienda {
-  // Lo guardado antes de 0034 no tiene nombreOfertas (y igual lo pisa el del servidor).
-  const leido = JSON.parse(valor) as Partial<Tienda>;
-  const datos = { ...leido, nombreOfertas: leido.nombreOfertas ?? "" } as Tienda;
-  if (!TEMAS.some(t => t.id === datos.tema) || !ACENTOS.some(a => a.id === datos.acento)) throw new Error("Configuración no válida.");
-  for (const key of ["logo", "portada", "bienvenida", "instagram", "whatsapp", "horario"] as const) {
+  const datos = JSON.parse(valor) as Tienda;
+  if (!datos || !TEMAS.some(t => t.id === datos.tema) || !ACENTOS.some(a => a.id === datos.acento)) throw new Error("Configuración no válida.");
+  for (const key of ["logo", "portada", "bienvenida", "instagram", "whatsapp", "horario", "nombreOfertas"] as const) {
     if (typeof datos[key] !== "string") throw new Error("Configuración incompleta.");
   }
   for (const key of ["logo", "portada"] as const) {
-    if (datos[key] && !datos[key].startsWith("/mi-tienda/") && !/^data:image\/(png|jpeg|webp);base64,/.test(datos[key])) throw new Error("Imagen no válida.");
+    if (!imagenValida(datos[key])) throw new Error("Imagen no válida. Usa JPG, PNG o WebP de hasta 1 MB.");
   }
-  if (Object.keys(validarTienda(datos)).length) throw new Error("Revisa la configuración guardada.");
+  if (Object.keys(validarTienda(datos)).length) throw new Error("Revisa los campos marcados antes de guardar.");
   return datos;
+}
+
+function imagenValida(valor: string) {
+  if (!valor) return true;
+  if (/^\/(?!\/)[^\s?#]+\.(?:png|jpe?g|webp)$/i.test(valor)) return true;
+  if (/^https:\/\/[^/]+\.public\.blob\.vercel-storage\.com\//.test(valor)) return true;
+  const carga = valor.match(/^data:image\/(?:png|jpeg|webp);base64,([A-Za-z0-9+/]*={0,2})$/);
+  return !!carga && carga[1].length <= Math.ceil(1024 * 1024 / 3) * 4;
 }

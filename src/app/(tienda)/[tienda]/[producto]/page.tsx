@@ -44,7 +44,7 @@ export default async function ProductoPage({ params }: PageProps) {
           </section>
         )}
       </main>
-      <PieTienda nombre={vitrina.tienda.nombre} logo={vitrina.tienda.logo} slug={tienda} celular={vitrina.tienda.celular} categorias={vitrina.categorias} />
+      <PieTienda instagram={vitrina.tienda.instagram} horario={vitrina.tienda.horario} nombre={vitrina.tienda.nombre} logo={vitrina.tienda.logo} slug={tienda} celular={vitrina.tienda.celular} categorias={vitrina.categorias} />
     </div>
   );
 }

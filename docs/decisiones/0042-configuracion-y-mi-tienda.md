@@ -16,7 +16,9 @@ Pagos conserva guardado inmediato, rollback al fallar, último método protegido
 
 ## Mi tienda
 
-Conserva temas/acento, carga de imágenes, bienvenida, contacto, nombre de ofertas, opciones Free/Pro y bloqueo de Pro pendiente, preview en vivo y aviso al salir sin guardar. Apariencia sigue guardada por navegador, mientras WhatsApp y nombre de ofertas usan el guardado existente del servidor. No se crea persistencia nueva.
+Conserva temas/acento, carga de imágenes, bienvenida, contacto, nombre de ofertas, opciones Free/Pro y bloqueo de Pro pendiente, preview en vivo y aviso al salir sin guardar. Ajuste solicitado antes del merge: identidad leída del documento real de la tienda y publicada en una sola escritura del almacén existente junto con contacto/ofertas. Tema, acento, logo, portada, bienvenida, Instagram y horario comparten fuente entre panel y vitrina; los borradores antiguos de localStorage no pisan lo publicado. Compatibilidad en lectura con las tiendas de ejemplo (MUÑA Editorial/Terracota, portada y titular propios), sin reset ni escritura de migración. Una tienda nueva sigue Neutral y vacía.
+
+Las miniaturas usan portada/logo y productos publicados de la tienda; sin catálogo, muestras por rubro identificadas como tales, nunca guardadas. Ayudas de imagen unificadas (formato/orientación y límite de 1 MB), íconos sin contenedor gris.
 
 La barra móvil de guardar aparece con cambios pendientes y reemplaza a la tab bar; al guardar se recupera la navegación y el aviso queda visible. Preview sin productos o portada explica qué falta en lugar de inventar productos o importes.
 

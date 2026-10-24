@@ -42,9 +42,9 @@ export function Vitrina({ datos, categoriaInicial }: VitrinaProps) {
     <div className="flex min-h-dvh flex-col">
       <CabeceraTienda nombre={datos.tienda.nombre} logo={datos.tienda.logo} slug={datos.tienda.slug} categorias={datos.categorias} activa={categoria} onCategoria={setCategoria} />
       {datos.productos.length > 0 &&
-        (datos.tienda.plan === "pro" ? (
+        (datos.tienda.plan === "pro" && (datos.tienda.demo || datos.tienda.portada?.src) ? (
           <div className="mx-auto w-full max-w-6xl px-4 lg:pt-6">
-            <PortadaPro />
+            <PortadaPro propia={datos.tienda.demo ? undefined : datos.tienda.portada} />
           </div>
         ) : (
           <Portada nombre={datos.tienda.nombre} demo={datos.tienda.demo} propia={datos.tienda.portada} />
@@ -93,7 +93,7 @@ export function Vitrina({ datos, categoriaInicial }: VitrinaProps) {
           </>
         )}
       </main>
-      <PieTienda nombre={datos.tienda.nombre} logo={datos.tienda.logo} slug={datos.tienda.slug} celular={datos.tienda.celular} categorias={datos.categorias} />
+      <PieTienda instagram={datos.tienda.instagram} horario={datos.tienda.horario} nombre={datos.tienda.nombre} logo={datos.tienda.logo} slug={datos.tienda.slug} celular={datos.tienda.celular} categorias={datos.categorias} />
     </div>
   );
 }

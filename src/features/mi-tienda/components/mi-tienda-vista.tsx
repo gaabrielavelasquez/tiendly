@@ -3,6 +3,7 @@ import { useRef, useState } from "react";
 import { CloudOff, Monitor, Smartphone, X } from "lucide-react";
 import { CONTENEDOR, EncabezadoSeccion, PanelMain, useOcultarBarraInferior, ZonaUsuario } from "@/components/panel";
 import { Button, EmptyState } from "@/components/ui";
+import type { Tienda } from "../types";
 import { cn } from "@/lib/cn";
 import { ACENTOS, TEMAS } from "../lib/config";
 import { useMiTienda } from "../hooks/use-mi-tienda";
@@ -16,8 +17,8 @@ import { TiendaPreview, type Muestra } from "./tienda-preview";
 import { SalidaSinGuardar } from "./salida-sin-guardar";
 
 /** `tienda`: la de la sesión (nombre y slug); una tienda nueva arranca sin la portada ni los textos de Heather. */
-export function MiTiendaVista({ escenario, whatsappVentas, plan, tienda }: { escenario?: string; whatsappVentas: string; plan: "free" | "pro"; tienda: { nombre: string; slug: string; demo: boolean; muestras: Muestra[]; nombreOfertas: string; categorias: string[] } }) {
-  const m = useMiTienda(escenario, whatsappVentas, tienda, tienda.nombreOfertas);
+export function MiTiendaVista({ escenario, inicial, plan, tienda }: { escenario?: string; inicial: Tienda; plan: "free" | "pro"; tienda: { nombre: string; slug: string; muestras: Muestra[]; muestrasTema: Muestra[]; muestrasEjemplo: boolean; nombreOfertas: string; categorias: string[] } }) {
+  const m = useMiTienda(escenario, inicial);
   const salida = useSalidaSinGuardar(m.pendiente, m.guardando);
   // Con cambios sin guardar, la barra de guardar reemplaza a la de pestañas en móvil (antes la tapaba y no se podía guardar).
   useOcultarBarraInferior(m.pendiente);
@@ -36,7 +37,7 @@ export function MiTiendaVista({ escenario, whatsappVentas, plan, tienda }: { esc
       {escenario === "vacio" && <p className="text-body-sm text-fg-secondary">Tu tienda está lista para personalizar. Elige un tema y agrega tu marca.</p>}
       <div className="grid min-w-0 items-start gap-10 xl:grid-cols-2 xl:gap-12">
         <div className="flex min-w-0 flex-col gap-10 lg:gap-12">
-          <Apariencia tienda={m.tienda} nombre={tienda.nombre} cambiar={m.cambiar} vistaPrevia={() => preview.current?.showModal()} />
+          <Apariencia tienda={m.tienda} nombre={tienda.nombre} muestras={tienda.muestrasTema} muestrasEjemplo={tienda.muestrasEjemplo} cambiar={m.cambiar} vistaPrevia={() => preview.current?.showModal()} />
           <CamposFree tienda={m.tienda} errores={m.errores} cambiar={m.cambiar} />
           <SeccionOfertas tienda={m.tienda} errores={m.errores} cambiar={m.cambiar} categorias={tienda.categorias} />
           <ProBloqueado plan={plan} />

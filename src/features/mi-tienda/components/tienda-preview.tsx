@@ -27,7 +27,6 @@ export function TiendaPreview({ tienda, nombre, muestras, mini = false, computad
       <div className={cn("grid grid-cols-2 gap-3", computadora && "grid-cols-4")}>
         {muestras.map(p =>
           <div key={p.nombre} className="min-w-0">{p.foto ? <img src={p.foto} alt={p.nombre} className="aspect-[4/5] w-full rounded-theme bg-sunken object-cover" /> : <div aria-hidden className="aspect-[4/5] w-full rounded-theme bg-sunken" />}
-            {!muestras.length && <div className="flex flex-col items-center gap-3 py-6 text-center"><Package aria-hidden strokeWidth={1.5} className="size-6 text-icon" /><p className="text-body-sm text-fg-secondary">Cuando agregues tus productos, aparecerán aquí.</p></div>}
       {!mini && <><p className="mt-2 truncate text-body-sm">{p.nombre}</p><p className="text-body-sm font-normal tabular-nums">{p.precio}</p></>}
           </div>)}
       </div>

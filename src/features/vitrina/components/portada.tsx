@@ -11,10 +11,9 @@ type PortadaProps = { nombre: string; demo: boolean; propia?: PortadaPropia };
  * debajo, nunca encima: el texto sobre la foto es el banner Pro (V1.1). MUÑA usa una sola foto a todo el ancho.
  */
 export function Portada({ nombre, demo, propia }: PortadaProps) {
-  // Una tienda nueva todavía no tiene fotos de portada ni textos propios (Mi tienda aún no los publica):
-  // su nombre y una bajada neutra, sin las fotos de Heather. Con portada propia (MUÑA): una sola foto a todo el ancho.
+  // Mi tienda y la vitrina comparten identidad; sin portada no se inventan fotos.
   const neutra = { ...PORTADA, fotos: [], titulo: nombre, bajada: "Elige lo que te guste y coordina tu pedido por WhatsApp.", cta: "Ver productos" };
-  const textos = demo ? PORTADA : propia ? { ...neutra, fotos: [propia], titulo: propia.titulo, bajada: propia.bajada } : neutra;
+  const textos = demo ? PORTADA : propia ? { ...neutra, fotos: propia.src ? [propia] : [], titulo: propia.titulo, bajada: propia.bajada } : neutra;
   const unaFoto = textos.fotos.length === 1;
   return (
     <section aria-labelledby="portada-titulo">

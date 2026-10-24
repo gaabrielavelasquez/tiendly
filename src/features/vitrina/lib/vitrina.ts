@@ -8,6 +8,7 @@ import { hoyLima } from "@/lib/reloj";
 import { DETALLE, hexDeColor } from "./contenido";
 import { esHeather } from "@/lib/datos/semillas";
 import { TIENDAS_EJEMPLO } from "@/lib/datos/tiendas-ejemplo";
+import { identidadDe } from "@/features/mi-tienda/lib/datos";
 import { datosTienda } from "@/lib/datos/tienda";
 
 // Vitrina pública: lo que ve el cliente. Lee el mismo catálogo que el panel, pero solo lo publicado.
@@ -56,7 +57,7 @@ export type PortadaPropia = { src: string; alt: string; titulo: string; bajada: 
 /** `demo`: Heather trae su portada, fotos y beneficios; las demás tiendas muestran solo lo que cargaron. */
 export type Vitrina = {
   /** `nombreOfertas`: el nombre de la sección de ofertas (Mi tienda; "Ofertas" por defecto). */
-  tienda: { nombre: string; slug: string; celular: string; logo?: string; plan: "free" | "pro"; demo: boolean; portada?: PortadaPropia; nombreOfertas: string };
+  tienda: { nombre: string; slug: string; celular: string; logo?: string; plan: "free" | "pro"; instagram?: string; horario?: string; demo: boolean; portada?: PortadaPropia; nombreOfertas: string };
   productos: ProductoVitrina[];
   /** El menú: la sección de ofertas primero (si hay ofertas hoy), después las categorías. */
   categorias: { id: string; label: string }[];
@@ -137,11 +138,15 @@ export async function obtenerVitrina(slug: string): Promise<Vitrina | null> {
   // Las categorías de la tienda, en el orden en que aparecen en su catálogo (texto libre, decisión 0032).
   const textos = [...new Set(activos.flatMap((p) => p.categorias))];
   const cats = [...new Map(textos.map((label) => [slugProducto(label), { id: slugProducto(label), label }])).values()];
-  const { nombre, logo, plan } = d.tienda;
+  const { nombre, plan } = d.tienda;
+  const identidad = identidadDe(d);
+  const { logo, instagram, horario } = identidad;
+  const original = portadaDe(slug);
+  const portada = identidad.portada || identidad.bienvenida ? { src: identidad.portada, alt: original?.alt ?? `Portada de ${nombre}`, titulo: identidad.bienvenida || nombre, bajada: original?.bajada ?? "Elige lo que te guste y coordina tu pedido por WhatsApp." } : undefined;
   const nombreOfertas = d.tienda.nombreOfertas?.trim() || "Ofertas";
   // La sección de ofertas va primera en el menú, con su nombre, solo si hay ofertas hoy (0034).
   const categorias = productos.some((p) => p.descuento > 0 && !p.agotado) ? [{ id: OFERTAS, label: nombreOfertas }, ...cats] : cats;
-  return { tienda: { nombre, slug, celular: d.config.pagos.whatsapp.celular, logo, plan, demo: esHeather(slug), portada: portadaDe(slug), nombreOfertas }, productos, categorias };
+  return { tienda: { nombre, slug, celular: d.config.pagos.whatsapp.celular, logo, plan, demo: esHeather(slug) && !d.tienda.apariencia, portada, instagram, horario, nombreOfertas }, productos, categorias };
 }
 
 export const leerCategoria = (v: string | string[] | undefined, validas: string[]): string | "todos" => {

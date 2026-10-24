@@ -22,6 +22,8 @@ export type TiendaSesion = {
   /** El WhatsApp al que escriben los clientes desde la vitrina. */
   celularVentas: string;
   logo?: string;
+  /** Identidad publicada desde Mi tienda; sin valor se conservan los datos originales de la tienda. */
+  apariencia?: Omit<import("@/features/mi-tienda/types").Tienda, "whatsapp" | "nombreOfertas">;
   plan: "free" | "pro";
   /** Pasos de "arrancar tu tienda" que no se deducen de los datos (Inicio, tienda nueva). */
   hechos: { pagos: boolean; entregas: boolean; compartir: boolean };
