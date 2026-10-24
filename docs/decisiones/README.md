@@ -22,7 +22,7 @@ Una decisión por archivo: contexto, decisión y consecuencias. Las anteriores a
 | 0034 | [Ofertas: precio antes, fechas, sección con nombre propio y "Poner en oferta" en lote](0034-ofertas.md) | **Vigente** (#24, #25 y #26; actualiza 0027) |
 | 0035 | [Ficha en dos columnas desde tablet y "Agregado al carrito"](0035-ficha-y-agregar-al-carrito.md) | Vigente (la hoja del punto 2 → 0036) |
 | 0036 | [El carrito es un drawer](0036-carrito-drawer.md) | **Vigente** (actualiza 0007 y 0035) |
-| 0037 | Tabla de tallas por producto | Propuesta, en el PR #27 |
+| 0037 | [Tabla de tallas por producto](0037-tabla-de-tallas.md) | Aprobada por Gabi para #27, con preview verde |
 | 0038 | [MUÑA: catálogo y miniaturas de color](0038-muna-catalogo-y-miniaturas.md) | Solicitada por Gabi |
 
 | 0039 | [Pedidos adopta las reglas de 0031](0039-pedidos-pase-0031.md) | Aprobada por Gabi para #31, con preview verde |

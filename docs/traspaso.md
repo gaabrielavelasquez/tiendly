@@ -209,3 +209,5 @@ Pagos, bancos, entregas y WhatsApp siguen simulados. No se enviaron mensajes, co
 - Gabi autorizó integrar #27 tras dos ajustes: ayuda inline en opciones llamadas Medidas/Medida/Dimensiones/Tamaño en cm con enlace al editor de medidas; título público genérico "Medidas". Implementado sin cambiar los datos de la opción.
 - La rama ya contiene el main actualizado (`b6cf172`). Se verificará el preview y producción /muna/cartera-cher a 390, sin reset ni datos de prueba en producción.
 - Siguiente tarea autorizada: un PR nuevo desde main para Cerrar sesión, con confirmación, borrar la tienda recordada y volver a /registro. **Detenerse para revisión de ese PR**; onboarding 2–4 queda después de la revisión.
+
+- Preview final `1834d47`: https://tiendly-14ble200s-gaabrielavelasquez-8525s-projects.vercel.app/panel/productos/m6. Tokens y build local/Vercel verdes. Chrome y WebKit a 360/390/1440 pasan los cuatro nombres de opción, enlace con/sin Talla, título genérico y plegado; sin scroll horizontal. Capturas finales a 390/1440 en `docs/capturas/pr-27-final/`. No se guardaron cambios de prueba.

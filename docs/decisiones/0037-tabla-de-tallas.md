@@ -1,7 +1,7 @@
 # 0037 · Tabla de tallas por producto
 
 - **Fecha:** 23-oct-2026
-- **Estado:** propuesta (PR 4 de 4 de ofertas), pendiente del ok de Gabi.
+- **Estado:** aprobada por Gabi para integrar #27 con preview verde.
 - **Aplica:** 0032 (la tabla de tallas solo aparece si una opción es talla; es por producto, con un atajo para reusar la de otro) y el prototipo aprobado de 0034 (PR #22).
 
 ## Decisión
