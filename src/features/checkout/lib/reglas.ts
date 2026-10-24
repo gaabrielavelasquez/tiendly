@@ -1,3 +1,4 @@
+import { redondearSoles } from "@/lib/formato";
 import type { ItemCarrito } from "@/features/vitrina/lib/carrito";
 import type { CatalogoCompra, Cupon, Datos, Entrega, Linea, Totales, TipoEntrega } from "../types";
 import { descuentoDe } from "@/features/cupones/lib/reglas";
@@ -20,19 +21,19 @@ export function resolverLineas(items: ItemCarrito[], catalogo: CatalogoCompra): 
 export const mismaLinea = (a: ItemCarrito, b: ItemCarrito) => a.id === b.id && a.variante === b.variante;
 
 /** Lo que falta para el envío gratis (0 si ya llegó). Se cuenta después del cupón. null: la tienda no lo ofrece. */
-export const faltaEnvioGratis = (base: number, desde: number | null) => (desde === null ? null : Math.max(0, desde - base));
+export const faltaEnvioGratis = (base: number, desde: number | null) => (desde === null ? null : Math.max(0, redondearSoles(desde - base)));
 
 /** Las tallas agotadas no suman: no se pueden comprar (el carrito pide quitarlas). */
 export function calcularTotales(todas: Linea[], cupon: Cupon | null, entrega: Entrega | null, envioGratisDesde: number | null): Totales {
   const lineas = todas.filter((l) => l.maximo > 0);
-  const productos = lineas.reduce((s, l) => s + l.precio * l.cantidad, 0);
+  const productos = redondearSoles(lineas.reduce((s, l) => s + l.precio * l.cantidad, 0));
   const unidades = lineas.reduce((s, l) => s + l.cantidad, 0);
   const descuento = cupon ? descuentoDe(cupon, productos) : 0;
-  const base = productos - descuento;
+  const base = redondearSoles(productos - descuento);
   const envioGratis = cupon?.tipo === "envio" || faltaEnvioGratis(base, envioGratisDesde) === 0;
   if (entrega?.tipo === "coordinar") return { productos, unidades, descuento, envio: null, envioGratis: false, envioPorCoordinar: true, total: base };
   const envio = !entrega ? null : entrega.tipo === "recojo" || envioGratis ? 0 : entrega.distrito.costo;
-  return { productos, unidades, descuento, envio, envioGratis, total: base + (envio ?? 0) };
+  return { productos, unidades, descuento, envio, envioGratis, total: redondearSoles(base + (envio ?? 0)) };
 }
 
 export const soloDigitos = (s: string) => s.replace(/\D/g, "");

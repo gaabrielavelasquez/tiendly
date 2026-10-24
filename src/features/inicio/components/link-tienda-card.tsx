@@ -18,7 +18,7 @@ export function LinkTiendaCard({ link, className }: { link: string; className?: 
   const Icono = estado === "copiado" ? Check : Copy;
 
   return (
-    <Card as="section" aria-labelledby="link-titulo" className={cn("flex flex-col gap-3", className)}>
+    <Card as="section" aria-labelledby="link-titulo" className={cn("flex min-w-0 flex-col gap-3", className)}>
       <h2 id="link-titulo" className="text-label font-bold uppercase tracking-widest text-fg-secondary">
         El link de tu tienda
       </h2>

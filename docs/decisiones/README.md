@@ -25,6 +25,7 @@ Una decisión por archivo: contexto, decisión y consecuencias. Las anteriores a
 | 0037 | [Tabla de tallas por producto](0037-tabla-de-tallas.md) | Aprobada por Gabi para #27, con preview verde |
 | 0038 | [MUÑA: catálogo y miniaturas de color](0038-muna-catalogo-y-miniaturas.md) | Solicitada por Gabi |
 | 0039 | [Pedidos adopta las reglas de 0031](0039-pedidos-pase-0031.md) | Aprobada por Gabi para #31, con preview verde |
-| 0040 | [Cerrar sesión desde la cuenta](0040-cerrar-sesion.md) | Solicitada por Gabi, pendiente de revisión |
+| 0040 | [Cerrar sesión desde la cuenta](0040-cerrar-sesion.md) | Integrada en #32; pase visual en 0041 |
+| 0041 | [Acceso/onboarding y montos decimales](0041-auth-onboarding-y-montos.md) | Solicitada por Gabi; pendiente de revisión |
 
 Para una decisión nueva: copia la estructura de 0026, usa el número siguiente y súmala a esta tabla.

@@ -8,5 +8,5 @@ export const metadata: Metadata = { title: "Crea tu tienda · Tiendly" };
 export default async function Registro() {
   // Los links de la vista previa salen del mismo lugar que el de cualquier tienda (TIENDLY_URL_TIENDAS), no escritos a mano.
   const linksEjemplo = await Promise.all(TIENDAS_EJEMPLO.map(async (t) => sinProtocolo(await urlTienda(t.slug))));
-  return <OnboardingFlow linksEjemplo={linksEjemplo} />;
+  return <OnboardingFlow linksEjemplo={linksEjemplo} baseTienda={await urlTienda("")} />;
 }

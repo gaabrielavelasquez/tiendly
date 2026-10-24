@@ -191,6 +191,23 @@
     radial-gradient(closest-side at 50% 60%, var(--tl-glow-warm) 72%, transparent 100%),
     radial-gradient(closest-side at 25% 30%, color-mix(in srgb, var(--tl-glow-sky-from) 40%, transparent) 60%, transparent 100%);
 }
+/* Logro del onboarding: halo centrado que envuelve la tarjeta, con más presencia que el halo de Hoy.
+   Solo tokens glow-sky/glow-warm, sin blur; no cambia el halo de otras pantallas. */
+@utility bg-halo-logro {
+  background-image:
+    radial-gradient(ellipse at 75% 75%, var(--tl-glow-warm) 65%, transparent 100%),
+    radial-gradient(ellipse at 75% 75%, var(--tl-glow-warm) 65%, transparent 100%),
+    radial-gradient(ellipse at 75% 75%, var(--tl-glow-warm) 65%, transparent 100%),
+    radial-gradient(ellipse at 75% 75%, var(--tl-glow-warm) 65%, transparent 100%),
+    radial-gradient(ellipse at 75% 75%, var(--tl-glow-warm) 65%, transparent 100%),
+    radial-gradient(ellipse at 75% 75%, var(--tl-glow-warm) 65%, transparent 100%),
+    radial-gradient(ellipse at 25% 25%, var(--tl-glow-sky-from) 40%, transparent 100%),
+    radial-gradient(ellipse at 25% 25%, var(--tl-glow-sky-from) 40%, transparent 100%);
+  mask-image:
+    linear-gradient(to right, transparent, var(--tl-text-primary) 12%, var(--tl-text-primary) 88%, transparent),
+    linear-gradient(to bottom, transparent, var(--tl-text-primary) 12%, var(--tl-text-primary) 88%, transparent);
+  mask-composite: intersect;
+}
 /* Tarjeta Hoy, ronda 4 de 0031: degradado corto de cobalto a un cobalto apenas más hondo (sin marino). */
 @utility bg-hero-suave {
   background-image: linear-gradient(135deg, var(--tl-accent-base) 0%, var(--tl-accent-pressed) 100%);

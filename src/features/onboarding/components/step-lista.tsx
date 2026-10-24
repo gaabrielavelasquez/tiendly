@@ -1,58 +1,42 @@
 "use client";
 
-import { Check } from "lucide-react";
-import { motion } from "motion/react";
-import { useReducedMotion } from "@/components/motion/use-reduced-motion";
-import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { Button } from "@/components/ui";
-import { MiniTienda } from "./mini-tienda";
-import { Sparkles } from "./sparkles";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { motion } from "motion/react";
+import { Button, buttonVariants } from "@/components/ui";
+import { useReducedMotion } from "@/components/motion/use-reduced-motion";
+import { useCopiar } from "@/features/inicio/hooks/use-copiar";
+import { whatsappCompartir } from "@/features/inicio/lib/format";
+import { motionTokens } from "@/styles/tokens";
+import { cn } from "@/lib/cn";
+import { TituloAcceso } from "./titulo-acceso";
+import { TiendaDatosPreview } from "./tienda-datos-preview";
 import { useOnboarding } from "../hooks/use-onboarding";
-import { EXPLICACION_TEMA, TEMA_INICIAL } from "../lib/rubros";
+import { EXPLICACION_TEMA } from "../lib/rubros";
 
-/** O4 / OD4 · Celebración. Móvil muestra la mini tienda; desktop, el sello de éxito (la tienda ya está a la izquierda). */
+/** Logro: la tienda propia es protagonista, halo acotado y entrada suave sin destellos. */
 export function StepLista() {
-  const router = useRouter();
+  const { state, baseTienda } = useOnboarding();
   const reduce = useReducedMotion();
-  const { state } = useOnboarding();
+  const router = useRouter();
+  const { estado, copiar } = useCopiar();
   const [yendo, setYendo] = useState(false);
-  const entrada = reduce ? false : { opacity: 0, scale: 0.85, y: 12 };
-
-  return (
-    <div className="flex flex-1 flex-col items-center gap-6 text-center lg:items-start lg:text-left">
-      <div className="relative mt-auto flex justify-center px-10 py-6 lg:hidden">
-        <motion.div initial={entrada} animate={{ opacity: 1, scale: 1, y: 0 }} transition={{ type: "spring", stiffness: 220, damping: 20 }}>
-          <MiniTienda nombre={state.nombre} slug={state.slug} tema={TEMA_INICIAL} className="shadow-celebration" />
-        </motion.div>
-        <Sparkles />
-      </div>
-      <div className="relative hidden lg:block">
-        <motion.div
-          initial={entrada}
-          animate={{ opacity: 1, scale: 1, y: 0 }}
-          transition={{ type: "spring", stiffness: 260, damping: 18 }}
-          className="flex size-18 items-center justify-center rounded-full bg-success-surface shadow-celebration"
-        >
-          <Check aria-hidden className="size-9 text-success" />
-        </motion.div>
-        <Sparkles count={3} className="-inset-8" />
-      </div>
-      <header className="flex flex-col gap-2">
-        <h1 className="font-display-hero text-h1">¡Tu tienda está lista!</h1>
-        <p className="text-body text-fg-secondary">{EXPLICACION_TEMA}</p>
-      </header>
-      <Button
-        className="mt-auto lg:mt-2"
-        block
-        loading={yendo}
-        onClick={() => {
-          setYendo(true);
-          router.push("/panel");
-        }}
-      >
-        Ir a mi panel
-      </Button>
+  const url = `${baseTienda}${state.slug}`;
+  return <div className="flex min-w-0 flex-col items-center gap-6 text-center">
+    <TituloAcceso titulo="Tu tienda está lista." contexto="Empieza con tu primer producto." />
+    <motion.div className="relative isolate w-full min-w-0 max-w-100" initial={reduce ? false : { opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: reduce ? 0 : motionTokens.durationFast * 2, ease: [...motionTokens.easing] as [number, number, number, number] }}>
+      <TiendaDatosPreview nombre={state.nombre} url={url} rubros={state.rubros} celebracion />
+    </motion.div>
+    <p className="text-body-sm text-pretty text-fg-secondary">{EXPLICACION_TEMA}</p>
+    <div className="flex w-full flex-col gap-3">
+      <Button block loading={yendo} disabled={yendo} onClick={() => { setYendo(true); router.push("/panel/productos/nuevo"); }}>Agregar mi primer producto</Button>
+      <Link href="/panel" className={buttonVariants({ variant: "secondary", block: true })}>Ir a mi panel</Link>
     </div>
-  );
+    <div className="flex w-full flex-wrap justify-center gap-x-6 gap-y-2">
+      <Button variant="ghost" onClick={() => copiar(url)}>Copiar link</Button>
+      <a href={whatsappCompartir(url)} target="_blank" rel="noopener noreferrer" className={cn(buttonVariants({ variant: "ghost" }))}>Compartir por WhatsApp</a>
+    </div>
+    <p role="status" className={cn("text-body-sm", estado === "error" ? "text-error" : "text-fg-secondary")}>{estado === "copiado" ? "Link copiado." : estado === "error" ? "No pudimos copiar el link. Puedes copiarlo desde la vista de tu tienda." : ""}</p>
+  </div>;
 }

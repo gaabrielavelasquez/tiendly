@@ -1,0 +1,330 @@
+{
+  "preview": "https://tiendly-ni5lpwjr2-gaabrielavelasquez-8525s-projects.vercel.app",
+  "source": "5d60b6a",
+  "tests": [
+    {
+      "engine": "chrome",
+      "label": "registro",
+      "w": 390,
+      "s": 390
+    },
+    {
+      "engine": "chrome",
+      "label": "ingreso",
+      "w": 390,
+      "s": 390
+    },
+    {
+      "engine": "chrome",
+      "label": "codigo incorrecto",
+      "w": 390,
+      "s": 390
+    },
+    {
+      "engine": "chrome",
+      "label": "ingreso al panel",
+      "w": 390,
+      "s": 390
+    },
+    {
+      "engine": "chrome",
+      "label": "salir",
+      "w": 390,
+      "s": 390
+    },
+    {
+      "engine": "chrome",
+      "label": "salida y cookie",
+      "w": 390,
+      "s": 390
+    },
+    {
+      "engine": "chrome",
+      "label": "codigo vencido",
+      "w": 390,
+      "s": 390
+    },
+    {
+      "engine": "chrome",
+      "label": "datos Otro",
+      "w": 390,
+      "s": 390
+    },
+    {
+      "engine": "chrome",
+      "label": "tienda propia",
+      "w": 390,
+      "s": 390
+    },
+    {
+      "engine": "chrome",
+      "label": "registro",
+      "w": 1440,
+      "s": 1440
+    },
+    {
+      "engine": "chrome",
+      "label": "ingreso",
+      "w": 1440,
+      "s": 1440
+    },
+    {
+      "engine": "chrome",
+      "label": "codigo incorrecto",
+      "w": 1440,
+      "s": 1440
+    },
+    {
+      "engine": "chrome",
+      "label": "ingreso al panel",
+      "w": 1440,
+      "s": 1440
+    },
+    {
+      "engine": "chrome",
+      "label": "salir",
+      "w": 1440,
+      "s": 1440
+    },
+    {
+      "engine": "chrome",
+      "label": "salida y cookie",
+      "w": 1440,
+      "s": 1440
+    },
+    {
+      "engine": "chrome",
+      "label": "codigo vencido",
+      "w": 1440,
+      "s": 1440
+    },
+    {
+      "engine": "chrome",
+      "label": "datos Otro",
+      "w": 1440,
+      "s": 1440
+    },
+    {
+      "engine": "chrome",
+      "label": "tienda propia",
+      "w": 1440,
+      "s": 1440
+    },
+    {
+      "engine": "chrome",
+      "label": "registro",
+      "w": 360,
+      "s": 360
+    },
+    {
+      "engine": "chrome",
+      "label": "ingreso",
+      "w": 360,
+      "s": 360
+    },
+    {
+      "engine": "chrome",
+      "label": "codigo incorrecto",
+      "w": 360,
+      "s": 360
+    },
+    {
+      "engine": "chrome",
+      "label": "ingreso al panel",
+      "w": 360,
+      "s": 360
+    },
+    {
+      "engine": "chrome",
+      "label": "salir",
+      "w": 360,
+      "s": 360
+    },
+    {
+      "engine": "chrome",
+      "label": "salida y cookie",
+      "w": 360,
+      "s": 360
+    },
+    {
+      "engine": "chrome",
+      "label": "codigo vencido",
+      "w": 360,
+      "s": 360
+    },
+    {
+      "engine": "chrome",
+      "label": "datos Otro",
+      "w": 360,
+      "s": 360
+    },
+    {
+      "engine": "chrome",
+      "label": "tienda propia",
+      "w": 360,
+      "s": 360
+    },
+    {
+      "engine": "webkit",
+      "label": "registro",
+      "w": 390,
+      "s": 390
+    },
+    {
+      "engine": "webkit",
+      "label": "ingreso",
+      "w": 390,
+      "s": 390
+    },
+    {
+      "engine": "webkit",
+      "label": "codigo incorrecto",
+      "w": 390,
+      "s": 390
+    },
+    {
+      "engine": "webkit",
+      "label": "ingreso al panel",
+      "w": 390,
+      "s": 390
+    },
+    {
+      "engine": "webkit",
+      "label": "salir",
+      "w": 390,
+      "s": 390
+    },
+    {
+      "engine": "webkit",
+      "label": "salida y cookie",
+      "w": 390,
+      "s": 390
+    },
+    {
+      "engine": "webkit",
+      "label": "codigo vencido",
+      "w": 390,
+      "s": 390
+    },
+    {
+      "engine": "webkit",
+      "label": "datos Otro",
+      "w": 390,
+      "s": 390
+    },
+    {
+      "engine": "webkit",
+      "label": "tienda propia",
+      "w": 390,
+      "s": 390
+    },
+    {
+      "engine": "webkit",
+      "label": "registro",
+      "w": 1440,
+      "s": 1440
+    },
+    {
+      "engine": "webkit",
+      "label": "ingreso",
+      "w": 1440,
+      "s": 1440
+    },
+    {
+      "engine": "webkit",
+      "label": "codigo incorrecto",
+      "w": 1440,
+      "s": 1440
+    },
+    {
+      "engine": "webkit",
+      "label": "ingreso al panel",
+      "w": 1440,
+      "s": 1440
+    },
+    {
+      "engine": "webkit",
+      "label": "salir",
+      "w": 1440,
+      "s": 1440
+    },
+    {
+      "engine": "webkit",
+      "label": "salida y cookie",
+      "w": 1440,
+      "s": 1440
+    },
+    {
+      "engine": "webkit",
+      "label": "codigo vencido",
+      "w": 1440,
+      "s": 1440
+    },
+    {
+      "engine": "webkit",
+      "label": "datos Otro",
+      "w": 1440,
+      "s": 1440
+    },
+    {
+      "engine": "webkit",
+      "label": "tienda propia",
+      "w": 1440,
+      "s": 1440
+    },
+    {
+      "engine": "webkit",
+      "label": "registro",
+      "w": 360,
+      "s": 360
+    },
+    {
+      "engine": "webkit",
+      "label": "ingreso",
+      "w": 360,
+      "s": 360
+    },
+    {
+      "engine": "webkit",
+      "label": "codigo incorrecto",
+      "w": 360,
+      "s": 360
+    },
+    {
+      "engine": "webkit",
+      "label": "ingreso al panel",
+      "w": 360,
+      "s": 360
+    },
+    {
+      "engine": "webkit",
+      "label": "salir",
+      "w": 360,
+      "s": 360
+    },
+    {
+      "engine": "webkit",
+      "label": "salida y cookie",
+      "w": 360,
+      "s": 360
+    },
+    {
+      "engine": "webkit",
+      "label": "codigo vencido",
+      "w": 360,
+      "s": 360
+    },
+    {
+      "engine": "webkit",
+      "label": "datos Otro",
+      "w": 360,
+      "s": 360
+    },
+    {
+      "engine": "webkit",
+      "label": "tienda propia",
+      "w": 360,
+      "s": 360
+    }
+  ]
+}

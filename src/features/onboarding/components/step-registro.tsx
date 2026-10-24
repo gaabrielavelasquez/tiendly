@@ -3,8 +3,6 @@
 import { useState } from "react";
 import { Button, Field } from "@/components/ui";
 import { BotonGoogle } from "./boton-google";
-import { TiendasEjemplo } from "./tiendas-ejemplo";
-import { Wordmark } from "./wordmark";
 import { useOnboarding } from "../hooks/use-onboarding";
 import { errorCelular, formatear, soloDigitos } from "../lib/phone";
 
@@ -16,7 +14,7 @@ const TITULAR = {
 
 /** O1 / OD1 · Registro con WhatsApp o Google. */
 export function StepRegistro() {
-  const { state, set, linksEjemplo } = useOnboarding();
+  const { state, set } = useOnboarding();
   const [digitos, setDigitos] = useState(state.celular);
   const [error, setError] = useState<string>();
   const [enviando, setEnviando] = useState(false);
@@ -30,12 +28,11 @@ export function StepRegistro() {
     if (err) return;
     setEnviando(true);
     await new Promise((r) => setTimeout(r, 700)); // simulación del envío por WhatsApp
-    set({ celular: digitos, celularVentas: state.celularVentas || digitos, paso: "codigo" });
+    set({ celular: digitos, celularVentas: state.celularVentas || digitos, paso: "codigo", codigoEnviadoEl: Date.now() });
   }
 
   return (
     <form onSubmit={enviar} noValidate className="flex flex-1 flex-col gap-6">
-      <Wordmark className="lg:hidden" />
       <header className="flex flex-col gap-3 pt-2">
         <h1 className="font-display-light text-h1 tracking-tight text-balance">
           <span className="block text-fg">{titulo}</span>
@@ -63,17 +60,11 @@ export function StepRegistro() {
         <span className="h-px flex-1 bg-line-subtle" />o<span className="h-px flex-1 bg-line-subtle" />
       </div>
       <BotonGoogle />
-      {/* Móvil: la vista previa compacta va después del formulario, para no empujarlo fuera de la pantalla. */}
-      {crear && (
-        <div className="pt-2 lg:hidden">
-          <TiendasEjemplo links={linksEjemplo} compacta />
-        </div>
-      )}
       <div className="mt-auto flex flex-col gap-3 pt-2 text-center lg:mt-0 lg:pt-6">
         <p className="text-body-sm text-fg-secondary">
           {crear ? "¿Ya tienes tienda? " : "¿Todavía no tienes tienda? "}
           <button type="button" className="link-text inline-flex min-h-11 items-center" onClick={() => set({ modo: crear ? "ingresar" : "crear" })}>
-            {crear ? "Ingresar" : "Crear una"}
+            {crear ? "Ingresa" : "Crear una"}
           </button>
         </p>
         <p className="text-label text-fg-secondary">

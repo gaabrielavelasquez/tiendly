@@ -3,26 +3,28 @@
 import { AnimatePresence, motion } from "motion/react";
 import { useReducedMotion } from "@/components/motion/use-reduced-motion";
 import { motionTokens } from "@/styles/tokens";
-import { OnboardingShell } from "./shell";
+import { TiendaDatosPreview } from "./tienda-datos-preview";
+import { useSlugCheck } from "../hooks/use-slug-check";
+import { aSlug } from "../lib/slug";
 import { ShellRegistro } from "./shell-registro";
 import { StepCodigo } from "./step-codigo";
 import { StepDatos } from "./step-datos";
 import { StepLista } from "./step-lista";
 import { StepRegistro } from "./step-registro";
 import { OnboardingProvider, useOnboarding, type Paso } from "../hooks/use-onboarding";
-import { aSlug } from "../lib/slug";
 
-const PASOS: Record<Paso, () => React.ReactElement> = {
+const PASOS: Record<Exclude<Paso, "datos">, () => React.ReactElement> = {
   registro: StepRegistro,
   codigo: StepCodigo,
-  datos: StepDatos,
   lista: StepLista,
 };
 
 function Flujo() {
-  const { state, linksEjemplo } = useOnboarding();
+  const { state, linksEjemplo, baseTienda } = useOnboarding();
   const reduce = useReducedMotion();
-  const Paso = PASOS[state.paso];
+  const slug = useSlugCheck(state.paso === "datos" ? state.nombre : "");
+  const Paso = state.paso === "datos" ? null : PASOS[state.paso];
+  const linkDatos = slug.estado === "listo" ? (slug.libre ? slug.slug : slug.sugerencia ?? slug.slug) : aSlug(state.nombre);
   const desplazamiento = reduce ? 0 : 16;
 
   const contenido = (
@@ -35,23 +37,17 @@ function Flujo() {
         exit={{ opacity: 0, x: -desplazamiento }}
         transition={{ duration: motionTokens.durationFast * 1.5, ease: [...motionTokens.easing] as [number, number, number, number] }}
       >
-        <Paso />
+        {Paso ? <Paso /> : <StepDatos slug={slug} />}
       </motion.div>
     </AnimatePresence>
   );
-  // El registro ya tiene su pase de diseño (0031); los otros pasos siguen con el shell anterior hasta su turno.
-  if (state.paso === "registro") return <ShellRegistro linksEjemplo={linksEjemplo}>{contenido}</ShellRegistro>;
-  return (
-    <OnboardingShell nombre={state.nombre} slug={state.slug || aSlug(state.nombre)}>
-      {contenido}
-    </OnboardingShell>
-  );
+  return <ShellRegistro paso={state.paso} linksEjemplo={linksEjemplo} preview={state.paso === "datos" ? <TiendaDatosPreview nombre={state.nombre} url={`${baseTienda}${linkDatos || "tu-tienda"}`} rubros={state.rubros} /> : undefined}>{contenido}</ShellRegistro>;
 }
 
 /** Onboarding O1–O4 / OD1–OD4 (decisión 0013). Datos simulados hasta que exista el backend. */
-export function OnboardingFlow({ linksEjemplo }: { linksEjemplo: string[] }) {
+export function OnboardingFlow({ linksEjemplo, baseTienda }: { linksEjemplo: string[]; baseTienda: string }) {
   return (
-    <OnboardingProvider linksEjemplo={linksEjemplo}>
+    <OnboardingProvider linksEjemplo={linksEjemplo} baseTienda={baseTienda}>
       <Flujo />
     </OnboardingProvider>
   );

@@ -1,7 +1,7 @@
 # 0040 · Cerrar sesión desde la cuenta
 
 - **Fecha:** 24-oct-2026.
-- **Estado:** solicitado por Gabi; PR separado, pendiente de revisión y sin merge.
+- **Estado:** aprobado e integrado en #32 (`c0f4682`); el pase visual completo continúa en 0041.
 - **Aplica:** menú del círculo con inicial en todas las cabeceras del panel; conserva 0031 y 0032.
 
 ## Comportamiento

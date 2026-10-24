@@ -35,8 +35,8 @@ function Productos({ t, conNombre }: { t: TiendaEjemplo; conNombre: boolean }) {
     <ul className="grid grid-cols-4 gap-2 lg:gap-3">
       {t.productos.slice(0, 4).map((p) => (
         <li key={p.nombre} className="flex min-w-0 flex-col gap-1.5">
-          <div className="relative aspect-4/5 overflow-hidden rounded-theme bg-sunken">
-            <Image src={p.foto} alt={p.alt} fill sizes="(min-width: 64rem) 8rem, 25vw" className="object-cover" />
+          <div className="relative aspect-4/5 overflow-hidden rounded-theme bg-surface">
+            <Image src={p.foto} alt={p.alt} fill loading="eager" sizes="(min-width: 64rem) 8rem, 25vw" className="object-cover" />
           </div>
           {conNombre && <span className="truncate text-caption text-fg">{p.nombre}</span>}
           <span className="text-caption text-fg-secondary tabular-nums">{formatoSoles(p.precio)}</span>
@@ -98,9 +98,9 @@ function Puntos({ actual, elegir }: { actual: number; elegir: (i: number) => voi
 /**
  * Vista previa del registro: tres tiendas de ejemplo de rubros distintos que se turnan con un fundido suave
  * (0032 y 0033). Las tres están montadas y apiladas en la misma celda, así las fotos ya cargaron cuando
- * aparecen; cada una con su alto natural, sin espacio vacío dentro. Con "reducir movimiento", queda fija en la primera. Desktop: protagonista con halo; móvil: compacta.
+ * aparecen; cada una con su alto natural, sin espacio vacío dentro. Con "reducir movimiento", queda fija en la primera. Desktop: portada y productos; móvil: compacta.
  */
-export function TiendasEjemplo({ links, compacta = false }: Props & { compacta?: boolean }) {
+export function TiendasEjemplo({ links, compacta = false, halo = false }: Props & { compacta?: boolean; halo?: boolean }) {
   const { actual, elegir, pausar, reducir } = useRotacion(TIENDAS_EJEMPLO.length, ROTACION_MS);
   return (
     <figure
@@ -112,14 +112,14 @@ export function TiendasEjemplo({ links, compacta = false }: Props & { compacta?:
       onFocus={() => pausar(true)}
       onBlur={() => pausar(false)}
     >
-      {!compacta && <span aria-hidden className="pointer-events-none absolute -inset-x-12 -top-10 -bottom-16 -z-10 bg-halo-hoy" />}
       <div className="flex items-center justify-between gap-3">
         <figcaption className="text-body-sm text-fg-secondary">Así se verá tu tienda.</figcaption>
         <Puntos actual={actual} elegir={elegir} />
       </div>
       {/* Una columna minmax(0, 1fr): sin esto, la celda crece hasta el ancho del link entero (una URL larga de
           Vercel) y toda la página se desborda en móvil. Lo mismo min-w-0 en cada tarjeta. */}
-      <div className="grid grid-cols-1">
+      <div className="relative isolate grid grid-cols-1">
+        {halo && <span aria-hidden className="pointer-events-none absolute -inset-x-10 -top-6 -bottom-14 -z-10 bg-halo-hoy" />}
         {TIENDAS_EJEMPLO.map((t, i) => (
           <motion.div
             key={t.slug}

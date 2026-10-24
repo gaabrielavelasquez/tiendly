@@ -226,3 +226,51 @@ Pagos, bancos, entregas y WhatsApp siguen simulados. No se enviaron mensajes, co
 
 - Verificación final Vercel de #32 completada en Chrome/WebKit a 360×844, 390×844 y 1440×1000: confirmación, carga/error/reintento, Set-Cookie real de borrado, primer paso tras recarga y conservación de datos ajenos, sin scroll horizontal. Capturas a 390/1440 de menú, hoja, carga, error y registro en `docs/capturas/cerrar-sesion/`, inspeccionadas y enlazadas en el PR.
 - Servidor propio 3203 cerrado tras comprobar PID y carpeta. El 3100 de Gabi sigue activo. No hubo escrituras de prueba de producción ni reset de Redis. #27 integrado y producción confirmada; **#32 queda abierto, sin merge, para revisión de Gabi**. Se detiene la sesión; no se inicia onboarding 2–4.
+
+
+## #32 integrado; pase completo de acceso/onboarding y montos · 24-oct-2026
+
+- #32 integrado tras aprobación explícita y preview verde: merge commit `c0f46827707a9b6eac9000f913f7c40c5918531e`. Producción READY; /registro y cierre/ingreso simulado comprobados en Chrome/WebKit a 390×844, sin scroll horizontal. Borrado de cookie correcto. Número ficticio y código de prueba; sin mensajes reales, sin crear tiendas o modificar datos de producción. Capturas locales en /private/tmp/tiendly-pr32-produccion/ y resultado en comentario de #32.
+- Único PR nuevo: rama `feat/auth-onboarding-diseno` desde ese main, worktree /private/tmp/tiendly-auth-onboarding. Todo auth/onboarding, Otro, regla global de céntimos y precios con dos decimales, como pidió Gabi. Decisión 0041 y DESIGN.md actualizados. Sin tokens o dependencias nuevos.
+- Antes capturado desde el preview de #32 (78d905b, mismo código funcional que main c0f4682) a 390/1440 en docs/capturas/auth-onboarding/before/. El flujo anterior no tenía estado de código vencido; se documenta esa ausencia, no se inventa una captura de ese estado.
+- Verificación de reglas puras pasa: enteros sin .00, fracciones con dos decimales, lectura/validación/guardado/edición del precio, totales y cupones a céntimos, lote sigue entero, Otro guardado con la tienda.
+- **No mergear el PR nuevo.** Gabi pidió antes/después y detenerse para su revisión. El 3100 y el checkout principal siguen intactos.
+
+- Compra decimal comprobada en navegador local: 90.99 y precio antes 119.10 se conservan al guardar/recargar; el precio aparece en vitrina, carrito y checkout; un pedido ficticio con envío llega a Pedidos e Inicio como 105.99, sin .00. Sin mensajes ni cobros reales.
+- La prueba con nombre/link largo detectó overflow en la tarjeta del link de Inicio de una tienda nueva; se limita la grilla a minmax(0,1fr) y el contenedor a min-w-0. También se fija el foco seguro de las hojas al abrir tras navegación interna, no solo tras una carga completa. Sin cambios visuales adicionales en Inicio/Pedidos.
+
+- PR único [#33](https://github.com/gaabrielavelasquez/tiendly-web/pull/33), código funcional `5d60b6a`. Preview Vercel READY: https://tiendly-ni5lpwjr2-gaabrielavelasquez-8525s-projects.vercel.app/registro. Build habitual Vercel y tokens/build locales verdes. Galería comparativa de las siete pantallas a 390/1440 en docs/capturas/auth-onboarding/README.md; incluye código incorrecto/vencido, Otro, errores de link/creación y campos decimales. Capturas inspeccionadas sin editar imágenes.
+- Chrome/WebKit locales completan creación real, Otro guardado, tienda propia, cierre e ingreso a 360/390/1440. En Vercel se prueban estados con sesión ficticia, errores/reintento bloqueando solicitudes y campos decimales sin guardar: no se crean tiendas ni se guarda ningún producto en Redis. WhatsApp e ingreso siguen simulados; Google sin backend conectado.
+- Servidor aislado 3204 cerrado tras comprobar PID 30586 y carpeta del worktree. El servidor 3100 de Gabi queda intacto. #32 está integrado y confirmado en producción; **#33 queda abierto, sin merge, para revisión de Gabi**. Se detiene aquí y no se inicia otra tarea.
+
+- Verificación final del preview en Chrome/WebKit a 360/390/1440 completa: registro/ingreso, código incorrecto y vencido, reenvío, datos/Otro, vista propia, foco seguro y borrado real de cookie al cerrar. Sin scroll horizontal. Resultados en docs/capturas/auth-onboarding/resultado-preview.json. La última actualización solo agrega evidencia/documentación y corrige un comentario; el código funcional coincide con el preview capturado.
+
+## Ajustes solicitados de #33 · 24-oct-2026
+
+- Se continúa exclusivamente en #33, rama feat/auth-onboarding-diseno y worktree aislado; main remoto sigue en c0f4682. Sin merge autorizado.
+- Código móvil sin vista ni beneficios, Verificar al pie; desktop conserva vista lateral. Datos usa nombre/link en vivo y muestras por rubro, compactas bajo el botón en móvil, sin beneficios. Link libre con Check y texto success, sin caja.
+- Tienda creada en una columna centrada con vista propia vacía, halo bg-halo-hoy y entrada suave/reducir movimiento; sin muestras ficticias guardadas ni beneficios. Agregar mi primer producto abre /panel/productos/nuevo; Ir a mi panel, copiar con éxito/error y wa.me sin envío automático. Registro desktop recupera halo detrás de la vista rotatoria.
+- Cuatro fotos reales adicionales para hogar/repostería/hecho a mano, WebP 480×600; fuentes en public/onboarding/FUENTES.md y originales ignorados en fotos-originales/onboarding/. Los demás rubros reutilizan fotos existentes. Sin tokens o dependencias nuevos.
+- Tokens y build local pasan. Pruebas locales en 3204; producción, Redis y servidor 3100 intactos. Antes de esta ronda copiado sin editar de las capturas Vercel del head funcional previo de #33, en docs/capturas/auth-ajustes/before/.
+- Pendiente completar evidencia y verificación desde el preview Vercel de esta ronda, actualizar #33 y detenerse para revisión de Gabi. No mergear.
+
+- Cierre de la ronda de #33: código funcional `6eea253`, preview READY https://tiendly-qnzrju0m5-gaabrielavelasquez-8525s-projects.vercel.app/registro. Chrome/WebKit locales y Vercel pasan a 390, después 1440 y 360: código normal/incorrecto/vencido/reenvío, CTA al pie móvil, datos propios con rubros y nombres/URL largos, éxito/error de copia, logro centrado, formulario nuevo y panel. Sin scroll horizontal. Resultados y antes/después en docs/capturas/auth-ajustes/README.md y resultado-preview.json. Capturas inspeccionadas, sin editar imágenes.
+- Creación real verificada solo en memoria local: Otro conservado, slug retornado visible y catálogo vacío; las muestras no se guardan. En Vercel solo estado de sesión ficticio y lecturas del slug; copiar éxito/error con portapapeles simulado, wa.me inspeccionado sin enviar mensajes. Sin escrituras de producción ni Redis. Dinero/precios de la primera ronda se conservan.
+- DESIGN.md y decisión 0041 actualizados con la presentación por paso y halos solo detrás de las protagonistas. Servidor propio 3204 cerrado tras comprobar PID 47903 y carpeta del worktree. Checkout principal y 3100 intactos. **#33 actualizado, sin merge. Detenerse para revisión de Gabi.** La última subida solo añade evidencia y documentación, con el mismo código funcional del preview capturado.
+
+## Último toque de Tienda creada en #33 · 24-oct-2026
+
+- Solicitud de Gabi: halo visible, centrado y envolvente; continuar la tienda construida en Datos con sus mismas muestras por rubro.
+- Se reutiliza TiendaDatosPreview en la celebración, con nombre, link retornado (abre la tienda), mismas muestras y nota Productos de muestra. Se elimina el componente vacío anterior. Las muestras siguen siendo visuales: no se guardan productos.
+- Halo específico bg-halo-logro, centrado en la caja de la tarjeta y con desvanecido en sus cuatro bordes mediante máscara CSS. Reutiliza glow-sky/glow-warm, sin nuevos tokens, blur, destellos ni cambios al halo de otras pantallas. Se conserva la entrada con reducir movimiento y las cuatro acciones finales.
+- La primera revisión local detectó un corte recto en el degradado: corregido y revisado visualmente antes de publicar. Se completarán build/tokens y evidencia Vercel 390/1440, con Chrome/WebKit a 360/390. Sin merge ni cambios en producción/Redis; servidor principal 3100 intacto.
+
+- Cierre del último toque de #33: código funcional `67963b1`, preview verde https://tiendly-ca14p3ri7-gaabrielavelasquez-8525s-projects.vercel.app/registro. Build/tokens locales y Vercel pasan. Chrome/WebKit pasan a 390, 1440 y 360: continuidad exacta de muestras (nombres, precios y fotos) entre Datos y Creada para hogar y multirrubro, nota visible, enlace confirmado, centro geométrico del halo y máscara soportada, nombres/URL largos y ausencia de scroll horizontal. Copiar, enlace wa.me y formulario nuevo conservados.
+- Antes/después Vercel a 390/1440 en docs/capturas/auth-logro/README.md, con capturas Safari y resultado-preview.json; imágenes inspeccionadas sin edición. Estado ficticio sembrado solo en el navegador, sin crear tiendas/productos en Vercel ni enviar mensajes. Las muestras siguen fuera del catálogo real.
+- Mi servidor 3204 (PID 57456) se cerró tras verificar carpeta antes del build final; 3100 confirmado activo (PID 77610). Sin tocar checkout principal, producción ni Redis. La última subida solo agrega evidencia/documentación. **#33 actualizado y sin merge: detenerse para revisión de Gabi.**
+
+## Aprobación de #33 y siguiente pase · 24-oct-2026
+
+- Gabi autoriza integrar #33 tras sumar un toque durazno al halo y preview verde. Se refuerza glow-warm hacia abajo/derecha, conservando azul arriba/izquierda y la máscara centrada. Sin nuevos colores o tokens.
+- Después del merge se comprobarán /registro y registro completo en producción a 390 con número ficticio y una tienda aislada de prueba, sin productos, cobros o mensajes reales. No resetear ni modificar tiendas existentes.
+- Siguiente tarea autorizada: un único PR desde main actualizado para Configuración y Mi tienda, reglas 0031, interruptores con check, entrega con zona obligatoria y preview de compra nunca vacío. Preservar 0003/0007/0009 y detenerse para revisión sin merge.

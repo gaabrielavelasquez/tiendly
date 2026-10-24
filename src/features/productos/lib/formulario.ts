@@ -1,4 +1,5 @@
 import type { Categoria, Opcion, Producto, TablaTallas } from "../types";
+import { leerPrecio } from "./precio";
 import { esMedida } from "./medidas";
 import { descuento } from "./ofertas";
 import { FILA_UNICA, limpiarTabla, tablaDelProducto } from "./tabla-tallas";
@@ -12,7 +13,7 @@ export type OpcionForm = { nombre: string; valores: string[] };
 export type FormProducto = {
   nombre: string;
   descripcion: string;
-  /** Soles enteros, tal como se escriben (solo dígitos); se validan y convierten al guardar. */
+  /** Soles con hasta dos decimales, tal como se escriben; se validan y convierten al guardar. */
   precio: string;
   precioAntes: string;
   /** Fechas de la oferta (AAAA-MM-DD) o "". Solo cuentan si hay precio antes. */
@@ -44,13 +45,12 @@ export const TALLAS_RAPIDAS: Record<string, string[]> = {
 
 /** "|" separa los valores en la clave de la variante: no puede ir dentro de un valor. */
 export const limpiarValor = (v: string) => v.replace(/\|/g, "/").trim();
-const entero = (s: string) => (s.trim() === "" ? NaN : Number(s.replace(/\D/g, "")));
 
 /** Las opciones que se guardan: con nombre y al menos un valor. */
 export const opcionesValidas = (f: Pick<FormProducto, "opciones">) => f.opciones.filter((o) => o.nombre.trim() && o.valores.length);
 export const variantesDe = (f: Pick<FormProducto, "opciones">) => combinaciones(opcionesValidas(f));
 export const stockTotal = (f: FormProducto) => variantesDe(f).reduce((s, v) => s + (Number(f.stock[claveVariante(v)]) || 0), 0);
-export const descuentoForm = (f: FormProducto) => descuento(entero(f.precio), entero(f.precioAntes));
+export const descuentoForm = (f: FormProducto) => descuento(leerPrecio(f.precio), leerPrecio(f.precioAntes));
 
 /** Por defecto, Color o Tono (0034); sin ellas, ninguna. */
 export const fotosPorDefecto = (opciones: OpcionForm[]) => opciones.findIndex((o) => ["color", "tono"].includes(o.nombre.trim().toLowerCase()));
@@ -71,8 +71,8 @@ export function desdeProducto(p: Producto): FormProducto {
   return {
     nombre: p.nombre,
     descripcion: p.descripcion ?? "",
-    precio: p.precio ? String(Math.round(p.precio)) : "",
-    precioAntes: p.precioAntes ? String(Math.round(p.precioAntes)) : "",
+    precio: p.precio ? String(p.precio) : "",
+    precioAntes: p.precioAntes ? String(p.precioAntes) : "",
     ofertaDesde: p.oferta?.desde ?? "",
     ofertaHasta: p.oferta?.hasta ?? "",
     opciones: p.opciones.map((o) => ({ nombre: o.nombre, valores: [...o.valores] })),
@@ -90,12 +90,12 @@ export function desdeProducto(p: Producto): FormProducto {
 export function validar(f: FormProducto): Errores {
   const e: Errores = {};
   if (f.nombre.trim().length < 2) e.nombre = "Escribe el nombre del producto.";
-  const precio = entero(f.precio);
+  const precio = leerPrecio(f.precio);
   // Vacío no es error: se guarda pausado (decisión 0028). Escrito y mal, sí.
-  if (f.precio.trim() && !(precio > 0)) e.precio = "Escribe un precio mayor a 0.";
+  if (f.precio.trim() && !(precio > 0)) e.precio = "Escribe un precio mayor a 0, con hasta 2 decimales.";
   if (f.precioAntes.trim()) {
-    const antes = entero(f.precioAntes);
-    if (!(antes > 0)) e.precioAntes = "Escribe un número o deja el campo vacío.";
+    const antes = leerPrecio(f.precioAntes);
+    if (!(antes > 0)) e.precioAntes = "Escribe un precio con hasta 2 decimales o deja el campo vacío.";
     else if (precio > 0 && antes <= precio) e.precioAntes = "Tiene que ser mayor que el precio, para que se vea como oferta.";
   }
   if (f.ofertaDesde && f.ofertaHasta && f.ofertaHasta < f.ofertaDesde) e.ofertaHasta = "Tiene que ser el mismo día del inicio o después.";
@@ -112,7 +112,7 @@ export function validar(f: FormProducto): Errores {
 
 /** Lo que impide publicar (decisión 0028): sin foto, precio o stock, se guarda pausado. Texto para el aviso o null. */
 export function faltaParaPublicar(f: FormProducto): string | null {
-  const faltan = [!f.imagenes.length && "una foto", !(entero(f.precio) > 0) && "el precio", stockTotal(f) === 0 && "el stock"].filter(Boolean) as string[];
+  const faltan = [!f.imagenes.length && "una foto", !(leerPrecio(f.precio) > 0) && "el precio", stockTotal(f) === 0 && "el stock"].filter(Boolean) as string[];
   if (!faltan.length) return null;
   return faltan.length === 1 ? faltan[0] : `${faltan.slice(0, -1).join(", ")} y ${faltan.at(-1)}`;
 }
@@ -131,9 +131,9 @@ export function aProducto(f: FormProducto, id: string, anterior?: Producto | nul
         const propias = (f.fotosPorValor[v] ?? []).map((idImg) => urlDe[idImg]).filter(Boolean);
         return [v, propias.length ? propias : urls];
       }));
-  const precio = entero(f.precio) > 0 ? entero(f.precio) : 0;
+  const precio = leerPrecio(f.precio) > 0 ? leerPrecio(f.precio) : 0;
   const talla = opciones.find((o) => o.tipo === "talla");
-  const antes = entero(f.precioAntes) > precio ? entero(f.precioAntes) : undefined;
+  const antes = leerPrecio(f.precioAntes) > precio ? leerPrecio(f.precioAntes) : undefined;
   return {
     id,
     nombre: f.nombre.trim(),

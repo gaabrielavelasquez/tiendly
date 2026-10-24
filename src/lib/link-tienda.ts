@@ -1,7 +1,7 @@
 import { headers } from "next/headers";
 
 /**
- * URL pública de la vitrina, para copiar y compartir. Con `TIENDLY_URL_TIENDAS` (p. ej. https://tiendly.pe,
+ * URL pública de la vitrina, para copiar y compartir. Con `TIENDLY_URL_TIENDAS` (p. ej. https://tu-dominio.example,
  * cuando el dominio esté activo) usa ese dominio; si no, el de esta app, para que el link abra de verdad.
  */
 export async function urlTienda(slug: string) {
@@ -13,5 +13,4 @@ export async function urlTienda(slug: string) {
   return `${protocolo}://${host}/${slug}`;
 }
 
-/** "https://tiendly.pe/heather" → "tiendly.pe/heather" (para mostrar). */
-export const sinProtocolo = (url: string) => url.replace(/^https?:\/\//, "");
+export { sinProtocolo } from "./formato-link";
