@@ -1,0 +1,223 @@
+{
+  "preview": "https://tiendly-gwdmopb9g-gaabrielavelasquez-8525s-projects.vercel.app",
+  "source": "8ad9767",
+  "writes": "ninguna escritura del servidor; identidad leída y localStorage legado simulado solo en navegador",
+  "tests": [
+    {
+      "engine": "chrome",
+      "test": "MUÑA Editorial/Terracota, portada, bienvenida, miniaturas y ayudas",
+      "width": 390,
+      "scrollWidth": 390
+    },
+    {
+      "engine": "chrome",
+      "test": "localStorage antiguo no pisa identidad real",
+      "width": 390,
+      "scrollWidth": 390
+    },
+    {
+      "engine": "chrome",
+      "test": "vista previa móvil propia",
+      "width": 390,
+      "scrollWidth": 390
+    },
+    {
+      "engine": "chrome",
+      "test": "vitrina conserva portada y Terracota",
+      "width": 390,
+      "scrollWidth": 390
+    },
+    {
+      "engine": "chrome",
+      "test": "vacío",
+      "width": 390,
+      "scrollWidth": 390
+    },
+    {
+      "engine": "chrome",
+      "test": "error",
+      "width": 390,
+      "scrollWidth": 390
+    },
+    {
+      "engine": "chrome",
+      "test": "MUÑA Editorial/Terracota, portada, bienvenida, miniaturas y ayudas",
+      "width": 1440,
+      "scrollWidth": 1440
+    },
+    {
+      "engine": "chrome",
+      "test": "localStorage antiguo no pisa identidad real",
+      "width": 1440,
+      "scrollWidth": 1440
+    },
+    {
+      "engine": "chrome",
+      "test": "vista previa desktop propia",
+      "width": 1440,
+      "scrollWidth": 1440
+    },
+    {
+      "engine": "chrome",
+      "test": "vitrina conserva portada y Terracota",
+      "width": 1440,
+      "scrollWidth": 1440
+    },
+    {
+      "engine": "chrome",
+      "test": "vacío",
+      "width": 1440,
+      "scrollWidth": 1440
+    },
+    {
+      "engine": "chrome",
+      "test": "error",
+      "width": 1440,
+      "scrollWidth": 1440
+    },
+    {
+      "engine": "chrome",
+      "test": "MUÑA Editorial/Terracota, portada, bienvenida, miniaturas y ayudas",
+      "width": 360,
+      "scrollWidth": 360
+    },
+    {
+      "engine": "chrome",
+      "test": "localStorage antiguo no pisa identidad real",
+      "width": 360,
+      "scrollWidth": 360
+    },
+    {
+      "engine": "chrome",
+      "test": "vista previa móvil propia",
+      "width": 360,
+      "scrollWidth": 360
+    },
+    {
+      "engine": "chrome",
+      "test": "vitrina conserva portada y Terracota",
+      "width": 360,
+      "scrollWidth": 360
+    },
+    {
+      "engine": "chrome",
+      "test": "vacío",
+      "width": 360,
+      "scrollWidth": 360
+    },
+    {
+      "engine": "chrome",
+      "test": "error",
+      "width": 360,
+      "scrollWidth": 360
+    },
+    {
+      "engine": "webkit",
+      "test": "MUÑA Editorial/Terracota, portada, bienvenida, miniaturas y ayudas",
+      "width": 390,
+      "scrollWidth": 390
+    },
+    {
+      "engine": "webkit",
+      "test": "localStorage antiguo no pisa identidad real",
+      "width": 390,
+      "scrollWidth": 390
+    },
+    {
+      "engine": "webkit",
+      "test": "vista previa móvil propia",
+      "width": 390,
+      "scrollWidth": 390
+    },
+    {
+      "engine": "webkit",
+      "test": "vitrina conserva portada y Terracota",
+      "width": 390,
+      "scrollWidth": 390
+    },
+    {
+      "engine": "webkit",
+      "test": "vacío",
+      "width": 390,
+      "scrollWidth": 390
+    },
+    {
+      "engine": "webkit",
+      "test": "error",
+      "width": 390,
+      "scrollWidth": 390
+    },
+    {
+      "engine": "webkit",
+      "test": "MUÑA Editorial/Terracota, portada, bienvenida, miniaturas y ayudas",
+      "width": 1440,
+      "scrollWidth": 1440
+    },
+    {
+      "engine": "webkit",
+      "test": "localStorage antiguo no pisa identidad real",
+      "width": 1440,
+      "scrollWidth": 1440
+    },
+    {
+      "engine": "webkit",
+      "test": "vista previa desktop propia",
+      "width": 1440,
+      "scrollWidth": 1440
+    },
+    {
+      "engine": "webkit",
+      "test": "vitrina conserva portada y Terracota",
+      "width": 1440,
+      "scrollWidth": 1440
+    },
+    {
+      "engine": "webkit",
+      "test": "vacío",
+      "width": 1440,
+      "scrollWidth": 1440
+    },
+    {
+      "engine": "webkit",
+      "test": "error",
+      "width": 1440,
+      "scrollWidth": 1440
+    },
+    {
+      "engine": "webkit",
+      "test": "MUÑA Editorial/Terracota, portada, bienvenida, miniaturas y ayudas",
+      "width": 360,
+      "scrollWidth": 360
+    },
+    {
+      "engine": "webkit",
+      "test": "localStorage antiguo no pisa identidad real",
+      "width": 360,
+      "scrollWidth": 360
+    },
+    {
+      "engine": "webkit",
+      "test": "vista previa móvil propia",
+      "width": 360,
+      "scrollWidth": 360
+    },
+    {
+      "engine": "webkit",
+      "test": "vitrina conserva portada y Terracota",
+      "width": 360,
+      "scrollWidth": 360
+    },
+    {
+      "engine": "webkit",
+      "test": "vacío",
+      "width": 360,
+      "scrollWidth": 360
+    },
+    {
+      "engine": "webkit",
+      "test": "error",
+      "width": 360,
+      "scrollWidth": 360
+    }
+  ]
+}

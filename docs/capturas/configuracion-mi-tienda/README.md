@@ -1,5 +1,7 @@
 # Configuración y Mi tienda · #34
 
+**Última corrección de Mi tienda:** [datos reales, guardado compartido y miniaturas propias](../mi-tienda-datos-reales/README.md). Esa ronda reemplaza las capturas y el comportamiento de apariencia descritos abajo; el resto de esta galería documenta el pase inicial.
+
 Antes: Vercel de main funcional tras #33, código 993dfa9 (equivalente a main f296d21 para estas pantallas).
 https://tiendly-dchpib2zy-gaabrielavelasquez-8525s-projects.vercel.app/panel/configuracion
 
