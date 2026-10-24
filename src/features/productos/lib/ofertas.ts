@@ -53,7 +53,7 @@ export function vigencia(p: ConPrecio, hoy: string): { texto: string; urgente: b
   return { texto: c === "mañana" ? "Hasta mañana" : `Hasta ${c}`, urgente: false };
 }
 
-/** Precio de oferta en lote: % sobre el precio normal o un precio fijo. Al sol entero, como se muestran los precios. */
+/** Precio de oferta en lote: % sobre el precio normal o un precio fijo. Al sol entero por defecto, aunque el catálogo acepte céntimos. */
 export function precioEnLote(normal: number, modo: "porcentaje" | "precio", valor: number) {
   return Math.round(modo === "porcentaje" ? normal * (1 - valor / 100) : valor);
 }

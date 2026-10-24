@@ -47,7 +47,7 @@ export function aCsv(pedidos: Pedido[]) {
     p.cliente.nombre,
     `+51 ${p.cliente.celular}`,
     p.items,
-    p.total.toFixed(2),
+    String(Math.round((p.total + Number.EPSILON) * 100) / 100),
     BADGE_PAGO[p.pago.estado].texto,
     METODO_PAGO[p.pago.metodo],
     badgeEntrega(p.entrega.estado, p.entrega.metodo).texto,

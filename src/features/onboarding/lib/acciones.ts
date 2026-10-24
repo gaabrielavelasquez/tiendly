@@ -35,7 +35,7 @@ async function primeroLibre(slug: string) {
   return `${slug}-${crypto.randomUUID().slice(0, 6)}`;
 }
 
-type NuevaTienda = { nombre: string; slug: string; celularVentas: string; rubros: RubroId[]; duena?: string };
+type NuevaTienda = { nombre: string; slug: string; celularVentas: string; rubros: RubroId[]; rubroOtro?: string; duena?: string };
 
 /**
  * Crea la tienda (simulado, en los datos compartidos): arranca vacía, con su link, su WhatsApp de ventas y
@@ -47,8 +47,10 @@ export async function crearTienda(t: NuevaTienda): Promise<{ slug: string } | { 
   if (nombre.length < 2 || !base) return { error: "Escribe el nombre de tu negocio." };
   if (errorCelular(t.celularVentas)) return { error: "Revisa el WhatsApp de ventas." };
   if (!validos(t.rubros)) return { error: "Elige al menos una opción para armar tu tienda." };
+  const otro = typeof t.rubroOtro === "string" ? t.rubroOtro.trim() : "";
+  if (t.rubros.includes("otro") && (otro.length < 2 || otro.length > 80)) return { error: "Cuéntanos qué vendes, en hasta 80 caracteres." };
   const slug = await primeroLibre(base);
-  await guardarTienda(tiendaNueva({ nombre, slug, celularVentas: t.celularVentas, rubros: t.rubros, duena: t.duena?.trim() || undefined }));
+  await guardarTienda(tiendaNueva({ nombre, slug, celularVentas: t.celularVentas, rubros: t.rubros, rubroOtro: t.rubros.includes("otro") ? otro : undefined, duena: t.duena?.trim() || undefined }));
   (await cookies()).set(COOKIE_TIENDA, slug, { httpOnly: true, sameSite: "lax", secure: process.env.NODE_ENV === "production", maxAge: 60 * 60 * 24 * 180, path: "/" });
   return { slug };
 }

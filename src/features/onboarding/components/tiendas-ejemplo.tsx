@@ -35,8 +35,8 @@ function Productos({ t, conNombre }: { t: TiendaEjemplo; conNombre: boolean }) {
     <ul className="grid grid-cols-4 gap-2 lg:gap-3">
       {t.productos.slice(0, 4).map((p) => (
         <li key={p.nombre} className="flex min-w-0 flex-col gap-1.5">
-          <div className="relative aspect-4/5 overflow-hidden rounded-theme bg-sunken">
-            <Image src={p.foto} alt={p.alt} fill sizes="(min-width: 64rem) 8rem, 25vw" className="object-cover" />
+          <div className="relative aspect-4/5 overflow-hidden rounded-theme bg-surface">
+            <Image src={p.foto} alt={p.alt} fill loading="eager" sizes="(min-width: 64rem) 8rem, 25vw" className="object-cover" />
           </div>
           {conNombre && <span className="truncate text-caption text-fg">{p.nombre}</span>}
           <span className="text-caption text-fg-secondary tabular-nums">{formatoSoles(p.precio)}</span>
@@ -112,7 +112,6 @@ export function TiendasEjemplo({ links, compacta = false }: Props & { compacta?:
       onFocus={() => pausar(true)}
       onBlur={() => pausar(false)}
     >
-      {!compacta && <span aria-hidden className="pointer-events-none absolute -inset-x-12 -top-10 -bottom-16 -z-10 bg-halo-hoy" />}
       <div className="flex items-center justify-between gap-3">
         <figcaption className="text-body-sm text-fg-secondary">Así se verá tu tienda.</figcaption>
         <Puntos actual={actual} elegir={elegir} />

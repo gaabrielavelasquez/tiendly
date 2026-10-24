@@ -1,8 +1,15 @@
 // Formatos compartidos del panel (Perú).
-const soles = new Intl.NumberFormat("es-PE", { style: "currency", currency: "PEN", maximumFractionDigits: 0 });
+const enteros = new Intl.NumberFormat("es-PE", { style: "currency", currency: "PEN", maximumFractionDigits: 0 });
+const decimales = new Intl.NumberFormat("es-PE", { style: "currency", currency: "PEN", minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
-/** "S/ 1,320". */
-export const formatoSoles = (n: number) => soles.format(n);
+/** Importes monetarios a precisión de céntimos, sin residuos de la aritmética binaria. */
+export const redondearSoles = (n: number) => Math.round((n + Number.EPSILON) * 100) / 100;
+
+/** "S/ 712" o "S/ 179.10": dos decimales solo cuando el importe tiene céntimos. */
+export function formatoSoles(n: number) {
+  const valor = redondearSoles(n);
+  return (Number.isInteger(valor) ? enteros : decimales).format(valor);
+}
 
 export const plural = (n: number, uno: string, varios: string) => `${n} ${n === 1 ? uno : varios}`;
 

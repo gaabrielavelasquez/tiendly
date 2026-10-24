@@ -32,7 +32,7 @@ export function AccionesPedido({ pedido, onAccion, className }: AccionesProps) {
       <HojaModal titulo="Cancelar pedido" abierto={confirmando} cerrar={() => setConfirmando(false)}>
         <p className="text-body text-fg-secondary">Se cancelará el pedido #{pedido.numero}. Esta acción no se puede deshacer.</p>
         <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:justify-end">
-          <Button autoFocus variant="secondary" onClick={() => setConfirmando(false)}>Conservar pedido</Button>
+          <Button autoFocus data-foco-inicial variant="secondary" onClick={() => setConfirmando(false)}>Conservar pedido</Button>
           <Button variant="danger" onClick={() => { setConfirmando(false); onAccion("cancelar"); }}>Sí, cancelar pedido</Button>
         </div>
       </HojaModal>

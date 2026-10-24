@@ -226,3 +226,15 @@ Pagos, bancos, entregas y WhatsApp siguen simulados. No se enviaron mensajes, co
 
 - Verificación final Vercel de #32 completada en Chrome/WebKit a 360×844, 390×844 y 1440×1000: confirmación, carga/error/reintento, Set-Cookie real de borrado, primer paso tras recarga y conservación de datos ajenos, sin scroll horizontal. Capturas a 390/1440 de menú, hoja, carga, error y registro en `docs/capturas/cerrar-sesion/`, inspeccionadas y enlazadas en el PR.
 - Servidor propio 3203 cerrado tras comprobar PID y carpeta. El 3100 de Gabi sigue activo. No hubo escrituras de prueba de producción ni reset de Redis. #27 integrado y producción confirmada; **#32 queda abierto, sin merge, para revisión de Gabi**. Se detiene la sesión; no se inicia onboarding 2–4.
+
+
+## #32 integrado; pase completo de acceso/onboarding y montos · 24-oct-2026
+
+- #32 integrado tras aprobación explícita y preview verde: merge commit `c0f46827707a9b6eac9000f913f7c40c5918531e`. Producción READY; /registro y cierre/ingreso simulado comprobados en Chrome/WebKit a 390×844, sin scroll horizontal. Borrado de cookie correcto. Número ficticio y código de prueba; sin mensajes reales, sin crear tiendas o modificar datos de producción. Capturas locales en /private/tmp/tiendly-pr32-produccion/ y resultado en comentario de #32.
+- Único PR nuevo: rama `feat/auth-onboarding-diseno` desde ese main, worktree /private/tmp/tiendly-auth-onboarding. Todo auth/onboarding, Otro, regla global de céntimos y precios con dos decimales, como pidió Gabi. Decisión 0041 y DESIGN.md actualizados. Sin tokens o dependencias nuevos.
+- Antes capturado desde el preview de #32 (78d905b, mismo código funcional que main c0f4682) a 390/1440 en docs/capturas/auth-onboarding/before/. El flujo anterior no tenía estado de código vencido; se documenta esa ausencia, no se inventa una captura de ese estado.
+- Verificación de reglas puras pasa: enteros sin .00, fracciones con dos decimales, lectura/validación/guardado/edición del precio, totales y cupones a céntimos, lote sigue entero, Otro guardado con la tienda.
+- **No mergear el PR nuevo.** Gabi pidió antes/después y detenerse para su revisión. El 3100 y el checkout principal siguen intactos.
+
+- Compra decimal comprobada en navegador local: 90.99 y precio antes 119.10 se conservan al guardar/recargar; el precio aparece en vitrina, carrito y checkout; un pedido ficticio con envío llega a Pedidos e Inicio como 105.99, sin .00. Sin mensajes ni cobros reales.
+- La prueba con nombre/link largo detectó overflow en la tarjeta del link de Inicio de una tienda nueva; se limita la grilla a minmax(0,1fr) y el contenedor a min-w-0. También se fija el foco seguro de las hojas al abrir tras navegación interna, no solo tras una carga completa. Sin cambios visuales adicionales en Inicio/Pedidos.

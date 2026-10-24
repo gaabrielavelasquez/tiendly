@@ -134,7 +134,7 @@ const EJEMPLOS: Record<string, () => DatosTienda> = { "glow-labo": glowLabo };
 export const semillaDe = (slug: string) => (slug === slugDemo() ? semillaDemo() : EJEMPLOS[slug]?.() ?? null);
 export const esEjemplo = (slug: string) => slug === slugDemo() || slug in EJEMPLOS;
 
-type Nueva = { nombre: string; slug: string; celularVentas: string; rubros: RubroId[]; duena?: string };
+type Nueva = { nombre: string; slug: string; celularVentas: string; rubros: RubroId[]; rubroOtro?: string; duena?: string };
 
 /**
  * Tienda nueva (onboarding): Pedidos por WhatsApp activo con su número; nada más. Sin zonas de delivery
@@ -157,5 +157,6 @@ export function tiendaNueva(t: Nueva): DatosTienda {
       },
     },
     rubros: t.rubros,
+    ...(t.rubros.includes("otro") && t.rubroOtro?.trim() ? { rubroOtro: t.rubroOtro.trim() } : {}),
   };
 }

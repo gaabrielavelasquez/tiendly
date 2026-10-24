@@ -1,3 +1,4 @@
+import { redondearSoles } from "@/lib/formato";
 import { formatoSoles } from "@/lib/formato";
 import type { Cupon, EstadoCupon } from "../types";
 
@@ -47,7 +48,7 @@ export function textoUso(c: Cupon, estado: EstadoCupon) {
 
 /** Lo que se descuenta de los productos (nunca del envío ni más que los productos). */
 export function descuentoDe(c: Pick<Cupon, "tipo" | "valor">, productos: number) {
-  if (c.tipo === "porcentaje") return Math.min(productos, Math.round((productos * (c.valor ?? 0)) / 100));
+  if (c.tipo === "porcentaje") return Math.min(productos, redondearSoles((productos * (c.valor ?? 0)) / 100));
   if (c.tipo === "monto") return Math.min(productos, c.valor ?? 0);
   return 0;
 }

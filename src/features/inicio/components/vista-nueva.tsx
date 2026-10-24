@@ -11,7 +11,7 @@ export function VistaNueva({ datos }: { datos: InicioData }) {
         titulo="Te damos la bienvenida"
         subtitulo="Tu tienda ya existe. Sigue estos pasos para recibir tu primer pedido."
       />
-      <div className="grid items-start gap-8 lg:grid-cols-5">
+      <div className="grid min-w-0 grid-cols-1 items-start gap-8 lg:grid-cols-5">
         <PasosCard className="lg:col-span-3" pasos={datos.pasos} />
         <LinkTiendaCard className="lg:col-span-2" link={datos.tienda.link} />
       </div>

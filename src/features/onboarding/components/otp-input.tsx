@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { cn } from "@/lib/cn";
 
 type OtpInputProps = { value: string; onChange: (v: string) => void; error?: boolean; disabled?: boolean };
@@ -10,12 +10,17 @@ type OtpInputProps = { value: string; onChange: (v: string) => void; error?: boo
  * el celular puede autocompletar el código y el lector de pantalla lee un único campo.
  */
 export function OtpInput({ value, onChange, error, disabled }: OtpInputProps) {
+  const input = useRef<HTMLInputElement>(null);
+  useEffect(() => { if (!disabled) input.current?.focus({ preventScroll: true }); }, [disabled]);
   const [foco, setFoco] = useState(false);
   const activo = Math.min(value.length, 3);
   return (
     <div className="relative">
       <input
+        ref={input}
         aria-label="Código de 4 dígitos"
+        aria-invalid={error || undefined}
+        aria-describedby={error ? "codigo-error" : undefined}
         inputMode="numeric"
         autoComplete="one-time-code"
         maxLength={4}

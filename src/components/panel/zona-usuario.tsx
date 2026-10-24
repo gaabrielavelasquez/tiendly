@@ -38,11 +38,11 @@ export function ZonaUsuario({ nombre: propio, className }: ZonaUsuarioProps) {
           <button type="button" className={fila} onClick={() => { if (menu.current) menu.current.open = false; s.abrir(); }}><LogOut aria-hidden strokeWidth={1.5} className="size-4 shrink-0 text-icon" />Cerrar sesión</button>
         </nav>
       </details>
-      <HojaModal titulo="Cerrar sesión" abierto={s.abierto} cerrar={cerrarHoja} ocupado={s.saliendo}>
+      <HojaModal titulo="Cerrar sesión" subtitulo="Vuelve cuando quieras" abierto={s.abierto} cerrar={cerrarHoja} ocupado={s.saliendo}>
         <p className="text-body text-fg-secondary">Volverás al registro. Los datos de tu tienda se conservan.</p>
         {s.error && <p role="alert" className="mt-4 text-body-sm text-error">{s.error}</p>}
         <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:justify-end">
-          <Button autoFocus variant="secondary" disabled={s.saliendo} onClick={cerrarHoja}>Seguir en la tienda</Button>
+          <Button autoFocus data-foco-inicial variant="secondary" disabled={s.saliendo} onClick={cerrarHoja}>Seguir en la tienda</Button>
           <Button loading={s.saliendo} disabled={s.saliendo} onClick={s.confirmar}>{s.saliendo ? "Cerrando sesión…" : "Sí, cerrar sesión"}</Button>
         </div>
       </HojaModal>

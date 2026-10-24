@@ -35,6 +35,8 @@ export type DatosTienda = {
   cupones: Cupon[];
   config: ConfigCompra;
   rubros: RubroId[];
+  /** Detalle que se escribe al elegir Otro en el registro. */
+  rubroOtro?: string;
 };
 
 /** Separadas por entorno: local, preview y producción no comparten datos aunque usen la misma base. */

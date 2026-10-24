@@ -34,7 +34,7 @@ export function Monto({ valor, tamano = "display", total = false, className }: M
     >
       <span className={cn("mr-1.5 opacity-60", t.resto)}>S/</span>
       <AnimatedNumber value={entero} className={t.cifra} />
-      <span className={cn("opacity-50", t.resto)}>.{decimales}</span>
+      {centimos % 100 !== 0 && <span className={cn("opacity-50", t.resto)}>.{decimales}</span>}
     </span>
   );
 }

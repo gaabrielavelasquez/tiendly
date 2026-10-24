@@ -64,7 +64,7 @@ Claude utilizará los siguientes principios y bibliotecas de UI/Motion para evit
   - Íconos finos, gris neutro, sin contenedores circulares; el color solo para lo que pide atención.
   - Urgencia y plazos como texto de color (sin píldora); píldoras y badges solo para estados donde hacen falta.
   - Filas de acción: toda la fila es el link (mín. 44 px), chevron simple, sin botones circulares.
-  - Dinero: Regular o Medium, cifras tabulares, "S/" y decimales atenuados; SemiBold solo en totales. Deltas: solo la cifra en verde o rojo.
+  - Dinero: Regular o Medium, cifras tabulares, "S/" y decimales atenuados (0041: céntimos solo si existen, nunca .00); SemiBold solo en totales. Deltas: solo la cifra en verde o rojo.
   - Tarjeta protagonista: máximo una por pantalla, cobalto con degradado corto y profundidad en capas; sin sombra de color difuminada ni grano.
   - Halos: solo detrás de la protagonista o en momentos de logro; nunca como fondo de página.
   - Gráficos: barras sólidas, pasados en gris medio, actual en cobalto, sin riel para lo que no llega.

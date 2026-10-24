@@ -47,7 +47,7 @@ La identidad visual de Tiendly combina **velocidad ultra limpia**, **lenguaje mo
   - **Títulos de página y saludo:** Outfit Medium (500, `font/title-style`, utilidad `font-display-light`) en H1 (28 · 40 px).
   - **Títulos de sección:** Outfit variable a 550 (`font/section-style`, utilidad `font-titulo-seccion`) en H3 (20 · 24 px): el nivel intermedio entre el título de página y el cuerpo.
 - **Saludo en dos tonos (0031):** mismo tamaño, dos líneas a propósito: "Hola, Cecilia." en `text/primary` y la frase de contexto ("Tienes 3 cosas para hoy."; sin pendientes, "Así va tu tienda hoy.", para no repetir el "Todo al día" de la lista) en `text/secondary`. Sin emoji. Debajo, la fecha en texto chico; en móvil no se repite la tienda (ya está en la barra superior).
-- **Dinero (0031, estilo Stripe):** peso Regular o Medium; **SemiBold (`font-metric`) solo en totales**. Cifras tabulares siempre. "S/" un escalón más chico y atenuado; decimales atenuados. Etiqueta chica en `text/secondary` arriba de cada monto ("Ventas", "Total de la semana"). Componente `Monto` en Inicio. *Reemplaza a 0021 en el peso de los montos.*
+- **Dinero (0031, estilo Stripe):** peso Regular o Medium; **SemiBold (`font-metric`) solo en totales**. Cifras tabulares siempre. "S/" un escalón más chico y atenuado; decimales atenuados. **Formato global (0041):** mostrar decimales solo si existen céntimos: `S/ 712`, `S/ 179.10`, `S/ 90.99`; nunca `.00`. Se usa el mismo formateador en Inicio, Pedidos, carrito, checkout y vitrina. Importes a precisión de dos decimales; no se redondea un precio a soles enteros para mostrarlo. Etiqueta chica en `text/secondary` arriba de cada monto ("Ventas", "Total de la semana"). Componente `Monto` en Inicio. *Reemplaza a 0021 en el peso de los montos.*
 - **Variaciones (deltas):** solo la cifra va en color (`feedback/success` si sube, `feedback/error` si baja: "+12 %"); el resto de la frase, en `text/secondary`.
 - **Cuerpo / Interfaz (Body & UI):** Sans-Serif neutra (ej. Inter / SF Pro) en pesos Regular y Medium, enfocada en máxima legibilidad en dispositivos móviles.
 
@@ -118,6 +118,11 @@ La identidad visual de Tiendly combina **velocidad ultra limpia**, **lenguaje mo
 - **Compactos** en el panel, con esquinas de **6 px** (`radius/chip` → `radius/xs`, decisión 0024): chip de filtro de **28 px** de alto (relleno 12 a los lados, texto 14) y badge de **24 px** (relleno 4 × 8, texto 12). *Alturas de 0020; antes, chip de 32 px (0018).* En la vitrina, las categorías van en pill (es un control, no una tarjeta).
 - **Área táctil:** el chip se ve de 28 px, pero en código su zona de toque llega a 44 px (padding invisible o `::after`), para no perder la regla de objetivos táctiles.
 - **Descuento (0034):** "−22 %" en `Badge tone="selected"`: el color de selección del tema (carbón en Neutral y Editorial), **nunca rojo**. Va junto al precio normal tachado. "Programada" va en el badge neutro. En la tienda no se muestran fechas.
+
+### Precios y acceso (0041)
+- Precio y Precio antes aceptan hasta dos decimales, con teclado decimal; punto o coma al escribir. Los enteros siguen siendo el caso común: se conserva "Ej.: 89". Editar y guardar conserva los céntimos. Las ofertas en lote siguen redondeando a soles enteros por defecto.
+- Acceso y onboarding comparten el registro de 0033: un titular en dos tonos, ejemplos reales de tres rubros y beneficios en texto plano. Sin el shell anterior, destellos, cajas grises ficticias, chips flotantes, checks en círculos o halo de fondo. Las URL salen del formato real de la app.
+- Tienda creada muestra el nombre, link y estado vacío reales de la tienda de quien se acaba de registrar. Otro conserva los chips y muestra "¿Qué vendes?" para el detalle.
 
 ### Tienda: ficha y carrito (0035 y 0036)
 - **Ficha:** dos columnas desde 768 px (foto a la izquierda). En el celular, la foto ocupa como máximo el 60 % del alto visible (`svh`), para que el nombre y el precio se vean sin scroll.
