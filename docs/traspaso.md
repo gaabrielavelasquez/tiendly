@@ -30,7 +30,7 @@ Para el agente que sigue (Codex) y para Gabi. Antes de tocar código, lee [`AGEN
 | PR | Rama | Estado | Preview |
 |---|---|---|---|
 | **#27** · Tabla de tallas por producto (ofertas 4/4) | `feat/tabla-tallas` | Listo, **espera revisión de Gabi**. Sin conflictos. | Verde |
-| **#30** · Multirubro: reemplazo de #19 | `feat/multirubro-copy-actualizado` | Conflictos resueltos desde main. Espera revisión de Gabi; sin merge. | Verde |
+
 | **#31** · Pase visual de Pedidos | `feat/pedidos-diseno-0031` | Propuesta 0031/0039; espera revisión de Gabi. Sin merge. | Verde |
 | **#22** · Prototipo de ofertas | `proto/productos-ofertas` | **No mergear.** Ya está implementado (#24 a #27). Cerrarlo y borrar la rama cuando Gabi diga. | Verde |
 
@@ -59,7 +59,7 @@ Pendiente sin fecha: precio y SKU por variante (`docs/backlog.md`); renombrar el
 - **El preview de una rama aparece recién al abrir el PR.** Los previews están protegidos: para Playwright, usa respuestas autenticadas mediante el comando oficial `vercel curl` y un proxy de solo lectura. No exportes variables de entorno ni credenciales.
 - **iPhone:** los campos con texto de menos de 16 px hacen zoom al tocarlos. En el panel, los campos usan `text-body`.
 - **`.next/types` viejo** rompe el build después de borrar páginas: `rm -rf .next/types`.
-- **#23 quedó reemplazado por #29; #19 se cerró por reemplazo en #30.** #27, #30 y #31 esperan revisión, sin merge.
+- **#23 quedó reemplazado por #29; #19 se cerró por reemplazo en #30.** #30 está integrado; #27 y #31 siguen abiertos y esperan revisión, sin merge.
 - Redis tiene una clave vieja, `preview:tienda:aurora`. No molesta, pero se puede borrar con el ok de Gabi.
 
 ## Sesión MUÑA · 24 de octubre de 2026
@@ -146,3 +146,23 @@ Pagos, bancos, entregas y WhatsApp siguen simulados. No se enviaron mensajes, co
 - Capturas antes/después a 390/1440 en `docs/capturas/pedidos-0031/`, enlazadas en #31. Decisión 0039 registra el alcance visual pendiente de revisión. Tokens sin cambios; `check:tokens` y build local pasan, build habitual Vercel verde.
 
 - Cierre de sesión: servidores propios 3202 (app) y 3204 (proxy Vercel de solo lectura) cerrados tras comprobar sus PID. El 3100 de Gabi sigue activo. Se deja #31 listo para revisión, sin merge ni otra tarea iniciada.
+
+
+## Cambio de aprobaciones y ampliación de #27 · 24-oct-2026
+
+- Gabi autorizó **solo el merge de #30**: integrado con merge commit `31edb4180386737e3abe7b0db0777c18819e3bbc`, sobre el head aprobado `5b31464`, con preview verde. El despliegue de main terminó en verde. No se reinició Redis ni se modificaron datos de producción.
+- #27 actualizado desde ese main mediante merge commit, sin force-push, en su worktree `/private/tmp/tiendly-tabla-tallas`. El checkout principal y el servidor 3100 no cambian. #31 queda intacto y pendiente de revisión; no está autorizado su merge.
+- Nuevos requisitos en #27: limpiar unidades de números/rangos, medidas únicas sin opción Talla y enlace de cabecera "Ver en la tienda" en pestaña nueva. La ampliación está en 0037; CLAUDE.md y DESIGN.md aclaran que las medidas únicas no necesitan selector de talla.
+- Normalización al escribir, desenfocar y guardar: `30 cm` → `30`, `86 cm - 90 cm` → `86–90`, coma decimal → punto. No se convierten escalas. Rango incompleto: error, sin guardar ni perder el borrador. Los encabezados indican cm una sola vez.
+- Sin Talla: sección Medidas con el mismo editor y copia independiente. Fila interna vacía, sin nuevas opciones o variantes; se conserva al guardar/recargar y se elimina con "Sin medidas". Ficha: "Medidas de la prenda", tabla Medida / Valor (cm), sin selector. Sugerencias genéricas Alto/Ancho/Largo; se pueden renombrar para una prenda única.
+- Enlace de cabecera: usa la URL guardada y se actualiza tras crear/renombrar. Pausado: deshabilitado con una nota; activar sin guardar no habilita una URL que aún no está publicada. El nombre sin guardar conserva la URL anterior.
+- Demo: la semilla de Cartera Cher ilustra medidas sin Talla (Alto/Ancho/Profundidad). Son valores ficticios para revisar; no se inyectan en documentos existentes ni cambian sus precios, opciones o variantes. **No resetear MUÑA.**
+- Validación local inicial: números/rangos, unidades, copia independiente, medidas únicas tras serializar y guía heredada/null pasan. Chrome y WebKit a 360/390/1440 sin scroll horizontal: editor con/sin talla, activo/pausado, producto nuevo, guía de calzado, guardado/recarga, cambio de slug y nueva pestaña. Tokens y build local aprobados; se agregará la evidencia final de Vercel al PR.
+- **#27 no se mergea**: Gabi pidió capturas 390/1440 y detenerse para esperar su revisión.
+
+- Validación adicional local: prenda única sin ninguna opción, medidas guardadas/recargadas y carrito; pausa persistida, activar requiere guardar, quitar medidas y enlace tras crear un producto con foto. Todo pasó con datos ficticios en memoria, sin Redis.
+- Las abreviaturas con punto (30 cm.) también se limpian. La tabla única puede ajustar valores largos dentro de la página sin scroll horizontal.
+
+- Evidencia renovada del código `bbecd23`: https://tiendly-iwau3gcyb-gaabrielavelasquez-8525s-projects.vercel.app/panel/productos/m6. Capturas 390/1440 en `docs/capturas/pr-27-medidas/`, enlazadas desde #27 (incluyen activo, pausado, nuevo, ficha sin Talla y error de rango).
+- Build final local y Vercel pasan, sin cambios de tokens ni dependencias. Chrome y WebKit completaron el preview final a 360/390/1440, incluida abreviatura con punto y tabla única con valores largos, sin scroll horizontal. Las capturas se inspeccionaron y se enlazaron en #27.
+- Servidor propio 3201 cerrado tras verificar su PID. El 3100 de Gabi sigue activo. No se modificaron el checkout principal, Redis ni datos de producción. Se detiene el trabajo tras actualizar #27 para esperar revisión, sin merge de #27 o #31.

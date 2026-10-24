@@ -18,7 +18,7 @@ export function MiniTienda({ nombre, slug, tema, className }: MiniTiendaProps) {
         <ShoppingBag aria-hidden strokeWidth={1.6} className="size-5 shrink-0 text-icon" />
       </div>
       <div className="flex aspect-video items-end rounded-theme bg-highlight p-2.5">
-        <span className="rounded-chip bg-surface px-2 py-0.5 text-label font-semibold text-fg shadow-card">Nueva colección</span>
+        <span className="rounded-chip bg-surface px-2 py-0.5 text-label font-semibold text-fg shadow-card">Novedades</span>
       </div>
       <div className="grid grid-cols-2 gap-2">
         {PRODUCTOS.map((precio) => (
