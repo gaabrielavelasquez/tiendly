@@ -15,33 +15,33 @@ const p = (n: number, datos: Base): Pedido => ({ id: `tl-${n}`, numero: `TL-${n}
 
 const PEDIDOS: Pedido[] = [
   // Hoy
-  p(1047, { creadoEl: "2026-10-15T17:52:00-05:00", cliente: { nombre: "Valeria Quispe", celular: "987654321" }, items: 2, total: 712,
+  p(1047, { creadoEl: "2026-10-15T17:52:00-05:00", cliente: { nombre: "Valeria Quispe", celular: "900000001" }, items: 2, total: 712,
     pago: { estado: "pagado", metodo: "yape" }, entrega: { estado: "por-enviar", metodo: "delivery", distrito: "Miraflores" } }),
-  p(1046, { creadoEl: "2026-10-15T16:05:00-05:00", cliente: { nombre: "Camila Torres", celular: "912345678" }, items: 1, total: 382,
+  p(1046, { creadoEl: "2026-10-15T16:05:00-05:00", cliente: { nombre: "Camila Torres", celular: "900000002" }, items: 1, total: 382,
     pago: { estado: "pagado", metodo: "tarjeta" }, entrega: { estado: "por-enviar", metodo: "delivery", distrito: "San Isidro" } }),
-  p(1045, { creadoEl: "2026-10-15T14:40:00-05:00", cliente: { nombre: "Andrea Salazar", celular: "945112233" }, items: 2, total: 330,
+  p(1045, { creadoEl: "2026-10-15T14:40:00-05:00", cliente: { nombre: "Andrea Salazar", celular: "900000003" }, items: 2, total: 330,
     pago: { estado: "pagado", metodo: "plin" }, entrega: { estado: "por-enviar", metodo: "recojo" } }),
-  p(1044, { creadoEl: "2026-10-15T11:20:00-05:00", cliente: { nombre: "Lucía Fernández", celular: "998877665" }, items: 1, total: 392,
+  p(1044, { creadoEl: "2026-10-15T11:20:00-05:00", cliente: { nombre: "Lucía Fernández", celular: "900000004" }, items: 1, total: 392,
     pago: { estado: "pagado", metodo: "yape" }, entrega: { estado: "enviado", metodo: "delivery", distrito: "Surco" } }),
   // Ayer
-  p(1043, { creadoEl: "2026-10-14T22:45:00-05:00", cliente: { nombre: "Daniela Ruiz", celular: "934567812" }, items: 1, total: 422,
+  p(1043, { creadoEl: "2026-10-14T22:45:00-05:00", cliente: { nombre: "Daniela Ruiz", celular: "900000005" }, items: 1, total: 422,
     pago: { estado: "pendiente", metodo: "yape" }, entrega: { estado: "por-enviar", metodo: "delivery", distrito: "Barranco" } }),
-  p(1042, { creadoEl: "2026-10-14T20:10:00-05:00", cliente: { nombre: "Mariana Paredes", celular: "976543210" }, items: 3, total: 890,
+  p(1042, { creadoEl: "2026-10-14T20:10:00-05:00", cliente: { nombre: "Mariana Paredes", celular: "900000006" }, items: 3, total: 890,
     pago: { estado: "pendiente", metodo: "transferencia" }, entrega: { estado: "por-enviar", metodo: "delivery", distrito: "La Molina" } }),
-  p(1041, { creadoEl: "2026-10-14T18:30:00-05:00", cliente: { nombre: "Sofía Medina", celular: "923456789" }, items: 1, total: 342,
+  p(1041, { creadoEl: "2026-10-14T18:30:00-05:00", cliente: { nombre: "Sofía Medina", celular: "900000007" }, items: 1, total: 342,
     pago: { estado: "pendiente", metodo: "contra-entrega" }, entrega: { estado: "enviado", metodo: "delivery", distrito: "Jesús María" } }),
-  p(1040, { creadoEl: "2026-10-14T15:45:00-05:00", cliente: { nombre: "Fernanda López", celular: "956781234" }, items: 2, total: 380,
+  p(1040, { creadoEl: "2026-10-14T15:45:00-05:00", cliente: { nombre: "Fernanda López", celular: "900000008" }, items: 2, total: 380,
     pago: { estado: "pagado", metodo: "yape" }, entrega: { estado: "entregado", metodo: "delivery", distrito: "Lince" } }),
-  p(1039, { creadoEl: "2026-10-14T10:05:00-05:00", cliente: { nombre: "Gabriela Ríos", celular: "981234567" }, items: 1, total: 340,
+  p(1039, { creadoEl: "2026-10-14T10:05:00-05:00", cliente: { nombre: "Gabriela Ríos", celular: "900000009" }, items: 1, total: 340,
     pago: { estado: "pagado", metodo: "plin" }, entrega: { estado: "entregado", metodo: "recojo" } }),
   // Esta semana
-  p(1038, { creadoEl: "2026-10-13T21:30:00-05:00", cliente: { nombre: "Paola Castillo", celular: "965432187" }, items: 1, total: 482,
+  p(1038, { creadoEl: "2026-10-13T21:30:00-05:00", cliente: { nombre: "Paola Castillo", celular: "900000010" }, items: 1, total: 482,
     pago: { estado: "pendiente", metodo: "yape" }, entrega: { estado: "por-enviar", metodo: "delivery", distrito: "Pueblo Libre" } }), // reserva vencida
-  p(1037, { creadoEl: "2026-10-13T12:10:00-05:00", cliente: { nombre: "Renata Vargas", celular: "947258369" }, items: 4, total: 750,
+  p(1037, { creadoEl: "2026-10-13T12:10:00-05:00", cliente: { nombre: "Renata Vargas", celular: "900000011" }, items: 4, total: 750,
     pago: { estado: "pagado", metodo: "tarjeta" }, entrega: { estado: "entregado", metodo: "delivery", distrito: "San Borja" } }),
-  p(1036, { creadoEl: "2026-10-12T19:25:00-05:00", cliente: { nombre: "Isabella Chávez", celular: "938271645" }, items: 1, total: 370,
+  p(1036, { creadoEl: "2026-10-12T19:25:00-05:00", cliente: { nombre: "Isabella Chávez", celular: "900000012" }, items: 1, total: 370,
     pago: { estado: "pagado", metodo: "yape" }, entrega: { estado: "entregado", metodo: "recojo" } }),
-  p(1035, { creadoEl: "2026-10-12T09:40:00-05:00", cliente: { nombre: "Ximena Rojas", celular: "974185296" }, items: 2, total: 530,
+  p(1035, { creadoEl: "2026-10-12T09:40:00-05:00", cliente: { nombre: "Ximena Rojas", celular: "900000013" }, items: 2, total: 530,
     pago: { estado: "pagado", metodo: "transferencia" }, entrega: { estado: "entregado", metodo: "delivery", distrito: "Magdalena" } }),
 ];
 

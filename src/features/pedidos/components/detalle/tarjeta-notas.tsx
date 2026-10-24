@@ -2,7 +2,7 @@
 
 import { Check } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
-import { TarjetaSeccion } from "@/components/panel";
+import { Seccion } from "@/components/panel";
 
 type NotasProps = { pedidoId: string; inicial?: string };
 
@@ -38,7 +38,8 @@ export function TarjetaNotas({ pedidoId, inicial = "" }: NotasProps) {
   }
 
   return (
-    <TarjetaSeccion
+    <Seccion
+      id="notas-pedido"
       titulo="Notas"
       descripcion="Solo tú las ves."
       accion={
@@ -59,6 +60,6 @@ export function TarjetaNotas({ pedidoId, inicial = "" }: NotasProps) {
         placeholder="Ej. Envolver para regalo, cobrar el saldo al entregar…"
         className="block w-full resize-y rounded-button border border-line-strong bg-surface px-3 py-2.5 text-body text-fg outline-2 outline-offset-2 outline-transparent transition placeholder:text-fg-tertiary focus:outline-focus"
       />
-    </TarjetaSeccion>
+    </Seccion>
   );
 }

@@ -31,7 +31,7 @@ Para el agente que sigue (Codex) y para Gabi. Antes de tocar código, lee [`AGEN
 |---|---|---|---|
 | **#27** · Tabla de tallas por producto (ofertas 4/4) | `feat/tabla-tallas` | Listo, **espera revisión de Gabi**. Sin conflictos. | Verde |
 
-| **#31** · Pase visual de Pedidos | `feat/pedidos-diseno-0031` | Propuesta 0031/0039; espera revisión de Gabi. Sin merge. | Verde |
+| **#31** · Pase visual de Pedidos | `feat/pedidos-diseno-0031` | Integrado con autorización de Gabi (`b6cf172`). | Verde |
 | **#22** · Prototipo de ofertas | `proto/productos-ofertas` | **No mergear.** Ya está implementado (#24 a #27). Cerrarlo y borrar la rama cuando Gabi diga. | Verde |
 
 ## Próximas tareas, en orden
@@ -166,3 +166,34 @@ Pagos, bancos, entregas y WhatsApp siguen simulados. No se enviaron mensajes, co
 - Evidencia renovada del código `bbecd23`: https://tiendly-iwau3gcyb-gaabrielavelasquez-8525s-projects.vercel.app/panel/productos/m6. Capturas 390/1440 en `docs/capturas/pr-27-medidas/`, enlazadas desde #27 (incluyen activo, pausado, nuevo, ficha sin Talla y error de rango).
 - Build final local y Vercel pasan, sin cambios de tokens ni dependencias. Chrome y WebKit completaron el preview final a 360/390/1440, incluida abreviatura con punto y tabla única con valores largos, sin scroll horizontal. Las capturas se inspeccionaron y se enlazaron en #27.
 - Servidor propio 3201 cerrado tras verificar su PID. El 3100 de Gabi sigue activo. No se modificaron el checkout principal, Redis ni datos de producción. Se detiene el trabajo tras actualizar #27 para esperar revisión, sin merge de #27 o #31.
+
+
+## Correcciones de #31 pedidas por Gabi · 24-oct-2026
+
+- Trabajo solo en `feat/pedidos-diseno-0031`, worktree `/private/tmp/tiendly-pedidos-diseno`. Se integró main (`31edb41`, #30) con merge commit; el único conflicto fue docs/traspaso.md y se conservó el traspaso más reciente de #27. No se incorporó el código de #27.
+- Ocho ajustes: soles enteros con el formateador de la tienda; actual con punto lleno indicator/fill, hechos con check y futuros atenuados; orden móvil cabecera/Productos/Pago/Cliente/Historial/Entrega/Notas; botón completo "Cancelar pedido" con diálogo; vencimiento una sola vez en Pago en formato Inicio; placeholder desde SSR para fotos fallidas; moneda e importe cancelados atenuados y tachados; mayor espacio al pie para las barras.
+- Cancelar pasa a ser irreversible, como pidió Gabi: diálogo nativo reutilizado, Escape y Conservar pedido no cancelan, confirmación explícita y sin Deshacer posterior. Las demás acciones conservan Deshacer. El estado y el almacén rechazan reactivar un pedido cancelado. Se conservan las etapas, confirmación manual, reserva de 24 h, contra entrega, stock y enlaces wa.me.
+- Local sin Redis, en 3202: Chrome y WebKit a 390×844, 360×844 y 1440×1000 pasan. Comprobados orden de secciones, punto actual, plazo único, soles sin .00, importe cancelado tachado, modal/escape/conservar/confirmar, ausencia de Deshacer al cancelar y conservación de Deshacer para pago. Notas y última fila quedan completamente por encima de la barra correspondiente al llegar al final. La tab bar no aparece en el detalle.
+- Comprobaciones puras: límite de 24 h y excepción contra entrega, hoy/mañana y la/las en Lima, cancelación irreversible en dominio/almacén, sin plazo repetido en Historial. check:tokens y build local pasan sin cambios en tokens o dependencias.
+- Evidencia final del código `b5a3143`: https://tiendly-2xu5w1h1h-gaabrielavelasquez-8525s-projects.vercel.app/panel/pedidos. Preview aislado Heather, build Turbopack y check:tokens verdes. Capturas actuales 390/1440 y mediciones en `docs/capturas/pedidos-corregidos/`; la comparación inicial queda en `pedidos-0031/`.
+- Chrome y WebKit completaron el preview a 360×844, 390×844 y 1440×1000, sin scroll horizontal. Comprobados soles enteros, tachado, paso actual, orden móvil, plazo único, fotos, diálogo, vacío/error/inexistente y acciones sin mutaciones remotas. A 390×844: Notas termina aproximadamente en y=676, barra fija empieza en y=779; última fila termina en y=740, tab bar empieza en y=787. Se inspeccionaron las capturas de viewport, historial, modal y desktop.
+- Servidor propio 3202 cerrado después de verificar PID y carpeta. El 3100 de Gabi sigue activo; checkout principal, Redis y producción intactos. **Sin merge** de #31; se actualiza el PR y se detiene para esperar revisión. No se inicia otra tarea.
+
+
+## Aprobación de #31 y corrección permanente del pago · 24-oct-2026
+
+- Gabi autorizó integrar #31 después de tres ajustes y preview verde: aviso Deshacer de 8 segundos pausado con hover/foco; corrección permanente de pago con hoja y auditoría; foco inicial de cancelación en Conservar pedido.
+- Implementado sin renovar la reserva: se conserva creadoEl + 24 h; si ya venció, se cancela al corregir. Contra entrega no vence. Se advierte si ya salió o se entregó, sin cambiar la etapa de entrega. La auditoría se conserva al volver a pagar. Las marcas usan la hora real de la acción.
+- Validación local en worktree 3202: reglas puras, tokens y build pasan. Chrome y WebKit a 360/390/1440 pasan foco seguro, corrección, aviso de envío y reserva vencida. Reloj del navegador comprueba 8 segundos efectivos y pausa independiente de hover/foco.
+- #30 ya estaba integrado (31edb41); no repetir su merge. Tras integrar #31, actualizar #27 desde main y su evidencia, sin merge de #27. No iniciar otra tarea.
+
+- Corrección permanente comprobada con un pedido ficticio del checkout local: persiste tras recarga y conserva la auditoría al volver a pagar, sin Redis. Las pruebas no envían WhatsApp ni cobran.
+- Preview final `a4a305c`: https://tiendly-idl65syg4-gaabrielavelasquez-8525s-projects.vercel.app/panel/pedidos. Build y tokens verdes. Chrome/WebKit pasan 360/390/1440. Capturas de hojas, foco y auditoría en `docs/capturas/pedidos-pago/`, para adjuntar a #31 antes del merge autorizado.
+
+
+## Cierre de #31 y actualización de #27 · 24-oct-2026
+
+- #31 integrado con autorización explícita de Gabi mediante merge commit `b6cf172754bd727147bac54c771ec9bdd9de1f2a`, sobre el head `88eff2e` con preview verde. Incluye las ocho correcciones anteriores y los tres ajustes finales de pago/foco. Servidor local propio 3202 cerrado; 3100 intacto.
+- #30 ya estaba integrado (`31edb41`); no se repite el merge.
+- #27 se actualiza desde ese main, sin force-push. El único conflicto es este traspaso: se conservó el registro completo más reciente de #31 y los ajustes/validaciones anteriores de #27. No hay conflictos de código.
+- Se conservan los tres requisitos de #27 ya implementados: números/rangos sin unidades, medidas sin Talla y Ver en la tienda activo/pausado. Se renueva la verificación y evidencia desde el main actualizado. **#27 no se mergea**; al actualizarlo se detiene para esperar revisión de Gabi.

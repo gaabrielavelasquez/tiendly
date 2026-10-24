@@ -1,12 +1,13 @@
 "use client";
 
 import { Download, Inbox, SearchX } from "lucide-react";
-import { Buscador, FiltrosRapidos, PanelHeader, type OpcionFiltro } from "@/components/panel";
-import { Button, Card, EmptyState } from "@/components/ui";
+import { Buscador, CONTENEDOR, FiltrosRapidos, PanelHeader, type OpcionFiltro } from "@/components/panel";
+import { Button } from "@/components/ui";
 import { plural } from "@/lib/formato";
 import type { Filtro, Pedido } from "../types";
 import { usePedidos } from "../hooks/use-pedidos";
 import { ListaMovilPedidos } from "./lista-movil";
+import { EstadoPedidos } from "./estado-pedidos";
 import { TablaPedidos } from "./tabla-pedidos";
 
 const FILTROS: OpcionFiltro<Filtro>[] = [
@@ -39,31 +40,33 @@ export function PedidosVista({ pedidos, ahora, filtroInicial }: VistaProps) {
 
   return (
     <>
-      <PanelHeader titulo="Pedidos" subtitulo={subtitulo} accion={v.total ? exportar : undefined} />
+      <div className="min-w-0 [&_h1]:font-display-light">
+        <PanelHeader titulo="Pedidos" subtitulo={subtitulo} accion={v.total ? exportar : undefined} />
+      </div>
 
       {v.total === 0 ? (
-        <Card>
-          <EmptyState
+        <div className={CONTENEDOR}>
+          <EstadoPedidos
             icon={Inbox}
             title="Todavía no tienes pedidos"
             description="Comparte el link de tu tienda por WhatsApp e Instagram. Cada pedido nuevo aparece aquí, con su pago y su entrega."
           />
-        </Card>
+        </div>
       ) : (
-        <Card className="overflow-hidden p-0 lg:p-0">
-          <div className="flex flex-col gap-2 border-b border-line-subtle px-4 pt-4 pb-2 lg:flex-row-reverse lg:items-center lg:justify-between lg:px-6 lg:py-3">
+        <div className="flex min-w-0 flex-col gap-3">
+          <div className="flex min-w-0 flex-col gap-2 lg:flex-row-reverse lg:items-center lg:justify-between">
             <Buscador
               id="buscar-pedidos"
               etiqueta="Buscar pedidos por número, cliente o celular"
               placeholder="Buscar por pedido, cliente o celular"
               valor={v.busqueda}
               onCambio={v.setBusqueda}
-              className="lg:w-80"
+              className="min-w-0 lg:w-80"
             />
             <FiltrosRapidos etiqueta="Filtrar pedidos" opciones={FILTROS} valor={v.filtro} conteos={v.conteos} onCambio={v.setFiltro} />
           </div>
           {v.visibles.length === 0 ? (
-            <EmptyState
+            <div className={CONTENEDOR}><EstadoPedidos
               icon={SearchX}
               title={v.busqueda ? "No encontramos pedidos" : "Nada por aquí"}
               description={v.busqueda ? `Nada coincide con "${v.busqueda}" en este filtro.` : "No hay pedidos en este filtro. Todo al día."}
@@ -72,10 +75,10 @@ export function PedidosVista({ pedidos, ahora, filtroInicial }: VistaProps) {
                   Ver todos los pedidos
                 </Button>
               }
-            />
+            /></div>
           ) : (
             <>
-              <div className="hidden lg:block">
+              <div className={`${CONTENEDOR} hidden overflow-hidden lg:block`}>
                 <TablaPedidos pedidos={v.visibles} ahora={ahora} />
               </div>
               <div className="lg:hidden">
@@ -83,7 +86,7 @@ export function PedidosVista({ pedidos, ahora, filtroInicial }: VistaProps) {
               </div>
             </>
           )}
-        </Card>
+        </div>
       )}
     </>
   );
