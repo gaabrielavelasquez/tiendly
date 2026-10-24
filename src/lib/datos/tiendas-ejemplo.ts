@@ -26,14 +26,14 @@ export const TIENDAS_EJEMPLO: TiendaEjemplo[] = [
     },
     // Los 4 primeros salen en la vista previa del registro; la tienda muestra los 8.
     productos: [
-      { nombre: "Traje Arena", precio: 389, foto: f("muna", "conjunto-arena"), alt: "Conjunto beige de chaqueta corta y pantalón ancho, frente a una pared de concreto" },
-      { nombre: "Bolso Puyu", precio: 199, foto: f("muna", "bolso-puyu"), alt: "Bolso acolchado gris con cadena dorada, colgado de una mano" },
-      { nombre: "Botín Saya", precio: 289, foto: f("muna", "botin-camel-1"), alt: "Botín de gamuza camel con punta fina y taco" },
+      { nombre: "Conjunto Arena", precio: 389, foto: f("muna", "conjunto-arena"), alt: "Conjunto beige de chaqueta corta y pantalón ancho, frente a una pared de concreto" },
+      { nombre: "Cartera Noche", precio: 199, foto: f("muna", "bolso-puyu"), alt: "Bolso acolchado gris con cadena dorada, colgado de una mano" },
+      { nombre: "Botín Otoño", precio: 289, foto: f("muna", "botin-camel-1"), alt: "Botín de gamuza camel con punta fina y taco" },
       { nombre: "Falda Lluvia", precio: 249, foto: f("muna", "falda-lluvia"), alt: "Falda de lentejuelas plateadas en movimiento, con un blazer de jean" },
-      { nombre: "Chompa Qori", precio: 189, foto: f("muna", "chompa-qori"), alt: "Chompa tejida verde oliva con cierre, sobre una silla transparente" },
-      { nombre: "Cartera Wari", precio: 219, foto: f("muna", "cartera-wari"), alt: "Cartera de cuero vino con hebilla plateada colgada en una pared clara, junto a una planta" },
-      { nombre: "Guantes Killa", precio: 159, foto: f("muna", "guantes-1"), alt: "Guantes de cuero burdeos" },
-      { nombre: "Slingback Inti", precio: 269, foto: f("muna", "slingback-1"), alt: "Zapatos slingback de charol burdeos con punta fina" },
+      { nombre: "Chompa Bruma", precio: 189, foto: f("muna", "chompa-qori"), alt: "Chompa tejida verde oliva con cierre, sobre una silla transparente" },
+      { nombre: "Cartera Cher", precio: 219, foto: f("muna", "cartera-wari"), alt: "Cartera de cuero vino con hebilla plateada colgada en una pared clara, junto a una planta" },
+      { nombre: "Guantes Malbec", precio: 159, foto: f("muna", "guantes-1"), alt: "Guantes de cuero burdeos" },
+      { nombre: "Slingback Brillo", precio: 269, foto: f("muna", "slingback-1"), alt: "Zapatos slingback de charol burdeos con punta fina" },
     ],
   },
   {
