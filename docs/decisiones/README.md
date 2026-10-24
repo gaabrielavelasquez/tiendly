@@ -28,6 +28,8 @@ Una decisión por archivo: contexto, decisión y consecuencias. Las anteriores a
 | 0040 | [Cerrar sesión desde la cuenta](0040-cerrar-sesion.md) | Integrada en #32; pase visual en 0041 |
 | 0041 | [Acceso/onboarding y montos decimales](0041-auth-onboarding-y-montos.md) | Integrada en #33 |
 
-| 0042 | [Configuración y Mi tienda: pase 0031](0042-configuracion-y-mi-tienda.md) | Solicitada por Gabi; sin merge |
+| 0042 | [Configuración y Mi tienda: pase 0031](0042-configuracion-y-mi-tienda.md) | Integrada en #34 |
 
 Para una decisión nueva: copia la estructura de 0026, usa el número siguiente y súmala a esta tabla.
+
+| 0043 | [Checkout y confirmaciones: pase 0031](0043-checkout-pase-0031.md) | Solicitada por Gabi; sin merge |

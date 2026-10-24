@@ -4,7 +4,7 @@ import { ShoppingBag } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { buttonVariants, EmptyState, Skeleton } from "@/components/ui";
+import { Button, buttonVariants, EmptyState, Skeleton } from "@/components/ui";
 import { CabeceraTienda } from "@/features/vitrina/components/cabecera-tienda";
 import { formatoSoles } from "@/lib/formato";
 import { cn } from "@/lib/cn";
@@ -32,6 +32,7 @@ export function VistaCompra({ datos: { tienda, categorias, catalogo, reglas } }:
   const c = useCompra(reglas.delivery ? "delivery" : reglas.recojo ? "recojo" : "coordinar");
   const router = useRouter();
   const [numero, setNumero] = useState<string | null>(null);
+  const [enviando, setEnviando] = useState(false);
   const [cerrando, setCerrando] = useState(false);
   const [error, setError] = useState(""); // pedido creado: no mostrar "carrito vacío" mientras navega
   const inicio = `/${tienda.slug}`;
@@ -40,20 +41,27 @@ export function VistaCompra({ datos: { tienda, categorias, catalogo, reglas } }:
   // Sin ninguna forma de entrega (ni coordinarla por WhatsApp) o sin cobro, no se puede comprar en línea.
   const sinCompra = (!reglas.delivery && !reglas.recojo && !reglas.coordinar) || !Object.values(reglas.pagos).some(Boolean);
 
+  function prepararNumero() {
+    setError("");
+    reservarNumero(tienda.slug).then(n => n ? setNumero(n) : setError("No pudimos preparar tu pedido. Inténtalo de nuevo."))
+      .catch(() => setError("No pudimos preparar tu pedido. Revisa tu conexión e inténtalo de nuevo."));
+  }
   // El número se reserva al llegar al pago: el mensaje de WhatsApp ya lo muestra.
   useEffect(() => {
-    if (c.paso === "pago" && !numero) reservarNumero(tienda.slug).then((n) => n && setNumero(n));
+    if (c.paso === "pago" && !numero) prepararNumero();
   }, [c.paso, numero]);
 
   const mensaje = numero && c.entrega ? mensajePedido({ tienda: tienda.nombre, numero, lineas, cupon: carrito.cupon?.codigo, totales, datos: c.datos, entrega: c.entrega }) : "";
 
   async function pagar() {
-    if (!numero || !c.entrega) return;
+    if (!numero || !c.entrega || enviando) return;
     setError("");
     // WhatsApp: la pestaña se abre en el mismo clic (si no, el navegador la bloquea) y recibe el link después.
     const ventana = c.metodo === "whatsapp" ? window.open("", "_blank") : null;
     if (ventana) ventana.opener = null;
     const fallar = (m: string) => (ventana?.close(), setError(m));
+    setEnviando(true);
+    try {
     const items = lineas.map(({ id, variante, cantidad }) => ({ id, variante, cantidad }));
     const sinStock = await revisarStock(tienda.slug, items, carrito.cupon?.codigo);
     if (sinStock) return fallar(sinStock);
@@ -78,12 +86,14 @@ export function VistaCompra({ datos: { tienda, categorias, catalogo, reglas } }:
     setCerrando(true);
     carrito.vaciar();
     router.replace(`${inicio}/pedido/${numero}`);
+    } catch { fallar("No pudimos registrar tu pedido. Revisa tu conexión e inténtalo de nuevo."); }
+    finally { setEnviando(false); }
   }
 
   const listo = c.paso === "pago" && c.hechos.datos && c.hechos.entrega && c.metodo !== null && numero !== null; // el número llega del servidor
   const accion = {
     listo,
-    procesando: c.procesando,
+    procesando: c.procesando || enviando,
     onPagar: pagar,
     etiqueta: !c.metodo ? "Elige cómo pagar" : c.metodo === "whatsapp" ? "Enviar pedido por WhatsApp" : `Pagar ${formatoSoles(totales.total)}${c.metodo === "yape" ? " con Yape" : ""}`,
     nota: !c.hechos.entrega ? "Completa tus datos y la entrega para pagar." : c.metodo === "whatsapp" ? "Se abre WhatsApp con tu pedido ya escrito." : !c.metodo ? "Elige cómo quieres pagar." : undefined,
@@ -94,7 +104,7 @@ export function VistaCompra({ datos: { tienda, categorias, catalogo, reglas } }:
       <div className="hidden lg:block">
         <CabeceraTienda nombre={tienda.nombre} logo={tienda.logo} slug={tienda.slug} categorias={categorias} />
       </div>
-      <main className={cn("mx-auto flex w-full max-w-6xl flex-1 flex-col gap-6 px-4 pt-2 lg:gap-8 lg:pt-10 lg:pb-16", c.paso === "pago" ? "pb-48" : "pb-10")}>
+      <main className={cn("mx-auto flex w-full max-w-6xl flex-1 flex-col gap-10 px-4 pt-2 lg:gap-12 lg:pt-10 lg:pb-16", c.paso === "pago" ? "pb-48" : "pb-10")}>
         <EncabezadoCompra paso={2} titulo="Finalizar compra" volver={`${inicio}/carrito`} volverLabel="Volver al carrito" carrito={`${inicio}/carrito`} />
         {carrito.lineas === null || cerrando ? (
           <div aria-busy className="flex flex-col gap-4 lg:w-2/3">
@@ -103,25 +113,25 @@ export function VistaCompra({ datos: { tienda, categorias, catalogo, reglas } }:
             <Skeleton className="h-64" />
           </div>
         ) : sinCompra ? (
-          <EmptyState
+          <EmptyState simple
             icon={ShoppingBag}
             title="Por ahora no se puede comprar en línea"
             description={`${tienda.nombre} está configurando sus entregas y pagos. Mientras tanto, escríbele por WhatsApp para hacer tu pedido.`}
             action={<a href={linkWhatsApp(reglas.celular, `Hola ${tienda.nombre}, quiero hacer un pedido.`)} target="_blank" rel="noopener noreferrer" className={buttonVariants()}>Escribir por WhatsApp</a>}
           />
         ) : lineas.length === 0 ? (
-          <EmptyState icon={ShoppingBag} title="Tu carrito está vacío" description="Agrega productos para finalizar tu compra." action={<Link href={inicio} className={buttonVariants()}>Ver productos</Link>} />
+          <EmptyState simple icon={ShoppingBag} title="Tu carrito está vacío" description="Agrega productos para finalizar tu compra." action={<Link href={inicio} className={buttonVariants()}>Ver productos</Link>} />
         ) : (
-          <div className="grid items-start gap-4 lg:grid-cols-3 lg:gap-8">
-            <div className="flex flex-col gap-4 lg:col-span-2">
-              <ResumenMovil lineas={lineas} totales={totales} cupon={carrito.cupon?.codigo} entrega={c.entrega} />
+          <div className="grid min-w-0 items-start gap-10 lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)] lg:gap-12">
+            <fieldset disabled={enviando || c.procesando} aria-busy={enviando || c.procesando || undefined} className="flex min-w-0 flex-col gap-10 lg:gap-12">
+              <ResumenMovil lineas={lineas} totales={totales} cupon={carrito.cupon?.codigo} entrega={c.entrega}><Cupon sereno cupon={carrito.cupon} descuento={totales.descuento} validar={(codigo) => aplicarCupon(tienda.slug, codigo, totales.productos)} onAplicar={carrito.setCupon} /></ResumenMovil>
               <PasoDatos c={c} />
               <PasoEntrega c={c} envioGratis={totales.envioGratis} tienda={tienda.nombre} delivery={reglas.delivery} recojo={reglas.recojo} coordinar={reglas.coordinar} />
               <PasoPago c={c} mensaje={mensaje} pagos={c.entrega?.tipo === "coordinar" ? { tarjeta: false, yape: false, whatsapp: reglas.pagos.whatsapp } : reglas.pagos} />
-              {error && <p role="alert" className="border border-error-border bg-error-surface p-3 text-body-sm text-error">{error}</p>}
-            </div>
+              {error && <div className="flex flex-col gap-3"><p role="alert" className="text-body-sm text-error">{error}</p>{!numero && <Button variant="secondary" onClick={prepararNumero}>Reintentar</Button>}</div>}
+            </fieldset>
             <ResumenDesktop lineas={lineas} totales={totales} cupon={carrito.cupon?.codigo} entrega={c.entrega} accion={accion}>
-              <Cupon cupon={carrito.cupon} descuento={totales.descuento} validar={(codigo) => aplicarCupon(tienda.slug, codigo, totales.productos)} onAplicar={carrito.setCupon} />
+              <Cupon sereno cupon={carrito.cupon} descuento={totales.descuento} validar={(codigo) => aplicarCupon(tienda.slug, codigo, totales.productos)} onAplicar={carrito.setCupon} />
             </ResumenDesktop>
             {c.paso === "pago" && <BarraPagar total={totales.total} accion={accion} />}
           </div>

@@ -36,8 +36,9 @@ export function PasoEntrega({ c, envioGratis, tienda, delivery, recojo, coordina
       <form noValidate onSubmit={(e) => (e.preventDefault(), c.continuarEntrega())} className="flex flex-col gap-4">
         <fieldset className="flex flex-col gap-3">
           <legend className="pb-3 text-body-sm font-semibold text-fg">¿Cómo lo recibes?</legend>
+          <div className="divide-y divide-line-subtle">
           {delivery && (
-            <Opcion
+            <Opcion fila
               nombre="entrega"
               valor="delivery"
               icono={Truck}
@@ -48,7 +49,7 @@ export function PasoEntrega({ c, envioGratis, tienda, delivery, recojo, coordina
             />
           )}
           {recojo && (
-            <Opcion
+            <Opcion fila
               nombre="entrega"
               valor="recojo"
               icono={Store}
@@ -57,7 +58,7 @@ export function PasoEntrega({ c, envioGratis, tienda, delivery, recojo, coordina
               titulo="Recojo en tienda"
               detalle={`Gratis · ${recojo.distrito}, coordinas el día`}
             >
-              <div className="flex gap-3 bg-sunken p-3 text-body-sm">
+              <div className="flex gap-3 border-t border-line-subtle pt-3 text-body-sm">
                 <MapPin aria-hidden strokeWidth={1.6} className="mt-0.5 size-5 shrink-0 text-icon" />
                 <p className="flex flex-col gap-1 text-fg-secondary">
                   <span className="font-semibold text-fg">Dirección de recojo</span>
@@ -71,7 +72,7 @@ export function PasoEntrega({ c, envioGratis, tienda, delivery, recojo, coordina
             </Opcion>
           )}
           {coordinar && (
-            <Opcion
+            <Opcion fila
               nombre="entrega"
               valor="coordinar"
               icono={MessageCircle}
@@ -81,6 +82,7 @@ export function PasoEntrega({ c, envioGratis, tienda, delivery, recojo, coordina
               detalle={`${tienda} te escribe para acordar cómo te llega y cuánto cuesta el envío.`}
             />
           )}
+          </div>
         </fieldset>
         {c.tipoEntrega === "delivery" && delivery && (
           <>
