@@ -186,3 +186,6 @@ Pagos, bancos, entregas y WhatsApp siguen simulados. No se enviaron mensajes, co
 - Implementado sin renovar la reserva: se conserva creadoEl + 24 h; si ya venció, se cancela al corregir. Contra entrega no vence. Se advierte si ya salió o se entregó, sin cambiar la etapa de entrega. La auditoría se conserva al volver a pagar. Las marcas usan la hora real de la acción.
 - Validación local en worktree 3202: reglas puras, tokens y build pasan. Chrome y WebKit a 360/390/1440 pasan foco seguro, corrección, aviso de envío y reserva vencida. Reloj del navegador comprueba 8 segundos efectivos y pausa independiente de hover/foco.
 - #30 ya estaba integrado (31edb41); no repetir su merge. Tras integrar #31, actualizar #27 desde main y su evidencia, sin merge de #27. No iniciar otra tarea.
+
+- Corrección permanente comprobada con un pedido ficticio del checkout local: persiste tras recarga y conserva la auditoría al volver a pagar, sin Redis. Las pruebas no envían WhatsApp ni cobran.
+- Preview final `a4a305c`: https://tiendly-idl65syg4-gaabrielavelasquez-8525s-projects.vercel.app/panel/pedidos. Build y tokens verdes. Chrome/WebKit pasan 360/390/1440. Capturas de hojas, foco y auditoría en `docs/capturas/pedidos-pago/`, para adjuntar a #31 antes del merge autorizado.
