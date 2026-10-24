@@ -30,7 +30,7 @@ Para el agente que sigue (Codex) y para Gabi. Antes de tocar código, lee [`AGEN
 | PR | Rama | Estado | Preview |
 |---|---|---|---|
 | **#27** · Tabla de tallas por producto (ofertas 4/4) | `feat/tabla-tallas` | Listo, **espera revisión de Gabi**. Sin conflictos. | Verde |
-| **#19** · Multirubro: rubros, placeholders y textos | `feat/multirubro-copy` | **Conflicto con `main`** en `formulario-producto.tsx`, `productos-vista.tsx` y `portada.tsx`. Parte de sus textos ya entró por otros PR. | Verde |
+| **#30** · Multirubro: reemplazo de #19 | `feat/multirubro-copy-actualizado` | Conflictos resueltos desde main. Espera revisión de Gabi; sin merge. | Verde |
 | **#22** · Prototipo de ofertas | `proto/productos-ofertas` | **No mergear.** Ya está implementado (#24 a #27). Cerrarlo y borrar la rama cuando Gabi diga. | Verde |
 
 ## Próximas tareas, en orden
@@ -118,6 +118,11 @@ Pagos, bancos, entregas y WhatsApp siguen simulados. No se enviaron mensajes, co
 
 - #27 **sigue siendo necesario**: #29 solo aporta la guía fija de calzado en la vitrina. #27 añade editor del panel, tabla por producto, copia independiente desde otro producto, medidas y rangos, selección explícita "Sin tabla" y limpieza de filas/columnas al guardar. Se actualizó su rama desde main, conservando el catálogo y la presentación de #29. Sigue abierto, sin merge: falta la revisión de Gabi de estos flujos.
 - Compatibilidad del #27: los documentos guardados antes de ese PR conservan la guía de calzado en lectura. Una elección explícita "Sin tabla" se guarda como null y no recupera la guía al recargar. No se escribe ni reinicia Redis para actualizar la rama.
-- #19 se reemplaza desde `origin/main` (`3298c2b`) en `feat/multirubro-copy-actualizado`. Sus tres conflictos se resolvieron conservando el formulario y el catálogo actuales (ambos ya contienen los textos nuevos) y la portada propia de MUÑA. El CTA general pasa a "Ver productos"; Heather conserva su contenido propio.
+- [#30](https://github.com/gaabrielavelasquez/tiendly-web/pull/30) reemplaza #19 desde `origin/main` (`3298c2b`) en `feat/multirubro-copy-actualizado`. Sus tres conflictos se resolvieron conservando el formulario y el catálogo actuales (ambos ya contienen los textos nuevos) y la portada propia de MUÑA. El CTA general pasa a "Ver productos"; Heather conserva su contenido propio.
 - Se conservan los IDs de rubro existentes; se amplían las etiquetas y los rubros en orden alfabético, con Otro al final. Copy con tuteo y sin género; ejemplos de varios rubros (0032). Sin cambios de tokens, precios, ofertas ni datos de producción.
 - Pruebas en worktrees aislados: copy en 3200 y tablas en 3201. El servidor de Gabi en 3100 queda intacto. Ambos `check:tokens` y builds locales con Webpack pasan; el build habitual se comprueba también en Vercel.
+
+- Cierre de revisión técnica: Chrome y WebKit completaron ambos previews Vercel a 360, 390 y 1440 sin scroll horizontal. Se comprobó el guardado de tablas solo en memoria local: copia independiente, edición y selección persistida "Sin tabla". No hay prueba de escritura en Redis de producción.
+- Evidencia renovada del #27: `docs/capturas/pr-27-actualizado/` en su rama; del #30: `docs/capturas/pr-30/`. Capturas de Vercel a 390/1440 enlazadas en cada PR. Ambos `check:tokens`, build local y despliegue Vercel pasan.
+- #19 queda cerrado por reemplazo en #30, con comentario explicativo y enlace. #27 y #30 quedan abiertos para revisar; **ninguno autorizado para merge** en esta tarea. Las medidas personalizadas de la falda en #27 son datos de ejemplo: para una tienda guardada se configuran desde el panel tras el merge aprobado; no reiniciar MUÑA.
+- Servidores de pruebas propios 3200 y 3201 cerrados al terminar, tras comprobar sus PID. El servidor de Gabi en 3100 y el checkout principal no se modifican. Pagos, bancos, envíos y WhatsApp siguen simulados.
