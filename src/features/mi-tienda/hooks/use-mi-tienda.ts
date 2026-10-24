@@ -58,7 +58,7 @@ export function useMiTienda(escenario: string | undefined, whatsappVentas: strin
       localStorage.setItem(STORAGE, JSON.stringify(tienda));
       setGuardada(tienda); setMensaje("Cambios guardados en este navegador.");
       return true;
-    } catch { setMensaje("No pudimos guardar. Revisa el espacio disponible de tu navegador e inténtalo de nuevo."); return false; }
+    } catch { setMensaje("No pudimos guardar. Revisa tu conexión o el espacio disponible de tu navegador e inténtalo de nuevo."); return false; }
     finally { setGuardando(false); }
   }
   function descartar() { setTienda(guardada); setErrores({}); setMensaje(""); }

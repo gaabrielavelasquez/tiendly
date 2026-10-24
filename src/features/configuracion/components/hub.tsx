@@ -1,6 +1,6 @@
-import { BadgeCheck, ChevronRight, CreditCard, Truck, UserRound } from "lucide-react";
+import { BadgeCheck, ChevronRight, CreditCard, Truck } from "lucide-react";
 import Link from "next/link";
-import { Card } from "@/components/ui";
+import { CONTENEDOR, EncabezadoSeccion } from "@/components/panel";
 import { sinProtocolo } from "@/lib/link-tienda";
 import { formatoCelular } from "@/features/checkout/lib/reglas";
 import type { ConfigCompra } from "../types";
@@ -22,29 +22,30 @@ export function Hub({ config, tienda, link }: { config: ConfigCompra; tienda: st
         : { href: "/panel/configuracion/afiliacion", icono: BadgeCheck, titulo: "Cobros automáticos", detalle: "Solicita pagos con tarjeta y Yape" },
   ];
   return (
-    <div className="flex flex-col gap-4">
-      <Card className="divide-y divide-line-subtle p-0 lg:p-0">
+    <div className="flex min-w-0 flex-col gap-10 lg:gap-12">
+      <section aria-labelledby="preferencias" className="flex min-w-0 flex-col gap-3">
+      <EncabezadoSeccion id="preferencias" titulo="Cobros y entregas" />
+      <div className={`${CONTENEDOR} divide-y divide-line-subtle`}>
         {filas.map(({ href, icono: Icono, titulo, detalle }) => (
-          <Link key={href} href={href} className="group flex min-h-16 items-center gap-4 px-5 py-4 transition-colors hover:bg-sunken">
-            <span aria-hidden className="flex size-10 shrink-0 items-center justify-center rounded-full bg-sunken text-icon"><Icono strokeWidth={1.6} className="size-5" /></span>
+          <Link key={titulo} href={href} className="group flex min-h-16 items-center gap-4 px-5 py-4 transition-colors hover:bg-sunken">
+            <span aria-hidden className="shrink-0 text-icon"><Icono strokeWidth={1.5} className="size-5" /></span>
             <span className="flex min-w-0 flex-1 flex-col gap-0.5">
-              <span className="text-body font-semibold text-fg">{titulo}</span>
+              <span className="text-body font-medium text-fg">{titulo}</span>
               <span className="text-caption text-fg-secondary">{detalle}</span>
             </span>
-            <ChevronRight aria-hidden strokeWidth={1.6} className="size-6 shrink-0 text-icon transition-transform group-hover:translate-x-0.5" />
+            <ChevronRight aria-hidden strokeWidth={1.5} className="size-6 shrink-0 text-icon transition-transform group-hover:translate-x-0.5" />
           </Link>
         ))}
-      </Card>
-      <Card as="section" aria-labelledby="cuenta" className="flex flex-col gap-3 p-5 lg:p-6">
-        <h2 id="cuenta" className="flex items-center gap-3 encabezado-seccion text-fg">
-          <UserRound aria-hidden strokeWidth={1.6} className="size-5 text-icon" /> Cuenta
-        </h2>
-        <dl className="grid gap-2 text-body-sm sm:grid-cols-3">
+      </div>
+      </section>
+      <section aria-labelledby="cuenta" className="flex min-w-0 flex-col gap-3">
+        <EncabezadoSeccion id="cuenta" titulo="Cuenta" />
+        <dl className={`${CONTENEDOR} divide-y divide-line-subtle text-body-sm`}>
           {[["Tienda", tienda], ["Link", sinProtocolo(link)], ["WhatsApp de pedidos", formatoCelular(config.pagos.whatsapp.celular)]].map(([k, v]) => (
-            <div key={k} className="flex flex-col"><dt className="text-caption text-fg-secondary">{k}</dt><dd className="font-semibold text-fg">{v}</dd></div>
+            <div key={k} className="flex min-w-0 flex-col gap-1 px-5 py-4 sm:flex-row sm:gap-6"><dt className="shrink-0 text-fg-secondary sm:w-48">{k}</dt><dd className="min-w-0 break-words text-fg">{k === "Link" ? <a href={link} target="_blank" rel="noopener noreferrer" className="link-text block truncate py-3">{v}</a> : v}</dd></div>
           ))}
         </dl>
-      </Card>
+      </section>
     </div>
   );
 }

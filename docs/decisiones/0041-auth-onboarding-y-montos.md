@@ -1,7 +1,7 @@
 # 0041 · Acceso y onboarding completos; céntimos cuando existen
 
 - **Fecha:** 24-oct-2026.
-- **Estado:** solicitado por Gabi, un PR desde main después de integrar #32. Sin autorización de merge.
+- **Estado:** aprobada por Gabi e integrada en #33 el 24-oct-2026 (`f296d21`), con halo cálido final.
 - **Aplica:** 0031/0033 a registro, ingreso, código y errores, datos, tienda creada y confirmación de cierre. Actualiza los soles enteros de 0039 con una regla global de decimales condicionales.
 
 ## Acceso y onboarding

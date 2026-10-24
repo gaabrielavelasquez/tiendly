@@ -1,11 +1,12 @@
+import { CONTENEDOR, EncabezadoSeccion } from "@/components/panel";
 import { cn } from "@/lib/cn";
 
-/** Icono en un círculo + nombre + "● Activo / Apagado / Sin activar" (Figma, cabecera de cada método). */
+/** Icono neutro sin contenedor + nombre + "● Activo / Apagado / Sin activar" (Figma, cabecera de cada método). */
 export function CabeceraMetodo({ icono, titulo, estado }: { icono: React.ReactNode; titulo: string; estado: "Activo" | "En revisión" | "Apagado" | "Sin activar" | "Inactivo" }) {
   const verde = estado === "Activo" || estado === "En revisión"; // Figma A7: «● En revisión» en verde
   return (
     <span className="flex items-center gap-3">
-      <span aria-hidden className="flex size-10 shrink-0 items-center justify-center rounded-full bg-sunken text-icon">
+      <span aria-hidden className="shrink-0 text-icon">
         {icono}
       </span>
       <span className="flex flex-col gap-0.5">
@@ -22,9 +23,9 @@ export function CabeceraMetodo({ icono, titulo, estado }: { icono: React.ReactNo
 /** Pie de las vistas: "Al pagar / Al comprar, tu cliente verá" (vista previa de la vitrina). */
 export function VistaCliente({ titulo, children }: { titulo: string; children: React.ReactNode }) {
   return (
-    <section aria-label={titulo} className="flex flex-col gap-3 rounded-card bg-sunken p-4 lg:p-5">
-      <h2 className="text-body-sm font-semibold text-fg">{titulo}</h2>
-      {children}
+    <section aria-label={titulo} className="flex min-w-0 flex-col gap-3">
+      <EncabezadoSeccion id={titulo.startsWith("Al pagar") ? "preview-pagos" : "preview-entregas"} titulo={titulo} />
+      <div className={`${CONTENEDOR} flex min-w-0 flex-col gap-3 p-5`}>{children}</div>
     </section>
   );
 }

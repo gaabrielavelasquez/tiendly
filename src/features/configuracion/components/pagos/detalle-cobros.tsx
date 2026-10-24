@@ -13,7 +13,7 @@ export function ComoFunciona() {
       <ol className="flex flex-col gap-3">
         {PASOS.map(([t, d], i) => (
           <li key={t} className="flex gap-3">
-            <span aria-hidden className="flex size-6 shrink-0 items-center justify-center rounded-full bg-selected text-label text-on-selected">{i + 1}</span>
+            <span aria-hidden className="flex size-6 shrink-0 items-center justify-center text-body-sm text-fg-secondary tabular-nums">{i + 1}</span>
             <span className="flex flex-col"><span className="font-semibold text-fg">{t}</span><span className="text-fg-secondary">{d}</span></span>
           </li>
         ))}
@@ -39,7 +39,7 @@ export function CuentaYComisiones({ cuenta }: { cuenta: NonNullable<Cobros["cuen
       <dl className="flex flex-col gap-2">
         <dt className="text-label font-semibold tracking-widest text-fg-secondary uppercase">Comisión por cada venta</dt>
         {[["Tarjeta de crédito", "3.45% + S/ 0.30"], ["Tarjeta de débito", "2.99% + S/ 0.30"], ["Yape", "1.50%"]].map(([k, v]) => (
-          <div key={k} className={fila}><dt className="text-fg-secondary">{k}</dt><dd className="font-semibold text-fg tabular-nums">{v}</dd></div>
+          <div key={k} className={fila}><dt className="text-fg-secondary">{k}</dt><dd className="font-normal text-fg tabular-nums">{v}</dd></div>
         ))}
         <dd className="text-caption text-fg-secondary">Más IGV. Se descuenta de cada venta.</dd>
       </dl>

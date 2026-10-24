@@ -16,7 +16,7 @@ export default async function ConfiguracionPage({ searchParams }: PageProps) {
   const tienda = await tiendaActual();
   const config = await obtenerConfig(tienda.slug, leerEscenario(herramientasDev ? escenario : undefined));
   return (
-    <PanelMain>
+    <PanelMain className="gap-10 lg:gap-12 [&_h1]:font-display-light">
       <PanelHeader titulo="Configuración" subtitulo="Cómo te pagan, cómo entregas y los datos de tu cuenta." />
       <Hub config={config} tienda={tienda.nombre} link={await urlTienda(tienda.slug)} />
     </PanelMain>

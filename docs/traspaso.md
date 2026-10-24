@@ -274,3 +274,10 @@ Pagos, bancos, entregas y WhatsApp siguen simulados. No se enviaron mensajes, co
 - Gabi autoriza integrar #33 tras sumar un toque durazno al halo y preview verde. Se refuerza glow-warm hacia abajo/derecha, conservando azul arriba/izquierda y la máscara centrada. Sin nuevos colores o tokens.
 - Después del merge se comprobarán /registro y registro completo en producción a 390 con número ficticio y una tienda aislada de prueba, sin productos, cobros o mensajes reales. No resetear ni modificar tiendas existentes.
 - Siguiente tarea autorizada: un único PR desde main actualizado para Configuración y Mi tienda, reglas 0031, interruptores con check, entrega con zona obligatoria y preview de compra nunca vacío. Preservar 0003/0007/0009 y detenerse para revisión sin merge.
+
+## #33 integrado y pase Configuración/Mi tienda · 24-oct-2026
+
+- #33 integrado tras aprobación y preview final verde: merge commit f296d212f3eca1d796a50260743ba7d84f68b6d3, head 5961217. Último halo suma durazno, con captura en docs/capturas/auth-durazno/. Producción confirmada con registro real completo en Chrome a 390 y lectura de /registro/panel en WebKit a 390.
+- Tienda de prueba aislada creada por la verificación autorizada: prueba-registro-33-5135991, teléfono ficticio 900000000, sin productos ni mensajes/cobros. Se comprobó cookie, formulario de primer producto, catálogo vacío y vitrina HTTP 200. No se borró la tienda ni se modificaron MUÑA u otras tiendas existentes. Evidencia en /private/tmp/tiendly-pr33-produccion/.
+- Nueva rama feat/configuracion-mi-tienda-diseno desde main f296d21, worktree /private/tmp/tiendly-configuracion-diseno. Un único PR, sin autorización de merge. Decisión 0042. Antes Vercel a 390/1440 desde el preview funcional de main en docs/capturas/configuracion-mi-tienda/before/.
+- Se preservan 0003/0007/0009 tal como están implementadas/documentadas. Originales fuera del repo; Drive sin resultados de Tiendly. Sin nuevas funciones o persistencia, sin cambios de tokens o dependencias. Tests de guardado se harán solo en memoria local, puerto 3205; servidor principal 3100 intacto.

@@ -1,7 +1,7 @@
 "use client";
 
-import { useRef, useState } from "react";
-import { Aviso, PanelHeader, Volver, type TextoAviso } from "@/components/panel";
+import { useEffect, useRef, useState } from "react";
+import { Aviso, CONTENEDOR, EncabezadoSeccion, PanelHeader, Volver, type TextoAviso } from "@/components/panel";
 import type { ConfigPagos } from "../../types";
 import { guardarPagos } from "../../lib/acciones";
 import { metodosVisibles, quedaAlgunMetodo } from "../../lib/reglas";
@@ -9,7 +9,10 @@ import { VistaCliente } from "../estado-metodo";
 import { TarjetaCobros } from "./tarjeta-cobros";
 import { TarjetaWhatsApp } from "./tarjeta-whatsapp";
 
-const grupo = "text-label font-semibold tracking-widest text-fg-secondary uppercase";
+function Grupo({ titulo, children }: { titulo: string; children: React.ReactNode }) {
+  const id = `pagos-${titulo.replaceAll(" ", "-").toLowerCase()}`;
+  return <section aria-labelledby={id} className="flex min-w-0 flex-col gap-3"><EncabezadoSeccion id={id} titulo={titulo} /><div className={`${CONTENEDOR} min-w-0 divide-y divide-line-subtle`}>{children}</div></section>;
+}
 
 /**
  * Configuración → Métodos de pago (Figma, módulo 2): activos arriba, lo que se puede activar o está
@@ -17,16 +20,22 @@ const grupo = "text-label font-semibold tracking-widest text-fg-secondary upperc
  */
 export function VistaPagos({ inicial }: { inicial: ConfigPagos }) {
   const [pagos, setPagos] = useState(inicial);
+  const [guardando, setGuardando] = useState(false);
   const [aviso, setAviso] = useState<TextoAviso>(null);
   const timer = useRef<number | undefined>(undefined);
+  useEffect(() => () => window.clearTimeout(timer.current), []);
   const avisar = (a: TextoAviso) => (setAviso(a), window.clearTimeout(timer.current), (timer.current = window.setTimeout(() => setAviso(null), 4000)));
 
   async function cambiar(sig: ConfigPagos) {
+    if (guardando) return;
     const antes = pagos;
-    setPagos(sig);
-    const r = await guardarPagos(sig);
-    if ("error" in r) return setPagos(antes), avisar({ texto: r.error, tono: "error" });
-    avisar({ texto: "Cambios guardados. Tu tienda ya muestra los métodos nuevos.", tono: "ok" });
+    setGuardando(true); setPagos(sig);
+    try {
+      const r = await guardarPagos(sig);
+      if ("error" in r) { setPagos(antes); avisar({ texto: r.error, tono: "error" }); }
+      else avisar({ texto: "Cambios guardados. Tu tienda ya muestra los métodos nuevos.", tono: "ok" });
+    } catch { setPagos(antes); avisar({ texto: "No pudimos guardar el método de pago. Revisa tu conexión e inténtalo de nuevo.", tono: "error" }); }
+    finally { setGuardando(false); }
   }
 
   const cobrosActivos = pagos.cobros.estado === "activo" && (pagos.cobros.tarjeta || pagos.cobros.yape);
@@ -47,24 +56,19 @@ export function VistaPagos({ inicial }: { inicial: ConfigPagos }) {
   const visibles = metodosVisibles(pagos);
 
   return (
-    <div className="flex flex-col gap-6">
+    <div className="flex min-w-0 flex-col gap-10 lg:gap-12 [&_h1]:font-display-light">
       <div className="flex flex-col gap-2">
         <Volver href="/panel/configuracion">Configuración</Volver>
         <PanelHeader titulo="Métodos de pago" subtitulo="Elige cómo te pagan tus clientes. En tu tienda solo se ve lo que actives." />
       </div>
-      <div className="grid items-start gap-6 lg:grid-cols-3">
-        <div className="flex flex-col gap-4 lg:col-span-2">
-          <h2 className={grupo}>Activos</h2>
-          {activos}
-          {enRevision && (
-            <>
-              <h2 className={`${grupo} pt-2`}>En proceso</h2>
-              {cobros}
-            </>
-          )}
-          {resto.length > 0 && <h2 className={`${grupo} pt-2`}>{pagos.cobros.estado === "sin-activar" ? "Puedes activar" : "Apagados"}</h2>}
-          {resto}
-        </div>
+      <div className="grid min-w-0 items-start gap-10 lg:grid-cols-3 lg:gap-12">
+        <fieldset disabled={guardando} aria-busy={guardando || undefined} className="flex min-w-0 flex-col gap-10 lg:col-span-2 lg:gap-12">
+          <legend className="sr-only">Métodos de pago</legend>
+          <Grupo titulo="Activos">{activos.length ? activos : <p className="p-5 text-body-sm text-fg-secondary">Activa un método para que tus clientes puedan pagar.</p>}</Grupo>
+          {enRevision && <Grupo titulo="En proceso">{cobros}</Grupo>}
+          {resto.length > 0 && <Grupo titulo={pagos.cobros.estado === "sin-activar" ? "Puedes activar" : "Apagados"}>{resto}</Grupo>}
+          {guardando && <p role="status" className="text-body-sm text-fg-secondary">Guardando el método de pago…</p>}
+        </fieldset>
         <VistaCliente titulo="Al pagar, tu cliente verá">
           {(
             [
@@ -82,6 +86,7 @@ export function VistaPagos({ inicial }: { inicial: ConfigPagos }) {
               </div>
             ) : null,
           )}
+          {!visibles.ahora.length && !visibles.despues.length && <p className="text-body-sm text-fg-secondary">Activa un método de pago para mostrar aquí las opciones de tu cliente.</p>}
           {enRevision && <p className="text-caption text-fg-secondary">Tarjeta y Yape aparecerán cuando se aprueben tus cobros automáticos.</p>}
         </VistaCliente>
       </div>
