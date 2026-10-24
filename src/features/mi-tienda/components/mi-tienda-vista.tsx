@@ -58,7 +58,7 @@ export function MiTiendaVista({ escenario, whatsappVentas, plan, tienda }: { esc
         <p role="status" className="basis-full text-caption text-fg-secondary sm:basis-auto sm:flex-1">{m.mensaje || (m.pendiente ? "Tienes cambios sin guardar." : "Todos los cambios están guardados.")}</p>
         {guardar("w-full sm:w-auto")}
       </div>}
-      <p role="status" className="text-body-sm text-fg-secondary xl:hidden">{m.mensaje || (!m.pendiente ? "Todos los cambios están guardados." : "")}</p>
+      {!m.pendiente && <p role="status" className="text-body-sm text-fg-secondary xl:hidden">{m.mensaje || "Todos los cambios están guardados."}</p>}
       <dialog ref={preview} aria-label="Vista previa de tu tienda" className="fixed inset-0 m-0 h-dvh max-h-dvh w-full max-w-none overflow-y-auto bg-page text-fg backdrop:bg-scrim">
         {/* Figma MT2: «Vista previa» con tema · acento, y X para cerrar. */}
         <header className="sticky top-0 z-10 flex items-center justify-between gap-3 border-b border-line-subtle bg-surface py-2 pr-2 pl-4">

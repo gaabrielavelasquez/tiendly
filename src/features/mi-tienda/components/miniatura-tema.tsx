@@ -8,7 +8,7 @@ export function MiniaturaTema({ tienda, tema, nombre }: { tienda: Tienda; tema: 
     </header>
     {tienda.portada ? <img src={tienda.portada} alt="" className="h-16 w-full object-cover" /> : <div className="h-16 bg-sunken" />}
     <div className="flex flex-1 flex-wrap items-center justify-between gap-1 p-1">
-      <span className="text-label font-semibold">S/ 360</span><span className="rounded-button bg-accent px-1 py-1 text-label text-on-accent">Comprar</span>
+      <span className="text-label font-normal tabular-nums">S/ 360</span><span className="rounded-button bg-accent px-1 py-1 text-label text-on-accent">Comprar</span>
     </div>
   </div>;
 }
