@@ -1,0 +1,186 @@
+{
+  "preview": "https://tiendly-ca14p3ri7-gaabrielavelasquez-8525s-projects.vercel.app",
+  "source": "67963b1",
+  "tests": [
+    {
+      "engine": "chrome",
+      "label": "datos hogar",
+      "w": 390,
+      "s": 390
+    },
+    {
+      "engine": "chrome",
+      "label": "logro mismo catálogo hogar",
+      "w": 390,
+      "s": 390
+    },
+    {
+      "engine": "chrome",
+      "label": "datos multi",
+      "w": 390,
+      "s": 390
+    },
+    {
+      "engine": "chrome",
+      "label": "logro mismo catálogo multi",
+      "w": 390,
+      "s": 390
+    },
+    {
+      "engine": "chrome",
+      "label": "nombre y link largos",
+      "w": 390,
+      "s": 390
+    },
+    {
+      "engine": "chrome",
+      "label": "datos hogar",
+      "w": 1440,
+      "s": 1440
+    },
+    {
+      "engine": "chrome",
+      "label": "logro mismo catálogo hogar",
+      "w": 1440,
+      "s": 1440
+    },
+    {
+      "engine": "chrome",
+      "label": "datos multi",
+      "w": 1440,
+      "s": 1440
+    },
+    {
+      "engine": "chrome",
+      "label": "logro mismo catálogo multi",
+      "w": 1440,
+      "s": 1440
+    },
+    {
+      "engine": "chrome",
+      "label": "nombre y link largos",
+      "w": 1440,
+      "s": 1440
+    },
+    {
+      "engine": "chrome",
+      "label": "datos hogar",
+      "w": 360,
+      "s": 360
+    },
+    {
+      "engine": "chrome",
+      "label": "logro mismo catálogo hogar",
+      "w": 360,
+      "s": 360
+    },
+    {
+      "engine": "chrome",
+      "label": "datos multi",
+      "w": 360,
+      "s": 360
+    },
+    {
+      "engine": "chrome",
+      "label": "logro mismo catálogo multi",
+      "w": 360,
+      "s": 360
+    },
+    {
+      "engine": "chrome",
+      "label": "nombre y link largos",
+      "w": 360,
+      "s": 360
+    },
+    {
+      "engine": "webkit",
+      "label": "datos hogar",
+      "w": 390,
+      "s": 390
+    },
+    {
+      "engine": "webkit",
+      "label": "logro mismo catálogo hogar",
+      "w": 390,
+      "s": 390
+    },
+    {
+      "engine": "webkit",
+      "label": "datos multi",
+      "w": 390,
+      "s": 390
+    },
+    {
+      "engine": "webkit",
+      "label": "logro mismo catálogo multi",
+      "w": 390,
+      "s": 390
+    },
+    {
+      "engine": "webkit",
+      "label": "nombre y link largos",
+      "w": 390,
+      "s": 390
+    },
+    {
+      "engine": "webkit",
+      "label": "datos hogar",
+      "w": 1440,
+      "s": 1440
+    },
+    {
+      "engine": "webkit",
+      "label": "logro mismo catálogo hogar",
+      "w": 1440,
+      "s": 1440
+    },
+    {
+      "engine": "webkit",
+      "label": "datos multi",
+      "w": 1440,
+      "s": 1440
+    },
+    {
+      "engine": "webkit",
+      "label": "logro mismo catálogo multi",
+      "w": 1440,
+      "s": 1440
+    },
+    {
+      "engine": "webkit",
+      "label": "nombre y link largos",
+      "w": 1440,
+      "s": 1440
+    },
+    {
+      "engine": "webkit",
+      "label": "datos hogar",
+      "w": 360,
+      "s": 360
+    },
+    {
+      "engine": "webkit",
+      "label": "logro mismo catálogo hogar",
+      "w": 360,
+      "s": 360
+    },
+    {
+      "engine": "webkit",
+      "label": "datos multi",
+      "w": 360,
+      "s": 360
+    },
+    {
+      "engine": "webkit",
+      "label": "logro mismo catálogo multi",
+      "w": 360,
+      "s": 360
+    },
+    {
+      "engine": "webkit",
+      "label": "nombre y link largos",
+      "w": 360,
+      "s": 360
+    }
+  ]
+}

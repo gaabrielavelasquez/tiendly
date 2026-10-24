@@ -1,5 +1,7 @@
 # Ajustes de #33 — código, vista propia y logro
 
+La celebración vigente está en el [último ajuste](../auth-logro/README.md), con las muestras compartidas y el halo envolvente. Esta galería conserva la ronda anterior.
+
 Antes: capturas Vercel de la ronda anterior de #33, código funcional 5d60b6a (head c6abd3f sin cambios funcionales). Copiadas sin editar imágenes desde auth-onboarding/after/.
 https://tiendly-ni5lpwjr2-gaabrielavelasquez-8525s-projects.vercel.app/registro
 
