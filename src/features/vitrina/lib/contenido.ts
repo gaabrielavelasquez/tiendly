@@ -30,11 +30,6 @@ export const DETALLE: Record<string, { corto: string; sobre: string }> = {
   p8: { corto: "Plataforma de 10 cm · Cuero napa", sobre: "Mule de plataforma de 10 cm en cuero napa. Alta pero estable: el peso se reparte en toda la suela." },
 };
 
-/** Tabla de tallas orientativa: largo del pie en cm. */
-export const TALLAS_CM: Record<string, string> = {
-  "35": "22.5 cm", "36": "23 cm", "37": "23.5 cm", "38": "24 cm", "39": "24.5 cm", "40": "25 cm",
-};
-
 /** Portada Free partida (decisión 0028): la modelo con los zapatos puestos y, al lado, solo los zapatos. */
 export const PORTADA = {
   fotos: [

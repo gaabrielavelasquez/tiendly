@@ -1,15 +1,17 @@
-import type { Producto } from "../types";
+import type { Producto, TablaTallas } from "../types";
 import { colorPorTalla } from "./variantes";
 
 // Catálogo de Heather: calzado hecho a mano en Lima, con las fotos reales de la marca
 // (public/heather). Fotos por color; tallas de calzado 35–40.
 
 const TALLAS = ["35", "36", "37", "38", "39", "40"];
+/** Tabla orientativa de la marca: largo del pie en cm (la misma para todos sus modelos). */
+const TABLA: TablaTallas = { medidas: ["Largo del pie"], filas: { "35": ["22.5"], "36": ["23"], "37": ["23.5"], "38": ["24"], "39": ["24.5"], "40": ["25"] } };
 const f = (archivo: string) => `/heather/${archivo}`;
 
 type Base = Omit<Producto, "opciones" | "variantes" | "imagen"> & { stock: Record<string, number[]> };
 /** Variantes color × talla; la foto principal es la primera del primer color. */
-const producto = ({ stock, ...p }: Base): Producto => ({ ...p, ...colorPorTalla(stock, TALLAS), imagen: Object.values(p.fotos ?? {})[0]?.[0] });
+const producto = ({ stock, ...p }: Base): Producto => ({ ...p, ...colorPorTalla(stock, TALLAS), imagen: Object.values(p.fotos ?? {})[0]?.[0], tablaTallas: TABLA });
 
 /** El catálogo de Heather (tienda de demo local). En Vercel no se usa: ver lib/datos/semillas. */
 export const CATALOGO_HEATHER: Producto[] = [

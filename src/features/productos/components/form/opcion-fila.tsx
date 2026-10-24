@@ -17,6 +17,8 @@ type Props = { o: OpcionForm; i: number; onCambio: (o: OpcionForm) => void; onQu
 export function OpcionFila({ o, i, onCambio, onQuitar, children }: Props) {
   const [nuevo, setNuevo] = useState("");
   const tipo = tipoDeNombre(o.nombre);
+  const nombre = o.nombre.normalize("NFD").replace(/\p{Diacritic}/gu, "").trim().toLowerCase().replace(/\s+/g, " ");
+  const sugiereMedidas = ["medidas", "medida", "dimensiones", "tamano en cm"].includes(nombre);
   const agregar = (texto: string) => {
     const vals = texto.split(",").map(limpiarValor).filter((v) => v && !o.valores.includes(v));
     if (vals.length) onCambio({ ...o, valores: [...o.valores, ...vals] });
@@ -27,13 +29,16 @@ export function OpcionFila({ o, i, onCambio, onQuitar, children }: Props) {
       <div className="flex items-end gap-2">
         <label className="flex min-w-0 flex-1 flex-col gap-1.5">
           <span className="text-body-sm font-semibold text-fg">Opción {i + 1}</span>
-          <input list="opciones-sugeridas" autoFocus={!o.nombre} value={o.nombre} placeholder="Ej.: Color, Talla, Tamaño" maxLength={20}
+          <input list="opciones-sugeridas" autoFocus={!o.nombre} aria-describedby={sugiereMedidas ? `ayuda-medidas-${i}` : undefined} value={o.nombre} placeholder="Ej.: Color, Talla, Tamaño" maxLength={20}
             onChange={(e) => onCambio({ ...o, nombre: e.target.value })} className={CAMPO} />
         </label>
         <button type="button" onClick={onQuitar} aria-label={`Quitar la opción ${o.nombre || i + 1}`} className="flex size-10 shrink-0 items-center justify-center rounded-button text-icon transition-colors hover:bg-sunken hover:text-fg">
           <Trash2 aria-hidden strokeWidth={1.5} className="size-4" />
         </button>
       </div>
+      {sugiereMedidas && <p id={`ayuda-medidas-${i}`} className="text-caption text-fg-secondary">
+        ¿Quieres poner las medidas del producto? <a href="#editor-medidas" className="text-accent-text underline underline-offset-4">Usa la sección Medidas.</a>
+      </p>}
       <datalist id="opciones-sugeridas">{OPCIONES_SUGERIDAS.map((s) => <option key={s} value={s} />)}</datalist>
       <div className="flex flex-wrap items-center gap-2">
         {o.valores.map((v) => (

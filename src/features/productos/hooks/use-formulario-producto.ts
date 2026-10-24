@@ -1,13 +1,13 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import type { Categoria } from "../types";
+import type { Categoria, TablaTallas } from "../types";
 import { guardarProducto } from "../lib/acciones";
 import { fotoParaGuardar } from "../lib/foto";
 import { fotosPorDefecto, validar, type Errores, type FormProducto, type ImagenForm, type OpcionForm } from "../lib/formulario";
 
 const alternar = <T,>(lista: T[], v: T) => (lista.includes(v) ? lista.filter((x) => x !== v) : [...lista, v]);
-const CAMPOS: (keyof Errores)[] = ["nombre", "precio", "precioAntes", "ofertaHasta", "opciones"];
+const CAMPOS: (keyof Errores)[] = ["nombre", "precio", "precioAntes", "ofertaHasta", "opciones", "tabla"];
 
 /**
  * Estado del formulario de producto: valores, validación (se muestra recién al intentar guardar), cambios sin
@@ -15,8 +15,9 @@ const CAMPOS: (keyof Errores)[] = ["nombre", "precio", "precioAntes", "ofertaHas
  * el id nuevo para no duplicarlo al volver a guardar. "Las fotos cambian según" sigue a Color o Tono hasta que
  * la persona la elige a mano.
  */
-export function useFormularioProducto(inicial: FormProducto, id?: string) {
+export function useFormularioProducto(inicial: FormProducto, id?: string, urlInicial?: string | null) {
   const [form, setForm] = useState(inicial);
+  const [urlTienda, setUrlTienda] = useState(urlInicial ?? null);
   const [base, setBase] = useState(() => JSON.stringify(inicial));
   const [intentoGuardar, setIntentoGuardar] = useState(false);
   const [guardando, setGuardando] = useState(false);
@@ -46,6 +47,7 @@ export function useFormularioProducto(inicial: FormProducto, id?: string) {
   })), [fotosManual]);
   const setOpcionFotos = useCallback((i: number) => (setFotosManual(true), setForm((f) => ({ ...f, opcionFotos: i }))), []);
   const setStock = useCallback((clave: string, v: string) => setForm((f) => ({ ...f, stock: { ...f.stock, [clave]: v.replace(/\D/g, "") } })), []);
+  const setTabla = useCallback((tabla: TablaTallas | null) => setForm((f) => ({ ...f, tabla })), []);
   const alternarCategoria = useCallback((c: Categoria) => setForm((f) => ({ ...f, categorias: alternar(f.categorias, c) })), []);
   const agregarCategoria = useCallback((c: Categoria) => setForm((f) => ({ ...f, categorias: f.categorias.includes(c) ? f.categorias : [...f.categorias, c] })), []);
   const alternarFotoValor = useCallback((valor: string, idImg: string) => setForm((f) => ({ ...f, fotosPorValor: { ...f.fotosPorValor, [valor]: alternar(f.fotosPorValor[valor] ?? [], idImg) } })), []);
@@ -82,6 +84,7 @@ export function useFormularioProducto(inicial: FormProducto, id?: string) {
       return 0;
     }
     idGuardado.current = r.id;
+    setUrlTienda(r.urlTienda);
     const urls = r.urls;
     imagenes = imagenes.map((i, n) => ({ ...i, url: urls[n] ?? i.url }));
     // Activo pero incompleto: se guardó pausado y se avisa qué falta (decisión 0028).
@@ -96,7 +99,7 @@ export function useFormularioProducto(inicial: FormProducto, id?: string) {
   }, [form]);
 
   return {
-    form, set, setOpciones, setOpcionFotos, setStock, alternarCategoria, agregarCategoria, alternarFotoValor, agregarImagenes, quitarImagen,
-    errores, guardar, guardando, guardado, sinGuardar, fallo,
+    form, set, setOpciones, setOpcionFotos, setStock, setTabla, alternarCategoria, agregarCategoria, alternarFotoValor, agregarImagenes, quitarImagen,
+    errores, guardar, guardando, guardado, sinGuardar, fallo, urlTienda,
   };
 }

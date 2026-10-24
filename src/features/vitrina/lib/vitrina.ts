@@ -1,6 +1,7 @@
+import { tablaDelProducto } from "@/features/productos/lib/tabla-tallas";
 import { obtenerProductos } from "@/features/productos/lib/mock";
 import { nivelStock, stockTotal } from "@/features/productos/lib/reglas";
-import type { Opcion, Producto } from "@/features/productos/types";
+import type { Opcion, Producto, TablaTallas } from "@/features/productos/types";
 import { claveVariante, COLOR_UNICO_LEGADO, FOTOS_GENERAL, opcionDeFotos, valorDe } from "@/features/productos/lib/variantes";
 import { descuento, estadoOferta, precioVigente } from "@/features/productos/lib/ofertas";
 import { hoyLima } from "@/lib/reloj";
@@ -42,6 +43,8 @@ export type FichaProducto = ProductoVitrina & {
   fotos: Record<string, string[]>;
   corto?: string;
   sobre?: string;
+  /** Solo si la tienda la cargó en el producto: sin tabla, no hay link "Ver tabla de tallas". */
+  tablaTallas?: TablaTallas;
 };
 
 /** Id de la sección de ofertas en el menú y en ?categoria= (0034). */
@@ -96,6 +99,7 @@ function aFicha(p: Producto, hoy: string): FichaProducto {
     fotos,
     corto: DETALLE[p.id]?.corto,
     sobre: p.descripcion ?? DETALLE[p.id]?.sobre,
+    tablaTallas: tablaDelProducto(p),
   };
 }
 

@@ -1,4 +1,5 @@
 import { conDisponible } from "./inventario";
+import { conTabla } from "./tabla-tallas";
 import { ahoraIso } from "@/lib/reloj";
 import { datosTienda } from "@/lib/datos/tienda";
 import type { Escenario, Producto } from "../types";
@@ -29,4 +30,10 @@ export async function obtenerProductos(escenario: Escenario, slug: string): Prom
 export async function categoriasDeTienda(slug: string): Promise<string[]> {
   const d = await datosTienda(slug);
   return [...new Set((d?.productos ?? []).flatMap((p) => p.categorias))];
+}
+
+/** Los productos de la tienda que ya tienen tabla de tallas (para "Usar la de…" en el formulario), sin `excluir`. */
+export async function tablasDeTienda(slug: string, excluir?: string) {
+  const d = await datosTienda(slug);
+  return conTabla(d?.productos ?? [], excluir);
 }

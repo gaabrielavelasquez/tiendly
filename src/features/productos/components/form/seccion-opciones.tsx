@@ -5,29 +5,37 @@ import { useState } from "react";
 import { Seccion } from "@/components/panel";
 import { Button, Chip } from "@/components/ui";
 import { MAXIMO_OPCIONES, OPCIONES_SUGERIDAS, type FormProducto, type ImagenForm, type OpcionForm } from "../../lib/formulario";
+import type { TablaDeOtro } from "../../lib/tabla-tallas";
+import { tipoDeNombre } from "../../lib/variantes";
+import type { TablaTallas } from "../../types";
 import { FotosPorValor } from "./fotos-por-valor";
 import { CAMPO, OpcionFila } from "./opcion-fila";
+import { TablaTallasCampos } from "./tabla-tallas-campos";
 
 type Props = {
   form: FormProducto;
   error?: string;
+  errorTabla?: string;
   onOpciones: (o: OpcionForm[]) => void;
   onOpcionFotos: (i: number) => void;
   onFotoValor: (valor: string, idImg: string) => void;
   imagenes: ImagenForm[];
+  tablas: TablaDeOtro[];
+  onTabla: (t: TablaTallas | null) => void;
 };
 
 /**
  * Opciones genéricas (0032 y 0034): hasta 3, en UN contenedor con divisores (0031). "Agregar opción" ofrece
  * Color, Talla, Tamaño, Tono, Aroma, Material u "Otra". Debajo: qué opción cambia las fotos (por defecto Color o
- * Tono) y qué fotos van con cada valor.
+ * Tono) y qué fotos van con cada valor. La primera opción Talla lleva la tabla de tallas del producto.
  */
-export function SeccionOpciones({ form, error, onOpciones, onOpcionFotos, onFotoValor, imagenes }: Props) {
+export function SeccionOpciones({ form, error, errorTabla, onOpciones, onOpcionFotos, onFotoValor, imagenes, tablas, onTabla }: Props) {
   const { opciones, opcionFotos } = form;
   const [eligiendo, setEligiendo] = useState(false);
   const usadas = new Set(opciones.map((o) => o.nombre.trim().toLowerCase()));
   const sumar = (nombre: string) => (onOpciones([...opciones, { nombre, valores: [] }]), setEligiendo(false));
   const lleno = opciones.length >= MAXIMO_OPCIONES;
+  const iTalla = opciones.findIndex((o) => tipoDeNombre(o.nombre) === "talla");
   const agregar = (
     <Button type="button" variant="quiet" size="sm" className="rounded-full" aria-expanded={eligiendo} disabled={lleno} onClick={() => setEligiendo((e) => !e)}>
       <span className="flex items-center gap-1.5"><Plus aria-hidden strokeWidth={1.5} className="size-4" />Agregar opción</span>
@@ -41,7 +49,9 @@ export function SeccionOpciones({ form, error, onOpciones, onOpcionFotos, onFoto
       {opciones.length > 0 && (
         <ul className="flex flex-col divide-y divide-line-subtle">
           {opciones.map((o, i) => (
-            <OpcionFila key={i} o={o} i={i} onCambio={(n) => onOpciones(opciones.map((x, j) => (j === i ? n : x)))} onQuitar={() => onOpciones(opciones.filter((_, j) => j !== i))} />
+            <OpcionFila key={i} o={o} i={i} onCambio={(n) => onOpciones(opciones.map((x, j) => (j === i ? n : x)))} onQuitar={() => onOpciones(opciones.filter((_, j) => j !== i))}>
+              {i === iTalla && <TablaTallasCampos error={errorTabla} tallas={o.valores} tabla={form.tabla} tablas={tablas} onCambio={onTabla} />}
+            </OpcionFila>
           ))}
         </ul>
       )}

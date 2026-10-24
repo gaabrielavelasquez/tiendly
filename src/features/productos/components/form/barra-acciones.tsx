@@ -1,12 +1,13 @@
 "use client";
 
+import { EnlaceTienda } from "./enlace-tienda";
 import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
 import { ZonaUsuario } from "@/components/panel";
 import { Button, buttonVariants } from "@/components/ui";
 import { cn } from "@/lib/cn";
 
-type BarraProps = { titulo: string; sinGuardar: boolean; guardando: boolean };
+type BarraProps = { titulo: string; sinGuardar: boolean; guardando: boolean; urlTienda?: string | null; notaTienda: string };
 
 const cancelar = cn(buttonVariants({ variant: "ghost" }), "transition active:scale-98");
 
@@ -14,7 +15,7 @@ const cancelar = cn(buttonVariants({ variant: "ghost" }), "transition active:sca
  * Barra de acciones. Desktop: fija arriba, con volver, título y botones. Móvil: el título arriba (no fijo)
  * y los botones fijos abajo, al alcance del pulgar. "Guardar producto" es el único CTA cobalto.
  */
-export function BarraAcciones({ titulo, sinGuardar, guardando }: BarraProps) {
+export function BarraAcciones({ titulo, sinGuardar, guardando, urlTienda, notaTienda }: BarraProps) {
   const estado = sinGuardar && <span className="text-caption text-fg-secondary">Cambios sin guardar</span>;
   return (
     <>
@@ -22,9 +23,12 @@ export function BarraAcciones({ titulo, sinGuardar, guardando }: BarraProps) {
         <Link href="/panel/productos" aria-label="Volver a Productos" className="flex size-9 items-center justify-center rounded-theme text-icon transition-colors hover:bg-sunken">
           <ArrowLeft aria-hidden strokeWidth={1.6} className="size-5" />
         </Link>
-        <h1 className="font-display-title text-h3 tracking-tight text-fg">{titulo}</h1>
-        {estado}
-        <div className="ml-auto flex items-center gap-2">
+        <div className="flex min-w-0 flex-1 flex-col">
+          <h1 className="truncate font-display-title text-h3 tracking-tight text-fg">{titulo}</h1>
+          {estado}
+        </div>
+        <EnlaceTienda url={urlTienda} nota={notaTienda} />
+        <div className="ml-auto flex shrink-0 items-center gap-2">
           <Link href="/panel/productos" className={cancelar}>
             Cancelar
           </Link>
@@ -37,14 +41,17 @@ export function BarraAcciones({ titulo, sinGuardar, guardando }: BarraProps) {
         </div>
       </div>
 
-      <header className="flex items-center gap-2 lg:hidden">
+      <header className="flex min-w-0 flex-col gap-1 lg:hidden">
+        <div className="flex min-w-0 items-center gap-2">
         <Link href="/panel/productos" aria-label="Volver a Productos" className="-ml-2 flex size-11 items-center justify-center rounded-theme text-icon">
           <ArrowLeft aria-hidden strokeWidth={1.6} className="size-5" />
         </Link>
-        <div className="flex flex-col">
-          <h1 className="font-display-title text-h2 tracking-tight text-fg">{titulo}</h1>
+        <div className="flex min-w-0 flex-1 flex-col">
+          <h1 className="truncate font-display-title text-h2 tracking-tight text-fg">{titulo}</h1>
           {estado}
         </div>
+        </div>
+        <EnlaceTienda url={urlTienda} nota={notaTienda} />
       </header>
       <div className="fixed inset-x-0 bottom-0 z-20 flex gap-2 border-t border-line-subtle bg-surface/95 px-4 pt-3 pb-[max(calc(var(--spacing)*3),env(safe-area-inset-bottom))] backdrop-blur-md lg:hidden">
         <Link href="/panel/productos" className={cn(cancelar, "flex-1")}>

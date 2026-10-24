@@ -1,5 +1,7 @@
-import type { Categoria, Opcion, Producto } from "../types";
+import type { Categoria, Opcion, Producto, TablaTallas } from "../types";
+import { esMedida } from "./medidas";
 import { descuento } from "./ofertas";
+import { FILA_UNICA, limpiarTabla, tablaDelProducto } from "./tabla-tallas";
 import { claveVariante, combinaciones, FOTOS_GENERAL, opcionDeFotos, tipoDeNombre } from "./variantes";
 
 // Modelo y reglas del formulario de producto (0032 opciones genéricas, 0034 ofertas). Funciones puras, sin React.
@@ -24,12 +26,14 @@ export type FormProducto = {
   fotosPorValor: Record<string, string[]>;
   /** Cantidad por variante (clave "Blanco|38"; sin opciones, ""), solo dígitos. */
   stock: Record<string, string>;
+  /** Tabla por talla o medidas únicas si no hay Talla. null: sin tabla. */
+  tabla: TablaTallas | null;
   estado: "activo" | "pausado";
   categorias: Categoria[];
   imagenes: ImagenForm[];
 };
 
-export type Errores = Partial<Record<"nombre" | "precio" | "precioAntes" | "ofertaHasta" | "opciones", string>>;
+export type Errores = Partial<Record<"nombre" | "precio" | "precioAntes" | "ofertaHasta" | "opciones" | "tabla", string>>;
 
 export const MAXIMO_OPCIONES = 3;
 export const OPCIONES_SUGERIDAS = ["Color", "Talla", "Tamaño", "Tono", "Aroma", "Material"];
@@ -53,7 +57,7 @@ export const fotosPorDefecto = (opciones: OpcionForm[]) => opciones.findIndex((o
 
 export const formVacio = (): FormProducto => ({
   nombre: "", descripcion: "", precio: "", precioAntes: "", ofertaDesde: "", ofertaHasta: "", opciones: [], opcionFotos: -1,
-  fotosPorValor: {}, stock: {}, estado: "activo", categorias: [], imagenes: [], // se publica al guardar (decisión 0028)
+  fotosPorValor: {}, stock: {}, tabla: null, estado: "activo", categorias: [], imagenes: [], // se publica al guardar (decisión 0028)
 });
 
 /** Prellena el formulario para editar un producto existente (ya migrado a opciones genéricas). */
@@ -62,6 +66,7 @@ export function desdeProducto(p: Producto): FormProducto {
   const imagenes = urls.map((url, i) => ({ id: `actual-${i}`, url, nombre: p.nombre }));
   const idDe = (url: string) => imagenes.find((i) => i.url === url)?.id ?? "";
   const iFotos = opcionDeFotos(p);
+  const tabla = tablaDelProducto(p);
   const fotosPorValor = iFotos < 0 ? {} : Object.fromEntries(p.opciones[iFotos].valores.map((v) => [v, (p.fotos?.[v] ?? []).map(idDe).filter(Boolean)]));
   return {
     nombre: p.nombre,
@@ -74,6 +79,7 @@ export function desdeProducto(p: Producto): FormProducto {
     opcionFotos: iFotos,
     fotosPorValor,
     stock: Object.fromEntries(p.variantes.map((v) => [claveVariante(v.valores), String(v.stock)])),
+    tabla: tabla ? structuredClone(tabla) : null,
     estado: p.estado,
     categorias: p.categorias,
     imagenes,
@@ -97,6 +103,10 @@ export function validar(f: FormProducto): Errores {
   const nombres = conValores.map((o) => o.nombre.trim().toLowerCase());
   if (nombres.some((n) => !n)) e.opciones = "Ponle nombre a cada opción, por ejemplo Color o Talla.";
   else if (new Set(nombres).size < nombres.length) e.opciones = "Cada opción necesita un nombre distinto.";
+  const tallas = conValores.find((o) => tipoDeNombre(o.nombre) === "talla")?.valores ?? [FILA_UNICA];
+  if (f.tabla && tallas.some((t) => (f.tabla!.filas[t] ?? []).some((v) => v.trim() && !esMedida(v)))) {
+    e.tabla = "Escribe un número o un rango, como 30 o 86–90. Las medidas están en cm.";
+  }
   return e;
 }
 
@@ -122,6 +132,7 @@ export function aProducto(f: FormProducto, id: string, anterior?: Producto | nul
         return [v, propias.length ? propias : urls];
       }));
   const precio = entero(f.precio) > 0 ? entero(f.precio) : 0;
+  const talla = opciones.find((o) => o.tipo === "talla");
   const antes = entero(f.precioAntes) > precio ? entero(f.precioAntes) : undefined;
   return {
     id,
@@ -138,5 +149,6 @@ export function aProducto(f: FormProducto, id: string, anterior?: Producto | nul
     opcionFotos: iFotos,
     imagen: urls[0],
     fotos: urls.length ? fotos : undefined,
+    tablaTallas: f.tabla ? limpiarTabla(f.tabla, talla?.valores ?? [FILA_UNICA]) ?? null : null,
   };
 }

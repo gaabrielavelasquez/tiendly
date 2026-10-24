@@ -3,8 +3,10 @@
 import Image from "next/image";
 import { X } from "lucide-react";
 import { cn } from "@/lib/cn";
-import type { Opcion } from "@/features/productos/types";
-import { HEX_COLOR, TALLAS_CM } from "../../lib/contenido";
+import type { Opcion, TablaTallas as Tabla } from "@/features/productos/types";
+import { HEX_COLOR } from "../../lib/contenido";
+
+import { TablaTallas } from "./tabla-tallas";
 
 const etiqueta = "text-label font-semibold tracking-widest text-fg-secondary uppercase";
 
@@ -16,19 +18,19 @@ type Props = {
   agotados: Set<string>;
   fotos?: Record<string, string[]>;
   error?: string;
+  tabla?: Tabla;
   onCambio: (v: string) => void;
 };
 
 /**
  * Un selector por opción (0032). Color: miniaturas si hay fotos; si no, muestras o botones.
- * Talla, Tono, Tamaño y el resto: botones (elegido en selection/*). Talla con medidas conocidas: "Ver tabla de tallas"
- * (la tabla por producto llega con la parte 4). Grupo de radio accesible.
+ * Talla, Tono, Tamaño y el resto: botones (elegido en selection/*). Talla con tabla propia o heredada: "Ver tabla de tallas". Grupo de radio accesible.
  */
-export function SelectorOpcion({ opcion, i, valor, agotados, fotos, error, onCambio }: Props) {
+export function SelectorOpcion({ opcion, i, valor, agotados, fotos, error, tabla, onCambio }: Props) {
   const muestras = opcion.tipo === "color" && opcion.valores.every((v) => HEX_COLOR[v]);
   const idError = `error-opcion-${i}`;
   return (
-    <fieldset className="flex flex-col gap-3" aria-describedby={error ? idError : undefined}>
+    <fieldset className="flex min-w-0 flex-col gap-3" aria-describedby={error ? idError : undefined}>
       <legend className={etiqueta}>
         {opcion.nombre}
         {valor && <> <span aria-hidden>—</span> <span className="text-fg">{valor}</span></>}
@@ -64,27 +66,7 @@ export function SelectorOpcion({ opcion, i, valor, agotados, fotos, error, onCam
         })}
       </div>
       {error && <p id={idError} className="text-caption text-error">{error}</p>}
-      {opcion.tipo === "talla" && opcion.valores.some((v) => TALLAS_CM[v]) && (
-        <details className="text-caption text-fg-secondary">
-          <summary className="w-fit cursor-pointer underline underline-offset-4 hover:text-fg">Ver tabla de tallas</summary>
-          <table aria-label="Tabla de tallas" className="mt-3 w-full text-left tabular-nums">
-            <thead>
-              <tr className="border-b border-line-strong text-fg">
-                <th scope="col" className="px-3 py-2 font-medium">Talla</th>
-                <th scope="col" className="px-3 py-2 font-medium">Largo del pie</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-line-subtle">
-              {opcion.valores.map((v) => (
-                <tr key={v}>
-                  <th scope="row" className="px-3 py-2 font-medium text-fg">{v}</th>
-                  <td className="px-3 py-2">{TALLAS_CM[v] ?? "—"}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </details>
-      )}
+      {opcion.tipo === "talla" && tabla && <TablaTallas tabla={tabla} tallas={opcion.valores} elegida={valor} />}
     </fieldset>
   );
 }

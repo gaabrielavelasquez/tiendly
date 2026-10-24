@@ -15,6 +15,12 @@ export type Variante = { valores: string[]; stock: number };
 /** Fechas de una oferta (decisión 0034), días AAAA-MM-DD en Lima. Sin `desde`: desde ya; sin `hasta`: sin fin. */
 export type Oferta = { desde?: string; hasta?: string };
 
+/**
+ * Tabla de tallas del producto (0032, parte 4 de 0034): medidas en cm por talla. `medidas` son las columnas ("Pecho",
+ * "Largo del pie"); `filas`, por cada talla (o la clave vacía para un producto sin talla), un texto por medida ("88" o "86–90"; vacío: no aplica).
+ */
+export type TablaTallas = { medidas: string[]; filas: Record<string, string[]> };
+
 /** 1 producto con variantes (decisión 0004, actualizada por 0032): las variantes son opciones genéricas. */
 export type Producto = {
   id: string;
@@ -45,6 +51,8 @@ export type Producto = {
   imagen?: string;
   /** Fotos por valor de la opción que cambia las fotos, en orden; sin esa opción, todas en la clave "". */
   fotos?: Record<string, string[]>;
+  /** Medidas por talla o medidas únicas del producto sin talla. null: sin tabla; undefined: conserva la guía heredada de calzado. Sin tabla, la tienda no muestra el link "Ver tabla de tallas". */
+  tablaTallas?: TablaTallas | null;
 };
 
 export type Filtro = "todos" | "activos" | "en-oferta" | "bajo-stock" | "agotados" | "pausados";
