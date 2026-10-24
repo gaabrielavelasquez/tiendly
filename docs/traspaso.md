@@ -307,3 +307,10 @@ Pagos, bancos, entregas y WhatsApp siguen simulados. No se enviaron mensajes, co
 - Gabi autorizó merge de #34 tras la fila móvil de temas. Código 13cd61d, preview verde pzzr83s06. Aproximadamente 2,5 tarjetas visibles en móvil, tres columnas desktop, nombres/precios sin truncado y botones sin salto. Chrome/WebKit a 390/1440/360: scroll del carrusel, selección del último tema y sin scroll de página. Tokens/build pasan; evidencia en docs/capturas/mi-tienda-temas-movil/.
 - Integrar con merge commit y confirmar /panel/mi-tienda en producción a 390 solo lectura. No guardar personalización ni reiniciar Redis.
 - Después, única tarea autorizada: checkout y ambas confirmaciones, reglas 0031, montos con céntimos solo cuando existen, conservar 0007/0008/0009. Nuevo worktree/rama desde main actualizado; MUÑA y Glow Labo, antes/después Vercel 390/1440, sin merge del nuevo PR.
+
+
+## Pase A · Cupones · PR #36
+
+- Nueva rama feat/cupones-diseno-0031 desde main 4ab96fa, worktree /private/tmp/tiendly-cupones-diseno. Sin tocar checkout principal ni 3100. Lista/contenedores/divisores, títulos externos, formularios, límite Free y eliminación con hoja nativa/foco Conservar. Switch con check y dinero sin .00 existentes. Reglas 0008 y acciones de servidor conservadas. Error de red/copia con reintento, no deja controles ocupados.
+- Tokens/build pasan. Chrome/WebKit locales: monto 30,90, guardar/recargar, eliminar/error/reintento/foco y límite Free 3 por servidor; pausa libera lugar. Solo memoria local 3207 sin Redis. Vercel antes ju9e56qi3 y después 7409w0n62, ambas con demo Heather solo en el despliegue, sin cambiar el proyecto. Antes/después 390/1440 en docs/capturas/cupones-0031/. WebKit también 360 sin scroll. Carga de Next con retraso solo dev/preview; sin acciones de guardado en Vercel.
+- #35 y #36 quedan abiertos, sin merge. Gabi autorizó continuar inmediatamente con B, Pagos/Cobros/Afiliación, en otro PR desde main; luego E2E en preview y correcciones en un último PR. Nada tiene autorización de merge.

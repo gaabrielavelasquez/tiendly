@@ -1,0 +1,152 @@
+{
+  "preview": "https://tiendly-7409w0n62-gaabrielavelasquez-8525s-projects.vercel.app",
+  "module": "cupones",
+  "phase": "after",
+  "tests": [
+    {
+      "engine": "webkit",
+      "n": "lista",
+      "w": 390,
+      "scroll": 390
+    },
+    {
+      "engine": "webkit",
+      "n": "vacio",
+      "w": 390,
+      "scroll": 390
+    },
+    {
+      "engine": "webkit",
+      "n": "limite",
+      "w": 390,
+      "scroll": 390
+    },
+    {
+      "engine": "webkit",
+      "n": "error",
+      "w": 390,
+      "scroll": 390
+    },
+    {
+      "engine": "webkit",
+      "n": "crear",
+      "w": 390,
+      "scroll": 390
+    },
+    {
+      "engine": "webkit",
+      "n": "validacion",
+      "w": 390,
+      "scroll": 390
+    },
+    {
+      "engine": "webkit",
+      "n": "editar",
+      "w": 390,
+      "scroll": 390
+    },
+    {
+      "engine": "webkit",
+      "n": "eliminar",
+      "w": 390,
+      "scroll": 390
+    },
+    {
+      "engine": "webkit",
+      "n": "lista",
+      "w": 1440,
+      "scroll": 1440
+    },
+    {
+      "engine": "webkit",
+      "n": "vacio",
+      "w": 1440,
+      "scroll": 1440
+    },
+    {
+      "engine": "webkit",
+      "n": "limite",
+      "w": 1440,
+      "scroll": 1440
+    },
+    {
+      "engine": "webkit",
+      "n": "error",
+      "w": 1440,
+      "scroll": 1440
+    },
+    {
+      "engine": "webkit",
+      "n": "crear",
+      "w": 1440,
+      "scroll": 1440
+    },
+    {
+      "engine": "webkit",
+      "n": "validacion",
+      "w": 1440,
+      "scroll": 1440
+    },
+    {
+      "engine": "webkit",
+      "n": "editar",
+      "w": 1440,
+      "scroll": 1440
+    },
+    {
+      "engine": "webkit",
+      "n": "eliminar",
+      "w": 1440,
+      "scroll": 1440
+    },
+    {
+      "engine": "webkit",
+      "n": "lista",
+      "w": 360,
+      "scroll": 360
+    },
+    {
+      "engine": "webkit",
+      "n": "vacio",
+      "w": 360,
+      "scroll": 360
+    },
+    {
+      "engine": "webkit",
+      "n": "limite",
+      "w": 360,
+      "scroll": 360
+    },
+    {
+      "engine": "webkit",
+      "n": "error",
+      "w": 360,
+      "scroll": 360
+    },
+    {
+      "engine": "webkit",
+      "n": "crear",
+      "w": 360,
+      "scroll": 360
+    },
+    {
+      "engine": "webkit",
+      "n": "validacion",
+      "w": 360,
+      "scroll": 360
+    },
+    {
+      "engine": "webkit",
+      "n": "editar",
+      "w": 360,
+      "scroll": 360
+    },
+    {
+      "engine": "webkit",
+      "n": "eliminar",
+      "w": 360,
+      "scroll": 360
+    }
+  ],
+  "writes": "solo datos de prueba en navegador; ninguna acción del servidor"
+}
