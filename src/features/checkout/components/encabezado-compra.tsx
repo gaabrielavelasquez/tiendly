@@ -46,7 +46,7 @@ export function EncabezadoCompra({ paso, titulo, volver, volverLabel, carrito }:
           Finalizar compra
         </li>
       </ol>
-      <h1 className="hidden font-display-light text-h1 text-fg lg:block">{titulo}</h1>
+      <h1 className={cn("hidden text-h1 text-fg lg:block", paso === 2 ? "font-display-light" : "font-display-hero")}>{titulo}</h1>
     </div>
   );
 }
