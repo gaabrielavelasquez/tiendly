@@ -15,3 +15,9 @@
 
 - Fotos de catálogo optimizadas a WebP; originales locales en `fotos-originales/muna/` (ignorados por Git).
 - Tras el merge aprobado por Gabi, queda pendiente reiniciar únicamente `production:tienda:muna` en Redis para cargar la nueva semilla. No se ejecuta como parte del PR.
+
+## Ajustes finales autorizados por Gabi · 24-oct-2026
+
+- La tabla de tallas permanece cerrada al entrar. Al abrirla muestra dos columnas, Talla y Largo del pie, con una talla por fila, tanto en móvil como en desktop.
+- Las tarjetas conservan muestras circulares de 14 px con un borde fino. Camel (gamuza) toma el color Camel y Vino (cuero), el vino. Si falta el color real de alguna muestra, se omite el grupo para evitar círculos vacíos.
+- Gabi autorizó explícitamente el merge del #29 y, tras desplegar, reiniciar únicamente `production:tienda:muna` en Redis y verificar `/muna` en producción a 390 px.
