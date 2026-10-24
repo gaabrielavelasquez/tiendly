@@ -4,7 +4,7 @@ import type { Opcion, Producto } from "@/features/productos/types";
 import { claveVariante, COLOR_UNICO_LEGADO, FOTOS_GENERAL, opcionDeFotos, valorDe } from "@/features/productos/lib/variantes";
 import { descuento, estadoOferta, precioVigente } from "@/features/productos/lib/ofertas";
 import { hoyLima } from "@/lib/reloj";
-import { DETALLE, HEX_COLOR } from "./contenido";
+import { DETALLE, hexDeColor } from "./contenido";
 import { esHeather } from "@/lib/datos/semillas";
 import { TIENDAS_EJEMPLO } from "@/lib/datos/tiendas-ejemplo";
 import { datosTienda } from "@/lib/datos/tienda";
@@ -80,7 +80,7 @@ const aVitrina = (p: Producto, hoy: string): ProductoVitrina => ({
   imagen: fotoVitrina(p.imagen),
   categorias: p.categorias.map(slugProducto),
   agotado: nivelStock(p) === "agotado",
-  colores: [...new Set(p.variantes.map((v) => valorDe(p, v, "color") ?? COLOR_UNICO_LEGADO))].map((nombre) => ({ nombre, hex: HEX_COLOR[nombre] })),
+  colores: [...new Set(p.variantes.map((v) => valorDe(p, v, "color") ?? COLOR_UNICO_LEGADO))].map((nombre) => ({ nombre, hex: hexDeColor(nombre) })),
   stock: stockTotal(p),
 });
 

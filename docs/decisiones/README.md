@@ -23,5 +23,6 @@ Una decisión por archivo: contexto, decisión y consecuencias. Las anteriores a
 | 0035 | [Ficha en dos columnas desde tablet y "Agregado al carrito"](0035-ficha-y-agregar-al-carrito.md) | Vigente (la hoja del punto 2 → 0036) |
 | 0036 | [El carrito es un drawer](0036-carrito-drawer.md) | **Vigente** (actualiza 0007 y 0035) |
 | 0037 | Tabla de tallas por producto | Propuesta, en el PR #27 |
+| 0038 | [MUÑA: catálogo y miniaturas de color](0038-muna-catalogo-y-miniaturas.md) | Solicitada por Gabi |
 
 Para una decisión nueva: copia la estructura de 0026, usa el número siguiente y súmala a esta tabla.

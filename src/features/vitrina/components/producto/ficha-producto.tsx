@@ -74,7 +74,7 @@ export function FichaProducto({ p, tienda, celular, demo }: FichaProps) {
         </div>
         {p.opciones.map((o, i) =>
           o.valores.length > 1 ? (
-            <SelectorOpcion key={o.nombre} opcion={o} i={i} valor={e.elegidos[i]} agotados={e.agotados[i]} error={error?.i === i ? error.texto : undefined}
+            <SelectorOpcion key={o.nombre} opcion={o} i={i} valor={e.elegidos[i]} agotados={e.agotados[i]} fotos={i === p.opcionFotos ? p.fotos : undefined} error={error?.i === i ? error.texto : undefined}
               onCambio={(v) => (e.elegir(i, v), setError(null))} />
           ) : null,
         )}
