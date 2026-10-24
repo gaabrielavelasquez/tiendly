@@ -268,3 +268,9 @@ Pagos, bancos, entregas y WhatsApp siguen simulados. No se enviaron mensajes, co
 - Cierre del último toque de #33: código funcional `67963b1`, preview verde https://tiendly-ca14p3ri7-gaabrielavelasquez-8525s-projects.vercel.app/registro. Build/tokens locales y Vercel pasan. Chrome/WebKit pasan a 390, 1440 y 360: continuidad exacta de muestras (nombres, precios y fotos) entre Datos y Creada para hogar y multirrubro, nota visible, enlace confirmado, centro geométrico del halo y máscara soportada, nombres/URL largos y ausencia de scroll horizontal. Copiar, enlace wa.me y formulario nuevo conservados.
 - Antes/después Vercel a 390/1440 en docs/capturas/auth-logro/README.md, con capturas Safari y resultado-preview.json; imágenes inspeccionadas sin edición. Estado ficticio sembrado solo en el navegador, sin crear tiendas/productos en Vercel ni enviar mensajes. Las muestras siguen fuera del catálogo real.
 - Mi servidor 3204 (PID 57456) se cerró tras verificar carpeta antes del build final; 3100 confirmado activo (PID 77610). Sin tocar checkout principal, producción ni Redis. La última subida solo agrega evidencia/documentación. **#33 actualizado y sin merge: detenerse para revisión de Gabi.**
+
+## Aprobación de #33 y siguiente pase · 24-oct-2026
+
+- Gabi autoriza integrar #33 tras sumar un toque durazno al halo y preview verde. Se refuerza glow-warm hacia abajo/derecha, conservando azul arriba/izquierda y la máscara centrada. Sin nuevos colores o tokens.
+- Después del merge se comprobarán /registro y registro completo en producción a 390 con número ficticio y una tienda aislada de prueba, sin productos, cobros o mensajes reales. No resetear ni modificar tiendas existentes.
+- Siguiente tarea autorizada: un único PR desde main actualizado para Configuración y Mi tienda, reglas 0031, interruptores con check, entrega con zona obligatoria y preview de compra nunca vacío. Preservar 0003/0007/0009 y detenerse para revisión sin merge.
