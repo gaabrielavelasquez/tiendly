@@ -24,19 +24,19 @@ export function ComoFunciona() {
   );
 }
 
-const fila = "flex justify-between gap-3 text-body-sm";
+const fila = "flex min-w-0 justify-between gap-3 py-3 text-body-sm";
 
 /** "Cuenta y comisiones" (Figma E7). */
 export function CuentaYComisiones({ cuenta }: { cuenta: NonNullable<Cobros["cuenta"]> }) {
   return (
     <div className="flex flex-col gap-4">
-      <dl className="flex flex-col gap-2">
+      <dl className="flex min-w-0 flex-col divide-y divide-line-subtle">
         <dt className="text-label font-semibold tracking-widest text-fg-secondary uppercase">Cuenta de depósito</dt>
         {[["Banco", cuenta.banco], ["Tipo", cuenta.tipo], ["Número", `···· ${cuenta.ultimos4}`], ["A nombre de", cuenta.titular]].map(([k, v]) => (
-          <div key={k} className={fila}><dt className="text-fg-secondary">{k}</dt><dd className="text-right font-semibold text-fg">{v}</dd></div>
+          <div key={k} className={fila}><dt className="text-fg-secondary">{k}</dt><dd className="min-w-0 break-words text-right font-normal text-fg">{v}</dd></div>
         ))}
       </dl>
-      <dl className="flex flex-col gap-2">
+      <dl className="flex min-w-0 flex-col divide-y divide-line-subtle">
         <dt className="text-label font-semibold tracking-widest text-fg-secondary uppercase">Comisión por cada venta</dt>
         {[["Tarjeta de crédito", "3.45% + S/ 0.30"], ["Tarjeta de débito", "2.99% + S/ 0.30"], ["Yape", "1.50%"]].map(([k, v]) => (
           <div key={k} className={fila}><dt className="text-fg-secondary">{k}</dt><dd className="font-normal text-fg tabular-nums">{v}</dd></div>

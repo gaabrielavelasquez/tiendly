@@ -11,11 +11,11 @@ export function ResumenSolicitud({ datos, negocio, editar }: { datos: Datos; neg
     { titulo: "Representante legal", paso: 2, principal: datos.nombre, valores: [`DNI ${datos.dni} · ${datos.cargo}`, `+51 ${datos.celular} · ${datos.correo}`] },
     { titulo: "Cuenta de depósito", paso: 3, principal: `${banco} ···· ${datos.cci.slice(-4)}`, valores: [nombreTipoCuenta(datos.tipoCuenta), `A nombre de ${negocio.razonSocial}`] },
   ];
-  return <div className="flex flex-col divide-y divide-line-subtle rounded-card border border-line-subtle bg-surface px-4">
-    {secciones.map(s => <section key={s.paso} className="flex flex-col gap-1 py-4">
-      <div className="flex items-center justify-between gap-3"><h3 className="text-label font-semibold tracking-widest text-fg-secondary uppercase">{s.titulo}</h3>{editar && <Button type="button" variant="ghost" size="sm" onClick={() => editar(s.paso)} aria-label={`Editar ${s.titulo.toLowerCase()}`}>Editar</Button>}</div>
-      <p className="text-body font-semibold break-words text-fg">{s.principal}</p>
-      {s.valores.map((v, i) => <p key={i} className="text-body-sm break-words text-fg-secondary">{v}</p>)}
+  return <div className="flex min-w-0 flex-col gap-10 lg:gap-12">
+    {secciones.map(s => <section key={s.paso} className="flex min-w-0 flex-col gap-3">
+      <div className="flex items-center justify-between gap-3"><h3 className="font-titulo-seccion text-h3 text-fg">{s.titulo}</h3>{editar && <Button type="button" variant="quiet" size="sm" onClick={() => editar(s.paso)} aria-label={`Editar ${s.titulo.toLowerCase()}`}>Editar</Button>}</div>
+      <div className="min-w-0 divide-y divide-line-subtle rounded-card bg-surface px-5 shadow-contenedor"><p className="break-words py-4 text-body font-medium text-fg">{s.principal}</p>
+      {s.valores.map((v, i) => <p key={i} className="break-words py-4 text-body-sm text-fg-secondary">{v}</p>)}</div>
     </section>)}
   </div>;
 }

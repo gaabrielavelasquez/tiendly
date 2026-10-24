@@ -1,0 +1,3 @@
+# 0045 · Pagos, Cobros automáticos y Afiliación
+
+Solicitado por Gabi, PR independiente desde main 4ab96fa. Sin merge. Mantiene 0007, guardado inmediato/último método, solicitudes y borradores, RUC/CCI simulados, corrección, términos y salida guardando. 0031: títulos externos, contenedores por lista con divisores, iconos neutros sin caja/círculo, estados como texto, foco/progreso carbón, CTA móvil con zona segura y sin tab bar encima. Comisiones/montos con formato existente sin .00; porcentajes no son importes. Switches compartidos con check. Carga, vacío/inicio, datos y error/reintento. Sin nuevos tokens/dependencias ni datos de producción.

@@ -81,7 +81,7 @@ export function VistaPagos({ inicial }: { inicial: ConfigPagos }) {
                 <span className="w-28 text-body-sm text-fg-secondary">{t}</span>
                 {/* Muestra (no es un control): el mismo aspecto del chip, sin botón. */}
                 {lista.map((m) => (
-                  <span key={m} className="inline-flex h-7 items-center rounded-chip border border-line bg-surface px-3 text-body-sm font-medium text-fg">{m}</span>
+                  <span key={m} className="inline-flex min-h-11 items-center text-body-sm font-medium text-fg">{m}</span>
                 ))}
               </div>
             ) : null,

@@ -6,15 +6,17 @@ import { ResumenSolicitud } from "./resumen-solicitud";
 export function PasoRevision({ m, terminos }: { m: ModeloAfiliacion; terminos: () => void }) {
   const id = useId();
   return <div className="flex flex-col gap-5">
-    <div><h2 className="font-display-title text-h2">Revisa y envía</h2><p className="mt-2 text-body-sm text-fg-secondary">Revisa que todo esté bien antes de enviar.</p></div>
+    <div><h2 className="font-titulo-seccion text-h3">Revisa y envía</h2><p className="mt-2 text-body-sm text-fg-secondary">Revisa que todo esté bien antes de enviar.</p></div>
     {m.negocio && <ResumenSolicitud datos={m.datos} negocio={m.negocio} editar={m.enviando ? undefined : m.editar} />}
-    <section className="space-y-3 rounded-card border border-line-subtle bg-sunken p-4">
-      <h3 className="font-semibold">Comisiones de tus cobros</h3>
+    <section className="flex flex-col gap-3">
+      <h3 className="font-titulo-seccion text-h3">Comisiones de tus cobros</h3>
+      <div className="space-y-4 rounded-card bg-surface p-5 shadow-contenedor">
       <dl className="space-y-2 text-body-sm text-fg-secondary">
         <div className="flex justify-between gap-4"><dt>Proveedor de pagos</dt><dd>Por confirmar</dd></div>
         <div className="flex justify-between gap-4"><dt>Tiendly</dt><dd>Por confirmar</dd></div>
         <div className="flex justify-between gap-4 border-t border-line-subtle pt-2 font-semibold text-fg"><dt>Total por venta</dt><dd>Por confirmar</dd></div>
       </dl><p className="text-caption text-fg-secondary">Antes de activar cobros, recibirás las condiciones y el desglose final. Enviar esta solicitud no realiza ningún cobro.</p>
+      </div>
     </section>
     <label htmlFor={id} className="flex min-h-12 cursor-pointer items-start gap-3 text-body-sm text-fg">
       <input id={id} type="checkbox" checked={m.acepto} disabled={m.enviando} onChange={e => m.setAcepto(e.target.checked)} style={{ accentColor: "var(--tl-selection-bg)" }} className="mt-1 size-5 shrink-0" />
