@@ -7,7 +7,7 @@ import { fotoParaGuardar } from "../lib/foto";
 import { fotosPorDefecto, validar, type Errores, type FormProducto, type ImagenForm, type OpcionForm } from "../lib/formulario";
 
 const alternar = <T,>(lista: T[], v: T) => (lista.includes(v) ? lista.filter((x) => x !== v) : [...lista, v]);
-const CAMPOS: (keyof Errores)[] = ["nombre", "precio", "precioAntes", "ofertaHasta", "opciones"];
+const CAMPOS: (keyof Errores)[] = ["nombre", "precio", "precioAntes", "ofertaHasta", "opciones", "tabla"];
 
 /**
  * Estado del formulario de producto: valores, validación (se muestra recién al intentar guardar), cambios sin
@@ -15,8 +15,9 @@ const CAMPOS: (keyof Errores)[] = ["nombre", "precio", "precioAntes", "ofertaHas
  * el id nuevo para no duplicarlo al volver a guardar. "Las fotos cambian según" sigue a Color o Tono hasta que
  * la persona la elige a mano.
  */
-export function useFormularioProducto(inicial: FormProducto, id?: string) {
+export function useFormularioProducto(inicial: FormProducto, id?: string, urlInicial?: string | null) {
   const [form, setForm] = useState(inicial);
+  const [urlTienda, setUrlTienda] = useState(urlInicial ?? null);
   const [base, setBase] = useState(() => JSON.stringify(inicial));
   const [intentoGuardar, setIntentoGuardar] = useState(false);
   const [guardando, setGuardando] = useState(false);
@@ -83,6 +84,7 @@ export function useFormularioProducto(inicial: FormProducto, id?: string) {
       return 0;
     }
     idGuardado.current = r.id;
+    setUrlTienda(r.urlTienda);
     const urls = r.urls;
     imagenes = imagenes.map((i, n) => ({ ...i, url: urls[n] ?? i.url }));
     // Activo pero incompleto: se guardó pausado y se avisa qué falta (decisión 0028).
@@ -98,6 +100,6 @@ export function useFormularioProducto(inicial: FormProducto, id?: string) {
 
   return {
     form, set, setOpciones, setOpcionFotos, setStock, setTabla, alternarCategoria, agregarCategoria, alternarFotoValor, agregarImagenes, quitarImagen,
-    errores, guardar, guardando, guardado, sinGuardar, fallo,
+    errores, guardar, guardando, guardado, sinGuardar, fallo, urlTienda,
   };
 }

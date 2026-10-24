@@ -1,6 +1,7 @@
 import type { Categoria, Opcion, Producto, TablaTallas } from "../types";
+import { esMedida } from "./medidas";
 import { descuento } from "./ofertas";
-import { limpiarTabla, tablaDelProducto } from "./tabla-tallas";
+import { FILA_UNICA, limpiarTabla, tablaDelProducto } from "./tabla-tallas";
 import { claveVariante, combinaciones, FOTOS_GENERAL, opcionDeFotos, tipoDeNombre } from "./variantes";
 
 // Modelo y reglas del formulario de producto (0032 opciones genéricas, 0034 ofertas). Funciones puras, sin React.
@@ -25,14 +26,14 @@ export type FormProducto = {
   fotosPorValor: Record<string, string[]>;
   /** Cantidad por variante (clave "Blanco|38"; sin opciones, ""), solo dígitos. */
   stock: Record<string, string>;
-  /** Tabla de tallas (solo cuenta si hay una opción Talla). null: sin tabla. */
+  /** Tabla por talla o medidas únicas si no hay Talla. null: sin tabla. */
   tabla: TablaTallas | null;
   estado: "activo" | "pausado";
   categorias: Categoria[];
   imagenes: ImagenForm[];
 };
 
-export type Errores = Partial<Record<"nombre" | "precio" | "precioAntes" | "ofertaHasta" | "opciones", string>>;
+export type Errores = Partial<Record<"nombre" | "precio" | "precioAntes" | "ofertaHasta" | "opciones" | "tabla", string>>;
 
 export const MAXIMO_OPCIONES = 3;
 export const OPCIONES_SUGERIDAS = ["Color", "Talla", "Tamaño", "Tono", "Aroma", "Material"];
@@ -102,6 +103,10 @@ export function validar(f: FormProducto): Errores {
   const nombres = conValores.map((o) => o.nombre.trim().toLowerCase());
   if (nombres.some((n) => !n)) e.opciones = "Ponle nombre a cada opción, por ejemplo Color o Talla.";
   else if (new Set(nombres).size < nombres.length) e.opciones = "Cada opción necesita un nombre distinto.";
+  const tallas = conValores.find((o) => tipoDeNombre(o.nombre) === "talla")?.valores ?? [FILA_UNICA];
+  if (f.tabla && tallas.some((t) => (f.tabla!.filas[t] ?? []).some((v) => v.trim() && !esMedida(v)))) {
+    e.tabla = "Escribe un número o un rango, como 30 o 86–90. Las medidas están en cm.";
+  }
   return e;
 }
 
@@ -144,6 +149,6 @@ export function aProducto(f: FormProducto, id: string, anterior?: Producto | nul
     opcionFotos: iFotos,
     imagen: urls[0],
     fotos: urls.length ? fotos : undefined,
-    tablaTallas: f.tabla && talla ? limpiarTabla(f.tabla, talla.valores) ?? null : null,
+    tablaTallas: f.tabla ? limpiarTabla(f.tabla, talla?.valores ?? [FILA_UNICA]) ?? null : null,
   };
 }

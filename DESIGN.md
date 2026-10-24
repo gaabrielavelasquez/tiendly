@@ -37,7 +37,7 @@ La identidad visual de Tiendly combina **velocidad ultra limpia**, **lenguaje mo
 - Los títulos, placeholders y botones directos no llevan punto final.
 
 ### Estructura de Productos
-- **Principio Unificado (0004, actualizado por 0032):** 1 producto con variantes. Cada variante es una combinación de hasta 3 opciones genéricas (color, talla, tono, tamaño, material, aroma u otra), con su stock. La tabla de tallas solo aparece cuando una opción es talla.
+- **Principio Unificado (0004, actualizado por 0032):** 1 producto con variantes. Cada variante es una combinación de hasta 3 opciones genéricas (color, talla, tono, tamaño, material, aroma u otra), con su stock. La tabla de tallas solo aparece cuando una opción es talla. Sin Talla, el producto puede tener medidas únicas en cm, sin selector (0037, ampliación solicitada el 24-oct).
 
 ---
 

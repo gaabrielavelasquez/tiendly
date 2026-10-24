@@ -11,6 +11,8 @@ import { useEleccion } from "../../hooks/use-eleccion";
 import { PrecioTienda } from "../precio-tienda";
 import { Beneficios } from "./beneficios";
 import { Galeria } from "./galeria";
+import { MedidasPrenda } from "./medidas-prenda";
+import { TablaTallas } from "./tabla-tallas";
 import { SelectorOpcion } from "./selector-opcion";
 
 /** `demo`: los beneficios (envío, pago, cambios) son textos de Heather; una tienda nueva no los promete. */
@@ -56,6 +58,7 @@ export function FichaProducto({ p, tienda, celular, demo }: FichaProps) {
     timer.current = window.setTimeout(() => setListo(false), 1500);
   }
 
+  const talla = p.opciones.find((o) => o.tipo === "talla");
   const mensaje = `Hola, quiero ${p.nombre}${elegidosTexto ? ` (${elegidosTexto})` : ""}. ¿Está disponible?`;
 
   return (
@@ -78,6 +81,7 @@ export function FichaProducto({ p, tienda, celular, demo }: FichaProps) {
               onCambio={(v) => (e.elegir(i, v), setError(null))} />
           ) : null,
         )}
+        {p.tablaTallas && (!talla ? <MedidasPrenda tabla={p.tablaTallas} /> : talla.valores.length === 1 ? <TablaTallas tabla={p.tablaTallas} tallas={talla.valores} elegida={e.elegidos[p.opciones.indexOf(talla)]} /> : null)}
         <div className="flex flex-col gap-2">
           <Button id="agregar-carrito" block onClick={agregar} disabled={p.agotado} aria-disabled={listo || undefined} className={cn(listo && "pointer-events-none")}>
             <span className="flex items-center gap-2">

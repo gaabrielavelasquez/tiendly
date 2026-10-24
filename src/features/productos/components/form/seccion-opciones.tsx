@@ -15,6 +15,7 @@ import { TablaTallasCampos } from "./tabla-tallas-campos";
 type Props = {
   form: FormProducto;
   error?: string;
+  errorTabla?: string;
   onOpciones: (o: OpcionForm[]) => void;
   onOpcionFotos: (i: number) => void;
   onFotoValor: (valor: string, idImg: string) => void;
@@ -28,7 +29,7 @@ type Props = {
  * Color, Talla, Tamaño, Tono, Aroma, Material u "Otra". Debajo: qué opción cambia las fotos (por defecto Color o
  * Tono) y qué fotos van con cada valor. La primera opción Talla lleva la tabla de tallas del producto.
  */
-export function SeccionOpciones({ form, error, onOpciones, onOpcionFotos, onFotoValor, imagenes, tablas, onTabla }: Props) {
+export function SeccionOpciones({ form, error, errorTabla, onOpciones, onOpcionFotos, onFotoValor, imagenes, tablas, onTabla }: Props) {
   const { opciones, opcionFotos } = form;
   const [eligiendo, setEligiendo] = useState(false);
   const usadas = new Set(opciones.map((o) => o.nombre.trim().toLowerCase()));
@@ -49,7 +50,7 @@ export function SeccionOpciones({ form, error, onOpciones, onOpcionFotos, onFoto
         <ul className="flex flex-col divide-y divide-line-subtle">
           {opciones.map((o, i) => (
             <OpcionFila key={i} o={o} i={i} onCambio={(n) => onOpciones(opciones.map((x, j) => (j === i ? n : x)))} onQuitar={() => onOpciones(opciones.filter((_, j) => j !== i))}>
-              {i === iTalla && <TablaTallasCampos tallas={o.valores} tabla={form.tabla} tablas={tablas} onCambio={onTabla} />}
+              {i === iTalla && <TablaTallasCampos error={errorTabla} tallas={o.valores} tabla={form.tabla} tablas={tablas} onCambio={onTabla} />}
             </OpcionFila>
           ))}
         </ul>

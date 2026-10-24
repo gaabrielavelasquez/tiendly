@@ -13,14 +13,14 @@ export function TablaTallas({ tabla, tallas, elegida }: Props) {
           <thead>
             <tr className="border-b border-line-strong text-fg">
               <th scope="col" className="px-3 py-2 font-medium">Talla</th>
-              {tabla.medidas.map((m, i) => <th key={i} scope="col" className="px-3 py-2 font-medium break-words">{m}</th>)}
+              {tabla.medidas.map((m, i) => <th key={i} scope="col" className="px-3 py-2 font-medium break-words">{m} (cm)</th>)}
             </tr>
           </thead>
           <tbody className="divide-y divide-line-subtle">
             {tallas.map((t) => (
               <tr key={t} aria-current={t === elegida || undefined} className={cn(t === elegida && "bg-sunken text-fg")}>
                 <th scope="row" className="px-3 py-2 font-medium text-fg">{t}</th>
-                {tabla.medidas.map((_, i) => <td key={i} className="px-3 py-2">{tabla.filas[t]?.[i] ? `${tabla.filas[t][i]} cm` : "—"}</td>)}
+                {tabla.medidas.map((_, i) => <td key={i} className="px-3 py-2">{tabla.filas[t]?.[i] ? tabla.filas[t][i] : "—"}</td>)}
               </tr>
             ))}
           </tbody>

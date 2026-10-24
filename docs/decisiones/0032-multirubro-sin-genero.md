@@ -15,7 +15,7 @@ Tiendly nació con Heather, una marca de calzado, y el producto se armó alreded
    - "¡Tu tienda está lista!" sigue bien: "lista" concuerda con "tienda", no con la persona. Lo mismo "¡Listo!" como interjección.
 3. **Variantes como opciones genéricas.** Un producto tiene hasta 3 opciones (color, talla, tono, tamaño, material, aroma, sabor u otra que escriba la tienda) y una variante es una combinación de valores con su stock. La tabla de tallas solo aparece cuando una opción es talla. Sigue valiendo 0004: un producto con variantes, no un producto por variante.
    - **Fotos:** la tienda elige qué opción cambia las fotos; por defecto, la de color o la llamada "Tono", si existe (22-oct).
-   - **Tabla de tallas:** por producto, con un atajo para reusar la de otro producto (22-oct).
+   - **Tabla de tallas:** por producto, con un atajo para reusar la de otro producto (22-oct). Ampliación solicitada el 24-oct en 0037: un producto sin Talla también puede tener medidas únicas, sin crear un selector.
    - **Vapes:** quedan en "Otro" hasta revisar las restricciones legales y si las pasarelas de pago los aceptan (22-oct).
 4. **Ejemplos de varios rubros.** Demos, placeholders, capturas y fotos muestran varias categorías, no solo productos asociados a mujeres.
 

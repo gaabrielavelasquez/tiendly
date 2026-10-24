@@ -12,6 +12,8 @@ import { motionTokens } from "@/styles/tokens";
 import { useFormularioProducto } from "../../hooks/use-formulario-producto";
 import type { FormProducto } from "../../lib/formulario";
 import type { TablaDeOtro } from "../../lib/tabla-tallas";
+import { tipoDeNombre } from "../../lib/variantes";
+import { TablaTallasCampos } from "./tabla-tallas-campos";
 import type { Categoria } from "../../types";
 import { BarraAcciones } from "./barra-acciones";
 import { CampoDescripcion } from "./campo-descripcion";
@@ -22,15 +24,15 @@ import { SeccionPrecio } from "./seccion-precio";
 import { SeccionStock } from "./seccion-stock";
 
 /** `hoy`: día de Lima (para la oferta); `categorias`: las que ya usa la tienda; `tablas`: las tablas de tallas de sus otros productos. */
-type FormularioProps = { titulo: string; inicial: FormProducto; id?: string; hoy: string; categorias: Categoria[]; tablas: TablaDeOtro[] };
+type FormularioProps = { titulo: string; inicial: FormProducto; id?: string; urlTienda?: string | null; hoy: string; categorias: Categoria[]; tablas: TablaDeOtro[] };
 
 /**
  * Crear / editar producto con el pase 0031: títulos de sección fuera de los contenedores, un contenedor por sección y
  * 40 · 48 px entre secciones. Desktop: 2/3 contenido y 1/3 ajustes (Estado y Categoría); móvil: una columna, con
  * "Guardar producto" fijo abajo (la barra de pestañas no se muestra aquí). Opciones genéricas (0032) y oferta (0034).
  */
-export function FormularioProducto({ titulo, inicial, id, hoy, categorias, tablas }: FormularioProps) {
-  const f = useFormularioProducto(inicial, id);
+export function FormularioProducto({ titulo, inicial, id, urlTienda, hoy, categorias, tablas }: FormularioProps) {
+  const f = useFormularioProducto(inicial, id, urlTienda);
   const reduce = useReducedMotion();
   const [resumen, setResumen] = useState("");
 
@@ -42,7 +44,7 @@ export function FormularioProducto({ titulo, inicial, id, hoy, categorias, tabla
 
   return (
     <form onSubmit={enviar} noValidate className="flex flex-col gap-6 pb-24 lg:pb-0">
-      <BarraAcciones titulo={titulo} sinGuardar={f.sinGuardar} guardando={f.guardando} />
+      <BarraAcciones titulo={titulo} sinGuardar={f.sinGuardar} guardando={f.guardando} urlTienda={f.form.estado === "activo" ? f.urlTienda : null} notaTienda={f.form.estado === "pausado" ? "Activa y guarda el producto para verlo." : "Guarda el producto para verlo."} />
       {resumen && Object.keys(f.errores).length > 0 && (
         <p role="alert" className="rounded-theme border border-error-border bg-error-surface px-4 py-3 text-body-sm text-error">
           {resumen}
@@ -54,8 +56,8 @@ export function FormularioProducto({ titulo, inicial, id, hoy, categorias, tabla
         </p>
       )}
 
-      <div className="grid items-start gap-10 lg:grid-cols-3 lg:gap-12">
-        <div className="flex flex-col gap-10 lg:col-span-2 lg:gap-12">
+      <div className="grid min-w-0 grid-cols-1 items-start gap-10 lg:grid-cols-3 lg:gap-12">
+        <div className="flex min-w-0 flex-col gap-10 lg:col-span-2 lg:gap-12">
           <Seccion id="sec-info" titulo="Información">
             <Field id="campo-nombre" label="Nombre" placeholder="Ej.: Lámpara lunar impresa en 3D" value={f.form.nombre}
               onChange={(e) => f.set("nombre", e.target.value)} error={f.errores.nombre} />
@@ -63,11 +65,16 @@ export function FormularioProducto({ titulo, inicial, id, hoy, categorias, tabla
           </Seccion>
           <SeccionFotos imagenes={f.form.imagenes} onAgregar={f.agregarImagenes} onQuitar={f.quitarImagen} />
           <SeccionPrecio form={f.form} errores={f.errores} hoy={hoy} onCambio={(k, v) => f.set(k, v)} />
-          <SeccionOpciones form={f.form} error={f.errores.opciones} imagenes={f.form.imagenes}
+          <SeccionOpciones form={f.form} error={f.errores.opciones} errorTabla={f.errores.tabla} imagenes={f.form.imagenes}
             onOpciones={f.setOpciones} onOpcionFotos={f.setOpcionFotos} onFotoValor={f.alternarFotoValor} tablas={tablas} onTabla={f.setTabla} />
+          {!f.form.opciones.some((o) => tipoDeNombre(o.nombre) === "talla") && (
+            <Seccion id="sec-medidas" titulo="Medidas">
+              <TablaTallasCampos sinTallas tallas={[]} tabla={f.form.tabla} tablas={tablas} error={f.errores.tabla} onCambio={f.setTabla} />
+            </Seccion>
+          )}
           <SeccionStock form={f.form} onStock={f.setStock} />
         </div>
-        <aside className="flex flex-col gap-10 lg:sticky lg:top-24 lg:gap-12">
+        <aside className="flex min-w-0 flex-col gap-10 lg:sticky lg:top-24 lg:gap-12">
           <SeccionEstado estado={f.form.estado} onCambio={(e) => f.set("estado", e)} />
           <SeccionCategoria elegidas={f.form.categorias} deLaTienda={categorias} onAlternar={f.alternarCategoria} onAgregar={f.agregarCategoria} />
         </aside>

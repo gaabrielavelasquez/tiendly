@@ -4,6 +4,7 @@ import { PanelMain } from "@/components/panel";
 import { FormularioProducto } from "@/features/productos/components/form/formulario-producto";
 import { desdeProducto } from "@/features/productos/lib/formulario";
 import { categoriasDeTienda, obtenerProducto, tablasDeTienda } from "@/features/productos/lib/mock";
+import { slugProducto } from "@/features/vitrina/lib/vitrina";
 import { hoyLima } from "@/lib/reloj";
 import { slugPanel } from "@/lib/sesion";
 
@@ -19,7 +20,7 @@ export default async function EditarProductoPage({ params }: PageProps) {
   if (!producto) notFound();
   return (
     <PanelMain className="lg:pt-0">
-      <FormularioProducto titulo={producto.nombre} inicial={desdeProducto(producto)} id={producto.id} hoy={hoyLima()} categorias={categorias} tablas={tablas} />
+      <FormularioProducto titulo={producto.nombre} inicial={desdeProducto(producto)} id={producto.id} urlTienda={producto.estado === "activo" ? `/${slug}/${slugProducto(producto.nombre)}` : null} hoy={hoyLima()} categorias={categorias} tablas={tablas} />
     </PanelMain>
   );
 }

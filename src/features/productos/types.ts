@@ -17,7 +17,7 @@ export type Oferta = { desde?: string; hasta?: string };
 
 /**
  * Tabla de tallas del producto (0032, parte 4 de 0034): medidas en cm por talla. `medidas` son las columnas ("Pecho",
- * "Largo del pie"); `filas`, por cada talla de la opción Talla, un texto por medida ("88" o "86–90"; vacío: no aplica).
+ * "Largo del pie"); `filas`, por cada talla (o la clave vacía para un producto sin talla), un texto por medida ("88" o "86–90"; vacío: no aplica).
  */
 export type TablaTallas = { medidas: string[]; filas: Record<string, string[]> };
 
@@ -51,7 +51,7 @@ export type Producto = {
   imagen?: string;
   /** Fotos por valor de la opción que cambia las fotos, en orden; sin esa opción, todas en la clave "". */
   fotos?: Record<string, string[]>;
-  /** Solo si el producto tiene una opción Talla. null: sin tabla; undefined: conserva la guía heredada de calzado. Sin tabla, la tienda no muestra el link "Ver tabla de tallas". */
+  /** Medidas por talla o medidas únicas del producto sin talla. null: sin tabla; undefined: conserva la guía heredada de calzado. Sin tabla, la tienda no muestra el link "Ver tabla de tallas". */
   tablaTallas?: TablaTallas | null;
 };
 

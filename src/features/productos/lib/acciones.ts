@@ -1,5 +1,6 @@
 "use server";
 
+import { slugProducto } from "@/features/vitrina/lib/vitrina";
 import { subirFotos } from "@/lib/datos/fotos";
 import { datosPanel, mutarPanel } from "@/lib/sesion";
 import type { Producto } from "../types";
@@ -13,7 +14,7 @@ import { conOferta, duplicar, sinOferta, type OfertaEnLote } from "./reglas";
  * Crea (`id` null) o actualiza un producto. Activo pero incompleto: se guarda pausado (decisión 0028).
  * Devuelve las URL finales de las fotos para que el formulario no las vuelva a subir.
  */
-export async function guardarProducto(id: string | null, form: FormProducto): Promise<{ id: string; pausado: string | null; urls: string[] } | { error: string }> {
+export async function guardarProducto(id: string | null, form: FormProducto): Promise<{ id: string; pausado: string | null; urls: string[]; urlTienda: string | null } | { error: string }> {
   if (Object.keys(validar(form)).length) return { error: "Revisa los campos marcados en rojo." };
   if (form.imagenes.some((i) => i.url.startsWith("blob:"))) return { error: "No pudimos subir las fotos. Inténtalo de nuevo." };
   const { tienda, productos } = await datosPanel();
@@ -28,7 +29,7 @@ export async function guardarProducto(id: string | null, form: FormProducto): Pr
     if (i >= 0) d.productos[i] = final;
     else d.productos.unshift(final);
   });
-  return { id: final.id, pausado, urls };
+  return { id: final.id, pausado, urls, urlTienda: final.estado === "activo" ? `/${tienda.slug}/${slugProducto(final.nombre)}` : null };
 }
 
 /** Copia pausada y sin stock, justo debajo del original. */

@@ -19,3 +19,12 @@
 - Se conservan los nombres, las ocho fichas, las fotos por color, Terracota y la oferta de MUÑA de #29. La guía de calzado mantiene la presentación aprobada; otras tablas muestran una columna por medida.
 - Compatibilidad sin reset ni escritura en Redis: si un documento antiguo no tiene `tablaTallas`, se sigue leyendo la guía heredada de calzado. `tablaTallas: null` representa la elección explícita "Sin tabla" y no recupera esa guía al volver a abrir el producto. Los productos nuevos sin tabla también guardan null.
 - Producción queda intacta. Las tablas propias nuevas de la semilla no se inyectan en documentos guardados: se configuran y guardan desde el panel después de revisar y aprobar el PR.
+
+## Ampliación solicitada por Gabi · 24-oct-2026
+
+- Números o rangos (30, 86–90); se quitan unidades como cm o mm al escribir, desenfocar y guardar. No se convierten escalas. Coma decimal y guiones se normalizan; un rango incompleto impide guardar y muestra ayuda, sin perder el borrador.
+- Sin opción Talla aparece una sección **Medidas**, con el mismo editor y copia independiente. Sus valores viven en una fila interna de clave vacía; no crea una talla, opción o variante. Al guardar se conservan las medidas únicas; "Sin medidas" las quita. En la ficha se muestra **Medidas de la prenda**, cerrada al entrar, en una tabla Medida / Valor (cm), sin selector.
+- Las unidades se indican en los encabezados de las tablas públicas; los valores no repiten cm. La guía de calzado sigue cerrada y con dos columnas. Los documentos antiguos y null conservan la compatibilidad del apartado anterior.
+- La cabecera del editor añade **Ver en la tienda**, en pestaña nueva. Usa la URL de la versión guardada, que se actualiza al guardar un nombre nuevo o al crear. Pausado: enlace deshabilitado con "Activa y guarda el producto para verlo."; nuevo sin guardar: "Guarda el producto para verlo.". Activar sin guardar no abre una ficha todavía inexistente.
+- Ejemplo de medidas únicas en la semilla de Cartera Cher (Alto, Ancho, Profundidad): datos ficticios para revisar el editor y la ficha sin Talla. No cambia las ocho referencias, sus opciones, variantes, precios u ofertas, ni inyecta datos en documentos guardados. No reiniciar Redis.
+- #30 integrado con autorización expresa de Gabi. **#27 no tiene autorización de merge** y queda pendiente de revisión con nuevas capturas.

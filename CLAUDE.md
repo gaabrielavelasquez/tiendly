@@ -19,7 +19,7 @@ Este archivo establece los estándares de programación, arquitectura técnica, 
 - **Sin género (decisión 0032):** Tiendly no es una marca "para emprendedoras". Di "la tienda", "quien vende" y **"cliente"**; nunca "vendedora", "emprendedora" ni adjetivos que marcan a la persona ("lista/listo", "bienvenida"). Reformula en vez de usar "@", "x" o "e": "Te damos la bienvenida", no "Bienvenida". "¡Tu tienda está lista!" sí vale (concuerda con "tienda").
 - **Multirubro (decisión 0032):** ningún rubro es el predeterminado; moda es uno más. Ejemplos, placeholders, demos y fotos muestran varias categorías.
 - **Micro-copy:** Todos los helper texts, descripciones e instrucciones deben terminar obligatoriamente con punto (`.`).
-- **Estructura de catálogo (0004, actualizada por 0032):** 1 producto con variantes; cada variante es una combinación de opciones genéricas (color, talla, tono, tamaño, material, aroma…). La tabla de tallas solo aparece si una opción es talla.
+- **Estructura de catálogo (0004, actualizada por 0032):** 1 producto con variantes; cada variante es una combinación de opciones genéricas (color, talla, tono, tamaño, material, aroma…). La tabla de tallas solo aparece si una opción es talla. Sin Talla, el producto puede tener medidas únicas en cm, sin selector (0037, ampliación solicitada el 24-oct).
 - **Reservas de pago:** Regla de 24 horas con auto-cancelación en Pedidos.
 
 ---
