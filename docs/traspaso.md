@@ -4,6 +4,15 @@ Para el agente que sigue (Codex) y para Gabi. Antes de tocar código, lee [`AGEN
 
 **Regla que no cambia:** nada se mergea sin el ok de Gabi.
 
+## Estado confirmado de MUÑA · 24-oct-2026
+
+- **PR #29 integrado**, con merge commit `3298c2be6bbd0b37bfd69015cb727aeaae61ad91`, tras aprobación explícita de Gabi y checks en verde.
+- Producción desplegó ese commit. Se respaldó y reinició **solo** `production:tienda:muna`; la siguiente visita guardó los ocho productos y la oferta de la falda en Redis. **No repetir el reset.**
+- https://tiendly-web-sigma.vercel.app/muna confirmado en Chrome y Safari de iPhone (WebKit) a 390 px: ocho productos, Editorial/Terracota, Ofertas y Falda Lluvia a S/ 199 (antes S/ 249), sin scroll horizontal.
+- Tabla cerrada al entrar, dos columnas (Talla y Largo del pie) al abrir. Muestras camel y vino de 14 px con borde fino. El enlace antiguo del botín redirige a la URL nueva.
+- Evidencia posterior al despliegue: `docs/capturas/muna-produccion/` en la rama `evidencia/muna-produccion-20261024`, enlazada desde el PR #29. El PR de producto sigue siendo uno solo.
+- Respaldo privado: `/private/tmp/muna-production-backup-20261024.json`, permisos 0600, fuera del repo. No contiene credenciales de Redis. No se tocaron otras tiendas, ni se enviaron mensajes, cobros o pedidos. El servidor de Gabi en 3100 se mantuvo intacto.
+
 ## Lo que se hizo esta semana (19 al 24 de octubre)
 
 | PR | Qué | Decisión |
@@ -21,15 +30,14 @@ Para el agente que sigue (Codex) y para Gabi. Antes de tocar código, lee [`AGEN
 | PR | Rama | Estado | Preview |
 |---|---|---|---|
 | **#27** · Tabla de tallas por producto (ofertas 4/4) | `feat/tabla-tallas` | Listo, **espera revisión de Gabi**. Sin conflictos. | Verde |
-| **#29** · MUÑA: ocho productos, galerías por color y Terracota | `feat/muna-catalogo` | Reemplaza al #23, cerrado. Merge y reset autorizados; resultado final en el PR. | Verde |
 | **#19** · Multirubro: rubros, placeholders y textos | `feat/multirubro-copy` | **Conflicto con `main`** en `formulario-producto.tsx`, `productos-vista.tsx` y `portada.tsx`. Parte de sus textos ya entró por otros PR. | Verde |
 | **#22** · Prototipo de ofertas | `proto/productos-ofertas` | **No mergear.** Ya está implementado (#24 a #27). Cerrarlo y borrar la rama cuando Gabi diga. | Verde |
 
 ## Próximas tareas, en orden
 
 1. **Terminar y revisar el #27 (tabla de tallas).** Ajustar lo que pida Gabi y mergear con su ok. Decisión 0037, que viaja en ese PR.
-2. **Consultar el registro final de MUÑA en el #29**, que reemplaza al #23: fotos nuevas, ocho productos, Editorial/Terracota y miniaturas de color con agotadas tachadas. La oferta de la falda y las tablas existentes se conservan. No se muestra selector para opciones de un solo valor.
-3. Gabi autorizó el merge y el reinicio de `production:tienda:muna` al cerrar el #29. Consultar su registro final antes de repetir esa operación.
+2. **MUÑA ya está publicada y verificada (#29)**, que reemplaza al #23: fotos nuevas, ocho productos, Editorial/Terracota y miniaturas de color con agotadas tachadas. La oferta de la falda y las tablas existentes se conservan. No se muestra selector para opciones de un solo valor.
+3. El merge y el reinicio de MUÑA se completaron. No repetir esa operación; las capturas y mediciones de producción están en la rama de evidencia enlazada desde el #29.
 4. Las tablas por producto siguen en el #27; no se integró esa rama abierta como parte de esta tarea.
 5. **Pase de diseño de Pedidos y Mi tienda** con las reglas de 0031 (`CLAUDE.md` §5 y `DESIGN.md` §3–4). Igual que en Inicio: propuesta con capturas, ok de Gabi y después código.
 
@@ -76,7 +84,7 @@ Pendiente sin fecha: precio y SKU por variante (`docs/backlog.md`); renombrar el
 
 ### Pendiente tras aprobación
 
-1. Gabi revisa el PR #29 que reemplaza al #23. **No se hizo merge.**
+1. El PR #29 quedó integrado y verificado en producción (ver estado confirmado al inicio de este documento).
 2. Tras su aprobación explícita y el merge, esperar a que producción termine de desplegar.
 3. Reiniciar únicamente `production:tienda:muna` en Redis para que la siguiente visita cargue los ocho productos y Ofertas. **No se modificaron datos de producción.** Esta acción sigue pendiente hasta el ok de Gabi.
 4. Verificar en producción catálogo, oferta de la falda y galerías por color.

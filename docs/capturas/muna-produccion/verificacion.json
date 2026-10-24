@@ -1,0 +1,36 @@
+[
+  {
+    "engine": "chrome",
+    "host": "https://tiendly-web-sigma.vercel.app",
+    "width": {
+      "width": 390,
+      "scroll": 390
+    },
+    "products": 8,
+    "offers": true,
+    "terracota": "#b5532f",
+    "swatches": [
+      "rgb(184, 138, 90)",
+      "rgb(94, 26, 36)"
+    ],
+    "table": "closed by default; 2 columns, 6 rows",
+    "oldLink": "308 -> botin-otono -> 200"
+  },
+  {
+    "engine": "webkit",
+    "host": "https://tiendly-web-sigma.vercel.app",
+    "width": {
+      "width": 390,
+      "scroll": 390
+    },
+    "products": 8,
+    "offers": true,
+    "terracota": "#b5532f",
+    "swatches": [
+      "rgb(184, 138, 90)",
+      "rgb(94, 26, 36)"
+    ],
+    "table": "closed by default; 2 columns, 6 rows",
+    "oldLink": "308 -> botin-otono -> 200"
+  }
+]
