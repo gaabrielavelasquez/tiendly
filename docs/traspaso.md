@@ -159,3 +159,6 @@ Pagos, bancos, entregas y WhatsApp siguen simulados. No se enviaron mensajes, co
 - Demo: la semilla de Cartera Cher ilustra medidas sin Talla (Alto/Ancho/Profundidad). Son valores ficticios para revisar; no se inyectan en documentos existentes ni cambian sus precios, opciones o variantes. **No resetear MUÑA.**
 - Validación local inicial: números/rangos, unidades, copia independiente, medidas únicas tras serializar y guía heredada/null pasan. Chrome y WebKit a 360/390/1440 sin scroll horizontal: editor con/sin talla, activo/pausado, producto nuevo, guía de calzado, guardado/recarga, cambio de slug y nueva pestaña. Tokens y build local aprobados; se agregará la evidencia final de Vercel al PR.
 - **#27 no se mergea**: Gabi pidió capturas 390/1440 y detenerse para esperar su revisión.
+
+- Validación adicional local: prenda única sin ninguna opción, medidas guardadas/recargadas y carrito; pausa persistida, activar requiere guardar, quitar medidas y enlace tras crear un producto con foto. Todo pasó con datos ficticios en memoria, sin Redis.
+- Las abreviaturas con punto (30 cm.) también se limpian. La tabla única puede ajustar valores largos dentro de la página sin scroll horizontal.

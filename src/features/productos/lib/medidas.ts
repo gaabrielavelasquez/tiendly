@@ -1,6 +1,6 @@
 /** Quita unidades sin convertir valores: la interfaz ya indica cm. Conserva el borrador de números y rangos. */
 export function quitarUnidades(valor: string): string {
-  return valor.replace(/[\p{L}\p{M}µ°]+(?:[²³]|\^\d+)?/gu, " ")
+  return valor.replace(/[\p{L}\p{M}µ°]+(?:[²³]|\^\d+)?\.?/gu, " ")
     .replace(/[^\d.,\s–—−-]/g, "").replace(/[—−-]/g, "–")
     .replace(/\s*–\s*/g, "–").trim();
 }
