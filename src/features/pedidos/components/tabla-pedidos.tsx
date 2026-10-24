@@ -20,7 +20,7 @@ export function TablaPedidos({ pedidos, ahora }: { pedidos: Pedido[]; ahora: str
     <table className="w-full border-collapse">
       <caption className="sr-only">Pedidos de tu tienda</caption>
       <thead>
-        <tr className="border-b border-line-subtle bg-sunken/60">
+        <tr className="border-b border-line-subtle bg-surface">
           <th scope="col" className={`${th} pl-6`}>Pedido</th>
           <th scope="col" className={th}>Cliente</th>
           <th scope="col" className={th}>Pago</th>
@@ -41,7 +41,7 @@ export function TablaPedidos({ pedidos, ahora }: { pedidos: Pedido[]; ahora: str
               animate={{ opacity: 1, y: 0 }}
               exit={reduce ? undefined : { opacity: 0 }}
               transition={{ duration: motionTokens.durationFast * 2, ease, delay: reduce ? 0 : Math.min(i, 10) * 0.03 }}
-              className="group border-b border-line-subtle transition-colors last:border-b-0 hover:bg-sunken/60"
+              className="group relative border-b border-line-subtle transition-colors last:border-b-0 hover:bg-surface"
             >
               <td className="py-4 pr-4 pl-6">
                 <CeldaPedido p={p} ahora={ahora} />
@@ -58,7 +58,7 @@ export function TablaPedidos({ pedidos, ahora }: { pedidos: Pedido[]; ahora: str
               <td className="px-4 py-4 text-right">
                 <CeldaTotal p={p} />
               </td>
-              <td className="w-px py-4 pr-6 pl-2">
+              <td className="relative z-10 w-px py-4 pr-6 pl-2">
                 <AccionWhatsApp p={p} />
               </td>
             </motion.tr>

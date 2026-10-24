@@ -30,15 +30,15 @@ function Estados({ p }: { p: Pedido }) {
  * Móvil: título arriba (no fijo) y acciones fijas abajo, al alcance del pulgar.
  */
 export function BarraPedido({ pedido, ahora, onAccion }: BarraProps) {
-  const titulo = <h1 className="font-display-title text-h3 tracking-tight text-fg">#{pedido.numero}</h1>;
+  const titulo = <h1 className="truncate font-display-light text-h1 tracking-tight text-fg">#{pedido.numero}</h1>;
   const fecha = <span className="text-caption text-fg-secondary">{fechaPedido(pedido.creadoEl, ahora)}</span>;
   return (
     <>
       <div className="sticky top-0 z-20 -mx-4 hidden items-center gap-4 border-b border-line-subtle bg-surface/80 px-4 py-3 backdrop-blur-md lg:-mx-12 lg:flex lg:px-12">
-        <Link href="/panel/pedidos" aria-label="Volver a Pedidos" className={`${volver} size-9`}>
+        <Link href="/panel/pedidos" aria-label="Volver a Pedidos" className={`${volver} size-11 shrink-0`}>
           <ArrowLeft aria-hidden strokeWidth={1.6} className="size-5" />
         </Link>
-        <div className="flex flex-col">
+        <div className="flex min-w-0 flex-1 flex-col">
           {titulo}
           {fecha}
         </div>
@@ -53,14 +53,14 @@ export function BarraPedido({ pedido, ahora, onAccion }: BarraProps) {
           <Link href="/panel/pedidos" aria-label="Volver a Pedidos" className={`${volver} -ml-2 size-11`}>
             <ArrowLeft aria-hidden strokeWidth={1.6} className="size-5" />
           </Link>
-          <div className="flex flex-col">
+          <div className="flex min-w-0 flex-1 flex-col">
             {titulo}
             {fecha}
           </div>
         </div>
         <Estados p={pedido} />
       </header>
-      <div className="fixed inset-x-0 bottom-0 z-20 border-t border-line-subtle bg-surface/95 px-4 py-3 backdrop-blur-md empty:hidden lg:hidden">
+      <div className="fixed inset-x-0 bottom-0 z-20 border-t border-line-subtle bg-surface/95 px-4 pt-3 pb-[max(calc(var(--spacing)*3),env(safe-area-inset-bottom))] backdrop-blur-md empty:hidden lg:hidden">
         <AccionesPedido pedido={pedido} onAccion={onAccion} className="w-full justify-end" />
       </div>
     </>

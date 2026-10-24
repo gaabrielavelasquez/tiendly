@@ -44,11 +44,11 @@ export function AccionesPedido({ pedido, onAccion, className }: AccionesProps) {
     <div className={cn("flex items-center gap-2", className)}>
       {cancelable && (
         <Button variant="ghost" onClick={() => setConfirmando(true)} className="text-fg-secondary hover:bg-sunken hover:text-fg">
-          Cancelar pedido
+          <span className="sm:hidden">Cancelar</span><span className="hidden sm:inline">Cancelar pedido</span>
         </Button>
       )}
       {siguiente && (
-        <Button onClick={() => onAccion(siguiente.id)} className="flex-1 sm:flex-none">
+        <Button onClick={() => onAccion(siguiente.id)} className="min-w-0 flex-1 whitespace-normal text-center sm:flex-none">
           {siguiente.label}
         </Button>
       )}

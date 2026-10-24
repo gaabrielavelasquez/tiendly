@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { PanelMain } from "@/components/panel";
 import { PedidosVista } from "@/features/pedidos/components/pedidos-vista";
 import { leerEscenario, obtenerPedidos } from "@/features/pedidos/lib/mock";
+import { prepararEscenario } from "@/features/pedidos/lib/escenarios";
 import { ahoraIso } from "@/lib/reloj";
 import { leerFiltro } from "@/features/pedidos/lib/reglas";
 
@@ -17,10 +18,11 @@ import { slugPanel } from "@/lib/sesion";
  */
 export default async function PanelPedidos({ searchParams }: PageProps) {
   const { escenario, estado } = await searchParams;
+  await prepararEscenario(escenario);
   const ahora = ahoraIso();
   const pedidos = await obtenerPedidos(leerEscenario(herramientasDev ? escenario : undefined), await slugPanel(), ahora);
   return (
-    <PanelMain>
+    <PanelMain className="gap-10 lg:gap-12">
       <PedidosVista pedidos={pedidos} ahora={ahora} filtroInicial={leerFiltro(Array.isArray(estado) ? estado[0] : estado)} />
     </PanelMain>
   );

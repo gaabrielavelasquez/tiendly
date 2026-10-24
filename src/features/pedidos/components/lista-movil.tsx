@@ -1,8 +1,10 @@
 "use client";
 
+import { ChevronRight } from "lucide-react";
+import { CONTENEDOR } from "@/components/panel";
+import { MontoPedido } from "./monto-pedido";
 import Link from "next/link";
 import { Badge, Collapsible } from "@/components/ui";
-import { formatoSoles } from "@/lib/formato";
 import { cn } from "@/lib/cn";
 import type { Pedido } from "../types";
 import { AccionWhatsApp } from "./accion-whatsapp";
@@ -25,19 +27,20 @@ function TarjetaPedido({ p, ahora }: { p: Pedido; ahora: string }) {
   const vence = tiempoRestante(p, ahora);
   const cancelado = p.pago.estado === "cancelado";
   return (
-    <div className="flex items-center gap-1 pr-2 transition-colors hover:bg-sunken has-[a:active]:bg-sunken">
-      <Link href={`/panel/pedidos/${p.id}`} className="flex min-w-0 flex-1 flex-col gap-1.5 py-3 pl-4">
-        <span className="flex items-baseline gap-2">
+    <div className="relative flex min-h-11 items-center gap-1 pr-2 transition-colors hover:bg-sunken has-[a:active]:bg-sunken">
+      <Link href={`/panel/pedidos/${p.id}`} className="flex min-h-11 min-w-0 flex-1 flex-col gap-1.5 py-4 pl-4 outline-offset-2 focus-visible:outline-2 focus-visible:outline-focus after:absolute after:inset-0 after:content-['']">
+        <span className="flex items-baseline gap-2 pr-6">
           <span className="font-display-title text-body-sm text-fg">#{p.numero}</span>
           <span className="min-w-0 flex-1 truncate text-body-sm text-fg-secondary">{p.cliente.nombre}</span>
-          <span className={cn("text-body-sm tabular-nums", cancelado ? "text-fg-tertiary line-through" : "font-semibold text-fg")}>{formatoSoles(p.total)}</span>
+          <span className={cn("text-body-sm tabular-nums", cancelado ? "text-fg-tertiary line-through" : "font-normal text-fg")}><MontoPedido valor={p.total} /></span>
         </span>
         <span className="flex items-center gap-2">
           <Badge tone={tono}>{texto}</Badge>
           {vence && <span className="text-caption font-medium text-warning">{vence}</span>}
         </span>
+      <ChevronRight aria-hidden strokeWidth={1.5} className="absolute top-1/2 right-14 size-4 -translate-y-1/2 text-icon" />
       </Link>
-      {cancelado ? <span aria-hidden className="size-11 shrink-0" /> : <AccionWhatsApp p={p} className="size-11 shrink-0 after:inset-0" />}
+      {cancelado ? <span aria-hidden className="size-11 shrink-0" /> : <AccionWhatsApp p={p} className="relative z-10 size-11 shrink-0 after:inset-0" />}
     </div>
   );
 }
@@ -46,21 +49,21 @@ function TarjetaPedido({ p, ahora }: { p: Pedido; ahora: string }) {
 export function ListaMovilPedidos({ pedidos, ahora }: { pedidos: Pedido[]; ahora: string }) {
   const grupos = ORDEN.map((g) => ({ g, lista: pedidos.filter((p) => grupoDia(p.creadoEl, ahora) === g) })).filter((x) => x.lista.length);
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col gap-10">
       {grupos.map(({ g, lista }) => (
         <Collapsible
           key={g}
           abiertoInicial
-          className="border-b border-line-subtle last:border-b-0"
-          claseBoton="bg-sunken/60 px-4 py-2"
+          className="min-w-0"
+          claseBoton="mb-3"
           resumen={
-            <span className="flex items-baseline gap-2">
-              <span className="text-body-sm font-semibold text-fg">{g}</span>
+            <span className="flex items-baseline gap-2 pr-6">
+              <span className="font-titulo-seccion text-h3 tracking-tight text-fg">{g}</span>
               <span className="text-caption text-fg-secondary tabular-nums">{lista.length}</span>
             </span>
           }
         >
-          <ul className="divide-y divide-line-subtle">
+          <ul className={`${CONTENEDOR} divide-y divide-line-subtle`}>
             {lista.map((p) => (
               <li key={p.id}>
                 <TarjetaPedido p={p} ahora={ahora} />

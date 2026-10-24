@@ -1,31 +1,32 @@
-import { Check, X } from "lucide-react";
-import { TarjetaSeccion } from "@/components/panel";
+import { Check, X, Minus } from "lucide-react";
+import { Seccion } from "@/components/panel";
 import { cn } from "@/lib/cn";
 import type { Paso } from "../../lib/detalle";
 
 const MARCA: Record<Paso["estado"], string> = {
-  hecho: "border-indicator bg-indicator text-on-selected",
-  actual: "border-warning bg-warning-surface",
-  pendiente: "border-line bg-surface",
-  cancelado: "border-line-strong bg-sunken text-fg-secondary",
+  hecho: "text-icon",
+  actual: "text-fg",
+  pendiente: "text-icon-subtle",
+  cancelado: "text-icon",
 };
 
 /**
- * Historial vertical: lo hecho en indicator/fill (DESIGN.md §4), lo que está en curso en ámbar
- * y lo que falta como marcador hueco. Cada paso dice qué pasó y cuándo.
+ * Historial vertical: progreso neutro sin círculos. El color se reserva al plazo del pago.
+ * Cada paso conserva su estado, descripción y fecha.
  */
 export function TarjetaHistorial({ pasos }: { pasos: Paso[] }) {
   return (
-    <TarjetaSeccion titulo="Historial">
+    <Seccion id="historial-pedido" titulo="Historial">
       <ol className="flex flex-col">
         {pasos.map((p, i) => (
           <li key={p.id} className="relative flex gap-3 pb-5 last:pb-0">
             {i < pasos.length - 1 && (
               <span aria-hidden className={cn("absolute top-6 bottom-0 left-2.5 w-px", p.estado === "hecho" ? "bg-indicator" : "bg-line")} />
             )}
-            <span aria-hidden className={cn("relative z-10 flex size-5 shrink-0 items-center justify-center rounded-full border-2", MARCA[p.estado])}>
-              {p.estado === "hecho" && <Check strokeWidth={3} className="size-3" />}
-              {p.estado === "cancelado" && <X strokeWidth={3} className="size-3" />}
+            <span aria-hidden className={cn("relative z-10 flex size-5 shrink-0 items-center justify-center bg-surface", MARCA[p.estado])}>
+              {p.estado === "hecho" && <Check strokeWidth={1.5} className="size-4" />}
+              {p.estado === "cancelado" && <X strokeWidth={1.5} className="size-4" />}
+              {(p.estado === "actual" || p.estado === "pendiente") && <Minus strokeWidth={1.5} className="size-4" />}
             </span>
             <div className="-mt-0.5 flex min-w-0 flex-1 flex-col gap-0.5">
               <div className="flex flex-wrap items-baseline justify-between gap-x-3">
@@ -35,11 +36,11 @@ export function TarjetaHistorial({ pasos }: { pasos: Paso[] }) {
                 </span>
                 {p.cuando && <span className="text-caption text-fg-secondary tabular-nums">{p.cuando}</span>}
               </div>
-              {p.detalle && <span className={cn("text-caption", p.estado === "actual" ? "text-warning" : "text-fg-secondary")}>{p.detalle}</span>}
+              {p.detalle && <span className={cn("text-caption", p.estado === "actual" && p.id === "pago" ? "text-warning" : "text-fg-secondary")}>{p.detalle}</span>}
             </div>
           </li>
         ))}
       </ol>
-    </TarjetaSeccion>
+    </Seccion>
   );
 }

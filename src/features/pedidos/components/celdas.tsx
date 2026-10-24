@@ -1,9 +1,10 @@
+import { MontoPedido } from "./monto-pedido";
 import Link from "next/link";
 import { Badge } from "@/components/ui";
-import { formatoSoles, plural } from "@/lib/formato";
+import { plural } from "@/lib/formato";
 import type { Pedido } from "../types";
 import { fechaPedido } from "../lib/format";
-import { BADGE_PAGO, badgeEntrega, celularVisible, iniciales, METODO_PAGO, tiempoRestante, textoEntrega } from "../lib/reglas";
+import { BADGE_PAGO, badgeEntrega, celularVisible, METODO_PAGO, tiempoRestante, textoEntrega } from "../lib/reglas";
 
 type CeldaProps = { p: Pedido; ahora: string };
 
@@ -11,7 +12,7 @@ type CeldaProps = { p: Pedido; ahora: string };
 export function CeldaPedido({ p, ahora }: CeldaProps) {
   return (
     <div className="flex flex-col gap-0.5">
-      <Link href={`/panel/pedidos/${p.id}`} className="font-display-title text-body-sm text-fg hover:underline">
+      <Link href={`/panel/pedidos/${p.id}`} className="min-h-11 content-center font-medium text-body-sm text-fg outline-offset-2 focus-visible:outline-2 focus-visible:outline-focus after:absolute after:inset-0 after:content-['']">
         #{p.numero}
       </Link>
       <span className="text-caption whitespace-nowrap text-fg-secondary">{fechaPedido(p.creadoEl, ahora)}</span>
@@ -23,12 +24,6 @@ export function CeldaPedido({ p, ahora }: CeldaProps) {
 export function CeldaCliente({ p }: { p: Pedido }) {
   return (
     <div className="flex min-w-0 items-center gap-3">
-      <span
-        aria-hidden
-        className="flex size-8 shrink-0 items-center justify-center rounded-full border border-line-subtle bg-sunken text-label font-semibold text-fg-secondary"
-      >
-        {iniciales(p.cliente.nombre)}
-      </span>
       <div className="flex min-w-0 flex-col gap-0.5">
         <span className="truncate text-body-sm font-medium text-fg">{p.cliente.nombre}</span>
         <span className="text-caption whitespace-nowrap text-fg-secondary tabular-nums">+51 {celularVisible(p.cliente.celular)}</span>
@@ -67,8 +62,8 @@ export function CeldaEntrega({ p }: { p: Pedido }) {
 export function CeldaTotal({ p }: { p: Pedido }) {
   return (
     <div className="flex flex-col items-end gap-0.5 tabular-nums">
-      <span className={p.pago.estado === "cancelado" ? "text-body text-fg-tertiary line-through" : "text-body font-semibold text-fg"}>
-        {formatoSoles(p.total)}
+      <span className={p.pago.estado === "cancelado" ? "text-body text-fg-tertiary line-through" : "text-body font-normal text-fg"}>
+        <MontoPedido valor={p.total} />
       </span>
       <span className="text-caption text-fg-secondary">{plural(p.items, "producto", "productos")}</span>
     </div>
