@@ -8,29 +8,49 @@ Tras Cerrar sesión, ingresar con el código simulado solo navegaba a /panel: no
 
 El número de ingreso se conserva por separado del WhatsApp de ventas, que puede cambiar. El índice y los documentos se separan por entorno. Para tiendas antiguas sin índice se busca el número de ventas, sin elegir arbitrariamente entre coincidencias múltiples. No hay migración masiva ni escrituras de datos de producción durante estas pruebas. El acceso por código sigue siendo **simulado**, no autenticación real.
 
-## E2E completo a 390 × 844: local
+## E2E completo en Vercel a 390 × 844: PASS
 
-Se ensamblaron temporalmente los cambios de #35, #36, #37 y esta corrección en un worktree desde main; ninguna rama se integró a otra PR. Servidor local en 3211, sin Redis, un solo proceso. [Resultado](local-completo/resultado.json).
+Preview integrado temporal: https://tiendly-l5sbiihvq-gaabrielavelasquez-8525s-projects.vercel.app (792c840). Combina solo para pruebas #35, #36, #37 y la corrección de ingreso. Ninguna PR se mergeó ni se apiló sobre otra. [Resultado remoto](preview-completo/resultado.json).
 
-1. Registro con teléfono ficticio → tienda nueva Hogar.
+Se creó la tienda sintética **e2e-tienda-83972309**, con teléfono ficticio. Todas las creaciones y acciones de compra/Pedidos usaron el servidor real del preview, sin sustituirlo por respuestas ficticias.
+
+1. Registro → tienda nueva Hogar.
 2. Producto con foto, Tamaño Pequeño/Grande, diez unidades por variante; oferta S/ 90.99, antes S/ 119.10.
 3. Cupón E2E10 (10 %) y delivery Lima a S/ 10.90.
-4. Dos compras por la interfaz: tarjeta de prueba y WhatsApp. Comprobación exacta de producto 90.99, descuento 9.10, envío 10.90 y total 92.79, con método correcto.
-5. Ambos pedidos visibles en Pedidos; Inicio muestra la venta pagada y el pendiente de envío.
+4. Dos compras por la interfaz: tarjeta de prueba y WhatsApp. Comprobación exacta de producto 90.99, descuento 9.10, envío 10.90 y total 92.79, con método correcto en ambas compras.
+5. Ambos pedidos visibles en Pedidos; Inicio muestra S/ 92.79 y un pedido por enviar.
 6. Pedido de WhatsApp marcado pagado y enviado; estado conservado tras recargar.
-7. Cerrar sesión elimina cookie; ingresar recupera la misma tienda y ambos pedidos.
+7. Cerrar sesión elimina cookie; ingresar recupera la misma tienda y ambos pedidos. Inicio ya suma S/ 185.58 y dos pedidos pagados.
 
 Para habilitar la ruta de tarjeta se invocó la acción existente guardarPagos con una cuenta ficticia **solo en el servidor de prueba**: la aprobación de afiliación es un mock. Los demás pasos usan la interfaz real y acciones de servidor. No se enviaron mensajes ni cobros. Cada checkpoint verifica ausencia de scroll horizontal.
 
-[Capturas locales del flujo](local-completo/) y [prueba independiente de ingreso](local-ingreso/resultado.json): número de registro distinto del de ventas, rechazo del contacto público como ingreso y recuperación correcta. Estas capturas se identifican como locales; no sustituyen las de Vercel.
+### Evidencia remota
 
-## E2E en Vercel: pendiente por persistencia
+| Paso | Captura a 390 |
+|---|---|
+| Tienda creada | [Ver](preview-completo/01-tienda-creada.jpg) |
+| Producto con opciones y oferta | [Ver](preview-completo/02-producto-opciones-oferta.jpg) |
+| Cupón | [Ver](preview-completo/03-cupon-creado.jpg) |
+| Entrega | [Ver](preview-completo/04-entrega-guardada.jpg) |
+| Compra con tarjeta | [Ver](preview-completo/06-compra-tarjeta.jpg) |
+| Compra por WhatsApp | [Ver](preview-completo/07-compra-whatsapp.jpg) |
+| Ambos pedidos | [Ver](preview-completo/08-pedidos-visibles.jpg) |
+| Inicio | [Ver](preview-completo/09-inicio-con-pedidos.jpg) |
+| Pago manual y envío | [Ver](preview-completo/10-pagado-y-enviado.jpg) |
+| Logout | [Ver](preview-completo/11-logout.jpg) |
+| Reingreso a la misma tienda | [Ver](preview-completo/12-login.jpg) |
 
-Preview temporal combinado: https://tiendly-j6tvajdlo-gaabrielavelasquez-8525s-projects.vercel.app (5d9dc76, antes de esta corrección). Registro, creación de tienda/producto, cupón y entrega se ejecutaron en servidor remoto. La ficha del producto devolvió 404: los previews no tienen Redis y cada instancia conserva una memoria distinta. [Resultado de interrupción](preview-interrumpido/resultado.json).
+### Persistencia del preview y autorización
 
-El E2E **completo en preview no está aprobado como PASS**. No se reemplaza por mocks del backend ni por el resultado local. La revisión automática rechazó habilitar, solo en el despliegue temporal, las credenciales Redis de desarrollo existentes: falta aprobación explícita para enviar secretos a Vercel. Se solicitó esa autorización a Gabi. Ninguna credencial se subió ni se adjuntó; no se cambiaron variables del proyecto.
+El primer intento sin Redis en j6tvajdlo creó tienda/producto/cupón/entrega, pero la ficha devolvió 404: cada instancia conservaba una memoria distinta. [Interrupción inicial](preview-interrumpido/resultado.json), ya superada.
 
-Pendiente: autorización, despliegue temporal con namespace preview, repetir de registro a reingreso a 390 y adjuntar resultado completo. No tocar claves production ni aprobar/mergear PRs.
+La revisión automática rechazó inicialmente habilitar las credenciales Redis de desarrollo sin aprobación explícita. Gabi respondió: «Sí, solo en ese preview temporal». Se desplegó el ensamblado de pruebas con KV_REST_API_URL/KV_REST_API_TOKEN **solo en l5sbiihvq**, sin cambiar variables del proyecto ni otras previews. Datos bajo claves preview; no se modificaron datos production. El archivo privado temporal de credenciales se eliminó tras desplegar. La repetición completa con persistencia pasa. El despliegue se conserva temporalmente para revisar la evidencia; no promoverlo a producción.
+
+## Validación local adicional
+
+El mismo E2E completo pasa a 390 × 844 en un solo proceso local aislado en 3211, sin Redis. [Resultado local](local-completo/resultado.json) y [capturas](local-completo/). Son evidencia adicional, identificada como local.
+
+[Prueba independiente](local-ingreso/resultado.json): número de registro distinto del WhatsApp de ventas, rechazo del contacto público como ingreso y recuperación correcta. [Código/red/reintento](local-ingreso/red-reintento.json): 0000 rechazado, fallo de red visible sin cookie y reintento exitoso. Servidores propios 3210/3211 cerrados; 3100 intacto.
 
 ## Comparación de ingreso desde Vercel
 

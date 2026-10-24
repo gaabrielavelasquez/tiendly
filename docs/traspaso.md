@@ -4,6 +4,9 @@ Para el agente que sigue (Codex) y para Gabi. Antes de tocar código, lee [`AGEN
 
 **Regla que no cambia:** nada se mergea sin el ok de Gabi.
 
+**Último cierre de sesión:** #35 checkout, #36 Cupones, #37 Pagos/Afiliación y #38 recuperación de ingreso quedan abiertos, sin merges. E2E completo en Vercel a 390 PASS con Redis de desarrollo autorizado solo en la preview temporal. Evidencia final en [e2e-ingreso](capturas/e2e-ingreso/README.md); ver el cierre al final antes de seguir tareas históricas de este documento.
+
+
 ## Estado confirmado de MUÑA · 24-oct-2026
 
 - **PR #29 integrado**, con merge commit `3298c2be6bbd0b37bfd69015cb727aeaae61ad91`, tras aprobación explícita de Gabi y checks en verde.
@@ -316,3 +319,15 @@ Pagos, bancos, entregas y WhatsApp siguen simulados. No se enviaron mensajes, co
 - E2E completo **local** a 390 pasa con código ensamblado temporalmente de #35/#36/#37/corrección: registro, producto/opciones/oferta decimal, cupón, ambas compras por 92.79, Pedidos/Inicio, pagar/enviar, logout/login y recuperación de ambos pedidos. No se enviaron mensajes ni cobros; activación de cobros por fixture en servidor local. Prueba adicional con número de registro diferente del WhatsApp de ventas pasa. Evidencia: docs/capturas/e2e-ingreso/.
 - E2E **en preview todavía pendiente**: el producto creado devuelve 404 en otra instancia porque los previews no tienen Redis (riesgo ya documentado). Se intentó habilitar solo el despliegue temporal con credenciales de desarrollo y namespace preview. La revisión automática rechazó el envío de secretos a Vercel sin aprobación explícita; autorización solicitada a Gabi y pendiente. No se ejecutó el despliegue con secretos ni se cambiaron variables del proyecto. No presentar el PASS local como PASS de preview.
 - Siguiente paso tras autorización: desplegar combinación temporal con persistencia preview, repetir TODO a 390 y actualizar PR final/evidencia. Sin autorización, mantener ese bloqueo explícito. No modificar production ni repetir resets de MUÑA. Ningún PR de esta sesión está autorizado para merge.
+
+- Actualización de autorización: Gabi respondió «Sí, solo en ese preview temporal». Se desplegó 792c840 en tiendly-l5sbiihvq con Redis de desarrollo, exclusivamente para ese despliegue y namespace preview. No se cambiaron variables del proyecto. Se eliminó el archivo privado temporal de credenciales tras desplegar. El E2E completo se está repitiendo allí; no declarar PASS antes del resultado.
+- Servidores propios 3210/3211 cerrados después de verificar PID 45916/47011 y sus carpetas. Servidor de Gabi 3100 confirmado activo con PID 77610.
+
+
+### Cierre final del E2E en Vercel · PR #38
+
+- **PASS completo en preview a 390 × 844**, sin sustitución del backend: registro, tienda e2e-tienda-83972309, producto/opciones/oferta, cupón, tarjeta y WhatsApp a 92.79 cada uno, Pedidos/Inicio, pago manual/envío persistidos, logout/login y recuperación de ambos pedidos. Redis solo en la preview temporal autorizada l5sbiihvq, namespace preview; nunca production.
+- La falta de persistencia del primer intento quedó superada tras autorización explícita de Gabi. No queda pendiente el E2E de preview. Archivo temporal de credenciales eliminado; variables del proyecto intactas. Conservar el despliegue solo temporalmente para revisión, no promoverlo a producción.
+- Fallo de aplicación corregido en [#38](https://github.com/gaabrielavelasquez/tiendly-web/pull/38): ingreso tras logout caía en MUÑA sin cookie. La corrección recupera la tienda; números de registro/ventas separados, errores de red/desconocido y reintento comprobados. OTP/pagos/afiliación continúan simulados y no se enviaron mensajes/cobros.
+- Informe, resultados, once checkpoints remotos y comparación antes/después Vercel 390/1440 en docs/capturas/e2e-ingreso/. Chrome/WebKit comparados a 360/390/1440 sin scroll; tokens/build local y Vercel verdes. Fuente 38e219f; la evidencia posterior no cambia código.
+- #36 y #37 siguen listos para revisar, sin merge. #38 pasa de borrador a revisión al adjuntar este resultado. #35 continúa abierto. Ningún merge autorizado en esta sesión. **Detenerse y esperar la revisión de Gabi; no iniciar otras tareas.**
