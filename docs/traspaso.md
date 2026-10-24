@@ -202,3 +202,10 @@ Pagos, bancos, entregas y WhatsApp siguen simulados. No se enviaron mensajes, co
 
 - Preview renovado de #27, código `2e60539`: https://tiendly-csokdlogy-gaabrielavelasquez-8525s-projects.vercel.app/panel/productos/m6. Build habitual y tokens verdes. Capturas actuales a 390/1440 en `docs/capturas/pr-27-tras-main/`, inspeccionadas y para enlazar en #27. Chrome/WebKit completan 360/390/1440 sin scroll horizontal.
 - Cierre: #31 y #30 integrados y producción de #31 verificada; #27 actualizado y abierto para revisión, sin merge. No iniciar otras tareas. Sin datos de prueba en producción ni reset de Redis. Checkout principal y servidor 3100 intactos.
+
+
+## Cierre autorizado de #27 · 24-oct-2026
+
+- Gabi autorizó integrar #27 tras dos ajustes: ayuda inline en opciones llamadas Medidas/Medida/Dimensiones/Tamaño en cm con enlace al editor de medidas; título público genérico "Medidas". Implementado sin cambiar los datos de la opción.
+- La rama ya contiene el main actualizado (`b6cf172`). Se verificará el preview y producción /muna/cartera-cher a 390, sin reset ni datos de prueba en producción.
+- Siguiente tarea autorizada: un PR nuevo desde main para Cerrar sesión, con confirmación, borrar la tienda recordada y volver a /registro. **Detenerse para revisión de ese PR**; onboarding 2–4 queda después de la revisión.

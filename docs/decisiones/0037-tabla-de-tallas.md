@@ -28,3 +28,10 @@
 - La cabecera del editor añade **Ver en la tienda**, en pestaña nueva. Usa la URL de la versión guardada, que se actualiza al guardar un nombre nuevo o al crear. Pausado: enlace deshabilitado con "Activa y guarda el producto para verlo."; nuevo sin guardar: "Guarda el producto para verlo.". Activar sin guardar no abre una ficha todavía inexistente.
 - Ejemplo de medidas únicas en la semilla de Cartera Cher (Alto, Ancho, Profundidad): datos ficticios para revisar el editor y la ficha sin Talla. No cambia las ocho referencias, sus opciones, variantes, precios u ofertas, ni inyecta datos en documentos guardados. No reiniciar Redis.
 - #30 integrado con autorización expresa de Gabi. **#27 no tiene autorización de merge** y queda pendiente de revisión con nuevas capturas.
+
+
+## Ajustes finales autorizados · 24-oct-2026
+
+- Opciones llamadas Medidas, Medida, Dimensiones o Tamaño en cm muestran debajo del nombre la ayuda "¿Quieres poner las medidas del producto? Usa la sección Medidas.". El enlace lleva al mismo editor de medidas, también cuando está dentro de Talla. No cambia ni bloquea la opción escrita.
+- La ficha pública usa "Medidas", sin restringirse a prendas. Conserva el plegado y los valores/unidades.
+- Gabi autoriza integrar #27 con preview verde y comprobar /muna/cartera-cher en producción a 390. No se reinicia Redis ni se inyectan medidas en los productos ya guardados.

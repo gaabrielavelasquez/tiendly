@@ -36,7 +36,7 @@ export function TablaTallasCampos({ tallas: valores, sinTallas = false, error, t
     medidas(tabla!.medidas.filter((_, j) => j !== i), Object.fromEntries(tallas.map((t) => [t, filaDe(tabla!, t).filter((_, j) => j !== i)])));
 
   return (
-    <div className="flex flex-col gap-3 rounded-theme bg-sunken p-3 sm:p-4">
+    <div id="editor-medidas" tabIndex={-1} className="flex scroll-mt-24 flex-col gap-3 rounded-theme bg-sunken p-3 sm:p-4">
       <label htmlFor="tabla-tallas" className="flex items-center gap-2 text-body-sm font-semibold text-fg">
         <Ruler aria-hidden strokeWidth={1.5} className="size-4 text-icon" />
         {sinTallas ? "Medidas del producto" : "Tabla de tallas"}
