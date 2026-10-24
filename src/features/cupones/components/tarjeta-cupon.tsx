@@ -2,7 +2,7 @@
 
 import { ChevronRight, Copy } from "lucide-react";
 import Link from "next/link";
-import { Card, Switch } from "@/components/ui";
+import { Switch } from "@/components/ui";
 import { cn } from "@/lib/cn";
 import type { Cupon, EstadoCupon } from "../types";
 import { textoCondicion, textoUso } from "../lib/reglas";
@@ -21,10 +21,10 @@ export function TarjetaCupon({ c, estado, onAlternar, onCopiar }: Props) {
   const encendido = estado !== "pausado";
   return (
     <li>
-      <Card as="article" className="relative flex items-center gap-3 p-4 lg:p-5">
+      <article className="relative flex min-h-11 min-w-0 items-center gap-3 p-5 lg:p-6">
         <div className="flex min-w-0 flex-1 flex-col gap-1.5">
-          <span className="flex items-center gap-1">
-            <Link href={`/panel/cupones/${c.id}`} className="font-display-title text-body text-fg after:absolute after:inset-0 after:content-['']">
+          <span className="flex min-w-0 items-center gap-1">
+            <Link href={`/panel/cupones/${c.id}`} className="font-display-title text-body text-fg break-all after:absolute after:inset-0 after:content-['']">
               {c.codigo}
             </Link>
             {conInterruptor && (
@@ -34,9 +34,8 @@ export function TarjetaCupon({ c, estado, onAlternar, onCopiar }: Props) {
             )}
           </span>
           <span className="text-body-sm text-fg-secondary">{textoCondicion(c)}</span>
-          <span className="flex items-center gap-1.5 text-caption">
-            <span aria-hidden className={cn("size-1.5 rounded-full", estado === "activo" || estado === "programado" ? "bg-success" : "bg-fg-tertiary")} />
-            <span className={estado === "activo" || estado === "programado" ? "font-semibold text-success" : "text-fg-secondary"}>{ETIQUETA[estado]}</span>
+          <span className="flex flex-wrap items-center gap-1.5 text-caption">
+            <span className={estado === "activo" ? "text-success" : "text-fg-secondary"}>{ETIQUETA[estado]}</span>
             <span className="text-fg-secondary">· {textoUso(c, estado)}</span>
           </span>
         </div>
@@ -49,7 +48,7 @@ export function TarjetaCupon({ c, estado, onAlternar, onCopiar }: Props) {
         ) : (
           <ChevronRight aria-hidden strokeWidth={1.6} className="size-6 shrink-0 text-icon" />
         )}
-      </Card>
+      </article>
     </li>
   );
 }
