@@ -1,4 +1,4 @@
-# 0037 · MUÑA: catálogo y miniaturas de color
+# 0038 · MUÑA: catálogo y miniaturas de color
 
 - **Fecha:** 24-oct-2026.
 - **Estado:** solicitado por Gabi para la actualización del catálogo MUÑA.
