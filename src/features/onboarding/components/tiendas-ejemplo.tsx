@@ -1,5 +1,6 @@
 "use client";
 
+import { estiloAcento } from "@/features/mi-tienda/lib/config";
 import { Link2, ShoppingBag } from "lucide-react";
 import { motion } from "motion/react";
 import Image from "next/image";
@@ -28,11 +29,11 @@ function Cabecera({ t, link }: { t: TiendaEjemplo; link?: string }) {
   );
 }
 
-/** Fila de productos (3 o 4): foto 4:5 con el radio del tema, nombre y precio. */
+/** Fila de 4 productos (los primeros de la tienda): foto 4:5 con el radio del tema, nombre y precio. */
 function Productos({ t, conNombre }: { t: TiendaEjemplo; conNombre: boolean }) {
   return (
-    <ul className={cn("grid gap-2 lg:gap-3", t.productos.length === 3 ? "grid-cols-3" : "grid-cols-4")}>
-      {t.productos.map((p) => (
+    <ul className="grid grid-cols-4 gap-2 lg:gap-3">
+      {t.productos.slice(0, 4).map((p) => (
         <li key={p.nombre} className="flex min-w-0 flex-col gap-1.5">
           <div className="relative aspect-4/5 overflow-hidden rounded-theme bg-sunken">
             <Image src={p.foto} alt={p.alt} fill sizes="(min-width: 64rem) 8rem, 25vw" className="object-cover" />
@@ -49,7 +50,7 @@ function Productos({ t, conNombre }: { t: TiendaEjemplo; conNombre: boolean }) {
 function Tarjeta({ t, link, compacta, prioridad }: { t: TiendaEjemplo; link: string; compacta: boolean; prioridad: boolean }) {
   if (compacta) {
     return (
-      <div data-theme={t.tema} className="overflow-hidden rounded-card bg-surface shadow-contenedor">
+      <div data-theme={t.tema} style={estiloAcento(t.acento ?? "tema")} className="overflow-hidden rounded-card bg-surface shadow-contenedor">
         <Cabecera t={t} link={link} />
         <div className="px-4 pb-4">
           <Productos t={t} conNombre={false} />
@@ -58,7 +59,7 @@ function Tarjeta({ t, link, compacta, prioridad }: { t: TiendaEjemplo; link: str
     );
   }
   return (
-    <div data-theme={t.tema} className="overflow-hidden rounded-card bg-surface shadow-capas">
+    <div data-theme={t.tema} style={estiloAcento(t.acento ?? "tema")} className="overflow-hidden rounded-card bg-surface shadow-capas">
       <Cabecera t={t} />
       <div className="relative aspect-video">
         <Image src={t.portada.src} alt={t.portada.alt} fill priority={prioridad} sizes="32rem" className="object-cover" />
@@ -97,7 +98,7 @@ function Puntos({ actual, elegir }: { actual: number; elegir: (i: number) => voi
 /**
  * Vista previa del registro: tres tiendas de ejemplo de rubros distintos que se turnan con un fundido suave
  * (0032 y 0033). Las tres están montadas y apiladas en la misma celda, así las fotos ya cargaron cuando
- * aparecen; cada una con su alto natural (MUÑA, con 3 productos, es más alta), sin espacio vacío dentro. Con "reducir movimiento", queda fija en la primera. Desktop: protagonista con halo; móvil: compacta.
+ * aparecen; cada una con su alto natural, sin espacio vacío dentro. Con "reducir movimiento", queda fija en la primera. Desktop: protagonista con halo; móvil: compacta.
  */
 export function TiendasEjemplo({ links, compacta = false }: Props & { compacta?: boolean }) {
   const { actual, elegir, pausar, reducir } = useRotacion(TIENDAS_EJEMPLO.length, ROTACION_MS);

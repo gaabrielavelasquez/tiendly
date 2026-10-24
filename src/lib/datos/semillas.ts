@@ -23,14 +23,28 @@ export const RETIRADAS = new Set(["aurora"]);
 export const esHeather = (slug: string) => slug === "heather";
 
 /** Datos de tienda de los productos de MUÑA (la vista previa del registro solo usa nombre, precio y foto). */
-const DETALLE_MUNA: Record<string, { id: string; categoria: string; color: string; tallas: string[]; stock: number[]; descripcion: string }> = {
-  "Botín Saya": { id: "m1", categoria: "Botas", color: "Café", tallas: ["35", "36", "37", "38", "39", "40"], stock: [1, 2, 3, 2, 1, 0],
-    descripcion: "Botín de cuero liso con punta fina y taco de 5 cm. Va con jean, con falda y con vestido." },
+/** Sin `tallas` (carteras y bolsos), el producto tiene solo la opción Color y `stock` es una cantidad. */
+const DETALLE_MUNA: Record<string, { id: string; categoria: string; color: string; tallas?: string[]; stock: number[]; descripcion: string }> = {
+  "Botín Saya": { id: "m1", categoria: "Botas", color: "Camel (gamuza)", tallas: ["35", "36", "37", "38", "39", "40"], stock: [1, 2, 3, 2, 1, 0],
+    descripcion: "Botín de punta fina en gamuza camel o cuero vino. Va con jean, con falda y con vestido." },
   "Chompa Qori": { id: "m2", categoria: "Ropa", color: "Oliva", tallas: ["S", "M", "L"], stock: [2, 3, 1],
     descripcion: "Chompa tejida de cuello alto con medio cierre. Abriga sin pesar y no pica." },
   "Falda Lluvia": { id: "m3", categoria: "Ropa", color: "Plata", tallas: ["S", "M", "L"], stock: [1, 2, 2],
     descripcion: "Falda midi de lentejuelas que se mueve al caminar. Forrada por dentro, con elástico en la cintura." },
+  "Traje Arena": { id: "m4", categoria: "Ropa", color: "Arena", tallas: ["S", "M", "L"], stock: [2, 2, 1],
+    descripcion: "Chaqueta corta de drill con cuello camisero y pantalón ancho de tiro alto. Se venden juntos." },
+  "Bolso Puyu": { id: "m5", categoria: "Accesorios", color: "Gris", stock: [4],
+    descripcion: "Bolso acolchado de cuero sintético con cadena dorada. Entran el celular, la billetera y las llaves." },
+  "Cartera Wari": { id: "m6", categoria: "Accesorios", color: "Vino", stock: [3],
+    descripcion: "Cartera de cuero vino con correa regulable y hebilla plateada. Se lleva al hombro o cruzada." },
+  "Guantes Killa": { id: "m7", categoria: "Accesorios", color: "Burdeos", tallas: ["S", "M", "L"], stock: [2, 3, 1],
+    descripcion: "Guantes de cuero burdeos, suaves y flexibles. Un abrigo ligero para los días frescos." },
+  "Slingback Inti": { id: "m8", categoria: "Tacos", color: "Burdeos", tallas: ["35", "36", "37", "38", "39"], stock: [1, 2, 3, 2, 0],
+    descripcion: "Zapatos de charol burdeos con punta fina y tira posterior. Un toque de brillo para tus planes de día o de noche." },
 };
+
+const fotoMuna = (archivo: string) => `/tiendas-ejemplo/muna/${archivo}.webp`;
+const galeriaMuna = (base: string, cantidad: number) => Array.from({ length: cantidad }, (_, i) => fotoMuna(`${base}-${i + 1}`));
 
 /** MUÑA: la tienda de demo pública (moda, ficticia). Mismos productos y fotos que la vista previa del registro. */
 function muna(): DatosTienda {
@@ -45,17 +59,26 @@ function muna(): DatosTienda {
       const d = DETALLE_MUNA[p.nombre];
       return {
         id: d.id, nombre: p.nombre, descripcion: d.descripcion, categorias: [d.categoria], estado: "activo", precio: p.precio,
-        ...colorPorTalla({ [d.color]: d.stock }, d.tallas),
-        // La falda está en oferta (0034): precio antes S/ 249, ahora S/ 199, sin fechas.
+        ...(d.tallas
+          ? colorPorTalla({ [d.color]: d.stock }, d.tallas)
+          : { opciones: [{ nombre: "Color", tipo: "color" as const, valores: [d.color] }], variantes: [{ valores: [d.color], stock: d.stock[0] ?? 0 }] }),
+        // La falda conserva su oferta: antes S/ 249, ahora S/ 199, sin fechas.
         ...(p.nombre === "Falda Lluvia" ? { precio: 199, precioAntes: p.precio } : {}),
         imagen: p.foto, fotos: { [d.color]: [p.foto] },
+        ...(d.id === "m1" ? {
+          ...colorPorTalla({ "Camel (gamuza)": d.stock, "Vino (cuero)": [1, 2, 2, 1, 0, 0] }, d.tallas!),
+          opcionFotos: 0, fotos: { "Camel (gamuza)": galeriaMuna("botin-camel", 3), "Vino (cuero)": galeriaMuna("botin-vino", 2) },
+        } : {}),
+        ...(d.id === "m6" ? { fotos: { [d.color]: [p.foto, fotoMuna("bolso-detalle")] } } : {}),
+        ...(d.id === "m7" ? { fotos: { [d.color]: galeriaMuna("guantes", 3) } } : {}),
+        ...(d.id === "m8" ? { fotos: { [d.color]: galeriaMuna("slingback", 3) } } : {}),
       };
     }),
     pedidos: { ultimo: 1000, creados: [] },
     inventario: {},
     cupones: [],
     config,
-    rubros: ["moda", "calzado"],
+    rubros: ["accesorios", "calzado", "moda"],
   };
 }
 
