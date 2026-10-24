@@ -300,3 +300,10 @@ Pagos, bancos, entregas y WhatsApp siguen simulados. No se enviaron mensajes, co
 - **Sin merge autorizado: actualizar #34 y detenerse para revisión de Gabi.** Sin otras tareas, mensajes/cobros, reset de Redis ni cambios en el checkout principal o el servidor 3100.
 
 - Verificación final Vercel completada en Chrome y WebKit a 390/1440/360: identidad MUÑA, portada/productos en miniaturas, ayudas únicas, ícono neutro, borrador corrupto ignorado, preview propia, vacío/error y vitrina sin scroll. Resultados en docs/capturas/mi-tienda-datos-reales/resultado-preview.json. Capturas inspeccionadas a 390/1440 sin edición de imágenes. Servidor propio 3205 cerrado (PID 96208, carpeta verificada); 3100 activo (PID 77610). La última subida adjunta evidencia y documentación, sin cambios de código funcional respecto al preview 8ad9767.
+
+
+## Cierre aprobado de #34 y checkout · 24-oct-2026
+
+- Gabi autorizó merge de #34 tras la fila móvil de temas. Código 13cd61d, preview verde pzzr83s06. Aproximadamente 2,5 tarjetas visibles en móvil, tres columnas desktop, nombres/precios sin truncado y botones sin salto. Chrome/WebKit a 390/1440/360: scroll del carrusel, selección del último tema y sin scroll de página. Tokens/build pasan; evidencia en docs/capturas/mi-tienda-temas-movil/.
+- Integrar con merge commit y confirmar /panel/mi-tienda en producción a 390 solo lectura. No guardar personalización ni reiniciar Redis.
+- Después, única tarea autorizada: checkout y ambas confirmaciones, reglas 0031, montos con céntimos solo cuando existen, conservar 0007/0008/0009. Nuevo worktree/rama desde main actualizado; MUÑA y Glow Labo, antes/después Vercel 390/1440, sin merge del nuevo PR.
