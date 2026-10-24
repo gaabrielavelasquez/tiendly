@@ -30,4 +30,6 @@ Una decisión por archivo: contexto, decisión y consecuencias. Las anteriores a
 
 | 0042 | [Configuración y Mi tienda: pase 0031](0042-configuracion-y-mi-tienda.md) | Solicitada por Gabi; sin merge |
 
+| 0045 | [Pagos y Afiliación: 0031](0045-cobros-afiliacion-0031.md) | En revisión, sin merge |
+
 Para una decisión nueva: copia la estructura de 0026, usa el número siguiente y súmala a esta tabla.

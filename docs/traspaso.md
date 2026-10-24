@@ -307,3 +307,11 @@ Pagos, bancos, entregas y WhatsApp siguen simulados. No se enviaron mensajes, co
 - Gabi autorizó merge de #34 tras la fila móvil de temas. Código 13cd61d, preview verde pzzr83s06. Aproximadamente 2,5 tarjetas visibles en móvil, tres columnas desktop, nombres/precios sin truncado y botones sin salto. Chrome/WebKit a 390/1440/360: scroll del carrusel, selección del último tema y sin scroll de página. Tokens/build pasan; evidencia en docs/capturas/mi-tienda-temas-movil/.
 - Integrar con merge commit y confirmar /panel/mi-tienda en producción a 390 solo lectura. No guardar personalización ni reiniciar Redis.
 - Después, única tarea autorizada: checkout y ambas confirmaciones, reglas 0031, montos con céntimos solo cuando existen, conservar 0007/0008/0009. Nuevo worktree/rama desde main actualizado; MUÑA y Glow Labo, antes/después Vercel 390/1440, sin merge del nuevo PR.
+
+
+## Pase B · PR #37 · Pagos/Cobros/Afiliación
+
+- Rama independiente feat/cobros-afiliacion-diseno desde main 4ab96fa; worktree /private/tmp/tiendly-cobros-diseno. Pase 0031 a métodos, comisiones, inicio, cuatro pasos, enviada/revisión/observada/aprobada y error. Sin tocar reglas 0007, último método, solicitud/CCI/RUC, términos o borradores. Switches existentes con check, dinero sin .00 y titulares externos, iconos sin cajas, progreso carbón y barra móvil segura.
+- Código ca9c807, preview aa54urq12 verde con Heather solo por despliegue; antes ju9e56qi3, ambos sin cambiar variables del proyecto. Capturas 390/1440 en docs/capturas/pagos-0031/. Estados vacíos/carga/error/datos y pasos; se siembra solo borrador ficticio de navegador para capturar, sin acciones del servidor en Vercel. Último ajuste de HojaModal aplica titular 0031 a las hojas; pantallas principales coinciden con las capturas.
+- Chrome/WebKit locales en 3208: no habido bloqueado, consulta válida, cuatro pasos, CCI, aceptación y envío simulado. Nada externo, solo memoria sin Redis. Tokens/build pasan, servidor 3208 cerrado tras verificar PID 32967. 3100 intacto.
+- #35, #36 y #37 permanecen sin merge. Continúa prueba E2E autorizada a 390 en una preview temporal que combina sus cambios sin integrarlos a main; registrar fallas y corregirlas en un último PR desde main.
