@@ -45,7 +45,7 @@ No dupliques esas reglas aquí: si algo cambia, se cambia en `CLAUDE.md` o `DESI
 
 ## Trabajo en paralelo entre agentes
 
-- **No cambies la rama del espacio de trabajo principal sin avisar:** Gabi lo usa con `npm run dev` en el puerto 3000. Para otra rama, usa un `git worktree` aparte.
+- **No cambies la rama del espacio de trabajo principal sin avisar:** Gabi lo usa con su servidor de desarrollo (`TIENDLY_TIENDA_DEMO=muna PORT=3100 npx next dev`). Para otra rama, usa un `git worktree` aparte y otro puerto. Nunca cierres un proceso que no levantaste.
 - No corras `npm run build` en la carpeta del servidor de desarrollo (pisa `.next`): hazlo en el worktree.
 - No incluyas archivos ajenos en los commits (por ejemplo, `.DS_Store`).
 - Al terminar, deja en el PR qué quedó pendiente y qué se simuló, para que el próximo agente siga desde ahí. El estado general y las próximas tareas están en [`docs/traspaso.md`](docs/traspaso.md).

@@ -52,8 +52,9 @@ Pendiente sin fecha: precio y SKU por variante (`docs/backlog.md`); renombrar el
   - Glow Labo no tiene este problema.
 - **En los previews de Vercel no hay Redis:** los datos viven en la memoria de cada instancia.
   - Algo que se guarda en el panel (un cupón, un producto) puede no verse en la tienda si la otra página cae en otra instancia.
-  - Para probar flujos que guardan, usa un solo proceso local: `npm run build` y después `TIENDLY_TIENDA_DEMO=muna npx next start -p 3100`, en un worktree.
-  - Al terminar, cierra el servidor por puerto (`lsof -ti tcp:3100 | xargs kill`): `pkill` no siempre lo cierra.
+  - Para probar flujos que guardan, usa un solo proceso local **en un `git worktree` aparte**: `npm run build` y después `TIENDLY_TIENDA_DEMO=muna npx next start -p 3200`.
+  - **El puerto 3100 es el servidor de desarrollo de Gabi** (`TIENDLY_TIENDA_DEMO=muna PORT=3100 npx next dev`, en la carpeta principal): no lo cierres ni hagas build en esa carpeta.
+  - Antes de levantar algo, revisa el puerto con `lsof -ti tcp:<puerto>`, y al terminar cierra solo el proceso que levantaste: `pkill` no siempre lo cierra.
   - En local, sin la variable, la demo es Heather.
 - **El preview de una rama aparece recién al abrir el PR.** Los previews están protegidos: para Playwright, usa el header `x-vercel-trusted-oidc-idp-token` con el token de `vercel env pull` en una carpeta temporal, y borra el archivo después. Nunca lo subas al repo.
 - **iPhone:** los campos con texto de menos de 16 px hacen zoom al tocarlos. En el panel, los campos usan `text-body`.
