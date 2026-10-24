@@ -1,6 +1,6 @@
 import type { Categoria, Opcion, Producto, TablaTallas } from "../types";
 import { descuento } from "./ofertas";
-import { limpiarTabla } from "./tabla-tallas";
+import { limpiarTabla, tablaDelProducto } from "./tabla-tallas";
 import { claveVariante, combinaciones, FOTOS_GENERAL, opcionDeFotos, tipoDeNombre } from "./variantes";
 
 // Modelo y reglas del formulario de producto (0032 opciones genéricas, 0034 ofertas). Funciones puras, sin React.
@@ -65,6 +65,7 @@ export function desdeProducto(p: Producto): FormProducto {
   const imagenes = urls.map((url, i) => ({ id: `actual-${i}`, url, nombre: p.nombre }));
   const idDe = (url: string) => imagenes.find((i) => i.url === url)?.id ?? "";
   const iFotos = opcionDeFotos(p);
+  const tabla = tablaDelProducto(p);
   const fotosPorValor = iFotos < 0 ? {} : Object.fromEntries(p.opciones[iFotos].valores.map((v) => [v, (p.fotos?.[v] ?? []).map(idDe).filter(Boolean)]));
   return {
     nombre: p.nombre,
@@ -77,7 +78,7 @@ export function desdeProducto(p: Producto): FormProducto {
     opcionFotos: iFotos,
     fotosPorValor,
     stock: Object.fromEntries(p.variantes.map((v) => [claveVariante(v.valores), String(v.stock)])),
-    tabla: p.tablaTallas ? structuredClone(p.tablaTallas) : null,
+    tabla: tabla ? structuredClone(tabla) : null,
     estado: p.estado,
     categorias: p.categorias,
     imagenes,
@@ -143,6 +144,6 @@ export function aProducto(f: FormProducto, id: string, anterior?: Producto | nul
     opcionFotos: iFotos,
     imagen: urls[0],
     fotos: urls.length ? fotos : undefined,
-    tablaTallas: f.tabla && talla ? limpiarTabla(f.tabla, talla.valores) : undefined,
+    tablaTallas: f.tabla && talla ? limpiarTabla(f.tabla, talla.valores) ?? null : null,
   };
 }

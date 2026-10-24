@@ -51,8 +51,8 @@ export type Producto = {
   imagen?: string;
   /** Fotos por valor de la opción que cambia las fotos, en orden; sin esa opción, todas en la clave "". */
   fotos?: Record<string, string[]>;
-  /** Solo si el producto tiene una opción Talla. Sin tabla, la tienda no muestra el link "Ver tabla de tallas". */
-  tablaTallas?: TablaTallas;
+  /** Solo si el producto tiene una opción Talla. null: sin tabla; undefined: conserva la guía heredada de calzado. Sin tabla, la tienda no muestra el link "Ver tabla de tallas". */
+  tablaTallas?: TablaTallas | null;
 };
 
 export type Filtro = "todos" | "activos" | "en-oferta" | "bajo-stock" | "agotados" | "pausados";

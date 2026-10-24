@@ -8,12 +8,16 @@
 export const HEX_COLOR: Record<string, string> = {
   Negro: "#1A1A1A", // hardcode-ok: dato del producto
   Plata: "#C9CCCF", // hardcode-ok: dato del producto
+  Vino: "#5E1A24", // hardcode-ok: dato del producto
   Burdeos: "#5E1A24", // hardcode-ok: dato del producto
   Vainilla: "#E9DFC9", // hardcode-ok: dato del producto
   Choco: "#5A4033", // hardcode-ok: dato del producto
   Camel: "#B88A5A", // hardcode-ok: dato del producto
   Blanco: "#FFFFFF", // hardcode-ok: dato del producto
 };
+
+/** Los calificadores de material no cambian el color de la muestra ("Camel (gamuza)" → Camel). */
+export const hexDeColor = (nombre: string) => HEX_COLOR[nombre.replace(/\s*\([^)]*\)\s*$/, "").trim()];
 
 export const DETALLE: Record<string, { corto: string; sobre: string }> = {
   p1: { corto: "Cuero natural · Hecho a mano en Lima", sobre: "Una ballerina de punta dividida en cuero natural, con moño al frente. La hacemos a mano en el taller y toma alrededor de dos semanas. El cuero se amolda al pie con el uso: al principio va ajustado y después queda hecho a tu medida." },

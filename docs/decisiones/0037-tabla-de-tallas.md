@@ -12,3 +12,10 @@
 4. **Al guardar** se quitan las columnas vacías y las tallas que ya no están. Sin ninguna medida escrita, no se guarda tabla.
 5. **En la tienda:** "Ver tabla de tallas" debajo de las tallas, solo si el producto tiene tabla. Se despliega en la misma página, con la talla elegida marcada. Sin tabla, no hay link (antes salía una tabla fija de calzado con "—" para S, M y L).
 6. Heather conserva su tabla de calzado (largo del pie, 35–40) como tabla de cada modelo.
+
+## Actualización con main tras #29 · 24-oct-2026
+
+- #29 ya aporta la guía de largo del pie de la vitrina, cerrada al entrar y en dos columnas. Este PR sigue aportando el editor, medidas por producto, copia independiente, rangos y eliminación explícita de la tabla.
+- Se conservan los nombres, las ocho fichas, las fotos por color, Terracota y la oferta de MUÑA de #29. La guía de calzado mantiene la presentación aprobada; otras tablas muestran una columna por medida.
+- Compatibilidad sin reset ni escritura en Redis: si un documento antiguo no tiene `tablaTallas`, se sigue leyendo la guía heredada de calzado. `tablaTallas: null` representa la elección explícita "Sin tabla" y no recupera esa guía al volver a abrir el producto. Los productos nuevos sin tabla también guardan null.
+- Producción queda intacta. Las tablas propias nuevas de la semilla no se inyectan en documentos guardados: se configuran y guardan desde el panel después de revisar y aprobar el PR.

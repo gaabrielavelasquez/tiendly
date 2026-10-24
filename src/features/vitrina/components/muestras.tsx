@@ -3,10 +3,11 @@
  * tienda), por eso va en style; el filo de 1 px separa los colores claros del fondo.
  */
 export function Muestras({ colores }: { colores: { nombre: string; hex?: string }[] }) {
+  if (!colores.length || colores.some((c) => !c.hex)) return null;
   return (
-    <span className="flex items-center gap-1" aria-label={`Colores: ${colores.map((c) => c.nombre).join(", ")}`}>
+    <span role="img" className="flex items-center gap-1.5" aria-label={`Colores: ${colores.map((c) => c.nombre).join(", ")}`}>
       {colores.map((c) => (
-        <span key={c.nombre} aria-hidden className="size-2.5 rounded-full ring-1 ring-fg/15 ring-inset" style={{ backgroundColor: c.hex }} />
+        <span key={c.nombre} aria-hidden title={c.nombre} className="size-3.5 rounded-full border border-line-strong" style={{ backgroundColor: c.hex }} />
       ))}
     </span>
   );

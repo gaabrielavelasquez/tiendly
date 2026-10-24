@@ -1,8 +1,11 @@
 "use client";
 
+import Image from "next/image";
+import { X } from "lucide-react";
 import { cn } from "@/lib/cn";
 import type { Opcion, TablaTallas as Tabla } from "@/features/productos/types";
 import { HEX_COLOR } from "../../lib/contenido";
+
 import { TablaTallas } from "./tabla-tallas";
 
 const etiqueta = "text-label font-semibold tracking-widest text-fg-secondary uppercase";
@@ -13,22 +16,21 @@ type Props = {
   valor: string | null;
   /** Valores sin stock con lo que ya se eligió en las otras opciones: se ven pero no se pueden elegir. */
   agotados: Set<string>;
+  fotos?: Record<string, string[]>;
   error?: string;
-  /** La tabla de tallas del producto (solo en la opción Talla). */
   tabla?: Tabla;
   onCambio: (v: string) => void;
 };
 
 /**
- * Un selector por opción (0032). Color: muestras redondas si todos los valores tienen color conocido; si no, botones.
- * Talla, Tono, Tamaño y el resto: botones (elegido en selection/*). Talla con tabla cargada en el producto: "Ver tabla
- * de tallas" (parte 4 de 0034). Grupo de radio accesible.
+ * Un selector por opción (0032). Color: miniaturas si hay fotos; si no, muestras o botones.
+ * Talla, Tono, Tamaño y el resto: botones (elegido en selection/*). Talla con tabla propia o heredada: "Ver tabla de tallas". Grupo de radio accesible.
  */
-export function SelectorOpcion({ opcion, i, valor, agotados, error, tabla, onCambio }: Props) {
+export function SelectorOpcion({ opcion, i, valor, agotados, fotos, error, tabla, onCambio }: Props) {
   const muestras = opcion.tipo === "color" && opcion.valores.every((v) => HEX_COLOR[v]);
   const idError = `error-opcion-${i}`;
   return (
-    <fieldset className="flex flex-col gap-3" aria-describedby={error ? idError : undefined}>
+    <fieldset className="flex min-w-0 flex-col gap-3" aria-describedby={error ? idError : undefined}>
       <legend className={etiqueta}>
         {opcion.nombre}
         {valor && <> <span aria-hidden>—</span> <span className="text-fg">{valor}</span></>}
@@ -37,7 +39,14 @@ export function SelectorOpcion({ opcion, i, valor, agotados, error, tabla, onCam
         {opcion.valores.map((v, n) => {
           const agotado = agotados.has(v);
           const comun = { id: n === 0 ? `opcion-${i}` : undefined, type: "button" as const, role: "radio", "aria-checked": valor === v, disabled: agotado, onClick: () => onCambio(v) };
-          return muestras ? (
+          const foto = opcion.tipo === "color" ? fotos?.[v]?.[0] : undefined;
+          return foto ? (
+            <button key={v} {...comun} aria-label={`${v}${agotado ? " (agotado)" : ""}`} title={v}
+              className={cn("relative size-16 overflow-hidden rounded-theme border bg-surface transition-colors", valor === v ? "border-selected-border ring-1 ring-selected-border" : "border-line-strong hover:border-fg", agotado && "cursor-not-allowed", error && !valor && "border-error")}>
+              <Image src={foto} alt="" fill sizes="64px" className={cn("object-cover", agotado && "opacity-40")} />
+              {agotado && <X aria-hidden strokeWidth={1} className="absolute inset-0 size-full text-fg" />}
+            </button>
+          ) : muestras ? (
             <button key={v} {...comun} aria-label={`${v}${agotado ? " (agotado)" : ""}`} title={v}
               className={cn("flex size-10 items-center justify-center rounded-full ring-1 transition", valor === v ? "ring-fg" : "ring-transparent hover:ring-line-strong", agotado && "cursor-not-allowed opacity-40")}>
               <span className="size-8 rounded-full ring-1 ring-fg/15 ring-inset" style={{ backgroundColor: HEX_COLOR[v] }} />
@@ -57,7 +66,7 @@ export function SelectorOpcion({ opcion, i, valor, agotados, error, tabla, onCam
         })}
       </div>
       {error && <p id={idError} className="text-caption text-error">{error}</p>}
-      {tabla && <TablaTallas tabla={tabla} tallas={opcion.valores} elegida={valor} />}
+      {opcion.tipo === "talla" && tabla && <TablaTallas tabla={tabla} tallas={opcion.valores} elegida={valor} />}
     </fieldset>
   );
 }

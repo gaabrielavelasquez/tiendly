@@ -35,8 +35,22 @@ export function limpiarTabla(t: TablaTallas, tallas: string[]): TablaTallas | un
   return Object.values(filas).some((f) => f.some(Boolean)) ? { medidas, filas } : undefined;
 }
 
-/** Los otros productos de la tienda con tabla (para "Usar la de…"), sin el que se edita. */
-export const conTabla = (productos: Producto[], excluir?: string) =>
-  productos.filter((p) => p.id !== excluir && p.tablaTallas).map((p) => ({ id: p.id, nombre: p.nombre, tabla: p.tablaTallas! }));
+/** Guía de calzado que ya mostraba #29: solo para documentos anteriores sin decisión explícita sobre la tabla. */
+const PIE_LEGADO: Record<string, string> = { "35": "22.5", "36": "23", "37": "23.5", "38": "24", "39": "24.5", "40": "25" };
+
+/** Lectura compatible sin escribir en Redis. null representa la elección explícita "Sin tabla". */
+export function tablaDelProducto(p: Pick<Producto, "opciones" | "tablaTallas">): TablaTallas | undefined {
+  const tallas = p.opciones.find((o) => o.tipo === "talla")?.valores;
+  if (!tallas?.length) return undefined;
+  if (p.tablaTallas !== undefined) return p.tablaTallas ?? undefined;
+  if (!tallas.some((t) => PIE_LEGADO[t])) return undefined;
+  return { medidas: ["Largo del pie"], filas: Object.fromEntries(tallas.map((t) => [t, [PIE_LEGADO[t] ?? ""]])) };
+}
+
+/** Otros productos con tabla propia o heredada, sin el que se edita. */
+export const conTabla = (productos: Producto[], excluir?: string) => productos.flatMap((p) => {
+  const tabla = tablaDelProducto(p);
+  return p.id !== excluir && tabla ? [{ id: p.id, nombre: p.nombre, tabla }] : [];
+});
 
 export type TablaDeOtro = ReturnType<typeof conTabla>[number];
