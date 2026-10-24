@@ -100,7 +100,7 @@ function Puntos({ actual, elegir }: { actual: number; elegir: (i: number) => voi
  * (0032 y 0033). Las tres están montadas y apiladas en la misma celda, así las fotos ya cargaron cuando
  * aparecen; cada una con su alto natural, sin espacio vacío dentro. Con "reducir movimiento", queda fija en la primera. Desktop: portada y productos; móvil: compacta.
  */
-export function TiendasEjemplo({ links, compacta = false }: Props & { compacta?: boolean }) {
+export function TiendasEjemplo({ links, compacta = false, halo = false }: Props & { compacta?: boolean; halo?: boolean }) {
   const { actual, elegir, pausar, reducir } = useRotacion(TIENDAS_EJEMPLO.length, ROTACION_MS);
   return (
     <figure
@@ -118,7 +118,8 @@ export function TiendasEjemplo({ links, compacta = false }: Props & { compacta?:
       </div>
       {/* Una columna minmax(0, 1fr): sin esto, la celda crece hasta el ancho del link entero (una URL larga de
           Vercel) y toda la página se desborda en móvil. Lo mismo min-w-0 en cada tarjeta. */}
-      <div className="grid grid-cols-1">
+      <div className="relative isolate grid grid-cols-1">
+        {halo && <span aria-hidden className="pointer-events-none absolute -inset-x-10 -top-6 -bottom-14 -z-10 bg-halo-hoy" />}
         {TIENDAS_EJEMPLO.map((t, i) => (
           <motion.div
             key={t.slug}

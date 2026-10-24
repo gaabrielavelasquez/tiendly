@@ -244,3 +244,12 @@ Pagos, bancos, entregas y WhatsApp siguen simulados. No se enviaron mensajes, co
 - Servidor aislado 3204 cerrado tras comprobar PID 30586 y carpeta del worktree. El servidor 3100 de Gabi queda intacto. #32 está integrado y confirmado en producción; **#33 queda abierto, sin merge, para revisión de Gabi**. Se detiene aquí y no se inicia otra tarea.
 
 - Verificación final del preview en Chrome/WebKit a 360/390/1440 completa: registro/ingreso, código incorrecto y vencido, reenvío, datos/Otro, vista propia, foco seguro y borrado real de cookie al cerrar. Sin scroll horizontal. Resultados en docs/capturas/auth-onboarding/resultado-preview.json. La última actualización solo agrega evidencia/documentación y corrige un comentario; el código funcional coincide con el preview capturado.
+
+## Ajustes solicitados de #33 · 24-oct-2026
+
+- Se continúa exclusivamente en #33, rama feat/auth-onboarding-diseno y worktree aislado; main remoto sigue en c0f4682. Sin merge autorizado.
+- Código móvil sin vista ni beneficios, Verificar al pie; desktop conserva vista lateral. Datos usa nombre/link en vivo y muestras por rubro, compactas bajo el botón en móvil, sin beneficios. Link libre con Check y texto success, sin caja.
+- Tienda creada en una columna centrada con vista propia vacía, halo bg-halo-hoy y entrada suave/reducir movimiento; sin muestras ficticias guardadas ni beneficios. Agregar mi primer producto abre /panel/productos/nuevo; Ir a mi panel, copiar con éxito/error y wa.me sin envío automático. Registro desktop recupera halo detrás de la vista rotatoria.
+- Cuatro fotos reales adicionales para hogar/repostería/hecho a mano, WebP 480×600; fuentes en public/onboarding/FUENTES.md y originales ignorados en fotos-originales/onboarding/. Los demás rubros reutilizan fotos existentes. Sin tokens o dependencias nuevos.
+- Tokens y build local pasan. Pruebas locales en 3204; producción, Redis y servidor 3100 intactos. Antes de esta ronda copiado sin editar de las capturas Vercel del head funcional previo de #33, en docs/capturas/auth-ajustes/before/.
+- Pendiente completar evidencia y verificación desde el preview Vercel de esta ronda, actualizar #33 y detenerse para revisión de Gabi. No mergear.

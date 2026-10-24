@@ -6,12 +6,13 @@
 
 ## Acceso y onboarding
 
-- Un solo shell del registro, titulares en dos tonos y beneficios en texto plano. Tres ejemplos rotatorios y «Así se verá tu tienda.» en todos los pasos previos a crearla; ingreso incluido. Se respeta reducir movimiento y pausa por puntero/foco.
+- Un shell compartido con presentación por paso y titulares en dos tonos. Registro/ingreso conservan tres ejemplos rotatorios y beneficios en texto plano. Código oculta vista y beneficios en móvil y mantiene Verificar al pie; desktop conserva la vista lateral, sin beneficios. Datos usa la tienda propia en vivo, con muestras según los rubros (0013), compacta bajo el botón en móvil y sin beneficios. Se respeta reducir movimiento y pausa por puntero/foco.
 - Se retiran los componentes anteriores de marca, mini tienda ficticia y destellos. Sin el titular anterior, cajas grises ficticias, chips flotantes, checks en círculos, halos de fondo ni dominio escrito a mano. Fotos reales de los ejemplos, con carga anticipada.
 - Las URL se generan con la base real de `urlTienda`, también al revisar o sugerir el slug. Revisión con carga, vacío y error/reintento; una falla de conexión no afirma que esté libre.
 - Código incorrecto y vencido comparten el diseño. La verificación sigue simulada: 0000 no coincide, los demás códigos de cuatro dígitos pasan. Vigencia simulada de cinco minutos, reenviar renueva el código; sin mensajes reales ni autenticación nueva.
 - Datos conserva los chips. Otro muestra «¿Qué vendes?», de 2 a 80 caracteres, validado al crear y guardado con los rubros. Ocultarlo no pierde el borrador.
-- Tienda creada muestra nombre, link retornado y estado vacío de la tienda propia, en Neutral. No inventa productos ni muestra una tienda de ejemplo como si fuera suya.
+- Tienda creada centra la vista propia como protagonista, con nombre, link retornado y estado vacío en Neutral. Halo acotado `bg-halo-hoy` (glow-sky/glow-warm) detrás y entrada suave con movimiento reducido; sin destellos ni beneficios. Primario «Agregar mi primer producto» al formulario nuevo; secundario «Ir a mi panel»; copiar link con éxito/error y compartir por WhatsApp mediante wa.me sin número ni envío automático. Las muestras del paso datos no se guardan como catálogo.
+- Registro desktop recupera el halo detrás de la vista rotatoria (0033), nunca como fondo. Link libre usa Check fino y texto en feedback/success, sin caja ni círculo.
 - Cierre de sesión conserva confirmación, foco seguro, error/reintento y limpieza de cookie/borrador. Titular en dos tonos; no cambia el resto de hojas.
 
 ## Montos y precios

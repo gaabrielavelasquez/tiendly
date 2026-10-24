@@ -1,4 +1,4 @@
-import { LoaderCircle } from "lucide-react";
+import { Check, LoaderCircle } from "lucide-react";
 import { sinProtocolo } from "@/lib/formato-link";
 import type { EstadoSlug } from "../hooks/use-slug-check";
 import { useOnboarding } from "../hooks/use-onboarding";
@@ -12,6 +12,6 @@ export function SlugStatus({ estado }: { estado: EstadoSlug & { reintentar: () =
     <span className="truncate">{link(estado.slug)}</span>
     {estado.estado === "revisando" ? <span className="flex items-center gap-2"><LoaderCircle aria-hidden className="size-4 motion-safe:animate-spin" />Revisando el link.</span>
       : estado.estado === "error" ? <><p className="text-error">No pudimos revisar el link.</p><button type="button" onClick={estado.reintentar} className="link-text min-h-11 self-start">Intentar de nuevo</button></>
-      : estado.libre ? <span>Este link está libre.</span> : <><p>Ese link ya está en uso. Puedes usar:</p><span className="truncate font-medium text-fg">{link(estado.sugerencia ?? estado.slug)}</span></>}
+      : estado.libre ? <span className="flex items-center gap-2 text-success"><Check aria-hidden strokeWidth={1.5} className="size-4" />Este link está libre.</span> : <><p>Ese link ya está en uso. Puedes usar:</p><span className="truncate font-medium text-fg">{link(estado.sugerencia ?? estado.slug)}</span></>}
   </div>;
 }

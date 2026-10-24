@@ -7,15 +7,14 @@ import { RubroChips } from "./rubro-chips";
 import { SlugStatus } from "./slug-status";
 import { useOnboarding } from "../hooks/use-onboarding";
 import { crearTienda } from "../lib/acciones";
-import { useSlugCheck } from "../hooks/use-slug-check";
+import type { EstadoSlug } from "../hooks/use-slug-check";
 import { errorCelular, formatear, soloDigitos } from "../lib/phone";
 
 type Errores = { nombre?: string; rubro?: string; rubroOtro?: string; celular?: string };
 
 /** O3 / OD3 · Nombre + rubro + WhatsApp de ventas. La vista previa de desktop se arma en vivo. */
-export function StepDatos() {
+export function StepDatos({ slug }: { slug: EstadoSlug & { reintentar: () => void } }) {
   const { state, set } = useOnboarding();
-  const slug = useSlugCheck(state.nombre);
   const [errores, setErrores] = useState<Errores>({});
   const [creando, setCreando] = useState(false);
 
