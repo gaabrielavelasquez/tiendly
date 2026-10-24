@@ -162,3 +162,7 @@ Pagos, bancos, entregas y WhatsApp siguen simulados. No se enviaron mensajes, co
 
 - Validación adicional local: prenda única sin ninguna opción, medidas guardadas/recargadas y carrito; pausa persistida, activar requiere guardar, quitar medidas y enlace tras crear un producto con foto. Todo pasó con datos ficticios en memoria, sin Redis.
 - Las abreviaturas con punto (30 cm.) también se limpian. La tabla única puede ajustar valores largos dentro de la página sin scroll horizontal.
+
+- Evidencia renovada del código `bbecd23`: https://tiendly-iwau3gcyb-gaabrielavelasquez-8525s-projects.vercel.app/panel/productos/m6. Capturas 390/1440 en `docs/capturas/pr-27-medidas/`, enlazadas desde #27 (incluyen activo, pausado, nuevo, ficha sin Talla y error de rango).
+- Build final local y Vercel pasan, sin cambios de tokens ni dependencias. Chrome y WebKit completaron el preview final a 360/390/1440, incluida abreviatura con punto y tabla única con valores largos, sin scroll horizontal. Las capturas se inspeccionaron y se enlazaron en #27.
+- Servidor propio 3201 cerrado tras verificar su PID. El 3100 de Gabi sigue activo. No se modificaron el checkout principal, Redis ni datos de producción. Se detiene el trabajo tras actualizar #27 para esperar revisión, sin merge de #27 o #31.
