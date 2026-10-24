@@ -2,7 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import type { Categoria } from "@/features/productos/types";
 
-type PieProps = { nombre: string; logo?: string; slug: string; celular: string; categorias: { id: Categoria; label: string }[] };
+type PieProps = { instagram?: string; horario?: string; nombre: string; logo?: string; slug: string; celular: string; categorias: { id: Categoria; label: string }[] };
 
 /** Iniciales de las dos primeras palabras ("Glow Labo" → "GL"): siempre caben en el círculo. */
 const iniciales = (nombre: string) =>
@@ -13,7 +13,7 @@ const iniciales = (nombre: string) =>
  * Sin logo, el círculo lleva las iniciales y el nombre completo va debajo, en varias líneas si hace falta
  * (antes los nombres largos se cortaban dentro del círculo, decisión 0031).
  */
-export function PieTienda({ nombre, logo, slug, celular, categorias }: PieProps) {
+export function PieTienda({ nombre, logo, slug, celular, categorias, instagram, horario }: PieProps) {
   return (
     <footer className="mt-auto flex flex-col items-center gap-5 bg-sunken px-4 py-12 text-center">
       <span className="relative flex size-20 items-center justify-center overflow-hidden rounded-full border border-line-subtle bg-surface font-display-hero text-h3 tracking-wide text-fg uppercase">
@@ -30,6 +30,8 @@ export function PieTienda({ nombre, logo, slug, celular, categorias }: PieProps)
           Contacto por WhatsApp
         </a>
       </nav>
+      {instagram && <a href={`https://www.instagram.com/${instagram}/`} target="_blank" rel="noopener noreferrer" className="text-caption text-fg-secondary hover:text-fg">@{instagram}</a>}
+      {horario && <p className="max-w-xs break-words text-caption text-fg-secondary">{horario}</p>}
       <Link href="/" className="text-label text-fg-tertiary hover:text-fg-secondary">
         Hecho con Tiendly
       </Link>

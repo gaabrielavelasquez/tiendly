@@ -1,5 +1,6 @@
 "use client";
 
+import { Check } from "lucide-react";
 import { cn } from "@/lib/cn";
 
 type SwitchProps = { checked: boolean; onChange: (v: boolean) => void; id?: string; "aria-describedby"?: string; children: React.ReactNode };
@@ -26,10 +27,10 @@ export function Switch({ checked, onChange, id, children, ...rest }: SwitchProps
       >
         <span
           className={cn(
-            "absolute top-0.5 left-0.5 size-4 rounded-full bg-surface shadow-card transition-transform",
+            "absolute top-0.5 left-0.5 flex size-4 items-center justify-center rounded-full bg-surface text-fg shadow-card transition-transform",
             checked && "translate-x-4",
           )}
-        />
+        >{checked && <Check aria-hidden strokeWidth={2} className="size-3" />}</span>
       </span>
     </button>
   );

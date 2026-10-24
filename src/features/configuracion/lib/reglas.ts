@@ -51,8 +51,9 @@ const ENVIO: Record<IdZona, string> = { lima: "Delivery en Lima", callao: "Deliv
 export function vistaCliente({ delivery, recojo }: ConfigEntregas): string[] {
   const lineas: string[] = [];
   if (delivery.activo) {
-    for (const z of delivery.zonas.filter((x) => x.activa && !vacio(x.costo))) lineas.push(`${ENVIO[z.id]} · ${formatoSoles(monto(z.costo))} · Llega en ${z.plazo}`);
-    if (delivery.envioGratis.activo && monto(delivery.envioGratis.desde) > 0) lineas.push(`Envío gratis en compras desde ${formatoSoles(monto(delivery.envioGratis.desde))}`);
+    const completas = delivery.zonas.filter((x) => x.activa && !vacio(x.costo) && monto(x.costo) >= 0 && !vacio(x.plazo));
+    for (const z of completas) lineas.push(`${ENVIO[z.id]} · ${formatoSoles(monto(z.costo))} · Llega en ${z.plazo}`);
+    if (completas.length && delivery.envioGratis.activo && monto(delivery.envioGratis.desde) > 0) lineas.push(`Envío gratis en compras desde ${formatoSoles(monto(delivery.envioGratis.desde))}`);
   }
   if (recojo.activo) lineas.push(`Recojo en tienda · Gratis${recojo.distrito ? ` · ${recojo.distrito}` : ""}`);
   return lineas;

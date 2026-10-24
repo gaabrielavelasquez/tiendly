@@ -1,20 +1,14 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { guardarNombreOfertas, guardarWhatsappVentas } from "@/features/configuracion/lib/acciones";
-import { INICIAL, leerTienda, storageDe, VACIA, validarTienda } from "../lib/config";
+import { guardarIdentidad } from "../lib/acciones";
+import { VACIA, validarTienda } from "../lib/config";
 import type { Errores, Tienda } from "../types";
 
-/**
- * `whatsappVentas`: el número guardado en la configuración de la tienda; manda sobre lo guardado en el navegador.
- * `sesion`: Heather (demo) arranca con su portada y textos; una tienda nueva, vacía.
- */
-/** `nombreOfertas`: el de la sección de ofertas, guardado en el servidor (la vitrina lo lee de ahí); manda sobre el navegador. */
-export function useMiTienda(escenario: string | undefined, whatsappVentas: string, sesion: { slug: string; demo: boolean }, nombreOfertas = "") {
-  const STORAGE = storageDe(sesion.slug);
-  const PRIMERA = sesion.demo ? INICIAL : VACIA;
-  const [tienda, setTienda] = useState<Tienda>(INICIAL);
-  const [guardada, setGuardada] = useState<Tienda>(INICIAL);
+/** El servidor es la fuente de identidad; un borrador antiguo del navegador nunca pisa datos publicados. */
+export function useMiTienda(escenario: string | undefined, inicial: Tienda) {
+  const [tienda, setTienda] = useState<Tienda>(inicial);
+  const [guardada, setGuardada] = useState<Tienda>(inicial);
   const [estado, setEstado] = useState<"cargando" | "lista" | "error">("cargando");
   const [errores, setErrores] = useState<Errores>({});
   const [mensaje, setMensaje] = useState("");
@@ -23,9 +17,7 @@ export function useMiTienda(escenario: string | undefined, whatsappVentas: strin
     setEstado("cargando");
     try {
       if (escenario === "error") throw new Error("Error simulado.");
-      const valor = localStorage.getItem(STORAGE);
-      const base = escenario === "vacio" ? VACIA : valor ? leerTienda(valor) : PRIMERA;
-      const datos = escenario === "vacio" ? base : { ...base, whatsapp: whatsappVentas, nombreOfertas };
+      const datos = escenario === "vacio" ? { ...VACIA, whatsapp: inicial.whatsapp } : inicial;
       setTienda(datos); setGuardada(datos); setEstado("lista");
     } catch { setEstado("error"); }
   }
@@ -47,18 +39,11 @@ export function useMiTienda(escenario: string | undefined, whatsappVentas: strin
     if (Object.keys(errores).length) { setMensaje("Revisa los campos marcados antes de guardar."); return false; }
     setGuardando(true);
     try {
-      if (tienda.whatsapp !== guardada.whatsapp) {
-        const r = await guardarWhatsappVentas(tienda.whatsapp);
-        if ("error" in r) { setErrores({ whatsapp: r.error }); setMensaje("Revisa los campos marcados antes de guardar."); return false; }
-      }
-      if (tienda.nombreOfertas !== guardada.nombreOfertas) {
-        const r = await guardarNombreOfertas(tienda.nombreOfertas);
-        if ("error" in r) { setErrores({ nombreOfertas: r.error }); setMensaje("Revisa los campos marcados antes de guardar."); return false; }
-      }
-      localStorage.setItem(STORAGE, JSON.stringify(tienda));
-      setGuardada(tienda); setMensaje("Cambios guardados en este navegador.");
+      const r = await guardarIdentidad(tienda);
+      if ("error" in r) { setMensaje(r.error); return false; }
+      setTienda(r.datos); setGuardada(r.datos); setMensaje("Cambios guardados y publicados.");
       return true;
-    } catch { setMensaje("No pudimos guardar. Revisa el espacio disponible de tu navegador e inténtalo de nuevo."); return false; }
+    } catch { setMensaje("No pudimos guardar. Revisa tu conexión e inténtalo de nuevo."); return false; }
     finally { setGuardando(false); }
   }
   function descartar() { setTienda(guardada); setErrores({}); setMensaje(""); }

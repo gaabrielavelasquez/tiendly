@@ -2,7 +2,7 @@
 
 import { ChevronRight, CreditCard } from "lucide-react";
 import Link from "next/link";
-import { buttonVariants, Card, Collapsible, Switch } from "@/components/ui";
+import { buttonVariants, Collapsible, Switch } from "@/components/ui";
 import { cn } from "@/lib/cn";
 import type { Cobros } from "../../types";
 import { CabeceraMetodo } from "../estado-metodo";
@@ -16,29 +16,29 @@ type Props = { cobros: Cobros; onCambio: (c: Cobros) => void; onUltimo: () => vo
  * (Figma A7). Activos: un interruptor por método.
  */
 export function TarjetaCobros({ cobros, onCambio, onUltimo, esUltimo }: Props) {
-  const icono = <CreditCard strokeWidth={1.6} className="size-5" />;
+  const icono = <CreditCard strokeWidth={1.5} className="size-5" />;
 
   if (cobros.estado === "en-revision") {
     return (
-      <Card className="flex flex-col gap-4 p-5 lg:p-6">
+      <div className="flex min-w-0 flex-col gap-4 p-5 lg:p-6">
         <CabeceraMetodo icono={icono} titulo="Cobros automáticos en tu web" estado="En revisión" />
         <p className="text-body-sm text-fg-secondary">
           Recibimos tu solicitud{cobros.solicitud ? ` el ${diaMes(cobros.solicitud.enviada)}` : ""}. Te avisamos por correo y WhatsApp cuando tus cobros automáticos estén activos.
         </p>
         <Link href="/panel/configuracion/afiliacion" className="group -mx-1 flex min-h-12 items-center justify-between gap-3 rounded-theme border-t border-line-subtle px-1 pt-3 text-body-sm font-semibold text-fg">
           Ver detalle de solicitud
-          <ChevronRight aria-hidden strokeWidth={1.6} className="size-5 text-icon transition-transform group-hover:translate-x-0.5" />
+          <ChevronRight aria-hidden strokeWidth={1.5} className="size-5 text-icon transition-transform group-hover:translate-x-0.5" />
         </Link>
-      </Card>
+      </div>
     );
   }
 
   if (cobros.estado === "sin-activar") {
     return (
-      <Card className="flex flex-col gap-4 p-5 lg:p-6">
+      <div className="flex min-w-0 flex-col gap-4 p-5 lg:p-6">
         <CabeceraMetodo icono={icono} titulo="Cobros automáticos en tu web" estado="Sin activar" />
         <p className="text-body-sm text-fg-secondary">Tu cliente paga con tarjeta o Yape sin salir de tu tienda, y la venta se confirma sola. Ya no revisas capturas de pago.</p>
-        <div className="flex flex-col gap-1 rounded-theme bg-sunken p-3 text-body-sm">
+        <div className="flex flex-col gap-1 border-t border-line-subtle pt-4 text-body-sm">
           <span className="font-semibold text-fg">Qué necesitas</span>
           <span className="text-fg-secondary">RUC y una cuenta bancaria a nombre de tu RUC. La aprobación tarda de 3 a 10 días hábiles.</span>
         </div>
@@ -48,13 +48,13 @@ export function TarjetaCobros({ cobros, onCambio, onUltimo, esUltimo }: Props) {
         <Collapsible resumen={<span className="text-body-sm font-semibold text-fg">Ver cómo funciona</span>} claseContenido="pt-2">
           <ComoFunciona />
         </Collapsible>
-      </Card>
+      </div>
     );
   }
 
   const cambiar = (c: Cobros) => (esUltimo(c) ? onUltimo() : onCambio(c));
   return (
-    <Card className="flex flex-col gap-4 p-5 lg:p-6">
+    <div className="flex min-w-0 flex-col gap-4 p-5 lg:p-6">
       <CabeceraMetodo icono={icono} titulo="Cobros automáticos en tu web" estado="Activo" />
       <p className="text-body-sm text-fg-secondary">El dinero llega a la cuenta de tu negocio. Los plazos dependen de tu proveedor de pagos.</p>
       <div className="flex flex-col divide-y divide-line-subtle border-y border-line-subtle">
@@ -85,7 +85,7 @@ export function TarjetaCobros({ cobros, onCambio, onUltimo, esUltimo }: Props) {
           <CuentaYComisiones cuenta={cobros.cuenta} />
         </Collapsible>
       )}
-    </Card>
+    </div>
   );
 }
 

@@ -30,10 +30,10 @@ export function CampoImagen({ label, ayuda, valor, onChange }: { label: string; 
   }
   return <div className="flex flex-col gap-2">
     <div className="flex items-center gap-3">
-      <div className="flex size-12 shrink-0 items-center justify-center overflow-hidden rounded-card border border-line-subtle bg-sunken">
-        {valor ? <img src={valor} alt={label} className="size-full object-contain" /> : <ImagePlus aria-hidden className="size-6 text-icon-subtle" />}
+      <div className="flex size-12 shrink-0 items-center justify-center overflow-hidden">
+        {valor ? <img src={valor} alt={label} className="size-full object-contain" /> : <ImagePlus aria-hidden strokeWidth={1.5} className="size-6 text-icon" />}
       </div>
-      <div className="min-w-0 flex-1"><p className="text-body-sm font-semibold">{label}</p><p className="mt-1 text-caption text-fg-secondary">{ayuda}</p>
+      <div className="min-w-0 flex-1"><p className="text-body-sm font-semibold">{label}</p><p id={`${id}-ayuda`} className="mt-1 text-caption text-fg-secondary">{ayuda}</p>
         {valor && <Button variant="ghost" size="sm" disabled={cargando} aria-label={`Quitar ${label.toLowerCase()}`} onClick={() => { version.current++; onChange(""); }}>Quitar</Button>}
       </div>
       <div className="flex shrink-0 items-center">
@@ -45,7 +45,6 @@ export function CampoImagen({ label, ayuda, valor, onChange }: { label: string; 
         </label>
       </div>
     </div>
-    <p id={`${id}-ayuda`} className="text-caption text-fg-secondary">JPG, PNG o WebP. Hasta 1 MB.</p>
     {error && <p role="alert" className="text-caption text-error">{error}</p>}
   </div>;
 }

@@ -1,7 +1,7 @@
 "use client";
 
 import { Store } from "lucide-react";
-import { Card, Field, Switch } from "@/components/ui";
+import { Field, Switch } from "@/components/ui";
 import type { ConfigEntregas } from "../../types";
 import type { ErroresEntregas } from "../../lib/reglas";
 import { CabeceraMetodo } from "../estado-metodo";
@@ -13,9 +13,9 @@ type Props = { recojo: Recojo; errores: ErroresEntregas; onCambio: (r: Recojo) =
 export function TarjetaRecojo({ recojo, errores, onCambio }: Props) {
   const set = (k: keyof Recojo) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => onCambio({ ...recojo, [k]: e.target.value });
   return (
-    <Card className="flex flex-col gap-4 p-5 lg:p-6">
+    <div className="flex min-w-0 flex-col gap-4 p-5 lg:p-6">
       <Switch checked={recojo.activo} onChange={(v) => onCambio({ ...recojo, activo: v })} aria-describedby="recojo-desc">
-        <CabeceraMetodo icono={<Store strokeWidth={1.6} className="size-5" />} titulo="Recojo en tienda" estado={recojo.activo ? "Activo" : "Inactivo"} />
+        <CabeceraMetodo icono={<Store strokeWidth={1.5} className="size-5" />} titulo="Recojo en tienda" estado={recojo.activo ? "Activo" : "Inactivo"} />
       </Switch>
       <p id="recojo-desc" className="text-body-sm text-fg-secondary">Tu cliente pasa a recoger su pedido y no paga envío. Coordinan el día por WhatsApp.</p>
       {recojo.activo && (
@@ -39,6 +39,6 @@ export function TarjetaRecojo({ recojo, errores, onCambio }: Props) {
           </div>
         </div>
       )}
-    </Card>
+    </div>
   );
 }

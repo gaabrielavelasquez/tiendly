@@ -1,0 +1,78 @@
+{
+  "preview": "https://tiendly-pzzr83s06-gaabrielavelasquez-8525s-projects.vercel.app",
+  "source": "13cd61d",
+  "tests": [
+    {
+      "engine": "chrome",
+      "w": 390,
+      "width": 318,
+      "scroll": 396,
+      "cards": [
+        124,
+        124,
+        124
+      ],
+      "display": "flex"
+    },
+    {
+      "engine": "chrome",
+      "w": 1440,
+      "width": 456,
+      "scroll": 456,
+      "cards": [
+        144,
+        144,
+        144
+      ],
+      "display": "grid"
+    },
+    {
+      "engine": "chrome",
+      "w": 360,
+      "width": 288,
+      "scroll": 360,
+      "cards": [
+        112,
+        112,
+        112
+      ],
+      "display": "flex"
+    },
+    {
+      "engine": "webkit",
+      "w": 390,
+      "width": 318,
+      "scroll": 396,
+      "cards": [
+        124,
+        124,
+        124
+      ],
+      "display": "flex"
+    },
+    {
+      "engine": "webkit",
+      "w": 1440,
+      "width": 456,
+      "scroll": 456,
+      "cards": [
+        144,
+        144,
+        144
+      ],
+      "display": "grid"
+    },
+    {
+      "engine": "webkit",
+      "w": 360,
+      "width": 288,
+      "scroll": 360,
+      "cards": [
+        112,
+        112,
+        112
+      ],
+      "display": "flex"
+    }
+  ]
+}

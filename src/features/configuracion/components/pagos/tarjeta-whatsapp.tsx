@@ -3,7 +3,7 @@
 import { MessageCircle } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
-import { Card, Switch } from "@/components/ui";
+import { Switch } from "@/components/ui";
 import { formatoCelular } from "@/features/checkout/lib/reglas";
 import type { ConfigPagos } from "../../types";
 import { CabeceraMetodo } from "../estado-metodo";
@@ -24,12 +24,12 @@ export function TarjetaWhatsApp({ whatsapp, unico, onCambio }: Props) {
   }
 
   return (
-    <Card className="flex flex-col gap-4 p-5 lg:p-6">
+    <div className="flex min-w-0 flex-col gap-4 p-5 lg:p-6">
       <Switch checked={whatsapp.activo} onChange={alternar} aria-describedby="wsp-desc">
-        <CabeceraMetodo icono={<MessageCircle strokeWidth={1.6} className="size-5" />} titulo="Pedidos por WhatsApp" estado={whatsapp.activo ? "Activo" : "Apagado"} />
+        <CabeceraMetodo icono={<MessageCircle strokeWidth={1.5} className="size-5" />} titulo="Pedidos por WhatsApp" estado={whatsapp.activo ? "Activo" : "Apagado"} />
       </Switch>
       {aviso && (
-        <p role="alert" className="rounded-theme border border-warning-border bg-warning-surface p-3 text-body-sm text-fg">
+        <p role="alert" className="text-body-sm text-warning">
           Es tu único método de cobro, así que no se puede apagar. Para apagarlo, primero activa los cobros automáticos.
         </p>
       )}
@@ -45,6 +45,6 @@ export function TarjetaWhatsApp({ whatsapp, unico, onCambio }: Props) {
           Editar en Mi tienda
         </Link>
       </div>
-    </Card>
+    </div>
   );
 }
