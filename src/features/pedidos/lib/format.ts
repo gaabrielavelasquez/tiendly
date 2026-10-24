@@ -1,5 +1,6 @@
+import { conArticulo } from "@/lib/formato";
 import type { Pedido } from "../types";
-import { BADGE_PAGO, badgeEntrega, METODO_PAGO } from "./reglas";
+import { BADGE_PAGO, badgeEntrega, METODO_PAGO, venceEl } from "./reglas";
 import { enLima } from "./tiempo";
 
 // Fechas de pedidos sin Intl (ver lib/tiempo.ts): el mismo texto en servidor y navegador.
@@ -11,12 +12,28 @@ function hora(h: number, min: number) {
   return `${h % 12 || 12}:${String(min).padStart(2, "0")} ${h < 12 ? "a. m." : "p. m."}`;
 }
 
+/** Hora de Lima con artículo: "las 5:52 p. m." o "la 1:11 p. m.". */
+export function horaConArticulo(iso: string) {
+  const f = enLima(Date.parse(iso));
+  return conArticulo(hora(f.h, f.min));
+}
+
 /** "Hoy, 5:52 p. m.", "Ayer, 10:45 p. m." o "13 oct, 9:30 p. m.". */
 export function fechaPedido(iso: string, ahora: string) {
   const p = enLima(new Date(iso).getTime());
   const base = new Date(ahora).getTime();
   const cuando = p.dia === enLima(base).dia ? "Hoy" : p.dia === enLima(base - 86400000).dia ? "Ayer" : `${p.fecha} ${MESES[p.mes]}`;
   return `${cuando}, ${hora(p.h, p.min)}`;
+}
+
+/** Plazo de la reserva en Lima, igual que Inicio, con la 1 en singular. La lista conserva su formato corto. */
+export function plazoReserva(p: Pedido, ahora: string): string | null {
+  const fin = venceEl(p);
+  const base = new Date(ahora).getTime();
+  if (p.pago.estado !== "pendiente" || p.pago.metodo === "contra-entrega" || fin <= base) return null;
+  const f = enLima(fin);
+  const dia = f.dia === enLima(base).dia ? "hoy" : f.dia === enLima(base + 86400000).dia ? "mañana" : `el ${f.fecha} ${MESES[f.mes]}`;
+  return `Vence ${dia}, a ${conArticulo(hora(f.h, f.min))}`;
 }
 
 const celda = (v: string | number) => `"${String(v).replace(/"/g, '""')}"`;

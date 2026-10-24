@@ -38,6 +38,8 @@ export type DetallePedido = {
   referencia?: string;
   /** Momentos del historial (ISO). El de creación es `Pedido.creadoEl`. */
   pagadoEl?: string;
+  /** Correcciones manuales del pago; se conservan aunque se vuelva a marcar como pagado. */
+  pagosDesmarcados?: string[];
   enviadoEl?: string;
   entregadoEl?: string;
   canceladoEl?: string;

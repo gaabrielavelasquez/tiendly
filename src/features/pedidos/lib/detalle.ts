@@ -1,10 +1,12 @@
-import { conArticulo, formatoSoles, plural } from "@/lib/formato";
+import { formatoSoles, plural } from "@/lib/formato";
 import type { DetallePedido, Pedido } from "../types";
 import { totalDetalle, unidades } from "./detalle-mock";
-import { fechaPedido } from "./format";
+import { fechaPedido, horaConArticulo } from "./format";
 import { conReglas, METODO_PAGO, venceEl } from "./reglas";
 
 // Reglas del detalle de un pedido. Funciones puras: qué acción sigue, qué pasa al aplicarla y el historial.
+
+export type AccionPedido = Accion | "cancelar" | "desmarcar-pago";
 
 export type Accion = "pagar" | "enviar" | "recoger" | "entregar" | "entregar-cobrar";
 
@@ -19,10 +21,11 @@ const ETIQUETA: Record<Accion, string> = {
 /** La próxima acción lógica del pedido (el CTA). `null` si ya no hay nada que hacer. */
 export function siguienteAccion(p: Pedido): { id: Accion; label: string } | null {
   const a = ((): Accion | null => {
-    if (p.pago.estado === "cancelado" || p.entrega.estado === "entregado") return null;
+    if (p.pago.estado === "cancelado") return null;
     // Contra entrega ya enviado: se cobra al entregar, en un solo paso.
     if (p.pago.estado === "pendiente" && p.pago.metodo === "contra-entrega" && p.entrega.estado === "enviado") return "entregar-cobrar";
     if (p.pago.estado === "pendiente") return "pagar";
+    if (p.entrega.estado === "entregado") return null;
     if (p.entrega.estado === "por-enviar") return p.entrega.metodo === "recojo" ? "recoger" : "enviar";
     return "entregar";
   })();
@@ -33,10 +36,20 @@ export function siguienteAccion(p: Pedido): { id: Accion; label: string } | null
 export const puedeCancelar = (p: Pedido) => p.pago.estado !== "cancelado" && p.entrega.estado !== "entregado";
 
 /** Aplica una acción y registra su momento en el historial. */
-export function aplicar(p: Pedido, d: DetallePedido, accion: Accion | "cancelar", ahora: string): [Pedido, DetallePedido] {
+export function aplicar(p: Pedido, d: DetallePedido, accion: AccionPedido, ahora: string): [Pedido, DetallePedido] {
+  if (p.pago.estado === "cancelado") return [p, d];
   switch (accion) {
     case "pagar":
       return [{ ...p, pago: { ...p.pago, estado: "pagado" } }, { ...d, pagadoEl: ahora }];
+    case "desmarcar-pago": {
+      if (p.pago.estado !== "pagado") return [p, d];
+      const [pedido, detalle] = inicial(
+        { ...p, pago: { ...p.pago, estado: "pendiente" } },
+        { ...d, pagadoEl: undefined, pagosDesmarcados: [...(d.pagosDesmarcados ?? []), ahora] }, ahora,
+      );
+      // La reserva conserva su vencimiento original; la cancelación ocurre al corregir el pago.
+      return [pedido, pedido.pago.estado === "cancelado" ? { ...detalle, canceladoEl: ahora } : detalle];
+    }
     case "enviar":
       return [{ ...p, entrega: { ...p.entrega, estado: "enviado" } }, { ...d, enviadoEl: ahora }];
     case "recoger":
@@ -56,21 +69,18 @@ export function inicial(p: Pedido, d: DetallePedido, ahora: string): [Pedido, De
   return [conR, d];
 }
 
-/** "Hoy, 10:45 p. m." → "hoy a las 10:45 p. m.", y "Hoy, 1:05 p. m." → "hoy a la 1:05 p. m." (la hora ya termina en punto). */
-function aLasHora(texto: string) {
-  const t = texto.charAt(0).toLowerCase() + texto.slice(1);
-  const i = t.indexOf(", ");
-  return i < 0 ? t : `${t.slice(0, i)} a ${conArticulo(t.slice(i + 2))}`;
-}
-
 export type Paso = { id: string; titulo: string; detalle?: string; cuando?: string; estado: "hecho" | "actual" | "pendiente" | "cancelado" };
 
 /** Historial vertical: lo que ya pasó con su hora y lo que falta como marcador de posición. */
 export function lineaDeTiempo(p: Pedido, d: DetallePedido, ahora: string): Paso[] {
   const cuando = (iso?: string) => (iso ? fechaPedido(iso, ahora) : undefined);
   const recibido: Paso = { id: "recibido", titulo: "Pedido recibido", detalle: `${plural(unidades(d), "producto", "productos")} · ${formatoSoles(totalDetalle(d))}.`, cuando: cuando(p.creadoEl), estado: "hecho" };
+  const correcciones: Paso[] = (d.pagosDesmarcados ?? []).map((iso, i) => ({
+    id: `pago-desmarcado-${i}`, titulo: `Pago desmarcado por ti a ${horaConArticulo(iso)}`,
+    cuando: cuando(iso), estado: "hecho",
+  }));
   if (p.pago.estado === "cancelado") {
-    return [recibido, { id: "cancelado", titulo: "Pedido cancelado", detalle: d.cancelacion === "tienda" ? "Lo cancelaste desde el panel." : "La reserva de 24 h venció sin pago.", cuando: cuando(d.canceladoEl), estado: "cancelado" }];
+    return [recibido, ...correcciones, { id: "cancelado", titulo: "Pedido cancelado", detalle: d.cancelacion === "tienda" ? "Lo cancelaste desde el panel." : "La reserva de 24 h venció sin pago.", cuando: cuando(d.canceladoEl), estado: "cancelado" }];
   }
   const recojo = p.entrega.metodo === "recojo";
   const pagado = p.pago.estado === "pagado";
@@ -78,11 +88,13 @@ export function lineaDeTiempo(p: Pedido, d: DetallePedido, ahora: string): Paso[
     ? { id: "pago", titulo: `Pagado con ${METODO_PAGO[p.pago.metodo]}`, cuando: cuando(d.pagadoEl), estado: "hecho" }
     : p.pago.metodo === "contra-entrega"
       ? { id: "pago", titulo: "Pago contra entrega", detalle: "Se cobra al entregar.", estado: "pendiente" }
-      : { id: "pago", titulo: "Esperando el pago", detalle: `La reserva vence ${aLasHora(cuando(new Date(venceEl(p)).toISOString())!)} Si no se paga, se cancela sola.`, estado: "actual" };
+      : { id: "pago", titulo: "Esperando el pago", estado: "actual" };
   const enviado = p.entrega.estado !== "por-enviar";
   const coordinar = p.entrega.metodo === "coordinar";
   const envio: Paso = { id: "envio", titulo: enviado ? (coordinar ? "Enviado" : `Enviado a ${p.entrega.distrito}`) : "Envío", detalle: enviado ? undefined : coordinar ? "Por coordinar con tu cliente por WhatsApp." : `Delivery a ${p.entrega.distrito}.`, cuando: cuando(d.enviadoEl), estado: enviado ? "hecho" : pagado ? "actual" : "pendiente" };
   const entregado = p.entrega.estado === "entregado";
   const final: Paso = { id: "entrega", titulo: recojo ? (entregado ? "Recogido en tienda" : "Recojo en tienda") : entregado ? "Entregado" : "Entrega", cuando: cuando(d.entregadoEl), estado: entregado ? "hecho" : (recojo ? pagado : enviado) ? "actual" : "pendiente" };
-  return recojo ? [recibido, pago, final] : [recibido, pago, envio, final];
+  // Si está enviado pero vuelve a pendiente, el único paso actual es el pago.
+  if (!pagado && p.pago.metodo !== "contra-entrega" && final.estado === "actual") final.estado = "pendiente";
+  return recojo ? [recibido, ...correcciones, pago, final] : [recibido, ...correcciones, pago, envio, final];
 }
