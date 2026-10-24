@@ -17,27 +17,23 @@ type DetalleProps = { pedido: Pedido; detalle: DetallePedido; ahora: string };
 
 /**
  * Detalle del pedido en dos columnas (2/3 productos e historial, 1/3 cliente, entrega y notas),
- * con la misma lógica que el formulario de producto. Las acciones avisan y se pueden deshacer.
+ * con la misma lógica que el formulario de producto. Las acciones avisan; cancelar requiere confirmar y no se puede deshacer.
  */
 export function DetallePedidoVista({ pedido, detalle, ahora }: DetalleProps) {
   const d = useDetallePedido(pedido, detalle, ahora);
   const reduce = useReducedMotion();
 
   return (
-    <div className="flex flex-col gap-10 pb-[calc(var(--spacing)*24+env(safe-area-inset-bottom))] lg:gap-12 lg:pb-0">
+    <div className="flex flex-col gap-10 pb-[calc(var(--spacing)*36+env(safe-area-inset-bottom))] lg:gap-12 lg:pb-0">
       <BarraPedido pedido={d.pedido} ahora={ahora} onAccion={d.ejecutar} />
-      {/* min-w-0: sin esto, la columna única de móvil crece al ancho mínimo del contenido y se sale de la pantalla. */}
+      {/* Orden del DOM móvil; desktop reparte las mismas secciones en dos columnas, sin duplicar controles. */}
       <div className="grid min-w-0 grid-cols-1 items-start gap-10 lg:grid-cols-3 lg:gap-12">
-        <div className="flex min-w-0 flex-col gap-10 lg:gap-12 lg:col-span-2">
-          <TarjetaItems pedido={d.pedido} detalle={d.detalle} />
-          <TarjetaHistorial pasos={lineaDeTiempo(d.pedido, d.detalle, ahora)} />
-        </div>
-        <aside className="flex min-w-0 flex-col gap-10 lg:gap-12 lg:sticky lg:top-24">
-          <TarjetaPago pedido={d.pedido} ahora={ahora} />
-          <TarjetaCliente pedido={d.pedido} detalle={d.detalle} />
-          <TarjetaEntrega pedido={d.pedido} detalle={d.detalle} />
-          <TarjetaNotas pedidoId={d.pedido.id} inicial={d.detalle.nota} />
-        </aside>
+        <div className="min-w-0 lg:col-span-2 lg:row-span-2"><TarjetaItems pedido={d.pedido} detalle={d.detalle} /></div>
+        <div className="min-w-0 lg:col-start-3 lg:row-start-1"><TarjetaPago pedido={d.pedido} ahora={ahora} /></div>
+        <div className="min-w-0 lg:col-start-3 lg:row-start-2"><TarjetaCliente pedido={d.pedido} detalle={d.detalle} /></div>
+        <div className="min-w-0 lg:col-span-2 lg:row-span-2 lg:row-start-3"><TarjetaHistorial pasos={lineaDeTiempo(d.pedido, d.detalle, ahora)} /></div>
+        <div className="min-w-0 lg:col-start-3 lg:row-start-3"><TarjetaEntrega pedido={d.pedido} detalle={d.detalle} /></div>
+        <div className="min-w-0 lg:col-start-3 lg:row-start-4"><TarjetaNotas pedidoId={d.pedido.id} inicial={d.detalle.nota} /></div>
       </div>
 
       <div role="status" className="pointer-events-none fixed inset-x-4 bottom-24 z-30 flex justify-center lg:inset-x-auto lg:right-8 lg:bottom-8">
@@ -51,9 +47,9 @@ export function DetallePedidoVista({ pedido, detalle, ahora }: DetalleProps) {
               className="pointer-events-auto flex w-full max-w-sm items-center justify-between gap-4 rounded-card bg-inverse py-2 pr-2 pl-4 text-body-sm text-fg-inverse shadow-overlay"
             >
               <span className="min-w-0 break-words">{d.aviso}</span>
-              <button type="button" onClick={d.deshacer} className="h-9 shrink-0 rounded-theme px-3 font-semibold hover:bg-fg-inverse/10">
+              {d.puedeDeshacer && <button type="button" onClick={d.deshacer} className="h-9 shrink-0 rounded-theme px-3 font-semibold hover:bg-fg-inverse/10">
                 Deshacer
-              </button>
+              </button>}
             </motion.div>
           )}
         </AnimatePresence>

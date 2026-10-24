@@ -18,7 +18,7 @@ const AVISO: Record<Accion | "cancelar", string> = {
 
 /**
  * Estado del detalle de un pedido en el cliente (hasta tener backend): aplica acciones, deja
- * deshacer la última durante unos segundos y avisa qué pasó.
+ * deshacer la última durante unos segundos, salvo cancelar (irreversible), y avisa qué pasó.
  */
 export function useDetallePedido(p: Pedido, d: DetallePedido, ahora: string) {
   const [estado, setEstado] = useState<Estado>(() => {
@@ -33,7 +33,7 @@ export function useDetallePedido(p: Pedido, d: DetallePedido, ahora: string) {
 
   const ejecutar = useCallback(
     (accion: Accion | "cancelar") => {
-      setAnterior(estado);
+      setAnterior(accion === "cancelar" ? null : estado);
       const [pedido, detalle] = aplicar(estado.pedido, estado.detalle, accion, ahora);
       setEstado({ pedido, detalle });
       void sincronizarPedido(pedido, detalle); // pedidos de la vitrina: estado y stock en el almacén
@@ -45,14 +45,14 @@ export function useDetallePedido(p: Pedido, d: DetallePedido, ahora: string) {
   );
 
   const deshacer = useCallback(() => {
-    if (anterior) {
+    if (anterior && estado.pedido.pago.estado !== "cancelado") {
       setEstado(anterior);
       void sincronizarPedido(anterior.pedido, anterior.detalle);
     }
     setAnterior(null);
     setAviso("");
     window.clearTimeout(timer.current);
-  }, [anterior]);
+  }, [anterior, estado.pedido.pago.estado]);
 
-  return { ...estado, ejecutar, deshacer, aviso };
+  return { ...estado, ejecutar, deshacer, aviso, puedeDeshacer: anterior !== null };
 }

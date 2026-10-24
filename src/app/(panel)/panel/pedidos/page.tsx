@@ -22,7 +22,7 @@ export default async function PanelPedidos({ searchParams }: PageProps) {
   const ahora = ahoraIso();
   const pedidos = await obtenerPedidos(leerEscenario(herramientasDev ? escenario : undefined), await slugPanel(), ahora);
   return (
-    <PanelMain className="gap-10 lg:gap-12">
+    <PanelMain className="gap-10 pb-10 lg:gap-12 lg:pb-16">
       <PedidosVista pedidos={pedidos} ahora={ahora} filtroInicial={leerFiltro(Array.isArray(estado) ? estado[0] : estado)} />
     </PanelMain>
   );

@@ -1,14 +1,13 @@
 import { cn } from "@/lib/cn";
 import { formatoSoles } from "@/lib/formato";
 
-/** Montos de Pedidos (0031): cifras tabulares, moneda y decimales atenuados; hereda el tamaño y peso del contexto. */
-export function MontoPedido({ valor, className }: { valor: number; className?: string }) {
-  const [entero, decimales] = valor.toFixed(2).split(".");
+/** Mismo redondeo y soles enteros que la tienda; la moneda queda atenuada. */
+export function MontoPedido({ valor, tachado = false, className }: { valor: number; tachado?: boolean; className?: string }) {
+  const monto = formatoSoles(valor);
   return (
-    <span aria-label={formatoSoles(valor)} className={cn("inline-flex items-baseline whitespace-nowrap tabular-nums", className)}>
-      <span aria-hidden className="mr-1 text-caption font-normal text-fg-secondary">S/</span>
-      <span aria-hidden>{Number(entero).toLocaleString("es-PE")}</span>
-      <span aria-hidden className="text-caption font-normal text-fg-secondary">.{decimales}</span>
+    <span aria-label={monto} className={cn("inline-flex items-baseline whitespace-nowrap tabular-nums", className)}>
+      <span aria-hidden className={cn("mr-1 text-caption font-normal", tachado ? "text-fg-tertiary line-through" : "text-fg-secondary")}>S/</span>
+      <span aria-hidden className={cn(tachado && "text-fg-tertiary line-through")}>{monto.replace(/^S\/\s*/, "")}</span>
     </span>
   );
 }

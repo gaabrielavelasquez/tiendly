@@ -1,4 +1,4 @@
-import { conArticulo, formatoSoles, plural } from "@/lib/formato";
+import { formatoSoles, plural } from "@/lib/formato";
 import type { DetallePedido, Pedido } from "../types";
 import { totalDetalle, unidades } from "./detalle-mock";
 import { fechaPedido } from "./format";
@@ -34,6 +34,7 @@ export const puedeCancelar = (p: Pedido) => p.pago.estado !== "cancelado" && p.e
 
 /** Aplica una acción y registra su momento en el historial. */
 export function aplicar(p: Pedido, d: DetallePedido, accion: Accion | "cancelar", ahora: string): [Pedido, DetallePedido] {
+  if (p.pago.estado === "cancelado") return [p, d];
   switch (accion) {
     case "pagar":
       return [{ ...p, pago: { ...p.pago, estado: "pagado" } }, { ...d, pagadoEl: ahora }];
@@ -56,13 +57,6 @@ export function inicial(p: Pedido, d: DetallePedido, ahora: string): [Pedido, De
   return [conR, d];
 }
 
-/** "Hoy, 10:45 p. m." → "hoy a las 10:45 p. m.", y "Hoy, 1:05 p. m." → "hoy a la 1:05 p. m." (la hora ya termina en punto). */
-function aLasHora(texto: string) {
-  const t = texto.charAt(0).toLowerCase() + texto.slice(1);
-  const i = t.indexOf(", ");
-  return i < 0 ? t : `${t.slice(0, i)} a ${conArticulo(t.slice(i + 2))}`;
-}
-
 export type Paso = { id: string; titulo: string; detalle?: string; cuando?: string; estado: "hecho" | "actual" | "pendiente" | "cancelado" };
 
 /** Historial vertical: lo que ya pasó con su hora y lo que falta como marcador de posición. */
@@ -78,7 +72,7 @@ export function lineaDeTiempo(p: Pedido, d: DetallePedido, ahora: string): Paso[
     ? { id: "pago", titulo: `Pagado con ${METODO_PAGO[p.pago.metodo]}`, cuando: cuando(d.pagadoEl), estado: "hecho" }
     : p.pago.metodo === "contra-entrega"
       ? { id: "pago", titulo: "Pago contra entrega", detalle: "Se cobra al entregar.", estado: "pendiente" }
-      : { id: "pago", titulo: "Esperando el pago", detalle: `La reserva vence ${aLasHora(cuando(new Date(venceEl(p)).toISOString())!)} Si no se paga, se cancela sola.`, estado: "actual" };
+      : { id: "pago", titulo: "Esperando el pago", estado: "actual" };
   const enviado = p.entrega.estado !== "por-enviar";
   const coordinar = p.entrega.metodo === "coordinar";
   const envio: Paso = { id: "envio", titulo: enviado ? (coordinar ? "Enviado" : `Enviado a ${p.entrega.distrito}`) : "Envío", detalle: enviado ? undefined : coordinar ? "Por coordinar con tu cliente por WhatsApp." : `Delivery a ${p.entrega.distrito}.`, cuando: cuando(d.enviadoEl), estado: enviado ? "hecho" : pagado ? "actual" : "pendiente" };

@@ -63,7 +63,7 @@ export function CeldaTotal({ p }: { p: Pedido }) {
   return (
     <div className="flex flex-col items-end gap-0.5 tabular-nums">
       <span className={p.pago.estado === "cancelado" ? "text-body text-fg-tertiary line-through" : "text-body font-normal text-fg"}>
-        <MontoPedido valor={p.total} />
+        <MontoPedido valor={p.total} tachado={p.pago.estado === "cancelado"} />
       </span>
       <span className="text-caption text-fg-secondary">{plural(p.items, "producto", "productos")}</span>
     </div>

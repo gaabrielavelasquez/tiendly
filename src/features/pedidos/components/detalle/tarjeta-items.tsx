@@ -54,7 +54,7 @@ export function TarjetaItems({ pedido, detalle }: ItemsProps) {
         </div>
         <div className="flex items-baseline justify-between border-t border-line-subtle pt-3">
           <dt className="font-semibold text-fg">Total</dt>
-          <dd className={cancelado ? "font-metric text-h3 text-fg-tertiary line-through" : "font-metric text-h3 text-fg"}><MontoPedido valor={total} /></dd>
+          <dd className={cancelado ? "font-metric text-h3 text-fg-tertiary line-through" : "font-metric text-h3 text-fg"}><MontoPedido valor={total} tachado={cancelado} /></dd>
         </div>
 
       </dl>

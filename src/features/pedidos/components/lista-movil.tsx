@@ -32,7 +32,7 @@ function TarjetaPedido({ p, ahora }: { p: Pedido; ahora: string }) {
         <span className="flex items-baseline gap-2 pr-6">
           <span className="font-display-title text-body-sm text-fg">#{p.numero}</span>
           <span className="min-w-0 flex-1 truncate text-body-sm text-fg-secondary">{p.cliente.nombre}</span>
-          <span className={cn("text-body-sm tabular-nums", cancelado ? "text-fg-tertiary line-through" : "font-normal text-fg")}><MontoPedido valor={p.total} /></span>
+          <span className={cn("text-body-sm tabular-nums", cancelado ? "text-fg-tertiary line-through" : "font-normal text-fg")}><MontoPedido valor={p.total} tachado={cancelado} /></span>
         </span>
         <span className="flex items-center gap-2">
           <Badge tone={tono}>{texto}</Badge>

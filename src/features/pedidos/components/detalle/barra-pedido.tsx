@@ -60,7 +60,7 @@ export function BarraPedido({ pedido, ahora, onAccion }: BarraProps) {
         </div>
         <Estados p={pedido} />
       </header>
-      <div className="fixed inset-x-0 bottom-0 z-20 border-t border-line-subtle bg-surface/95 px-4 pt-3 pb-[max(calc(var(--spacing)*3),env(safe-area-inset-bottom))] backdrop-blur-md empty:hidden lg:hidden">
+      <div role="group" aria-label="Acciones del pedido" className="fixed inset-x-0 bottom-0 z-20 border-t border-line-subtle bg-surface/95 px-4 pt-3 pb-[max(calc(var(--spacing)*3),env(safe-area-inset-bottom))] backdrop-blur-md empty:hidden lg:hidden">
         <AccionesPedido pedido={pedido} onAccion={onAccion} className="w-full justify-end" />
       </div>
     </>

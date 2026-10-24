@@ -22,7 +22,7 @@ export function agregarPedido(a: AlmacenPedidos, c: Creado) {
 /** Reemplaza el estado de un pedido creado (acciones del panel). `null` si no es de la vitrina. */
 export function actualizarPedido(a: AlmacenPedidos, pedido: Pedido, detalle: DetallePedido) {
   const c = a.creados.find((x) => x.pedido.id === pedido.id);
-  if (!c) return null;
+  if (!c || (c.pedido.pago.estado === "cancelado" && pedido.pago.estado !== "cancelado")) return null;
   Object.assign(c, { pedido, detalle });
   return c;
 }
