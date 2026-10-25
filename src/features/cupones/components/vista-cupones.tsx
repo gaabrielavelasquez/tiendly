@@ -9,16 +9,19 @@ import { cn } from "@/lib/cn";
 import type { Cupon } from "../types";
 import { alternarCupon } from "../lib/acciones";
 import { cuponesEnUso, estadoCupon, LIMITE_FREE, limiteCupones } from "../lib/reglas";
+import { conConfirmados, useSesionCupones } from "./sesion-cupones";
 import { TarjetaCupon } from "./tarjeta-cupon";
 
 
 
 /** Cupones (Figma, módulo 3; decisión 0008): en uso arriba, pausados y vencidos abajo. Plan Free: hasta 3 en uso; Pro: sin límite. */
 export function VistaCupones({ inicial, hoy, creado, plan }: { inicial: Cupon[]; hoy: string; creado?: string; plan: "free" | "pro" }) {
-  useOcultarBarraInferior(inicial.length > 0);
+  const sesion = useSesionCupones();
+  const lista = conConfirmados(inicial, sesion.cambios);
+  const guardadoVisible = creado && lista.some(c => c.codigo === creado);
+  useOcultarBarraInferior(lista.length > 0);
   const [ocupado, setOcupado] = useState(false);
-  const [lista, setLista] = useState(inicial);
-  const [aviso, setAviso] = useState<TextoAviso>(creado ? { texto: `Cupón guardado. Ya puedes compartir ${creado}.`, tono: "ok" } : null);
+  const [aviso, setAviso] = useState<TextoAviso>(guardadoVisible ? { texto: `Cupón guardado. Ya puedes compartir ${creado}.`, tono: "ok" } : null);
   const timer = useRef<number | undefined>(undefined);
   const avisar = (a: TextoAviso) => (setAviso(a), window.clearTimeout(timer.current), (timer.current = window.setTimeout(() => setAviso(null), 4500)));
   useEffect(() => {
@@ -35,14 +38,14 @@ export function VistaCupones({ inicial, hoy, creado, plan }: { inicial: Cupon[];
 
   async function alternar(c: Cupon, activo: boolean) {
     if (ocupado) return;
-    setLista((l) => l.map((x) => (x.id === c.id ? { ...x, activo } : x)));
+    sesion.recordar({ ...c, activo });
     setOcupado(true);
     try {
       const r = await alternarCupon(c.id, activo);
-      if ("error" in r) { setLista(l => l.map(x => x.id === c.id ? c : x)); avisar({ texto: r.error, tono: "error" }); return; }
+      if ("error" in r) { sesion.recordar(c); avisar({ texto: r.error, tono: "error" }); return; }
       avisar({ texto: activo ? `${c.codigo} está activo.` : `${c.codigo} está pausado. Nadie puede usarlo hasta que lo actives.`, tono: "ok" });
     } catch (e) {
-      setLista(l => l.map(x => x.id === c.id ? c : x));
+      sesion.recordar(c);
       avisar({ texto: "No pudimos guardar. Revisa tu conexión e inténtalo de nuevo.", tono: "error" });
     } finally { setOcupado(false); }
   }

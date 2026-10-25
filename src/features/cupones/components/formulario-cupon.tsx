@@ -10,6 +10,7 @@ import type { Cupon, EstadoCupon } from "../types";
 import { eliminarCupon, guardarCupon } from "../lib/acciones";
 import { aForm, descuentoDe, validarCupon, type ErroresCupon, type FormCupon } from "../lib/reglas";
 import { HojaModal } from "@/features/afiliacion/components/hoja-modal";
+import { useSesionCupones } from "./sesion-cupones";
 import { CamposCondiciones, CamposDescuento } from "./campos-cupon";
 
 const RESUMEN: Record<keyof ErroresCupon, (m: string) => string> = {
@@ -24,6 +25,7 @@ const EJEMPLO = 650; // subtotal de ejemplo para la vista previa (Figma: "Ahorra
 /** Crear o editar un cupón (Figma, módulo 3). Errores al guardar con resumen arriba; en edición, "Eliminar cupón". */
 export function FormularioCupon({ cupon, estado, otros }: { cupon?: Cupon; estado?: EstadoCupon; otros: Cupon[] }) {
   const router = useRouter();
+  const sesion = useSesionCupones();
   useOcultarBarraInferior(true);
   const [eliminando, setEliminando] = useState(false);
   const [f, setF] = useState<FormCupon>(() => aForm(cupon));
@@ -44,7 +46,7 @@ export function FormularioCupon({ cupon, estado, otros }: { cupon?: Cupon; estad
     setGuardando(true);
     try {
       const r = await guardarCupon(f, cupon?.id);
-      if ("codigo" in r) { router.push(`/panel/cupones?guardado=${r.codigo}`); router.refresh(); return; }
+      if ("cupon" in r) { sesion.recordar(r.cupon); router.push(`/panel/cupones?guardado=${encodeURIComponent(r.cupon.codigo)}`); return; }
       setError(r.error);
     } catch { setError("No pudimos guardar el cupón. Revisa tu conexión e inténtalo de nuevo."); }
     finally { setGuardando(false); }
@@ -52,7 +54,7 @@ export function FormularioCupon({ cupon, estado, otros }: { cupon?: Cupon; estad
   async function eliminar() {
     if (!cupon || eliminando) return;
     setEliminando(true); setError("");
-    try { await eliminarCupon(cupon.id); setConfirmar(false); router.push("/panel/cupones"); router.refresh(); }
+    try { await eliminarCupon(cupon.id); sesion.quitar(cupon.id); setConfirmar(false); router.push("/panel/cupones"); router.refresh(); }
     catch { setError("No pudimos eliminar el cupón. Revisa tu conexión e inténtalo de nuevo."); }
     finally { setEliminando(false); }
   }
