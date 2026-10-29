@@ -9,4 +9,4 @@ next-env.d.ts
 .env*.local
 
 # Fotos originales (pesadas): solo se publican las versiones optimizadas de public/
-/fotos-originales/
+/frontend/fotos-originales/

@@ -1,6 +1,8 @@
 # Traspaso · 29-oct-2026
 
-Para el agente que sigue (Codex) y para Gabi. Antes de tocar código, lee [`AGENTS.md`](../AGENTS.md), [`CLAUDE.md`](../CLAUDE.md), [`DESIGN.md`](../DESIGN.md) y las decisiones de [`docs/decisiones/`](decisiones/README.md).
+Para el agente que sigue (Codex) y para Gabi. Antes de tocar código, lee [`AGENTS.md`](../AGENTS.md), [`CLAUDE.md`](../CLAUDE.md), [`frontend/DESIGN.md`](../frontend/DESIGN.md) y las decisiones de [`docs/decisiones/`](decisiones/README.md).
+
+**Estructura (PR 1, monorepo):** la app vive en `frontend/` y los comandos `npm` se corren ahí; `backend/` guarda la base de datos, los Workers y los scripts. En los registros con fecha de este documento, las rutas `src/…`, `public/…`, `next.config.ts` y `DESIGN.md` son anteriores a ese cambio: hoy van con `frontend/` adelante.
 
 **Regla que no cambia:** nada se mergea sin el ok de Gabi.
 
@@ -43,7 +45,7 @@ Integrados: #24 a #39. El 29-oct, con ok de Gabi: #39 (fecha de creación y tras
 3. **Antes de la beta: base de datos separada para desarrollo y previews** (ver Riesgos). No se cambió todavía.
 4. **Antes de invitar a cualquier tienda real: ingreso solo con Google.** Está en el PR #40, abierto y sin merge: se integra junto con el ingreso real con Google (trabajo de backend).
 
-Pendiente sin fecha: precio y SKU por variante (`docs/backlog.md`); renombrar el campo `duena` cuando llegue el backend; cerrar #22 y borrar `src/features/prototipo-ofertas`.
+Pendiente sin fecha: precio y SKU por variante (`docs/backlog.md`); renombrar el campo `duena` cuando llegue el backend; #22 ya está cerrado; `src/features/prototipo-ofertas` solo existe en su rama (`proto/productos-ofertas`).
 
 ## Riesgos conocidos
 
@@ -56,13 +58,13 @@ Pendiente sin fecha: precio y SKU por variante (`docs/backlog.md`); renombrar el
 - **Desarrollo local y cualquier preview con credenciales escriben en la base Redis de producción.** Las variables `KV_*` están en los entornos Production y Development de Vercel (no en Preview), y apuntan a la misma base de Upstash; solo el prefijo de la clave separa los entornos (`production:`, `preview:`, `local:`). Un local con `vercel env pull` o un preview al que se le pasen credenciales (como el E2E temporal del #38) crea claves reales en esa base, y un error en el prefijo podría pisar tiendas de producción. Los previews normales guardan en memoria.
   - **Antes de la beta**, desarrollo y previews deben usar una base aparte (otra base de Upstash con sus propias variables en los entornos Preview y Development de Vercel). No se cambió todavía.
   - Mientras tanto: no crear tiendas de prueba en producción sin anotarlas aquí, y nunca borrar ni reiniciar claves `production:` sin el ok de Gabi.
-- Para probar flujos que guardan, usa un solo proceso local **en un `git worktree` aparte**: `npm run build` y después `TIENDLY_TIENDA_DEMO=muna npx next start -p 3200`.
-  - **El puerto 3100 es el servidor de desarrollo de Gabi** (`TIENDLY_TIENDA_DEMO=muna PORT=3100 npx next dev`, en la carpeta principal): no lo cierres ni hagas build en esa carpeta.
+- Para probar flujos que guardan, usa un solo proceso local **en un `git worktree` aparte**, dentro de `frontend/`: `npm run build` y después `TIENDLY_TIENDA_DEMO=muna npx next start -p 3200`.
+  - **El puerto 3100 es el servidor de desarrollo de Gabi** (`cd frontend && TIENDLY_TIENDA_DEMO=muna PORT=3100 npx next dev`, en la carpeta principal): no lo cierres ni hagas build en esa carpeta.
   - Antes de levantar algo, revisa el puerto con `lsof -ti tcp:<puerto>`, y al terminar cierra solo el proceso que levantaste: `pkill` no siempre lo cierra.
   - En local, sin la variable, la demo es Heather.
 - **El preview de una rama aparece recién al abrir el PR.** Los previews están protegidos: para Playwright, usa respuestas autenticadas mediante el comando oficial `vercel curl` y un proxy de solo lectura. No exportes variables de entorno ni credenciales.
 - **iPhone:** los campos con texto de menos de 16 px hacen zoom al tocarlos. En el panel, los campos usan `text-body`.
-- **`.next/types` viejo** rompe el build después de borrar páginas: `rm -rf .next/types`.
+- **`.next/types` viejo** rompe el build después de borrar páginas: `rm -rf frontend/.next/types`.
 - **#23 quedó reemplazado por #29; #19 se cerró por reemplazo en #30.**
 - **Una tienda que no existe responde 200, no 404:** se ve la página de «no encontrada», pero el código HTTP es 200 (comprobado el 29-oct con `/heather-pe` y un slug inventado). Revisar antes de la beta.
 
