@@ -2,9 +2,11 @@
 
 import { AnimatePresence, motion } from "motion/react";
 import { useReducedMotion } from "@/components/motion/use-reduced-motion";
+import { cn } from "@/lib/cn";
 import { motionTokens } from "@/styles/tokens";
 import { TiendaDatosPreview } from "./tienda-datos-preview";
 import { useSlugCheck } from "../hooks/use-slug-check";
+import { ingresoCelularActivo } from "../lib/ingreso-celular";
 import { aSlug } from "../lib/slug";
 import { ShellRegistro } from "./shell-registro";
 import { StepCodigo } from "./step-codigo";
@@ -31,7 +33,8 @@ function Flujo() {
     <AnimatePresence mode="wait" initial={false}>
       <motion.div
         key={state.paso}
-        className="flex flex-1 flex-col"
+        // Solo con Google, el registro no se estira: el pie y la vista previa quedan junto al botón en móvil.
+        className={cn("flex flex-col", (state.paso !== "registro" || ingresoCelularActivo) && "flex-1")}
         initial={{ opacity: 0, x: desplazamiento }}
         animate={{ opacity: 1, x: 0 }}
         exit={{ opacity: 0, x: -desplazamiento }}
