@@ -609,6 +609,7 @@ tiendly/
 ├── AGENTS.md            (se queda; rutas actualizadas)
 ├── CLAUDE.md            (se queda; rutas actualizadas)
 ├── README.md            (nuevo y corto: qué hay en cada carpeta)
+├── .vercelignore        (se queda en la raíz: ver la nota de abajo)
 ├── docs/                (se queda: decisiones, traspaso, capturas, este plan)
 ├── frontend/
 │   ├── DESIGN.md
@@ -616,7 +617,6 @@ tiendly/
 │   ├── design/  public/  scripts/  src/
 │   ├── package.json  package-lock.json  tsconfig.json
 │   ├── next.config.ts  postcss.config.mjs  next-env.d.ts
-│   ├── .vercelignore
 │   └── fotos-originales/   (ignorada por Git; se mueve a mano)
 └── backend/
     ├── README.md        (cómo crear la base local y aplicar migraciones)
@@ -626,6 +626,8 @@ tiendly/
 ```
 
 Se mueve con `git mv`, en un commit que **solo** mueve, para que el historial de cada archivo se siga con `git log --follow`.
+
+**`.vercelignore` vive en la raíz del repo, no en `frontend/`** (comprobado en #44, 29-oct-2026). Con el Root Directory de Vercel en `frontend`, un `frontend/.vercelignore` no se aplicó: el preview servía las fotos de Heather, que no dio su permiso. En la raíz sí se aplica. Cada ruta va en sus dos formas (`public/heather` y `frontend/public/heather`).
 
 ### 10.3 Qué se rompe si se hace mal
 

@@ -13,6 +13,7 @@ No dupliques esas reglas aquí: si algo cambia, se cambia en `CLAUDE.md` o `fron
 - **`frontend/`:** la app Next.js (código, `DESIGN.md`, tokens y scripts). **Los comandos `npm` se corren en `frontend/`.**
 - **`backend/`:** base de datos, Workers y scripts (ver [`backend/README.md`](backend/README.md) y [`docs/plan-backend.md`](docs/plan-backend.md)).
 - **En la raíz:** `docs/`, `AGENTS.md` y `CLAUDE.md`, que valen para las dos partes.
+- **`.vercelignore` va en la raíz, no en `frontend/`:** con el Root Directory de Vercel en `frontend`, Vercel no aplica un `.vercelignore` dentro de esa carpeta, y se subirían las fotos de Heather, que no dio su permiso (comprobado en #44). Cada ruta va en sus dos formas: `public/heather` y `frontend/public/heather`.
 
 ## Recordatorios que más se olvidan
 
