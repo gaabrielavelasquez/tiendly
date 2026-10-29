@@ -537,10 +537,10 @@ Todo sale de `main` actualizado, en ramas y worktrees aparte (AGENTS.md), y **na
 | 2 | `chore/cloudflare-prueba` | **La prueba de riesgo:** la app actual en un Worker de prueba, sin datos (memoria). `frontend/wrangler.jsonc`, `frontend/open-next.config.ts`, `.dev.vars` en `.gitignore`. Mide CPU por visita y peso del Worker; prueba acciones de servidor, `revalidatePath`, fotos y `next/image`. Cambia `VERCEL_ENV` por `TIENDLY_ENTORNO` con la regla de §7.1 y sus pruebas. | 4–6 | Diego o agente |
 | 3 | `feat/d1-etapa-1` | `backend/db/migraciones/0001_etapa_1.sql` (tablas de §4.2), `frontend/src/lib/datos/almacen.ts` sobre D1 con versión, D1 local, demos sembradas, arreglos del checkout de §4.2, plan `beta_plus` con capacidades y `betaHasta` (§4.4), `backend/README.md` con los comandos. | 6–7 | Agente, con revisión de Diego |
 | 4 | `feat/fotos-r2` | `frontend/src/lib/datos/fotos.ts` sobre R2, ruta `/fotos/<clave>`, `frontend/next.config.ts` sin Blob. | 2–3 | Agente |
-| 4b | `feat/envio-por-zona` | Costo en soles enteros o "A coordinar por WhatsApp", conversión al leer, carrito/checkout, envío gratis y cupón de envío (§4.5). Cambio visual: decisión nueva y capturas 390/1440. **Puede moverse para después de las invitaciones y antes de enero; lo decide Gabi** (§9.3). | 3–4 | Agente, con ok de Gabi |
-| 5 | `feat/ingreso-google` | Better Auth + Google, `miembros`, `slugPanel()` desde la sesión, permisos en cada acción del panel, ingreso de prueba en local/preview y los commits de #40 (rama `fix/seguridad-ingreso`). | 7–9 | **Diego** (en paralelo con 3–4b) |
+| 5 | `feat/ingreso-google` | Better Auth + Google, `miembros`, `slugPanel()` desde la sesión, permisos en cada acción del panel, ingreso de prueba en local/preview y los commits de #40 (rama `fix/seguridad-ingreso`). | 7–9 | **Diego** (en paralelo con 3 y 4) |
 | 6 | Mudanza | Script de §8.2, bases y buckets de producción, `tiendly.pe` apuntando al Worker, Workers Builds conectado a `main`, cambio de §8.3. | 3–4 | Gabi + agente |
 | — | **Beta: 5–10 tiendas fundadoras** | Invitaciones, solo con lo innegociable de §9.3 cumplido, y con el permiso de medición en el mensaje de invitación. | — | Gabi |
+| 4b | `feat/envio-por-zona` | Costo en soles enteros o "A coordinar por WhatsApp", conversión al leer, carrito/checkout, envío gratis y cupón de envío (§4.5). Cambio visual: decisión nueva y capturas 390/1440. **Va después de las invitaciones de la beta y antes de enero** (decisión 9 de §12). | 3–4 | Agente, con ok de Gabi |
 | 7 | `feat/tareas-cron` | Worker `tiendly-tareas` en `backend/workers/tareas/`: reservas vencidas (§4.3) y fin de la beta, con los cupones que pasan el límite pausados (§4.4). | 2–3 | Agente |
 | 8–12 | Etapa 2, un PR por módulo (decidido) | Tiendas y personas → catálogo → pedidos/stock/pagos → cupones → configuración y Afiliación. Cada uno con su migración y su script de paso desde la Etapa 1. **Antes del registro abierto de enero.** | 25–35 | Diego + agente |
 | 13 | `feat/aviso-fundadoras` | Franja del 28-feb en el panel (§4.4), visible desde el 25-ene. | 2 | Agente, con ok de Gabi |
@@ -549,16 +549,17 @@ Todo sale de `main` actualizado, en ramas y worktrees aparte (AGENTS.md), y **na
 
 **Todo este calendario depende de que Diego confirme** que puede hacer el PR 5 (7–9 h, entre el 9 y el 20 de noviembre) y cubrir el soporte del 3 al 18 de febrero (§14 y §15). Sin esa confirmación, valen las fechas de "sin ayuda" y §9.3.
 
-- **Hasta la beta (pasos 0 a 6, con 4b):** unas 29–38 h, contando el envío por zona y el plan fundador. Sin el PR 4b, 3–4 h menos.
-- Con Diego en el PR 5, a Gabi le tocan unas 22–29 h: la beta arranca entre el **16 y el 20 de noviembre**.
+- **Hasta la beta (pasos 0 a 6):** unas 26–34 h, contando el plan fundador. El PR 4b (3–4 h) va después de las invitaciones.
+- Con Diego en el PR 5, a Gabi le tocan unas 19–25 h: la beta arranca entre el **16 y el 20 de noviembre**, ahora con algo más de margen.
 - Si Gabi lo hace sin ayuda: entre el **20 y el 27 de noviembre**.
 - El PR 7 (cron) puede ir después de las invitaciones: la regla de 24 h y el fin de la beta ya se cumplen al leer.
 
 | Fecha | Qué |
 |---|---|
 | 2–6 nov | Paso 0 (dominio, repo privado, #40 cerrado sin borrar su rama), PR 1 y PR 2. |
-| 9–20 nov | PRs 3, 4, 4b y 6; Diego, PR 5. |
+| 9–20 nov | PRs 3, 4 y 6; Diego, PR 5. |
 | 16–27 nov | Invitaciones a 5–10 tiendas fundadoras. |
+| Fin de nov – dic | PR 4b (envío por zona), antes de enero. |
 | Dic – 15 ene | Etapa 2 (PRs 8–12) y PR 7. |
 | Enero 2027 | Registro abierto, sobre la Etapa 2. |
 | 25 ene | Franja del 28-feb en el panel (PR 13). Lista "Antes del viaje" completa (§14). |
@@ -583,11 +584,11 @@ Costo: un Worker y un secreto más. Ojo: si el proyecto de Vercel está en el pl
 | | Qué |
 |---|---|
 | **Innegociable antes de invitar a cualquier tienda real** | Ingreso con Google con permisos por tienda (PR 5). Repo privado. Base de datos real con copias de seguridad (D1 con *Time Travel* y exportación semanal, §8.4) y una base de pruebas aparte (`tiendly-preview`, §7). `tiendly.pe` activo. Términos y Política de Privacidad publicados. |
-| **Se puede mover** | El día exacto en que arranca la beta (entre el 16 y el 27 de noviembre). El PR 4b. La Etapa 2. La franja del 25 de enero. El cron. Cuántas tiendas arrancan: **3 tiendas bien acompañadas valen más que 10 a medias.** |
+| **Se puede mover** | El día exacto en que arranca la beta (entre el 16 y el 27 de noviembre). La semana exacta del PR 4b, siempre después de las invitaciones y antes de enero. La Etapa 2. La franja del 25 de enero. El cron. Cuántas tiendas arrancan: **3 tiendas bien acompañadas valen más que 10 a medias.** |
 | **Fijo desde afuera** | El viaje de Gabi (3–18 feb 2027) y diciembre (fiestas: poco tiempo para trabajar en Tiendly y mucha venta en las tiendas). |
 
 - **El 28 de febrero se vuelve una promesa recién cuando se invita a la primera tienda.** Hasta entonces, la fecha puede cambiar libremente. Después, solo puede moverse para más tarde, nunca para antes.
-- **PR 4b: puede moverse para después de las invitaciones y antes de enero. Pendiente de la decisión de Gabi.** Si se mueve, la beta arranca con el envío como hoy: el panel ya exige un número, y la conversión de §4.5 se aplica después, al leer. La decisión 7 (sin envío gratis ni cupón de envío en zonas "A coordinar") entra recién con ese PR, porque antes no existe la opción "A coordinar" por zona.
+- **PR 4b: va después de las invitaciones de la beta y antes de enero** (decisión 9 de §12). La beta arranca con el envío como hoy: el panel ya exige un número, y la conversión de §4.5 se aplica después, al leer. La decisión 7 (sin envío gratis ni cupón de envío en zonas "A coordinar") entra recién con ese PR, porque antes no existe la opción "A coordinar" por zona.
 
 ---
 
@@ -691,7 +692,9 @@ Cuándo mirar AWS: si una base pasa de unos 8 GB (el límite por base es 10 GB) 
 
 Las decisiones 6 a 8 eran propuestas de este plan; Gabi las aprobó el 29-oct-2026.
 
-**Sin decidir:** si el PR 4b (envío por zona) se mueve para después de las invitaciones (§9.3).
+| # | Decisión de Gabi (después) | Dónde se aplica en este plan |
+|---|---|---|
+| 9 | **El PR 4b (envío por zona) va después de las invitaciones de la beta**, y antes de enero. La beta arranca con el envío como hoy. | §9, §9.1 y §9.3 |
 
 ---
 
@@ -750,7 +753,7 @@ Para Diego o para quien siga después.
   - No se invita a una tienda real sin el PR 5 en producción.
   - `TIENDLY_ENTORNO` falla cerrado (§7.1).
   - No se reescribe el historial de Git sin aprobación explícita (§13).
-- **Lo que falta decidir o confirmar:** si el PR 4b se mueve (§9.3), tu disponibilidad (arriba) y la lista "Sin verificar" de §16.
+- **Lo que falta confirmar:** tu disponibilidad (arriba) y la lista "Sin verificar" de §16.
 
 ---
 
