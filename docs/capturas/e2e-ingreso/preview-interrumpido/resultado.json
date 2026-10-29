@@ -1,0 +1,18 @@
+{
+  "preview": "https://tiendly-j6tvajdlo-gaabrielavelasquez-8525s-projects.vercel.app",
+  "slug": "e2e-tienda-82718077",
+  "name": "E2E tienda 82718077",
+  "nums": [],
+  "trace": [
+    "tienda-creada",
+    "producto-opciones-oferta",
+    "cupon-creado",
+    "entrega-guardada",
+    "cobros-mock-activos"
+  ],
+  "status": "FAIL",
+  "stage": "comprar-tarjeta",
+  "error": "page.waitForFunction: Timeout 120000ms exceeded.",
+  "url": "https://tiendly-j6tvajdlo-gaabrielavelasquez-8525s-projects.vercel.app/e2e-tienda-82718077/taza-e2e-con-dos-tamanos",
+  "text": "404\nThis page could not be found."
+}
