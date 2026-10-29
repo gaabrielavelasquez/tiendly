@@ -8,6 +8,7 @@ import { COOKIE_TIENDA, mutarPanel } from "@/lib/sesion";
 import { esRubro, type RubroId } from "./rubros";
 import { errorCelular } from "./phone";
 import { aSlug, OCUPADOS, type ResultadoSlug } from "./slug";
+import { ingresoCelularActivo } from "./ingreso-celular";
 
 /** Guarda los rubros del negocio (Afiliación A2). Se vuelve a validar aquí: no se confía en el navegador. */
 export async function guardarRubros(rubros: RubroId[]): Promise<{ ok: true } | { error: string }> {
@@ -67,6 +68,7 @@ async function recordarSesion(slug: string) {
 
 /** Se llama después del código simulado; no envía mensajes ni implementa autenticación real. */
 export async function ingresarTienda(celular: string): Promise<{ ok: true } | { error: string }> {
+  if (!ingresoCelularActivo) return { error: "Por ahora se ingresa solo con Google." };
   if (errorCelular(celular)) return { error: "Revisa tu número de WhatsApp." };
   const slug = await tiendaDeIngreso(celular);
   if (!slug) return { error: "No encontramos una tienda para este número. Revisa el número con el que te registraste." };

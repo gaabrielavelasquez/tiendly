@@ -41,11 +41,16 @@ Integrados: #24 a #39. El 29-oct, con ok de Gabi: #39 (fecha de creación y tras
 1. **Gabi envía su lista de revisión** tras los merges del 29-oct. No empezar otra tarea antes.
 2. **Onboarding 2–4**, después de esa revisión.
 3. **Antes de la beta: base de datos separada para desarrollo y previews** (ver Riesgos). No se cambió todavía.
+4. **Antes de invitar a cualquier tienda real: ingreso solo con Google**, con Google conectado de verdad (decisión 0046).
 
 Pendiente sin fecha: precio y SKU por variante (`docs/backlog.md`); renombrar el campo `duena` cuando llegue el backend; cerrar #22 y borrar `src/features/prototipo-ofertas`.
 
 ## Riesgos conocidos
 
+- **El código de WhatsApp es simulado: quien sepa el número de una tienda puede ingresar a ella.** Por eso el ingreso por número tiene que estar apagado (solo Google) antes de invitar a cualquier tienda real (decisión 0046).
+  - Desde el PR de 0046 está apagado por defecto: se enciende con `NEXT_PUBLIC_INGRESO_CELULAR=1` solo en desarrollo y pruebas. En producción no se enciende hasta que el código se envíe y verifique de verdad.
+  - Las demos (MUÑA, Glow Labo, Heather) no aceptan ingreso por número en ningún entorno, y en producción su panel no guarda cambios.
+  - El botón «Continuar con Google» todavía no tiene backend: con la bandera apagada no se puede crear ni recuperar una tienda.
 - **MUÑA: actualización del catálogo en producción (#29).**
   - Los datos viven en Upstash Redis (`production:tienda:muna`) y, antes del cierre del #29, contenían tres productos sin la oferta de la falda. El resultado del reset autorizado y su verificación se registra en la descripción del #29.
   - Gabi autorizó reiniciar únicamente esa clave después del merge del #29. Consultar el resultado y el respaldo en el registro final del PR antes de repetir un reset; las demás tiendas quedan fuera.

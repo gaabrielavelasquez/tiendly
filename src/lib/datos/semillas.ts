@@ -134,6 +134,8 @@ const EJEMPLOS: Record<string, () => DatosTienda> = { "glow-labo": glowLabo };
 /** La semilla de una tienda (demo o ejemplo), o null si no es una de ellas. */
 export const semillaDe = (slug: string) => (slug === slugDemo() ? semillaDemo() : EJEMPLOS[slug]?.() ?? null);
 export const esEjemplo = (slug: string) => slug === slugDemo() || slug in EJEMPLOS;
+/** Tiendas de demo (MUÑA, Glow Labo, Heather): nadie ingresa a ellas y en producción no se editan. */
+export const esDemo = (slug: string) => esEjemplo(slug) || esHeather(slug);
 
 type Nueva = { nombre: string; slug: string; celularVentas: string; rubros: RubroId[]; rubroOtro?: string; duena?: string };
 

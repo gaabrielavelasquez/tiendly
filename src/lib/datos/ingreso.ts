@@ -1,9 +1,11 @@
 import { clavesConPrefijo, escribir, leer } from "./almacen";
+import { esDemo } from "./semillas";
 import { datosTienda, type DatosTienda } from "./tienda";
 
 const entorno = () => process.env.VERCEL_ENV ?? "local";
 const claveIngreso = (celular: string) => `${entorno()}:ingreso:${celular}`;
-const coincide = (d: DatosTienda, celular: string) => (d.tienda.celularIngreso ?? d.tienda.celularVentas) === celular;
+/** Las demos nunca coinciden: su número es público y el código de WhatsApp es simulado. */
+const coincide = (d: DatosTienda, celular: string) => !esDemo(d.tienda.slug) && (d.tienda.celularIngreso ?? d.tienda.celularVentas) === celular;
 
 export const recordarIngreso = (celular: string, slug: string) => escribir(claveIngreso(celular), slug);
 

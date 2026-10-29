@@ -4,15 +4,16 @@ import { useState } from "react";
 import { Button, Field } from "@/components/ui";
 import { BotonGoogle } from "./boton-google";
 import { useOnboarding } from "../hooks/use-onboarding";
+import { ingresoCelularActivo } from "../lib/ingreso-celular";
 import { errorCelular, formatear, soloDigitos } from "../lib/phone";
 
 // Titular en dos tonos, como el saludo de Inicio (decisión 0031): mismo tamaño, primario + secundario.
 const TITULAR = {
   crear: ["Crea tu tienda gratis.", "Lista en 2 minutos."],
-  ingresar: ["Ingresa a tu tienda.", "Con tu número de WhatsApp."],
+  ingresar: ["Ingresa a tu tienda.", ingresoCelularActivo ? "Con tu número de WhatsApp." : "Con tu cuenta de Google."],
 } as const;
 
-/** O1 / OD1 · Registro con WhatsApp o Google. */
+/** O1 / OD1 · Registro con WhatsApp o Google. En la beta, solo Google (ver lib/ingreso-celular). */
 export function StepRegistro() {
   const { state, set } = useOnboarding();
   const [digitos, setDigitos] = useState(state.celular);
@@ -40,25 +41,29 @@ export function StepRegistro() {
         </h1>
         {crear && <p className="text-body text-pretty text-fg-secondary">Tu link para vender por WhatsApp e Instagram. Sin tarjeta.</p>}
       </header>
-      <Field
-        label="Tu número de WhatsApp"
-        prefix="+51"
-        prefixFijo
-        type="tel"
-        inputMode="numeric"
-        autoComplete="tel-national"
-        placeholder="987 654 321"
-        value={formatear(digitos)}
-        onChange={(e) => setDigitos(soloDigitos(e.target.value))}
-        hint="Te mandamos un código por WhatsApp. No usamos contraseñas."
-        error={error}
-      />
-      <Button type="submit" block loading={enviando}>
-        Recibir código por WhatsApp
-      </Button>
-      <div className="flex items-center gap-3 text-body-sm text-fg-secondary" aria-hidden>
-        <span className="h-px flex-1 bg-line-subtle" />o<span className="h-px flex-1 bg-line-subtle" />
-      </div>
+      {ingresoCelularActivo && (
+        <>
+          <Field
+            label="Tu número de WhatsApp"
+            prefix="+51"
+            prefixFijo
+            type="tel"
+            inputMode="numeric"
+            autoComplete="tel-national"
+            placeholder="987 654 321"
+            value={formatear(digitos)}
+            onChange={(e) => setDigitos(soloDigitos(e.target.value))}
+            hint="Te mandamos un código por WhatsApp. No usamos contraseñas."
+            error={error}
+          />
+          <Button type="submit" block loading={enviando}>
+            Recibir código por WhatsApp
+          </Button>
+          <div className="flex items-center gap-3 text-body-sm text-fg-secondary" aria-hidden>
+            <span className="h-px flex-1 bg-line-subtle" />o<span className="h-px flex-1 bg-line-subtle" />
+          </div>
+        </>
+      )}
       <BotonGoogle />
       <div className="mt-auto flex flex-col gap-3 pt-2 text-center lg:mt-0 lg:pt-6">
         <p className="text-body-sm text-fg-secondary">
