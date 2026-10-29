@@ -25,6 +25,8 @@ export type TiendaSesion = {
   /** Identidad publicada desde Mi tienda; sin valor se conservan los datos originales de la tienda. */
   apariencia?: Omit<import("@/features/mi-tienda/types").Tienda, "whatsapp" | "nombreOfertas">;
   plan: "free" | "pro";
+  /** Cuándo se creó en el onboarding (ISO). Las tiendas anteriores y las de ejemplo no lo tienen. */
+  creadaEl?: string;
   /** Pasos de "arrancar tu tienda" que no se deducen de los datos (Inicio, tienda nueva). */
   hechos: { pagos: boolean; entregas: boolean; compartir: boolean };
 };

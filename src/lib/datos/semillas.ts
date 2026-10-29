@@ -6,6 +6,7 @@ import { CATALOGO_HEATHER } from "@/features/productos/lib/catalogo-heather";
 import type { Producto, TablaTallas } from "@/features/productos/types";
 import { colorPorTalla } from "@/features/productos/lib/variantes";
 import type { DatosTienda } from "./tienda";
+import { ahoraIso } from "@/lib/reloj";
 import { TIENDAS_EJEMPLO } from "./tiendas-ejemplo";
 
 // Datos de partida: la tienda de demo y las tiendas nuevas del onboarding.
@@ -144,7 +145,7 @@ type Nueva = { nombre: string; slug: string; celularVentas: string; rubros: Rubr
 export function tiendaNueva(t: Nueva): DatosTienda {
   const zona = (id: "lima" | "callao" | "provincias") => ({ id, activa: false, costo: "", plazo: "" });
   return {
-    tienda: { nombre: t.nombre, slug: t.slug, duena: t.duena, celularVentas: t.celularVentas, plan: "free", hechos: { pagos: false, entregas: false, compartir: false } },
+    tienda: { nombre: t.nombre, slug: t.slug, duena: t.duena, celularVentas: t.celularVentas, plan: "free", creadaEl: ahoraIso(), hechos: { pagos: false, entregas: false, compartir: false } },
     productos: [],
     pedidos: { ultimo: 1000, creados: [] },
     inventario: {},
