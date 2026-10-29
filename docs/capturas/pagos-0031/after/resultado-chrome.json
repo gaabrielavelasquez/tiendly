@@ -1,0 +1,188 @@
+{
+  "preview": "https://tiendly-aa54urq12-gaabrielavelasquez-8525s-projects.vercel.app",
+  "module": "pagos",
+  "phase": "after",
+  "tests": [
+    {
+      "engine": "chrome",
+      "n": "pagos",
+      "w": 390,
+      "scroll": 390
+    },
+    {
+      "engine": "chrome",
+      "n": "pagos-sin-activar",
+      "w": 390,
+      "scroll": 390
+    },
+    {
+      "engine": "chrome",
+      "n": "pagos-revision",
+      "w": 390,
+      "scroll": 390
+    },
+    {
+      "engine": "chrome",
+      "n": "pagos-error",
+      "w": 390,
+      "scroll": 390
+    },
+    {
+      "engine": "chrome",
+      "n": "cuenta-comisiones",
+      "w": 390,
+      "scroll": 390
+    },
+    {
+      "engine": "chrome",
+      "n": "inicio",
+      "w": 390,
+      "scroll": 390
+    },
+    {
+      "engine": "chrome",
+      "n": "revision",
+      "w": 390,
+      "scroll": 390
+    },
+    {
+      "engine": "chrome",
+      "n": "observada",
+      "w": 390,
+      "scroll": 390
+    },
+    {
+      "engine": "chrome",
+      "n": "aprobada",
+      "w": 390,
+      "scroll": 390
+    },
+    {
+      "engine": "chrome",
+      "n": "afiliacion-error",
+      "w": 390,
+      "scroll": 390
+    },
+    {
+      "engine": "chrome",
+      "n": "paso-1",
+      "w": 390,
+      "scroll": 390
+    },
+    {
+      "engine": "chrome",
+      "n": "paso-2",
+      "w": 390,
+      "scroll": 390
+    },
+    {
+      "engine": "chrome",
+      "n": "paso-3",
+      "w": 390,
+      "scroll": 390
+    },
+    {
+      "engine": "chrome",
+      "n": "paso-4",
+      "w": 390,
+      "scroll": 390
+    },
+    {
+      "engine": "chrome",
+      "n": "paso-5",
+      "w": 390,
+      "scroll": 390
+    },
+    {
+      "engine": "chrome",
+      "n": "pagos",
+      "w": 1440,
+      "scroll": 1440
+    },
+    {
+      "engine": "chrome",
+      "n": "pagos-sin-activar",
+      "w": 1440,
+      "scroll": 1440
+    },
+    {
+      "engine": "chrome",
+      "n": "pagos-revision",
+      "w": 1440,
+      "scroll": 1440
+    },
+    {
+      "engine": "chrome",
+      "n": "pagos-error",
+      "w": 1440,
+      "scroll": 1440
+    },
+    {
+      "engine": "chrome",
+      "n": "cuenta-comisiones",
+      "w": 1440,
+      "scroll": 1440
+    },
+    {
+      "engine": "chrome",
+      "n": "inicio",
+      "w": 1440,
+      "scroll": 1440
+    },
+    {
+      "engine": "chrome",
+      "n": "revision",
+      "w": 1440,
+      "scroll": 1440
+    },
+    {
+      "engine": "chrome",
+      "n": "observada",
+      "w": 1440,
+      "scroll": 1440
+    },
+    {
+      "engine": "chrome",
+      "n": "aprobada",
+      "w": 1440,
+      "scroll": 1440
+    },
+    {
+      "engine": "chrome",
+      "n": "afiliacion-error",
+      "w": 1440,
+      "scroll": 1440
+    },
+    {
+      "engine": "chrome",
+      "n": "paso-1",
+      "w": 1440,
+      "scroll": 1440
+    },
+    {
+      "engine": "chrome",
+      "n": "paso-2",
+      "w": 1440,
+      "scroll": 1440
+    },
+    {
+      "engine": "chrome",
+      "n": "paso-3",
+      "w": 1440,
+      "scroll": 1440
+    },
+    {
+      "engine": "chrome",
+      "n": "paso-4",
+      "w": 1440,
+      "scroll": 1440
+    },
+    {
+      "engine": "chrome",
+      "n": "paso-5",
+      "w": 1440,
+      "scroll": 1440
+    }
+  ],
+  "writes": "solo datos de prueba en navegador; ninguna acción del servidor"
+}

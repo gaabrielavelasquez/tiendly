@@ -1,0 +1,278 @@
+{
+  "preview": "https://tiendly-aa54urq12-gaabrielavelasquez-8525s-projects.vercel.app",
+  "module": "pagos",
+  "phase": "after",
+  "tests": [
+    {
+      "engine": "webkit",
+      "n": "pagos",
+      "w": 390,
+      "scroll": 390
+    },
+    {
+      "engine": "webkit",
+      "n": "pagos-sin-activar",
+      "w": 390,
+      "scroll": 390
+    },
+    {
+      "engine": "webkit",
+      "n": "pagos-revision",
+      "w": 390,
+      "scroll": 390
+    },
+    {
+      "engine": "webkit",
+      "n": "pagos-error",
+      "w": 390,
+      "scroll": 390
+    },
+    {
+      "engine": "webkit",
+      "n": "cuenta-comisiones",
+      "w": 390,
+      "scroll": 390
+    },
+    {
+      "engine": "webkit",
+      "n": "inicio",
+      "w": 390,
+      "scroll": 390
+    },
+    {
+      "engine": "webkit",
+      "n": "revision",
+      "w": 390,
+      "scroll": 390
+    },
+    {
+      "engine": "webkit",
+      "n": "observada",
+      "w": 390,
+      "scroll": 390
+    },
+    {
+      "engine": "webkit",
+      "n": "aprobada",
+      "w": 390,
+      "scroll": 390
+    },
+    {
+      "engine": "webkit",
+      "n": "afiliacion-error",
+      "w": 390,
+      "scroll": 390
+    },
+    {
+      "engine": "webkit",
+      "n": "paso-1",
+      "w": 390,
+      "scroll": 390
+    },
+    {
+      "engine": "webkit",
+      "n": "paso-2",
+      "w": 390,
+      "scroll": 390
+    },
+    {
+      "engine": "webkit",
+      "n": "paso-3",
+      "w": 390,
+      "scroll": 390
+    },
+    {
+      "engine": "webkit",
+      "n": "paso-4",
+      "w": 390,
+      "scroll": 390
+    },
+    {
+      "engine": "webkit",
+      "n": "paso-5",
+      "w": 390,
+      "scroll": 390
+    },
+    {
+      "engine": "webkit",
+      "n": "pagos",
+      "w": 1440,
+      "scroll": 1440
+    },
+    {
+      "engine": "webkit",
+      "n": "pagos-sin-activar",
+      "w": 1440,
+      "scroll": 1440
+    },
+    {
+      "engine": "webkit",
+      "n": "pagos-revision",
+      "w": 1440,
+      "scroll": 1440
+    },
+    {
+      "engine": "webkit",
+      "n": "pagos-error",
+      "w": 1440,
+      "scroll": 1440
+    },
+    {
+      "engine": "webkit",
+      "n": "cuenta-comisiones",
+      "w": 1440,
+      "scroll": 1440
+    },
+    {
+      "engine": "webkit",
+      "n": "inicio",
+      "w": 1440,
+      "scroll": 1440
+    },
+    {
+      "engine": "webkit",
+      "n": "revision",
+      "w": 1440,
+      "scroll": 1440
+    },
+    {
+      "engine": "webkit",
+      "n": "observada",
+      "w": 1440,
+      "scroll": 1440
+    },
+    {
+      "engine": "webkit",
+      "n": "aprobada",
+      "w": 1440,
+      "scroll": 1440
+    },
+    {
+      "engine": "webkit",
+      "n": "afiliacion-error",
+      "w": 1440,
+      "scroll": 1440
+    },
+    {
+      "engine": "webkit",
+      "n": "paso-1",
+      "w": 1440,
+      "scroll": 1440
+    },
+    {
+      "engine": "webkit",
+      "n": "paso-2",
+      "w": 1440,
+      "scroll": 1440
+    },
+    {
+      "engine": "webkit",
+      "n": "paso-3",
+      "w": 1440,
+      "scroll": 1440
+    },
+    {
+      "engine": "webkit",
+      "n": "paso-4",
+      "w": 1440,
+      "scroll": 1440
+    },
+    {
+      "engine": "webkit",
+      "n": "paso-5",
+      "w": 1440,
+      "scroll": 1440
+    },
+    {
+      "engine": "webkit",
+      "n": "pagos",
+      "w": 360,
+      "scroll": 360
+    },
+    {
+      "engine": "webkit",
+      "n": "pagos-sin-activar",
+      "w": 360,
+      "scroll": 360
+    },
+    {
+      "engine": "webkit",
+      "n": "pagos-revision",
+      "w": 360,
+      "scroll": 360
+    },
+    {
+      "engine": "webkit",
+      "n": "pagos-error",
+      "w": 360,
+      "scroll": 360
+    },
+    {
+      "engine": "webkit",
+      "n": "cuenta-comisiones",
+      "w": 360,
+      "scroll": 360
+    },
+    {
+      "engine": "webkit",
+      "n": "inicio",
+      "w": 360,
+      "scroll": 360
+    },
+    {
+      "engine": "webkit",
+      "n": "revision",
+      "w": 360,
+      "scroll": 360
+    },
+    {
+      "engine": "webkit",
+      "n": "observada",
+      "w": 360,
+      "scroll": 360
+    },
+    {
+      "engine": "webkit",
+      "n": "aprobada",
+      "w": 360,
+      "scroll": 360
+    },
+    {
+      "engine": "webkit",
+      "n": "afiliacion-error",
+      "w": 360,
+      "scroll": 360
+    },
+    {
+      "engine": "webkit",
+      "n": "paso-1",
+      "w": 360,
+      "scroll": 360
+    },
+    {
+      "engine": "webkit",
+      "n": "paso-2",
+      "w": 360,
+      "scroll": 360
+    },
+    {
+      "engine": "webkit",
+      "n": "paso-3",
+      "w": 360,
+      "scroll": 360
+    },
+    {
+      "engine": "webkit",
+      "n": "paso-4",
+      "w": 360,
+      "scroll": 360
+    },
+    {
+      "engine": "webkit",
+      "n": "paso-5",
+      "w": 360,
+      "scroll": 360
+    }
+  ],
+  "writes": "solo datos de prueba en navegador; ninguna acción del servidor"
+}

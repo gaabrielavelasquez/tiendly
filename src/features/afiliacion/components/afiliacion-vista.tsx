@@ -3,7 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { CloudOff } from "lucide-react";
-import { PanelMain } from "@/components/panel";
+import { PanelMain, useOcultarBarraInferior } from "@/components/panel";
 import { Button, Card, EmptyState } from "@/components/ui";
 import { STORAGE } from "../lib/borrador";
 import { cn } from "@/lib/cn";
@@ -28,6 +28,7 @@ export function AfiliacionVista({ escenario, soporte, rubros, tienda }: { escena
   const destino = useRef("/panel/configuracion");
   const card = useRef<HTMLDivElement>(null);
   const enFormulario = m.paso >= 1 && m.paso <= 4;
+  useOcultarBarraInferior(enFormulario);
   const ocupado = m.buscando || m.enviando;
   useEffect(() => {
     if (!enFormulario) return;
@@ -62,16 +63,16 @@ export function AfiliacionVista({ escenario, soporte, rubros, tienda }: { escena
     else m.ir(m.paso - 1);
   }
   const rucBloqueado = m.paso === 1 && m.negocio?.condicion === "no-habido";
-  return <PanelMain className="pb-32 lg:pb-16">
+  return <PanelMain className="gap-10 pb-40 lg:gap-12 lg:pb-16">
     <nav aria-label="Ruta" className="flex flex-wrap gap-2 text-caption text-fg-secondary"><Link className="link-text flex min-h-11 items-center" href="/panel/configuracion">Configuración</Link><span className="self-center">/</span><span className="self-center">Cobros automáticos</span></nav>
-    <header className={cn("w-full", m.paso === 6 ? "max-w-180" : "mx-auto max-w-160")}><h1 className="font-display-title text-h1 text-fg">{m.paso === 6 ? "Métodos de pago" : "Cobros automáticos"}</h1><p className="mt-2 text-body text-fg-secondary">{m.paso === 6 ? "Sigue el estado de tus cobros automáticos." : "Tarjeta y Yape en tu tienda, con una solicitud guiada."}</p></header>
-    <p className={cn("w-full rounded-button border border-info-border bg-info-surface p-3 text-caption text-info", m.paso === 6 ? "max-w-180" : "mx-auto max-w-160")}>Modo de prueba. Usa datos ficticios: no se consultan servicios externos ni se envían mensajes o confirmaciones.</p>
-    {m.estado === "cargando" ? <AfiliacionSkeleton /> : m.estado === "error" ? <Card className="mx-auto w-full max-w-2xl"><EmptyState icon={CloudOff} title="No pudimos cargar tu solicitud" description="El borrador no se pudo leer. Puedes empezar una solicitud nueva con datos de prueba." action={<Button onClick={m.reiniciar}>Empezar de nuevo</Button>} /></Card> :
+    <header className={cn("w-full", m.paso === 6 ? "max-w-180" : "mx-auto max-w-160")}><h1 className="font-display-light text-h1 text-fg">{m.paso === 6 ? "Métodos de pago" : "Cobros automáticos"}</h1><p className="mt-2 text-body text-fg-secondary">{m.paso === 6 ? "Sigue el estado de tus cobros automáticos." : "Tarjeta y Yape en tu tienda, con una solicitud guiada."}</p></header>
+    <p className={cn("w-full text-caption text-fg-secondary", m.paso === 6 ? "max-w-180" : "mx-auto max-w-160")}>Modo de prueba. Usa datos ficticios: no se consultan servicios externos ni se envían mensajes o confirmaciones.</p>
+    {m.estado === "cargando" ? <AfiliacionSkeleton /> : m.estado === "error" ? <Card className="mx-auto w-full max-w-2xl"><EmptyState simple icon={CloudOff} title="No pudimos cargar tu solicitud" description="El borrador no se pudo leer. Puedes empezar una solicitud nueva con datos de prueba." action={<Button onClick={m.reiniciar}>Empezar de nuevo</Button>} /></Card> :
       <div ref={card} className={cn("w-full scroll-mt-20", m.paso === 6 ? "max-w-180" : "mx-auto max-w-160")}>
-        <Card className="flex flex-col gap-6 p-5 lg:p-8">
+        <div className="flex min-w-0 flex-col gap-10 lg:gap-12">
           {enFormulario && <Stepper paso={m.paso} />}
           {m.paso === 0 && <AntesEmpezar empezar={() => m.ir(1)} ayuda={() => setDialogo("ayuda")} />}
-          {enFormulario && <form noValidate onSubmit={e => { e.preventDefault(); if (!ocupado) void (m.paso === 4 ? m.enviar() : m.continuar()); }} className="flex flex-col gap-6">
+          {enFormulario && <form noValidate onSubmit={e => { e.preventDefault(); if (!ocupado) void (m.paso === 4 ? m.enviar() : m.continuar()); }} className="flex min-w-0 flex-col gap-10 lg:gap-12">
             {Object.values(m.errores).some(Boolean) && <p role="alert" className="rounded-button border border-error-border bg-error-surface p-3 text-body-sm text-error">Revisa los campos marcados para continuar.</p>}
             <fieldset disabled={m.enviando} className="min-w-0">
               {m.paso === 1 && <PasoNegocio m={m} ayuda={() => setDialogo("ayuda")} whatsapp={() => salir("/panel")} />}
@@ -80,7 +81,7 @@ export function AfiliacionVista({ escenario, soporte, rubros, tienda }: { escena
               {m.paso === 4 && <PasoRevision m={m} terminos={() => setDialogo("terminos")} />}
             </fieldset>
             {m.mensaje && <p role="alert" className="text-body-sm text-error">{m.mensaje}</p>}
-            <div className="fixed inset-x-0 bottom-0 z-20 flex items-center justify-end gap-3 border-t border-line-subtle bg-surface p-4 lg:static lg:border-0 lg:p-0">
+            <div className="fixed inset-x-0 bottom-0 z-20 flex items-center justify-end gap-3 border-t border-line-subtle bg-surface px-4 pt-3 pb-[max(env(safe-area-inset-bottom),--spacing(3))] lg:static lg:border-0 lg:p-0">
               <Button type="button" variant="secondary" disabled={ocupado} onClick={volver}>Volver</Button>
               {rucBloqueado && <Button type="button" variant="secondary" className="hidden lg:inline-flex" onClick={() => salir("/panel")}>Seguir con Pedidos por WhatsApp</Button>}
               <Button type="submit" loading={ocupado} disabled={ocupado || rucBloqueado || (m.paso === 4 && !m.acepto)}>{m.enviando ? "Enviando solicitud…" : m.buscando ? "Buscando…" : m.paso === 4 ? "Enviar solicitud" : m.paso === 1 && !m.negocio ? "Buscar negocio" : "Continuar"}</Button>
@@ -88,7 +89,7 @@ export function AfiliacionVista({ escenario, soporte, rubros, tienda }: { escena
           </form>}
           {m.paso === 5 && m.solicitud && <SolicitudEnviada solicitud={m.solicitud} verDetalle={() => m.ir(6)} />}
           {m.paso === 6 && m.solicitud && <EstadoSolicitud solicitud={m.solicitud} detalle={() => setDialogo("detalle")} corregir={() => m.editar(3)} soporte={soporte} />}
-        </Card>
+        </div>
       </div>}
     {!enFormulario && m.mensaje && <p role="alert" className="text-body-sm text-error">{m.mensaje}</p>}
     <AfiliacionDialogos dialogo={dialogo} cerrar={() => { setDialogo(null); setErrorSalir(""); }} salir={() => salir()} m={m} errorSalir={errorSalir} />

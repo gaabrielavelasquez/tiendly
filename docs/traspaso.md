@@ -32,16 +32,13 @@ Para el agente que sigue (Codex) y para Gabi. Antes de tocar código, lee [`AGEN
 
 | PR | Rama | Estado | Preview |
 |---|---|---|---|
-| **#36** · Cupones 0031 | `feat/cupones-diseno-0031` | Pendiente de revisión de Gabi; **sin merge autorizado**. | — |
-| **#37** · Pagos y Afiliación 0031 | `feat/cobros-afiliacion-diseno` | Pendiente de revisión de Gabi; **sin merge autorizado**. | — |
-| **#38** · Ingreso: recupera la tienda | `fix/flujo-completo-ingreso` | Pendiente de revisión de Gabi; **sin merge autorizado**. | — |
 | **#22** · Prototipo de ofertas | `proto/productos-ofertas` | **No mergear.** Ya está implementado (#24 a #27). Cerrarlo y borrar la rama cuando Gabi diga. | Verde |
 
-Integrados hasta el 24-oct: #24 a #35 (el último, #35, checkout y confirmaciones 0031, `7617988`).
+Integrados: #24 a #39. El 29-oct, con ok de Gabi: #39 (fecha de creación y traspaso), #38 (ingreso), #36 (Cupones 0031) y #37 (Pagos y Afiliación 0031), en ese orden, cada uno con preview verde, tokens y build.
 
 ## Próximas tareas, en orden
 
-1. **Gabi revisa #36, #37 y #38.** No mergear ni empezar otra tarea antes de su ok.
+1. **Gabi envía su lista de revisión** tras los merges del 29-oct. No empezar otra tarea antes.
 2. **Onboarding 2–4**, después de esa revisión.
 3. **Antes de la beta: base de datos separada para desarrollo y previews** (ver Riesgos). No se cambió todavía.
 
@@ -53,7 +50,7 @@ Pendiente sin fecha: precio y SKU por variante (`docs/backlog.md`); renombrar el
   - Los datos viven en Upstash Redis (`production:tienda:muna`) y, antes del cierre del #29, contenían tres productos sin la oferta de la falda. El resultado del reset autorizado y su verificación se registra en la descripción del #29.
   - Gabi autorizó reiniciar únicamente esa clave después del merge del #29. Consultar el resultado y el respaldo en el registro final del PR antes de repetir un reset; las demás tiendas quedan fuera.
   - Glow Labo no tiene este problema.
-- **Previews y desarrollo local escriben en la base Redis de producción.** Es la misma base de Upstash; solo el prefijo de la clave separa los entornos (`production:`, `preview:`, `local:` si el local tiene las credenciales). Una prueba en un preview crea claves reales en esa base, y un error en el prefijo podría pisar tiendas de producción.
+- **Desarrollo local y cualquier preview con credenciales escriben en la base Redis de producción.** Las variables `KV_*` están en los entornos Production y Development de Vercel (no en Preview), y apuntan a la misma base de Upstash; solo el prefijo de la clave separa los entornos (`production:`, `preview:`, `local:`). Un local con `vercel env pull` o un preview al que se le pasen credenciales (como el E2E temporal del #38) crea claves reales en esa base, y un error en el prefijo podría pisar tiendas de producción. Los previews normales guardan en memoria.
   - **Antes de la beta**, desarrollo y previews deben usar una base aparte (otra base de Upstash con sus propias variables en los entornos Preview y Development de Vercel). No se cambió todavía.
   - Mientras tanto: no crear tiendas de prueba en producción sin anotarlas aquí, y nunca borrar ni reiniciar claves `production:` sin el ok de Gabi.
 - Para probar flujos que guardan, usa un solo proceso local **en un `git worktree` aparte**: `npm run build` y después `TIENDLY_TIENDA_DEMO=muna npx next start -p 3200`.
@@ -361,3 +358,12 @@ Pagos, bancos, entregas y WhatsApp siguen simulados. No se enviaron mensajes, co
 - Nueva rama feat/cupones-diseno-0031 desde main 4ab96fa, worktree /private/tmp/tiendly-cupones-diseno. Sin tocar checkout principal ni 3100. Lista/contenedores/divisores, títulos externos, formularios, límite Free y eliminación con hoja nativa/foco Conservar. Switch con check y dinero sin .00 existentes. Reglas 0008 y acciones de servidor conservadas. Error de red/copia con reintento, no deja controles ocupados.
 - Tokens/build pasan. Chrome/WebKit locales: monto 30,90, guardar/recargar, eliminar/error/reintento/foco y límite Free 3 por servidor; pausa libera lugar. Solo memoria local 3207 sin Redis. Vercel antes ju9e56qi3 y después 7409w0n62, ambas con demo Heather solo en el despliegue, sin cambiar el proyecto. Antes/después 390/1440 en docs/capturas/cupones-0031/. WebKit también 360 sin scroll. Carga de Next con retraso solo dev/preview; sin acciones de guardado en Vercel.
 - #35 y #36 quedan abiertos, sin merge. Gabi autorizó continuar inmediatamente con B, Pagos/Cobros/Afiliación, en otro PR desde main; luego E2E en preview y correcciones en un último PR. Nada tiene autorización de merge.
+
+## Pase B · PR #37 · Pagos/Cobros/Afiliación
+
+- Rama independiente feat/cobros-afiliacion-diseno desde main 4ab96fa; worktree /private/tmp/tiendly-cobros-diseno. Pase 0031 a métodos, comisiones, inicio, cuatro pasos, enviada/revisión/observada/aprobada y error. Sin tocar reglas 0007, último método, solicitud/CCI/RUC, términos o borradores. Switches existentes con check, dinero sin .00 y titulares externos, iconos sin cajas, progreso carbón y barra móvil segura.
+- Código ca9c807, preview aa54urq12 verde con Heather solo por despliegue; antes ju9e56qi3, ambos sin cambiar variables del proyecto. Capturas 390/1440 en docs/capturas/pagos-0031/. Estados vacíos/carga/error/datos y pasos; se siembra solo borrador ficticio de navegador para capturar, sin acciones del servidor en Vercel. Último ajuste de HojaModal aplica titular 0031 a las hojas; pantallas principales coinciden con las capturas.
+- Chrome/WebKit locales en 3208: no habido bloqueado, consulta válida, cuatro pasos, CCI, aceptación y envío simulado. Nada externo, solo memoria sin Redis. Tokens/build pasan, servidor 3208 cerrado tras verificar PID 32967. 3100 intacto.
+- #35, #36 y #37 permanecen sin merge. Continúa prueba E2E autorizada a 390 en una preview temporal que combina sus cambios sin integrarlos a main; registrar fallas y corregirlas en un último PR desde main.
+
+- Verificación final Safari Vercel de B completada a 390/1440/360, todos los pasos y estados sin scroll; resultado en after/resultado-webkit.json. La siembra de borradores espera la hidratación para que el harness no los reemplace. Se continúa con E2E real en preview, sin merge.
