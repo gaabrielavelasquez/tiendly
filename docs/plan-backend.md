@@ -14,7 +14,14 @@
 4. **Dos etapas de datos (decidido).** Etapa 1 (para la beta): la misma forma de hoy, un documento por tienda, pero en D1 y con un número de versión, que arregla los guardados que se pisan. Etapa 2 (antes del registro abierto de enero): tablas por módulo.
 5. **Fecha:** a 12–15 h por semana, con Diego en el ingreso con Google (PR 5), la beta puede arrancar entre el **16 y el 20 de noviembre**. Si Gabi lo hace sin ayuda, entre el **20 y el 27**.
 6. **Ante la duda, las demos se protegen.** Si `TIENDLY_ENTORNO` falta o trae un valor raro, la app se comporta como producción: las demos no se editan y no hay ingreso de prueba (§7.1).
-7. **Antes de invitar a la beta:** ingreso con Google con permisos por tienda, `tiendly.pe` activo (se compra a inicios de noviembre) y el repo en **privado** (hoy es público y tiene fotos y datos de Heather sin su permiso, §13).
+7. **Innegociable antes de invitar a la beta** (§9.3):
+   - ingreso con Google con permisos por tienda;
+   - el repo en **privado** (hoy es público y tiene fotos y datos de Heather sin su permiso, §13);
+   - base real con copias de seguridad y una base de pruebas aparte;
+   - `tiendly.pe` activo (se compra a inicios de noviembre);
+   - Términos y Privacidad publicados.
+
+   Si el calendario se atrasa, se mueven las fechas, no esto.
 8. **Beta = "Tienda fundadora"** hasta una fecha común, el **28 de febrero de 2027**; después, plan Free con el mismo link (§4.4). Gabi viaja del 3 al 18 de febrero y Diego cubre el soporte (§14).
 
 ---
@@ -323,9 +330,17 @@ En la Etapa 1 no hace falta esta tabla: lo esencial (productos, pedidos, cupones
 
 1. **Al leer:** una tienda `beta_plus` con `beta_hasta` vencida se trata como `free`. Así funciona aunque el cron falle.
 2. **Cron** (`tiendly-tareas`, el mismo de las reservas): guarda `plan = 'free'`. No toca el slug, el link, los productos, los pedidos ni `fundadora_desde`.
-3. **Lo que pasa el límite de Free** (por ejemplo, más de 3 cupones en uso): no se borra nada. **Propuesta, por confirmar con Gabi:** los que pasan el límite quedan pausados, empezando por los más nuevos, y el aviso lo explica antes.
+3. **Cupones por encima del límite de Free** (decisión 6 de §12): si la tienda tiene más de 3 cupones en uso, se pausan los que sobran, **empezando por los más nuevos**. "En uso" significa activos y programados, como cuenta hoy `cuponesEnUso`. **No se borra nada.** La tienda elige cuáles quedan activos con el interruptor de pausa que ya existe: pausa uno y activa otro, dentro del límite. Para saber cuáles son los más nuevos:
+   - En la Etapa 1, sirve el orden de la lista, porque los cupones nuevos entran primero (`guardarCupon` usa `unshift`).
+   - En la Etapa 2, la tabla `cupones` suma `creado_el`.
+   - Hasta que el cron los pause, el checkout aplica la misma regla al leer: solo valen los 3 cupones en uso más antiguos.
 
-**Aviso, semanas antes:** desde el **25 de enero de 2027**, el panel de cada tienda fundadora muestra una franja neutra, como la de 0046. Además, Gabi manda un mensaje personal **antes de viajar** (el 3 de febrero). Texto propuesto: "Tu acceso de Tienda fundadora termina el 28 de febrero. Tu tienda, tu link y tus datos siguen igual." El aviso necesita la aprobación de Gabi y una decisión en `docs/decisiones/`.
+**Aviso, semanas antes** (decisión 8 de §12): desde el **25 de enero de 2027**, el panel de cada tienda fundadora muestra una franja neutra, como la de 0046, con este texto exacto:
+
+> Tu acceso de Tienda fundadora termina el 28 de febrero. Tu tienda y tu link siguen igual, con el plan Free. Si usas más de 3 cupones, se pausarán los más nuevos; puedes elegir cuáles mantener. Escríbenos si quieres conversar sobre qué sigue.
+
+- **El precio de fundadora no va en la franja:** va en el mensaje personal que Gabi manda a cada tienda **antes de viajar** (el 3 de febrero).
+- Al construir la franja (PR 13), se necesita la aprobación de Gabi sobre cómo se ve y una decisión nueva en `docs/decisiones/`.
 
 **Permiso de medición:** se pide al invitar, con un texto corto y claro. Se guarda la fecha (`acepto_medicion_el`) y se explica en la página de Privacidad (§14).
 
@@ -339,8 +354,8 @@ En la Etapa 1 no hace falta esta tabla: lo esencial (productos, pedidos, cupones
 |---|---|
 | Zona con costo fijo | Se suma el costo al total, como hoy. |
 | Zona "A coordinar por WhatsApp" | "Envío por coordinar"; no se suma al total. Reutiliza `envioPorCoordinar`, que ya existe en `Totales` para las tiendas sin entregas. |
-| Envío gratis desde un monto | Se compara con el mismo cálculo de hoy (`faltaEnvioGratis`), ahora contra un número. Aplica a las zonas con costo fijo. **Propuesta, por confirmar:** en una zona por coordinar no aplica, porque no hay un monto que regalar. |
-| Cupón de envío gratis (0008) | Descuenta exactamente el costo numérico de la zona elegida. **Propuesta, por confirmar:** en una zona por coordinar no se puede usar, con el error "Este cupón no aplica a envíos por coordinar." |
+| Envío gratis desde un monto | Se compara con el mismo cálculo de hoy (`faltaEnvioGratis`), ahora contra un número. Aplica solo a las zonas con costo fijo; **en una zona "A coordinar por WhatsApp" no aplica** (decisión 7 de §12), porque no hay un monto que regalar. |
+| Cupón de envío gratis (0008) | Descuenta exactamente el costo numérico de la zona elegida. **En una zona "A coordinar por WhatsApp" no se puede usar** (decisión 7 de §12), con el error "Este cupón no aplica a envíos por coordinar." |
 
 `reglasCompra` (`checkout/lib/config.ts`) deja de convertir texto con `Number(...)` y ya no puede esconder una zona en silencio: una zona activa siempre tiene costo fijo o "coordinar".
 
@@ -502,17 +517,19 @@ Todo sale de `main` actualizado, en ramas y worktrees aparte (AGENTS.md), y **na
 | 2 | `chore/cloudflare-prueba` | **La prueba de riesgo:** la app actual en un Worker de prueba, sin datos (memoria). `frontend/wrangler.jsonc`, `frontend/open-next.config.ts`, `.dev.vars` en `.gitignore`. Mide CPU por visita y peso del Worker; prueba acciones de servidor, `revalidatePath`, fotos y `next/image`. Cambia `VERCEL_ENV` por `TIENDLY_ENTORNO` con la regla de §7.1 y sus pruebas. | 4–6 | Diego o agente |
 | 3 | `feat/d1-etapa-1` | `backend/db/migraciones/0001_etapa_1.sql` (tablas de §4.2), `frontend/src/lib/datos/almacen.ts` sobre D1 con versión, D1 local, demos sembradas, arreglos del checkout de §4.2, plan `beta_plus` con capacidades y `betaHasta` (§4.4), `backend/README.md` con los comandos. | 6–7 | Agente, con revisión de Diego |
 | 4 | `feat/fotos-r2` | `frontend/src/lib/datos/fotos.ts` sobre R2, ruta `/fotos/<clave>`, `frontend/next.config.ts` sin Blob. | 2–3 | Agente |
-| 4b | `feat/envio-por-zona` | Costo en soles enteros o "A coordinar por WhatsApp", conversión al leer, carrito/checkout, envío gratis y cupón de envío (§4.5). Cambio visual: decisión nueva y capturas 390/1440. | 3–4 | Agente, con ok de Gabi |
+| 4b | `feat/envio-por-zona` | Costo en soles enteros o "A coordinar por WhatsApp", conversión al leer, carrito/checkout, envío gratis y cupón de envío (§4.5). Cambio visual: decisión nueva y capturas 390/1440. **Puede moverse para después de las invitaciones y antes de enero; lo decide Gabi** (§9.3). | 3–4 | Agente, con ok de Gabi |
 | 5 | `feat/ingreso-google` | Better Auth + Google, `miembros`, `slugPanel()` desde la sesión, permisos en cada acción del panel, ingreso de prueba en local/preview y los commits de #40 (rama `fix/seguridad-ingreso`). | 7–9 | **Diego** (en paralelo con 3–4b) |
 | 6 | Mudanza | Script de §8.2, bases y buckets de producción, `tiendly.pe` apuntando al Worker, Workers Builds conectado a `main`, cambio de §8.3. | 3–4 | Gabi + agente |
-| — | **Beta: 5–10 tiendas fundadoras** | Invitaciones, solo con: PR 5 en producción, `tiendly.pe` activo, repo privado y permiso de medición en el mensaje de invitación. | — | Gabi |
-| 7 | `feat/tareas-cron` | Worker `tiendly-tareas` en `backend/workers/tareas/`: reservas vencidas (§4.3) y fin de la beta (§4.4). | 2–3 | Agente |
+| — | **Beta: 5–10 tiendas fundadoras** | Invitaciones, solo con lo innegociable de §9.3 cumplido, y con el permiso de medición en el mensaje de invitación. | — | Gabi |
+| 7 | `feat/tareas-cron` | Worker `tiendly-tareas` en `backend/workers/tareas/`: reservas vencidas (§4.3) y fin de la beta, con los cupones que pasan el límite pausados (§4.4). | 2–3 | Agente |
 | 8–12 | Etapa 2, un PR por módulo (decidido) | Tiendas y personas → catálogo → pedidos/stock/pagos → cupones → configuración y Afiliación. Cada uno con su migración y su script de paso desde la Etapa 1. **Antes del registro abierto de enero.** | 25–35 | Diego + agente |
 | 13 | `feat/aviso-fundadoras` | Franja del 28-feb en el panel (§4.4), visible desde el 25-ene. | 2 | Agente, con ok de Gabi |
 
 ### 9.1 Calendario realista
 
-- **Hasta la beta (pasos 0 a 6, con 4b):** unas 29–38 h, contando el envío por zona y el plan fundador.
+**Todo este calendario depende de que Diego confirme** que puede hacer el PR 5 (7–9 h, entre el 9 y el 20 de noviembre) y cubrir el soporte del 3 al 18 de febrero (§14 y §15). Sin esa confirmación, valen las fechas de "sin ayuda" y §9.3.
+
+- **Hasta la beta (pasos 0 a 6, con 4b):** unas 29–38 h, contando el envío por zona y el plan fundador. Sin el PR 4b, 3–4 h menos.
 - Con Diego en el PR 5, a Gabi le tocan unas 22–29 h: la beta arranca entre el **16 y el 20 de noviembre**.
 - Si Gabi lo hace sin ayuda: entre el **20 y el 27 de noviembre**.
 - El PR 7 (cron) puede ir después de las invitaciones: la regla de 24 h y el fin de la beta ya se cumplen al leer.
@@ -538,6 +555,19 @@ Si Next.js 16 no funciona en Workers por algo que no se arregla en un día, **la
 - Los datos quedan en Cloudflare igual; el hosting se muda cuando OpenNext lo permita.
 
 Costo: un Worker y un secreto más. Ojo: si el proyecto de Vercel está en el plan Hobby, revisar si el uso comercial está permitido (**sin verificar**).
+
+### 9.3 Qué es fijo y qué se puede mover
+
+**Regla: si el calendario se atrasa, se mueven las fechas, nunca lo innegociable.**
+
+| | Qué |
+|---|---|
+| **Innegociable antes de invitar a cualquier tienda real** | Ingreso con Google con permisos por tienda (PR 5). Repo privado. Base de datos real con copias de seguridad (D1 con *Time Travel* y exportación semanal, §8.4) y una base de pruebas aparte (`tiendly-preview`, §7). `tiendly.pe` activo. Términos y Política de Privacidad publicados. |
+| **Se puede mover** | El día exacto en que arranca la beta (entre el 16 y el 27 de noviembre). El PR 4b. La Etapa 2. La franja del 25 de enero. El cron. Cuántas tiendas arrancan: **3 tiendas bien acompañadas valen más que 10 a medias.** |
+| **Fijo desde afuera** | El viaje de Gabi (3–18 feb 2027) y diciembre (fiestas: poco tiempo para trabajar en Tiendly y mucha venta en las tiendas). |
+
+- **El 28 de febrero se vuelve una promesa recién cuando se invita a la primera tienda.** Hasta entonces, la fecha puede cambiar libremente. Después, solo puede moverse para más tarde, nunca para antes.
+- **PR 4b: puede moverse para después de las invitaciones y antes de enero. Pendiente de la decisión de Gabi.** Si se mueve, la beta arranca con el envío como hoy: el panel ya exige un número, y la conversión de §4.5 se aplica después, al leer. La decisión 7 (sin envío gratis ni cupón de envío en zonas "A coordinar") entra recién con ese PR, porque antes no existe la opción "A coordinar" por zona.
 
 ---
 
@@ -635,12 +665,13 @@ Cuándo mirar AWS: si una base pasa de unos 8 GB (el límite por base es 10 GB) 
 | 3 | **#40 se cierra sin borrar su rama.** Su contenido entra al PR 5 (ingreso con Google), que hace Diego. Hasta entonces, producción sigue con el ingreso por número simulado. Se mantiene la regla: ninguna tienda real se invita antes del ingreso con Google con permisos por tienda. | §5.3, §9 (pasos 0 y 5), §10.1 y §15 |
 | 4 | **`tiendly.pe` se compra a inicios de noviembre**, antes de invitar a la beta, después de revisar que esté libre (**sin verificar**). | §5.4, §6, §7.2, §9, §11 y §14 |
 | 5 | **Primero la Etapa 1** (un documento por tienda en D1 con número de versión); **las tablas de la Etapa 2, antes del registro abierto de enero.** | §4.1–§4.3 y §9 |
+| 6 | **Al pasar a Free, los cupones por encima del límite** (3 en uso) se pausan, empezando por los más nuevos. No se borra nada, y la tienda elige cuáles quedan activos con el interruptor de pausa que ya existe. | §4.4 y §9 (PR 7) |
+| 7 | **El envío gratis desde un monto y el cupón de envío gratis no aplican** a una zona "A coordinar por WhatsApp". | §4.5 y §9 (PR 4b) |
+| 8 | **Texto exacto de la franja del 28-feb** (neutra, como la de 0046), en §4.4. El precio de fundadora no va en la franja: va en el mensaje personal de Gabi. Al construirla (PR 13), la franja necesita la aprobación de Gabi y una decisión en `docs/decisiones/`. | §4.4 y §9 (PR 13) |
 
-Queda por confirmar con Gabi (marcado como **propuesta** donde aparece):
+Las decisiones 6 a 8 eran propuestas de este plan; Gabi las aprobó el 29-oct-2026.
 
-- Qué pasa al pasar a Free con lo que excede el límite (§4.4).
-- Si el envío gratis desde un monto y el cupón de envío gratis aplican a una zona "A coordinar" (§4.5).
-- El texto del aviso del 28-feb (§4.4).
+**Sin decidir:** si el PR 4b (envío por zona) se mueve para después de las invitaciones (§9.3).
 
 ---
 
@@ -659,7 +690,7 @@ Queda por confirmar con Gabi (marcado como **propuesta** donde aparece):
 | Función Pro que todavía no existe | Una pantalla que pregunta por el plan se rompe. | Capacidades en vez de `plan === "pro"`; lo desconocido responde "no" (§4.4). |
 | Fin de la beta 10 días después del viaje | Las tiendas se enteran tarde o sin nadie que responda. | Franja desde el 25-ene y mensaje personal antes del 3-feb (§4.4 y §14). |
 | Una sola persona conoce el sistema | Nadie puede arreglar una caída durante el viaje. | Diego con acceso propio, runbook y alertas (§14). |
-| Datos personales (celulares, direcciones, DNI y CCI de Afiliación) | Exposición o mal uso. | Permisos por tienda (PR 5), Términos y Privacidad antes del viaje. **Sin verificar** qué exige la Ley 29733 de Protección de Datos Personales para este caso. |
+| Datos personales (celulares, direcciones, DNI y CCI de Afiliación) | Exposición o mal uso. | Permisos por tienda (PR 5), Términos y Privacidad antes de invitar a la primera tienda (§9.3). **Sin verificar** qué exige la Ley 29733 de Protección de Datos Personales para este caso. |
 
 ---
 
@@ -667,6 +698,7 @@ Queda por confirmar con Gabi (marcado como **propuesta** donde aparece):
 
 Gabi viaja a Perú y visita marcas en persona durante una semana. Diego cubre el soporte y ya tiene acceso al repo. Todo esto debe estar listo **hasta el 29 de enero**:
 
+- [ ] **Diego confirmó su disponibilidad** para el PR 5 (7–9 h entre el 9 y el 20 de noviembre) y para el soporte del 3 al 18 de febrero. Se pide **antes de empezar el PR 1**: todo el calendario de §9.1 depende de esa respuesta.
 - [ ] **Diego es miembro de la cuenta de Cloudflare**, con una invitación a su propio correo. **Nunca se comparte la contraseña de la cuenta de Tiendly.** Con permisos para Workers, D1 y R2 (**sin verificar** el nombre exacto de cada rol).
 - [ ] **Diego sigue teniendo acceso al repo** después de ponerlo en privado (colaborador).
 - [ ] **Diego leyó este plan y `docs/traspaso.md`**, y practicó en preview una vuelta a la versión anterior del Worker.
@@ -678,7 +710,7 @@ Gabi viaja a Perú y visita marcas en persona durante una semana. Diego cubre el
   5. **Datos borrados o dañados:** no tocar nada y avisar a Gabi. *Time Travel* reemplaza la base entera: solo con su ok, aunque sea por WhatsApp.
 - [ ] **Alertas de errores a un correo compartido** que lean Gabi y Diego. **Sin verificar** qué notificaciones de errores de Workers ofrece Cloudflare; si no alcanzan, se usa un servicio de monitoreo gratuito.
 - [ ] **Dominio activo**, con renovación automática y vencimiento después de marzo.
-- [ ] **Términos y Privacidad publicados**, incluido el permiso de medición de uso.
+- [ ] **Términos y Privacidad al día**, incluido el permiso de medición de uso. Se publican antes de invitar a la primera tienda (§9.3); aquí solo se revisa que sigan vigentes.
 - [ ] **Aviso del 28-feb:** franja visible desde el 25-ene y mensaje personal a cada tienda fundadora antes del 3-feb.
 - [ ] **Durante el viaje, solo arreglos:** nada de funciones nuevas ni migraciones de base.
 
@@ -689,6 +721,7 @@ Gabi viaja a Perú y visita marcas en persona durante una semana. Diego cubre el
 Para Diego o para quien siga después.
 
 - **Estado al 29-oct-2026:** `main` en `e87804d` (#41, demos protegidas). Abiertos: #42 (este plan), #40 (se cierra sin borrar su rama) y #22 (no se mergea). Producción en Vercel con Upstash Redis y Blob, ingreso por número simulado, solo las demos MUÑA y Glow Labo.
+- [ ] **Confirmar tu disponibilidad** con Gabi: el PR 5 (7–9 h entre el 9 y el 20 de noviembre) y el soporte del 3 al 18 de febrero. Todo el calendario de §9.1 depende de esa respuesta.
 - **Leer primero:** `AGENTS.md`, `CLAUDE.md`, `docs/traspaso.md` y, de este plan, §2 (qué hace el código hoy), §4 (datos), §7.1 (regla de entorno), §9 (orden) y §12 (decisiones).
 - **Tu PR (5, ingreso con Google):** sale de `main` después de la mudanza. Los commits de #40 a traer con `git cherry-pick`, desde la rama `fix/seguridad-ingreso`: `67a5381`, `e3a6392` y `822f904` (saltar `c59b3a9`, que es un merge de `main`). Si alguno choca por las rutas movidas, aplicarlo sobre `frontend/`.
 - **Reglas que no se negocian:**
@@ -697,7 +730,7 @@ Para Diego o para quien siga después.
   - No se invita a una tienda real sin el PR 5 en producción.
   - `TIENDLY_ENTORNO` falla cerrado (§7.1).
   - No se reescribe el historial de Git sin aprobación explícita (§13).
-- **Lo que falta confirmar:** las propuestas de §12 y la lista "Sin verificar" de §16.
+- **Lo que falta decidir o confirmar:** si el PR 4b se mueve (§9.3), tu disponibilidad (arriba) y la lista "Sin verificar" de §16.
 
 ---
 
