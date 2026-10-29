@@ -3,18 +3,24 @@
 Este repo tiene **una sola fuente de reglas**. Antes de escribir o cambiar código, lee y sigue:
 
 1. **[`CLAUDE.md`](CLAUDE.md):** principios, reglas de negocio y micro-copy, congelamiento estético y **Workflow**. Aunque se llame así, aplica a todos los agentes.
-2. **[`DESIGN.md`](DESIGN.md):** sistema visual y tokens. Ante cualquier diferencia con otro documento, manda `DESIGN.md`.
+2. **[`frontend/DESIGN.md`](frontend/DESIGN.md):** sistema visual y tokens. Ante cualquier diferencia con otro documento, manda `frontend/DESIGN.md`.
 3. **[`docs/decisiones/`](docs/decisiones/README.md):** decisiones de producto y diseño. Si una decisión contradice un documento más viejo, manda la decisión más reciente.
 
-No dupliques esas reglas aquí: si algo cambia, se cambia en `CLAUDE.md` o `DESIGN.md` y este archivo sigue valiendo.
+No dupliques esas reglas aquí: si algo cambia, se cambia en `CLAUDE.md` o `frontend/DESIGN.md` y este archivo sigue valiendo.
+
+## Estructura del repo
+
+- **`frontend/`:** la app Next.js (código, `DESIGN.md`, tokens y scripts). **Los comandos `npm` se corren en `frontend/`.**
+- **`backend/`:** base de datos, Workers y scripts (ver [`backend/README.md`](backend/README.md) y [`docs/plan-backend.md`](docs/plan-backend.md)).
+- **En la raíz:** `docs/`, `AGENTS.md` y `CLAUDE.md`, que valen para las dos partes.
 
 ## Recordatorios que más se olvidan
 
 - **El repo manda en lo visual; Figma, en flujos y estructura** (decisión 0026). Archivo `zHR0uS37OATafFq7U4NEwr`, página **Flujos** (`1:65`).
-- **Congelamiento estético:** no cambies colores, radios, sombras, tipografías ni espacios. No edites a mano `src/styles/tokens.css` ni `tokens.ts` (salen de `design/tokens.json` con `npm run tokens`). Las pantallas nuevas reutilizan componentes y tokens existentes.
+- **Congelamiento estético:** no cambies colores, radios, sombras, tipografías ni espacios. No edites a mano `frontend/src/styles/tokens.css` ni `tokens.ts` (salen de `frontend/design/tokens.json` con `npm run tokens`). Las pantallas nuevas reutilizan componentes y tokens existentes.
 - **Copy:** tuteo, la palabra «cliente», punto final en ayudas, errores y descripciones. Sin género (0032): «la tienda» o «quien vende», nunca «vendedora» ni «emprendedora»; se reformula en vez de usar «@», «x» o «e». Multirubro: ejemplos de varias categorías.
 - **Cuatro estados** en cada vista: carga, vacío, con datos y error.
-- **De-layering (0031)**, en toda pantalla nueva o rediseñada (detalle en `CLAUDE.md` §5 y `DESIGN.md` §3–4):
+- **De-layering (0031)**, en toda pantalla nueva o rediseñada (detalle en `CLAUDE.md` §5 y `frontend/DESIGN.md` §3–4):
   - títulos de sección fuera de los contenedores, y cada lista en UN contenedor con divisores;
   - íconos finos y grises, sin círculos;
   - urgencia como texto de color, sin píldora;
@@ -34,7 +40,7 @@ No dupliques esas reglas aquí: si algo cambia, se cambia en `CLAUDE.md` o `DESI
 
 1. Una rama por módulo, desde `main`. Un PR por rama.
 2. Mobile-first: primero 390 px, después 1440 px.
-3. Antes del PR: `npm run check:tokens` y `npm run build` sin errores.
+3. Antes del PR, en `frontend/`: `npm run check:tokens` y `npm run build` sin errores.
 4. Revisa las pantallas en el navegador a 390 y 1440 px y adjunta capturas al PR.
 5. Prueba con datos reales y largos (URLs de preview de Vercel, nombres y precios largos) y confirma que no hay scroll horizontal en 360 y 390 px antes de abrir el PR.
    - **Mide en el preview de Vercel, no en localhost.** `document.documentElement.scrollWidth` no puede pasar del ancho de la pantalla. El preview de una rama aparece al abrir el PR; espera a que el check de Vercel esté en verde.
@@ -45,7 +51,7 @@ No dupliques esas reglas aquí: si algo cambia, se cambia en `CLAUDE.md` o `DESI
 
 ## Trabajo en paralelo entre agentes
 
-- **No cambies la rama del espacio de trabajo principal sin avisar:** Gabi lo usa con su servidor de desarrollo (`TIENDLY_TIENDA_DEMO=muna PORT=3100 npx next dev`). Para otra rama, usa un `git worktree` aparte y otro puerto. Nunca cierres un proceso que no levantaste.
+- **No cambies la rama del espacio de trabajo principal sin avisar:** Gabi lo usa con su servidor de desarrollo (`cd frontend && TIENDLY_TIENDA_DEMO=muna PORT=3100 npx next dev`). Para otra rama, usa un `git worktree` aparte y otro puerto. Nunca cierres un proceso que no levantaste.
 - No corras `npm run build` en la carpeta del servidor de desarrollo (pisa `.next`): hazlo en el worktree.
 - No incluyas archivos ajenos en los commits (por ejemplo, `.DS_Store`).
 - Al terminar, deja en el PR qué quedó pendiente y qué se simuló, para que el próximo agente siga desde ahí. El estado general y las próximas tareas están en [`docs/traspaso.md`](docs/traspaso.md).

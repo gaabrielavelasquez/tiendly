@@ -1,6 +1,6 @@
 # Tiendly · frontend
 
-Panel de la tienda, vitrina y onboarding. Antes de tocar UI, lee `DESIGN.md` (manda) y `CLAUDE.md`.
+Panel de la tienda, vitrina y onboarding. Antes de tocar UI, lee `DESIGN.md` (manda) y [`CLAUDE.md`](../CLAUDE.md), en la raíz del repo. Los comandos `npm` se corren en esta carpeta.
 
 ## Arrancar
 

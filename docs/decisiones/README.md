@@ -37,4 +37,6 @@ Una decisión por archivo: contexto, decisión y consecuencias. Las anteriores a
 | 0045 | [Pagos y Afiliación: 0031](0045-cobros-afiliacion-0031.md) | En revisión, sin merge |
 | 0046 | [Demos protegidas en producción](0046-demos-protegidas.md) | Aceptada |
 
+**Rutas:** desde el 29-oct-2026 (PR 1, monorepo), la app vive en `frontend/`. En las decisiones anteriores, las rutas como `src/…`, `design/…`, `public/…` o `DESIGN.md` son relativas a `frontend/`; no se reescriben.
+
 Para una decisión nueva: copia la estructura de 0026, usa el número siguiente y súmala a esta tabla.

@@ -6,8 +6,8 @@ Este archivo establece los estándares de programación, arquitectura técnica, 
 
 ## 1. Principios de Desarrollo
 
-1. **Strict Context Adherence:** Consulta siempre `DESIGN.md` antes de escribir o modificar componentes UI.
-   - **Fuente de verdad (decisión 0026):** las reglas visuales viven en `DESIGN.md`, `design/tokens.json` y el código. Figma es la referencia de flujos y de estructura de pantallas, no de valores visuales. Las decisiones se registran en `docs/decisiones/`.
+1. **Strict Context Adherence:** Consulta siempre `frontend/DESIGN.md` antes de escribir o modificar componentes UI.
+   - **Fuente de verdad (decisión 0026):** las reglas visuales viven en `frontend/DESIGN.md`, `frontend/design/tokens.json` y el código. Figma es la referencia de flujos y de estructura de pantallas, no de valores visuales. Las decisiones se registran en `docs/decisiones/`.
 2. **Cero Hardcoding:** Prohibido escribir colores hexadecimales o valores directos de `padding`/`margin` en los componentes. Utiliza únicamente las clases de Tailwind configuradas con los tokens semánticos del Azul Cobalto Eléctrico, degradados sutiles y bordes suavizados.
 3. **Modularidad & Archivos Pequeños:** Cada componente debe ser una función autocontenida de menos de 150 líneas. Separa la lógica de negocio en custom hooks.
 4. **Mobile-First & Performance:** Todo diseño se construye priorizando la vista de 390px antes de escalar a vistas desktop.
@@ -42,7 +42,7 @@ Claude utilizará los siguientes principios y bibliotecas de UI/Motion para evit
 ## 4. Stack Técnico Recomendado
 
 - **Framework:** Next.js (App Router) / React Native.
-- **Styling:** Tailwind CSS + CSS Variables con Tokens de `DESIGN.md`.
+- **Styling:** Tailwind CSS + CSS Variables con Tokens de `frontend/DESIGN.md`.
 - **Componentes Base:** Radix UI / Shadcn UI + Motion Primitives.
 - **Iconografía:** Lucide Icons.
 
@@ -57,8 +57,8 @@ Claude utilizará los siguientes principios y bibliotecas de UI/Motion para evit
   4. Estado de Error.
 - **Feedback Háptico / Visual:** Botones con transición `150ms ease-out` y escala al presionar (`active:scale-[0.98]`).
 - **Cobalto y selección:** el degradado cobalto va **solo** en el botón primario (CTA) y en **una** tarjeta protagonista por pantalla, como máximo (hoy: la tarjeta "Hoy" de Inicio, con su degradado corto de 0031). La barra del período actual en los gráficos va en cobalto sólido, aprobada por Gabi. Todo lo demás sigue `selection/*` (chips, fichas, radios, tarjetas de opción, interruptores: negro carbón `#1A1A1A` + texto blanco) e `indicator/*` (progreso, pasos, línea de tiempo: negro carbón). Links y botón Fantasma en `accent/text`.
-- **Forma (decisiones 0024 y 0031):** tarjetas de `8px` con borde casi invisible (`border/card`) y sombra nítida (`elevation/card`); botones, campos, chips y badges de `6px`, 40 px de alto en botones y campos (chip de 28 px y badge de 24 px visibles, zona táctil de 44 px). Lienzo `#F8F8F6`. Ante cualquier diferencia, manda `DESIGN.md`.
-- **De-layering (decisión 0031, ver `DESIGN.md` §3 y §4):**
+- **Forma (decisiones 0024 y 0031):** tarjetas de `8px` con borde casi invisible (`border/card`) y sombra nítida (`elevation/card`); botones, campos, chips y badges de `6px`, 40 px de alto en botones y campos (chip de 28 px y badge de 24 px visibles, zona táctil de 44 px). Lienzo `#F8F8F6`. Ante cualquier diferencia, manda `frontend/DESIGN.md`.
+- **De-layering (decisión 0031, ver `frontend/DESIGN.md` §3 y §4):**
   - Saludo en dos tonos (primario + secundario, mismo tamaño), sin emoji.
   - Títulos de sección fuera de los contenedores; cada lista en UN contenedor con divisores finos; jerarquía por espacio y tipografía, no por cajas.
   - Íconos finos, gris neutro, sin contenedores circulares; el color solo para lo que pide atención.
@@ -73,10 +73,10 @@ Claude utilizará los siguientes principios y bibliotecas de UI/Motion para evit
 
 ## 6. Congelamiento estético (Aesthetic freeze)
 
-Vigente hasta completar el Core Loop (onboarding → productos → vitrina → pedidos → carrito y compra). El Core Loop se completó (PR #12) y el congelamiento se levantó **solo** para el pase de diseño 0031, ya cerrado: sus reglas viven en `DESIGN.md`. Lo de abajo sigue valiendo para cualquier cambio visual nuevo.
+Vigente hasta completar el Core Loop (onboarding → productos → vitrina → pedidos → carrito y compra). El Core Loop se completó (PR #12) y el congelamiento se levantó **solo** para el pase de diseño 0031, ya cerrado: sus reglas viven en `frontend/DESIGN.md`. Lo de abajo sigue valiendo para cualquier cambio visual nuevo.
 
-- **No se cambian** tokens de color, radios, sombras, tipografía ni espacios, ni en `design/tokens.json` ni con clases nuevas que los imiten.
-- Las pantallas nuevas **reutilizan solo** los componentes de `src/components/` y los tokens existentes. Si algo no se puede armar con ellos, se pregunta antes de crear uno nuevo.
+- **No se cambian** tokens de color, radios, sombras, tipografía ni espacios, ni en `frontend/design/tokens.json` ni con clases nuevas que los imiten.
+- Las pantallas nuevas **reutilizan solo** los componentes de `frontend/src/components/` y los tokens existentes. Si algo no se puede armar con ellos, se pregunta antes de crear uno nuevo.
 - Cualquier cambio visual necesita la **aprobación explícita de Gabi** y se registra como decisión en `docs/decisiones/`.
 
 ---
@@ -86,7 +86,7 @@ Vigente hasta completar el Core Loop (onboarding → productos → vitrina → p
 1. **Una rama por módulo**, creada desde `main` (`feat/<módulo>`; `chore/<tema>` para lo que no es pantalla).
 2. **Mobile-first:** primero a 390 px, después a 1440 px.
 3. **Cuatro estados en cada vista:** carga, vacío, con datos y error.
-4. **Antes de abrir el PR:** `npm run check:tokens` y `npm run build`, los dos sin errores.
+4. **Antes de abrir el PR,** en `frontend/`: `npm run check:tokens` y `npm run build`, los dos sin errores.
 5. **Revisar las pantallas en el navegador** a 390 px y a 1440 px.
 6. **Probar con datos reales y largos, y sin scroll horizontal en móvil:** antes de abrir el PR, revisar cada pantalla con URLs largas (p. ej. la de una preview de Vercel, no `localhost`), nombres de tienda y de producto largos y precios altos. En 360 px y 390 px, `document.documentElement.scrollWidth` no puede pasar del ancho de la pantalla. Textos que no cortan (links, nombres): una línea con `truncate`, y `min-w-0` en sus contenedores flex o grid (en una grilla, columnas `minmax(0, 1fr)`, p. ej. `grid-cols-1`).
 7. **Abrir un PR con capturas** de cada pantalla en los dos tamaños.
