@@ -18,31 +18,17 @@ type Props = {
 export function Paso({ numero, titulo, estado, resumen, onEditar, children }: Props) {
   const id = `paso-${numero}`;
   return (
-    <section aria-labelledby={id} className={cn("border bg-surface", estado === "abierto" ? "border-line-strong" : "border-line-subtle")}>
-      <div className="flex items-start gap-3 p-4">
-        {estado === "hecho" ? (
-          <span className="flex size-7 shrink-0 items-center justify-center rounded-full bg-success-surface text-success">
-            <Check aria-hidden strokeWidth={2.2} className="size-4" />
-            <span className="sr-only">Listo:</span>
-          </span>
-        ) : (
-          <span aria-hidden className={cn("flex size-7 shrink-0 items-center justify-center rounded-full text-body-sm font-semibold", estado === "abierto" ? "bg-selected text-on-selected" : "bg-sunken text-fg-secondary")}>
-            {numero}
-          </span>
-        )}
-        <div className="flex min-w-0 flex-1 flex-col gap-0.5 pt-0.5">
-          <h2 id={id} className={cn("text-body font-semibold", estado === "pendiente" ? "text-fg-secondary" : "text-fg")}>
-            {titulo}
-          </h2>
-          {estado !== "abierto" && <div className="text-body-sm text-fg-secondary">{resumen}</div>}
-        </div>
-        {estado === "hecho" && onEditar && (
-          <button type="button" onClick={onEditar} className="-my-2 h-11 px-1 text-body-sm font-semibold text-fg underline-offset-4 hover:underline">
-            Editar<span className="sr-only"> {titulo.toLowerCase()}</span>
-          </button>
-        )}
-      </div>
-      {estado === "abierto" && <div className="flex flex-col gap-4 px-4 pb-4">{children}</div>}
+    <section aria-labelledby={id} className="flex min-w-0 flex-col gap-3">
+      <header className="flex min-w-0 items-center gap-3">
+        <span aria-hidden className={cn("flex size-6 shrink-0 items-center justify-center text-body-sm", estado === "abierto" ? "rounded-full bg-indicator text-on-selected" : "text-fg-secondary")}>
+          {estado === "hecho" ? <Check strokeWidth={1.5} className="size-5 text-icon" /> : numero}
+        </span>
+        <h2 id={id} aria-current={estado === "abierto" ? "step" : undefined} className={cn("min-w-0 flex-1 font-display-light text-h3", estado === "pendiente" ? "text-fg-secondary" : "text-fg")}>{titulo}</h2>
+        {estado === "hecho" && <span className="sr-only">Completado.</span>}
+        {estado === "hecho" && onEditar && <button type="button" onClick={onEditar} className="min-h-11 shrink-0 px-2 text-body-sm font-medium text-accent-text underline-offset-4 hover:underline">Editar<span className="sr-only"> {titulo.toLowerCase()}</span></button>}
+      </header>
+      {estado === "abierto" ? <div className="flex min-w-0 flex-col gap-5 rounded-card bg-surface p-5 shadow-contenedor lg:p-6">{children}</div>
+        : <div className="min-w-0 break-words rounded-card bg-surface p-5 text-body-sm text-fg-secondary shadow-contenedor lg:p-6">{resumen}</div>}
     </section>
   );
 }

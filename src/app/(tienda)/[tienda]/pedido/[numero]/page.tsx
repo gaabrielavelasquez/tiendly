@@ -18,7 +18,7 @@ export default async function PedidoPage({ params }: PageProps) {
   return (
     <div className="flex min-h-dvh flex-col">
       <CabeceraTienda nombre={nombre} logo={logo} slug={slug} categorias={vitrina.categorias} />
-      <main className="mx-auto flex w-full max-w-6xl flex-1 justify-center px-4 py-8 lg:py-16">
+      <main className="mx-auto flex w-full max-w-6xl flex-1 justify-center px-4 py-10 lg:py-12">
         <VistaConfirmacion tienda={{ nombre, slug, celular }} numero={decodeURIComponent(numero)} />
       </main>
     </div>

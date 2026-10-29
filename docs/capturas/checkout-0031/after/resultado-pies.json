@@ -1,0 +1,49 @@
+{
+  "preview": "https://tiendly-4mla7vpg9-gaabrielavelasquez-8525s-projects.vercel.app",
+  "phase": "after",
+  "writes": "fixtures de carrito/pedido solo en navegador; número de pedido simulado en respuesta; ninguna acción del servidor",
+  "tests": [
+    {
+      "engine": "chrome",
+      "slug": "muna",
+      "name": "whatsapp",
+      "w": 390,
+      "scrollWidth": 390
+    },
+    {
+      "engine": "chrome",
+      "slug": "muna",
+      "name": "confirmado",
+      "w": 390,
+      "scrollWidth": 390
+    },
+    {
+      "engine": "chrome",
+      "slug": "muna",
+      "name": "registrado",
+      "w": 390,
+      "scrollWidth": 390
+    },
+    {
+      "engine": "chrome",
+      "slug": "glow-labo",
+      "name": "whatsapp",
+      "w": 390,
+      "scrollWidth": 390
+    },
+    {
+      "engine": "chrome",
+      "slug": "glow-labo",
+      "name": "confirmado",
+      "w": 390,
+      "scrollWidth": 390
+    },
+    {
+      "engine": "chrome",
+      "slug": "glow-labo",
+      "name": "registrado",
+      "w": 390,
+      "scrollWidth": 390
+    }
+  ]
+}

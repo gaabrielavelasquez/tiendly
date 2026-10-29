@@ -1,4 +1,4 @@
-# Traspaso · 24-oct-2026
+# Traspaso · 29-oct-2026
 
 Para el agente que sigue (Codex) y para Gabi. Antes de tocar código, lee [`AGENTS.md`](../AGENTS.md), [`CLAUDE.md`](../CLAUDE.md), [`DESIGN.md`](../DESIGN.md) y las decisiones de [`docs/decisiones/`](decisiones/README.md).
 
@@ -32,17 +32,18 @@ Para el agente que sigue (Codex) y para Gabi. Antes de tocar código, lee [`AGEN
 
 | PR | Rama | Estado | Preview |
 |---|---|---|---|
-| **#32** · Cerrar sesión | `feat/cerrar-sesion` | Pendiente de revisión de Gabi; **sin merge autorizado**. | Verde |
-
+| **#36** · Cupones 0031 | `feat/cupones-diseno-0031` | Pendiente de revisión de Gabi; **sin merge autorizado**. | — |
+| **#37** · Pagos y Afiliación 0031 | `feat/cobros-afiliacion-diseno` | Pendiente de revisión de Gabi; **sin merge autorizado**. | — |
+| **#38** · Ingreso: recupera la tienda | `fix/flujo-completo-ingreso` | Pendiente de revisión de Gabi; **sin merge autorizado**. | — |
 | **#22** · Prototipo de ofertas | `proto/productos-ofertas` | **No mergear.** Ya está implementado (#24 a #27). Cerrarlo y borrar la rama cuando Gabi diga. | Verde |
+
+Integrados hasta el 24-oct: #24 a #35 (el último, #35, checkout y confirmaciones 0031, `7617988`).
 
 ## Próximas tareas, en orden
 
-1. **Revisar #32 (Cerrar sesión).** Espera el ok de Gabi; no mergear ni iniciar onboarding 2–4 antes de su revisión. #27 ya está integrado (`03902bb`).
-2. **MUÑA ya está publicada y verificada (#29)**, que reemplaza al #23: fotos nuevas, ocho productos, Editorial/Terracota y miniaturas de color con agotadas tachadas. La oferta de la falda y las tablas existentes se conservan. No se muestra selector para opciones de un solo valor.
-3. El merge y el reinicio de MUÑA se completaron. No repetir esa operación; las capturas y mediciones de producción están en la rama de evidencia enlazada desde el #29.
-4. Las tablas por producto siguen en el #27; no se integró esa rama abierta como parte de esta tarea.
-5. **#31 integrado y verificado en producción** (0031/0039, `b6cf172`). #27 queda para revisión de Gabi. Mi tienda y cualquier otra tarea quedan fuera de esta sesión.
+1. **Gabi revisa #36, #37 y #38.** No mergear ni empezar otra tarea antes de su ok.
+2. **Onboarding 2–4**, después de esa revisión.
+3. **Antes de la beta: base de datos separada para desarrollo y previews** (ver Riesgos). No se cambió todavía.
 
 Pendiente sin fecha: precio y SKU por variante (`docs/backlog.md`); renombrar el campo `duena` cuando llegue el backend; cerrar #22 y borrar `src/features/prototipo-ofertas`.
 
@@ -52,17 +53,25 @@ Pendiente sin fecha: precio y SKU por variante (`docs/backlog.md`); renombrar el
   - Los datos viven en Upstash Redis (`production:tienda:muna`) y, antes del cierre del #29, contenían tres productos sin la oferta de la falda. El resultado del reset autorizado y su verificación se registra en la descripción del #29.
   - Gabi autorizó reiniciar únicamente esa clave después del merge del #29. Consultar el resultado y el respaldo en el registro final del PR antes de repetir un reset; las demás tiendas quedan fuera.
   - Glow Labo no tiene este problema.
-- **En los previews de Vercel no hay Redis:** los datos viven en la memoria de cada instancia.
-  - Algo que se guarda en el panel (un cupón, un producto) puede no verse en la tienda si la otra página cae en otra instancia.
-  - Para probar flujos que guardan, usa un solo proceso local **en un `git worktree` aparte**: `npm run build` y después `TIENDLY_TIENDA_DEMO=muna npx next start -p 3200`.
+- **Previews y desarrollo local escriben en la base Redis de producción.** Es la misma base de Upstash; solo el prefijo de la clave separa los entornos (`production:`, `preview:`, `local:` si el local tiene las credenciales). Una prueba en un preview crea claves reales en esa base, y un error en el prefijo podría pisar tiendas de producción.
+  - **Antes de la beta**, desarrollo y previews deben usar una base aparte (otra base de Upstash con sus propias variables en los entornos Preview y Development de Vercel). No se cambió todavía.
+  - Mientras tanto: no crear tiendas de prueba en producción sin anotarlas aquí, y nunca borrar ni reiniciar claves `production:` sin el ok de Gabi.
+- Para probar flujos que guardan, usa un solo proceso local **en un `git worktree` aparte**: `npm run build` y después `TIENDLY_TIENDA_DEMO=muna npx next start -p 3200`.
   - **El puerto 3100 es el servidor de desarrollo de Gabi** (`TIENDLY_TIENDA_DEMO=muna PORT=3100 npx next dev`, en la carpeta principal): no lo cierres ni hagas build en esa carpeta.
   - Antes de levantar algo, revisa el puerto con `lsof -ti tcp:<puerto>`, y al terminar cierra solo el proceso que levantaste: `pkill` no siempre lo cierra.
   - En local, sin la variable, la demo es Heather.
 - **El preview de una rama aparece recién al abrir el PR.** Los previews están protegidos: para Playwright, usa respuestas autenticadas mediante el comando oficial `vercel curl` y un proxy de solo lectura. No exportes variables de entorno ni credenciales.
 - **iPhone:** los campos con texto de menos de 16 px hacen zoom al tocarlos. En el panel, los campos usan `text-body`.
 - **`.next/types` viejo** rompe el build después de borrar páginas: `rm -rf .next/types`.
-- **#23 quedó reemplazado por #29; #19 se cerró por reemplazo en #30.** #30 y #31 están integrados con autorización; #27 sigue abierto y espera revisión, sin merge.
-- Redis tiene una clave vieja, `preview:tienda:aurora`. No molesta, pero se puede borrar con el ok de Gabi.
+- **#23 quedó reemplazado por #29; #19 se cerró por reemplazo en #30.**
+- **Una tienda que no existe responde 200, no 404:** se ve la página de «no encontrada», pero el código HTTP es 200 (comprobado el 29-oct con `/heather-pe` y un slug inventado). Revisar antes de la beta.
+
+## Limpieza de Redis · 29-oct-2026
+
+- Con el ok de Gabi se respaldaron y borraron 13 claves: las tiendas de prueba `production:tienda:heather-pe`, `casa-nube`, `miconejito` y `prueba-registro-33-5135991`, y todas las claves `preview:` (incluida `preview:tienda:aurora`).
+- Respaldo: `~/tiendly-respaldos/redis-produccion-20261029.json`, permisos 0600, fuera del repo y sin credenciales.
+- Quedan solo `production:tienda:muna` y `production:tienda:glow-labo`, sin tocar. `/muna` y `/glow-labo` responden con su catálogo; `/heather-pe` muestra «no encontrada».
+- Desde ahora las tiendas nuevas guardan `tienda.creadaEl` (ISO) al crearse en el onboarding. Las anteriores y las de ejemplo no lo tienen.
 
 ## Sesión MUÑA · 24 de octubre de 2026
 
@@ -311,6 +320,21 @@ Pagos, bancos, entregas y WhatsApp siguen simulados. No se enviaron mensajes, co
 - Integrar con merge commit y confirmar /panel/mi-tienda en producción a 390 solo lectura. No guardar personalización ni reiniciar Redis.
 - Después, única tarea autorizada: checkout y ambas confirmaciones, reglas 0031, montos con céntimos solo cuando existen, conservar 0007/0008/0009. Nuevo worktree/rama desde main actualizado; MUÑA y Glow Labo, antes/después Vercel 390/1440, sin merge del nuevo PR.
 
+- #34 integrado con autorización y preview final verde, merge commit 4ab96fa836353fc9059f04451ae64aa62d71977f, head 119c434. Producción READY (f0jqf4ips); /panel/mi-tienda confirmada en Chrome/WebKit a 390×844: MUÑA Editorial/Terracota, portada/bienvenida y carrusel móvil, sin scroll. Solo lectura, sin guardar datos de producción. Evidencia local /private/tmp/tiendly-pr34-produccion/.
+- Nueva tarea única en feat/checkout-diseno-0031, worktree /private/tmp/tiendly-checkout-diseno, desde main 4ab96fa. No se cambia checkout principal ni se toca el servidor 3100. Antes Vercel capturado desde pzzr83s06 (checkout funcional idéntico a ese main) a 390/1440 para MUÑA y Glow Labo; carrito/pedidos ficticios solo en navegador y número simulado en respuesta, sin acciones del servidor. Decisión 0043. No mergear este nuevo PR.
+
+
+## Cierre del pase de checkout · PR #35 · 24-oct-2026
+
+- PR único [#35](https://github.com/gaabrielavelasquez/tiendly-web/pull/35), feat/checkout-diseno-0031 desde main 4ab96fa, worktree /private/tmp/tiendly-checkout-diseno. Código de las pantallas b804d74; preview verde https://tiendly-4mla7vpg9-gaabrielavelasquez-8525s-projects.vercel.app. Un último ajuste conserva la tipografía anterior del encabezado del carrito (paso 1); checkout/confirmaciones quedan iguales a las capturas.
+- Checkout: títulos externos, opciones como filas con divisores, pasos neutros carbón, confirmación inmediata/reserva sin badges, resumen mobile plegable y desktop sticky. Moneda/céntimos atenuados, cifras tabulares/Regular y total SemiBold; formatoSoles existente sin .00. Cupones disponibles en el resumen móvil/desktop con tratamiento neutro; carrito conserva su estilo. Reintento de cupón/número/pedido ante fallo de red y controles bloqueados durante envío.
+- Confirmado/Registrado: título en dos tonos sin género, icono neutro sin círculo, detalle de pedido con divisores y reserva como texto. Acción principal fija móvil con zona segura y espacio al final; PDF y WhatsApp conservados. Estados de carga, vacío y error/reintento. Reglas, totales y acciones del servidor de compra no cambian (0007/0008/0009); sin tokens o dependencias nuevos.
+- Galería antes/después Vercel a 390/1440 de MUÑA y Glow Labo en docs/capturas/checkout-0031/README.md; seis vistas por tema y estados carga/vacío/error. Capturas inspeccionadas sin edición. Fotos y acentos reales; progreso/selección en carbón dentro de checkout, CTA mantiene Terracota o Suave. Pies de viewport a 390 muestran contenido final visible sobre la barra fija.
+- Chrome/WebKit locales pasan a 390/1440/360: doce compras reales simuladas entre ambos temas, tarjeta rechazada/éxito, Yape inválido/éxito y WhatsApp con 24 h exactas, cupones porcentaje/monto/envío, Lima/Callao/provincias, céntimos, errores de red/reintento, PDF y barras sin superposición. Recojo gratuito probado en ambos; tienda nueva sin zonas mantiene coordinación solo por WhatsApp. Confirmación corrupta/error y reintento. Resultados en resultado-local.json. Todas las escrituras solo en memoria local sin Redis; ventana de WhatsApp ficticia, sin mensajes.
+- Chrome/WebKit Vercel pasan ambos temas a 390/1440 y WebKit también 360; sin scroll horizontal, seis vistas por tema. Chrome local cubre también 360. Carrito/confirmación y cupón inválido son fixtures del navegador; número simulado en respuesta por el harness. Cero acciones del servidor de prueba en Vercel y cero escrituras de producción. El error del boundary es real con sesión corrupta; las cargas se capturan antes de hidratar. Proveedor de pagos y confirmaciones por WhatsApp siguen simulados.
+- #34 sí integrado y producción confirmada según registro anterior. **#35 no tiene aprobación de merge: actualizar descripción/capturas, dejar listo y detenerse para revisión de Gabi.** No iniciar otra tarea.
+
+- Cierre final: tokens y build final pasan. Nombres largos y S/ 129,999.10 comprobados en MUÑA y Glow Labo a 390/1440/360, sin scroll. Servidor de pruebas 3206 cerrado tras verificar PID 20007 y carpeta; 3100 de Gabi sigue activo (PID 77610). Último commit adjunta 78 capturas Vercel, resultados y traspaso, y conserva el encabezado anterior del carrito; no cambia las pantallas de checkout/confirmación capturadas. **#35 queda listo, abierto y sin merge. Detenerse para revisión de Gabi.**
 
 ## Pases posteriores al checkout y E2E · 24-oct-2026
 

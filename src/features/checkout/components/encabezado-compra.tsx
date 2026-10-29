@@ -15,7 +15,7 @@ export function EncabezadoCompra({ paso, titulo, volver, volverLabel, carrito }:
         <Link href={volver} aria-label={volverLabel} className="-ml-2 flex size-11 items-center justify-center rounded-theme text-icon hover:bg-sunken">
           <ChevronLeft aria-hidden strokeWidth={1.6} className="size-6" />
         </Link>
-        <h1 className="text-h3 font-semibold text-fg">{titulo}</h1>
+        <h1 className={paso === 2 ? "min-w-0 font-display-light text-h1 text-fg" : "text-h3 font-semibold text-fg"}>{titulo}</h1>
       </div>
       <div className="flex flex-col gap-2 lg:hidden">
         <p className="text-caption font-semibold text-fg-secondary">Paso {paso} de 2</p>
@@ -28,7 +28,7 @@ export function EncabezadoCompra({ paso, titulo, volver, volverLabel, carrito }:
         <li className="flex items-center gap-2">
           {paso === 2 ? (
             <Link href={carrito} className="flex items-center gap-2 text-fg-secondary hover:text-fg">
-              <span className="flex size-5 items-center justify-center rounded-full bg-success-surface text-success">
+              <span className="flex size-5 items-center justify-center text-icon">
                 <Check aria-hidden strokeWidth={2} className="size-3" />
               </span>
               Carrito
@@ -46,7 +46,7 @@ export function EncabezadoCompra({ paso, titulo, volver, volverLabel, carrito }:
           Finalizar compra
         </li>
       </ol>
-      <h1 className="hidden font-display-hero text-h1 text-fg lg:block">{titulo}</h1>
+      <h1 className={cn("hidden text-h1 text-fg lg:block", paso === 2 ? "font-display-light" : "font-display-hero")}>{titulo}</h1>
     </div>
   );
 }
