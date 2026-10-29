@@ -296,8 +296,9 @@ entrega:  por-enviar ──► enviado ──► entregado   (recojo: por recoge
 | Tabla | Columnas clave | Reglas |
 |---|---|---|
 | `config_pagos` | `tienda_id` (clave primaria), `whatsapp_activo`, `whatsapp_celular`, `cobros_estado` (`sin-activar`, `en-revision`, `activo`), `tarjeta`, `yape`, `cuenta` (JSON: banco, tipo, últimos 4, titular) | Una fila por tienda. |
-| `config_entregas` | `tienda_id` (clave primaria), `delivery_activo`, `envio_gratis_activo`, `envio_gratis_desde`, `recojo_activo`, `recojo_direccion`, `recojo_distrito`, `recojo_horario`, `recojo_nota` | Una fila por tienda (0009). `envio_gratis_desde` en céntimos, múltiplo de 100 (soles enteros, §4.5). |
-| `zonas_entrega` | `tienda_id`, `zona` (`lima`, `callao`, `provincias`), `activa`, `cobro` (`fijo`, `coordinar`), `costo`, `plazo`, `revisar` | Clave primaria (`tienda_id`, `zona`). `costo` en céntimos y múltiplo de 100 (`CHECK (costo % 100 = 0)`); vacío si `cobro = 'coordinar'`. `revisar` marca lo que la migración no pudo convertir sola (§4.5). |
+| `config_entregas` | `tienda_id` (clave primaria), `delivery_activo`, `recojo_activo`, `recojo_direccion`, `recojo_distrito`, `recojo_horario`, `recojo_nota` | Una fila por tienda (0009). El envío gratis ya no vive aquí: pasa a cada zona. |
+| `zonas_entrega` | `id`, `tienda_id`, `nombre`, `clave` (`lima`, `callao`, `provincias` o vacío), `orden`, `activa`, `cobro` (`fijo`, `coordinar`), `costo`, `plazo`, `envio_gratis_desde`, `revisar` | **Una lista de filas por tienda, no tres campos fijos** (§4.5). `costo` y `envio_gratis_desde` en céntimos y múltiplos de 100 (`CHECK (costo % 100 = 0)`); `costo` vacío si `cobro = 'coordinar'`; `envio_gratis_desde` vacío = sin envío gratis, y siempre vacío en una zona "coordinar" (decisión 7). `clave` une la zona con la geografía que ya usa el checkout. `revisar` marca lo que la migración no pudo convertir sola. |
+| `zona_distritos` | `zona_id`, `tienda_id`, `distrito` | Opcional: qué distritos cubre una zona. Único (`tienda_id`, `distrito`): un distrito está en una sola zona de la tienda. En la beta queda vacía; si una zona no tiene distritos, valen los de su `clave`. |
 | `solicitudes_afiliacion` | `id`, `tienda_id`, `numero`, `estado` (`revision`, `observada`, `aprobada`), `datos` (JSON), `negocio` (JSON), `enviada_el`, `respuesta` | Tiene DNI y CCI: solo la persona titular la lee. El borrador sigue en el navegador. |
 
 #### Plan por tienda
@@ -344,6 +345,11 @@ En la Etapa 1 no hace falta esta tabla: lo esencial (productos, pedidos, cupones
 
 **Permiso de medición:** se pide al invitar, con un texto corto y claro. Se guarda la fecha (`acepto_medicion_el`) y se explica en la página de Privacidad (§14).
 
+**Qué medir en la beta** (solo con permiso):
+
+- Ingresos al panel, productos creados y pedidos recibidos (`eventos_uso`, o el documento en la Etapa 1).
+- Cuántas tiendas fundadoras piden tarifas por distrito (§4.5). Se anota a mano, desde las conversaciones y el soporte.
+
 ### 4.5 Costo de envío: soles enteros o "A coordinar por WhatsApp"
 
 **La regla** (decisión 2 de §12): cada zona activa tiene **o** un costo fijo en soles enteros (sin céntimos, 0 o más) **o** la opción "A coordinar por WhatsApp", sin monto. El envío gratis desde un monto también es un número entero.
@@ -372,6 +378,20 @@ En la Etapa 1 no hace falta esta tabla: lo esencial (productos, pedidos, cupones
 - Una zona marcada muestra, en Configuración → Entregas, una ayuda junto a su costo: "Revisa el costo de envío de Provincias." La marca se borra al guardar.
 - El script de §8.2 lista en su reporte cada zona marcada, por tienda.
 - Hoy producción solo tiene las demos, así que no se espera ninguna marca. La regla existe por si aparece una tienda real antes de la mudanza.
+
+**Las zonas se guardan como una lista, no como tres campos fijos.** Cada zona es una fila con:
+
+- su nombre;
+- su costo fijo en soles enteros, o "A coordinar";
+- su envío gratis desde un monto, si tiene;
+- y, opcionalmente, la lista de distritos que cubre.
+
+Detalle en `zonas_entrega` y `zona_distritos`, §4.3.
+
+- **Por qué:** Gabi observó que las tiendas de Instagram publican sus tarifas **por distrito o por zona**, y hasta ahora hay **una sola entrevista**. Con una lista, sumar zonas propias o precios por distrito después es agregar filas, sin cambiar la forma de la base.
+- **En la beta, la pantalla no cambia de estructura:** sigue mostrando las tres zonas de hoy (Lima Metropolitana, Callao y Provincias), con un solo "Envío gratis desde" que se guarda en cada zona de costo fijo.
+- **Zonas editables o precios por distrito:** quedan como una función posible para después, **no entran en la beta**. Se deciden con lo que se mida (§4.4).
+- En la Etapa 1 no hace falta nada nuevo: `config.entregas.delivery.zonas` ya es una lista con `id`.
 
 **Pantalla:** Entregas suma, por zona, la elección "Costo fijo" / "A coordinar por WhatsApp", con los componentes de selección que ya existen (`selection/*`). Es un cambio visual: necesita el ok de Gabi, una decisión nueva en `docs/decisiones/` y capturas a 390 y 1440 (CLAUDE.md §6 y §7). Va en el PR 4b (§9).
 
