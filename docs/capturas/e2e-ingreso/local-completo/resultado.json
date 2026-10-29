@@ -1,0 +1,27 @@
+{
+  "preview": "http://localhost:3211",
+  "slug": "e2e-tienda-83667633",
+  "name": "E2E tienda 83667633",
+  "nums": [
+    "TL-1001",
+    "TL-1002"
+  ],
+  "trace": [
+    "tienda-creada",
+    "producto-opciones-oferta",
+    "cupon-creado",
+    "entrega-guardada",
+    "cobros-mock-activos",
+    "compra-tarjeta",
+    "compra-whatsapp",
+    "pedidos-visibles",
+    "inicio-con-pedidos",
+    "pagado-y-enviado",
+    "logout",
+    "login",
+    "login-recupera-pedidos"
+  ],
+  "status": "PASS",
+  "payments": "simulados; cobros activos mediante fixture servidor solo en localhost",
+  "messages": 0
+}

@@ -1,0 +1,242 @@
+[
+  {
+    "engine": "chrome",
+    "w": 390,
+    "test": "muna datos inválidos"
+  },
+  {
+    "engine": "chrome",
+    "w": 390,
+    "test": "muna cupón real y reintento"
+  },
+  {
+    "engine": "chrome",
+    "w": 390,
+    "test": "muna pago y barra sin cubrir contenido"
+  },
+  {
+    "engine": "chrome",
+    "w": 390,
+    "test": "muna pedido real tarjeta total 96.89"
+  },
+  {
+    "engine": "chrome",
+    "w": 390,
+    "test": "glow-labo datos inválidos"
+  },
+  {
+    "engine": "chrome",
+    "w": 390,
+    "test": "glow-labo cupón real y reintento"
+  },
+  {
+    "engine": "chrome",
+    "w": 390,
+    "test": "glow-labo pago y barra sin cubrir contenido"
+  },
+  {
+    "engine": "chrome",
+    "w": 390,
+    "test": "glow-labo pedido real tarjeta total 96.89"
+  },
+  {
+    "engine": "chrome",
+    "w": 1440,
+    "test": "muna datos inválidos"
+  },
+  {
+    "engine": "chrome",
+    "w": 1440,
+    "test": "muna cupón real y reintento"
+  },
+  {
+    "engine": "chrome",
+    "w": 1440,
+    "test": "muna pago y barra sin cubrir contenido"
+  },
+  {
+    "engine": "chrome",
+    "w": 1440,
+    "test": "muna pedido real yape total 103.09"
+  },
+  {
+    "engine": "chrome",
+    "w": 1440,
+    "test": "glow-labo datos inválidos"
+  },
+  {
+    "engine": "chrome",
+    "w": 1440,
+    "test": "glow-labo cupón real y reintento"
+  },
+  {
+    "engine": "chrome",
+    "w": 1440,
+    "test": "glow-labo pago y barra sin cubrir contenido"
+  },
+  {
+    "engine": "chrome",
+    "w": 1440,
+    "test": "glow-labo pedido real yape total 103.09"
+  },
+  {
+    "engine": "chrome",
+    "w": 360,
+    "test": "muna datos inválidos"
+  },
+  {
+    "engine": "chrome",
+    "w": 360,
+    "test": "muna cupón real y reintento"
+  },
+  {
+    "engine": "chrome",
+    "w": 360,
+    "test": "muna pago y barra sin cubrir contenido"
+  },
+  {
+    "engine": "chrome",
+    "w": 360,
+    "test": "muna pedido real whatsapp total 90.99"
+  },
+  {
+    "engine": "chrome",
+    "w": 360,
+    "test": "glow-labo datos inválidos"
+  },
+  {
+    "engine": "chrome",
+    "w": 360,
+    "test": "glow-labo cupón real y reintento"
+  },
+  {
+    "engine": "chrome",
+    "w": 360,
+    "test": "glow-labo pago y barra sin cubrir contenido"
+  },
+  {
+    "engine": "chrome",
+    "w": 360,
+    "test": "glow-labo pedido real whatsapp total 90.99"
+  },
+  {
+    "engine": "webkit",
+    "w": 390,
+    "test": "muna datos inválidos"
+  },
+  {
+    "engine": "webkit",
+    "w": 390,
+    "test": "muna cupón real y reintento"
+  },
+  {
+    "engine": "webkit",
+    "w": 390,
+    "test": "muna pago y barra sin cubrir contenido"
+  },
+  {
+    "engine": "webkit",
+    "w": 390,
+    "test": "muna pedido real tarjeta total 96.89"
+  },
+  {
+    "engine": "webkit",
+    "w": 390,
+    "test": "glow-labo datos inválidos"
+  },
+  {
+    "engine": "webkit",
+    "w": 390,
+    "test": "glow-labo cupón real y reintento"
+  },
+  {
+    "engine": "webkit",
+    "w": 390,
+    "test": "glow-labo pago y barra sin cubrir contenido"
+  },
+  {
+    "engine": "webkit",
+    "w": 390,
+    "test": "glow-labo pedido real tarjeta total 96.89"
+  },
+  {
+    "engine": "webkit",
+    "w": 1440,
+    "test": "muna datos inválidos"
+  },
+  {
+    "engine": "webkit",
+    "w": 1440,
+    "test": "muna cupón real y reintento"
+  },
+  {
+    "engine": "webkit",
+    "w": 1440,
+    "test": "muna pago y barra sin cubrir contenido"
+  },
+  {
+    "engine": "webkit",
+    "w": 1440,
+    "test": "muna pedido real yape total 103.09"
+  },
+  {
+    "engine": "webkit",
+    "w": 1440,
+    "test": "glow-labo datos inválidos"
+  },
+  {
+    "engine": "webkit",
+    "w": 1440,
+    "test": "glow-labo cupón real y reintento"
+  },
+  {
+    "engine": "webkit",
+    "w": 1440,
+    "test": "glow-labo pago y barra sin cubrir contenido"
+  },
+  {
+    "engine": "webkit",
+    "w": 1440,
+    "test": "glow-labo pedido real yape total 103.09"
+  },
+  {
+    "engine": "webkit",
+    "w": 360,
+    "test": "muna datos inválidos"
+  },
+  {
+    "engine": "webkit",
+    "w": 360,
+    "test": "muna cupón real y reintento"
+  },
+  {
+    "engine": "webkit",
+    "w": 360,
+    "test": "muna pago y barra sin cubrir contenido"
+  },
+  {
+    "engine": "webkit",
+    "w": 360,
+    "test": "muna pedido real whatsapp total 90.99"
+  },
+  {
+    "engine": "webkit",
+    "w": 360,
+    "test": "glow-labo datos inválidos"
+  },
+  {
+    "engine": "webkit",
+    "w": 360,
+    "test": "glow-labo cupón real y reintento"
+  },
+  {
+    "engine": "webkit",
+    "w": 360,
+    "test": "glow-labo pago y barra sin cubrir contenido"
+  },
+  {
+    "engine": "webkit",
+    "w": 360,
+    "test": "glow-labo pedido real whatsapp total 90.99"
+  }
+]

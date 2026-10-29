@@ -1,0 +1,175 @@
+{
+  "preview": "https://tiendly-pzzr83s06-gaabrielavelasquez-8525s-projects.vercel.app",
+  "phase": "before",
+  "writes": "fixtures de carrito/pedido solo en navegador; número de pedido simulado en respuesta; ninguna acción del servidor",
+  "tests": [
+    {
+      "engine": "chrome",
+      "slug": "muna",
+      "name": "datos",
+      "w": 390,
+      "scrollWidth": 390
+    },
+    {
+      "engine": "chrome",
+      "slug": "muna",
+      "name": "entrega",
+      "w": 390,
+      "scrollWidth": 390
+    },
+    {
+      "engine": "chrome",
+      "slug": "muna",
+      "name": "tarjeta",
+      "w": 390,
+      "scrollWidth": 390
+    },
+    {
+      "engine": "chrome",
+      "slug": "muna",
+      "name": "whatsapp",
+      "w": 390,
+      "scrollWidth": 390
+    },
+    {
+      "engine": "chrome",
+      "slug": "muna",
+      "name": "confirmado",
+      "w": 390,
+      "scrollWidth": 390
+    },
+    {
+      "engine": "chrome",
+      "slug": "muna",
+      "name": "registrado",
+      "w": 390,
+      "scrollWidth": 390
+    },
+    {
+      "engine": "chrome",
+      "slug": "glow-labo",
+      "name": "datos",
+      "w": 390,
+      "scrollWidth": 390
+    },
+    {
+      "engine": "chrome",
+      "slug": "glow-labo",
+      "name": "entrega",
+      "w": 390,
+      "scrollWidth": 390
+    },
+    {
+      "engine": "chrome",
+      "slug": "glow-labo",
+      "name": "tarjeta",
+      "w": 390,
+      "scrollWidth": 390
+    },
+    {
+      "engine": "chrome",
+      "slug": "glow-labo",
+      "name": "whatsapp",
+      "w": 390,
+      "scrollWidth": 390
+    },
+    {
+      "engine": "chrome",
+      "slug": "glow-labo",
+      "name": "confirmado",
+      "w": 390,
+      "scrollWidth": 390
+    },
+    {
+      "engine": "chrome",
+      "slug": "glow-labo",
+      "name": "registrado",
+      "w": 390,
+      "scrollWidth": 390
+    },
+    {
+      "engine": "chrome",
+      "slug": "muna",
+      "name": "datos",
+      "w": 1440,
+      "scrollWidth": 1440
+    },
+    {
+      "engine": "chrome",
+      "slug": "muna",
+      "name": "entrega",
+      "w": 1440,
+      "scrollWidth": 1440
+    },
+    {
+      "engine": "chrome",
+      "slug": "muna",
+      "name": "tarjeta",
+      "w": 1440,
+      "scrollWidth": 1440
+    },
+    {
+      "engine": "chrome",
+      "slug": "muna",
+      "name": "whatsapp",
+      "w": 1440,
+      "scrollWidth": 1440
+    },
+    {
+      "engine": "chrome",
+      "slug": "muna",
+      "name": "confirmado",
+      "w": 1440,
+      "scrollWidth": 1440
+    },
+    {
+      "engine": "chrome",
+      "slug": "muna",
+      "name": "registrado",
+      "w": 1440,
+      "scrollWidth": 1440
+    },
+    {
+      "engine": "chrome",
+      "slug": "glow-labo",
+      "name": "datos",
+      "w": 1440,
+      "scrollWidth": 1440
+    },
+    {
+      "engine": "chrome",
+      "slug": "glow-labo",
+      "name": "entrega",
+      "w": 1440,
+      "scrollWidth": 1440
+    },
+    {
+      "engine": "chrome",
+      "slug": "glow-labo",
+      "name": "tarjeta",
+      "w": 1440,
+      "scrollWidth": 1440
+    },
+    {
+      "engine": "chrome",
+      "slug": "glow-labo",
+      "name": "whatsapp",
+      "w": 1440,
+      "scrollWidth": 1440
+    },
+    {
+      "engine": "chrome",
+      "slug": "glow-labo",
+      "name": "confirmado",
+      "w": 1440,
+      "scrollWidth": 1440
+    },
+    {
+      "engine": "chrome",
+      "slug": "glow-labo",
+      "name": "registrado",
+      "w": 1440,
+      "scrollWidth": 1440
+    }
+  ]
+}

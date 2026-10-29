@@ -1,0 +1,10 @@
+{
+  "status": "PASS",
+  "slug": "ingreso-independiente-17928834",
+  "tests": [
+    "logout borra cookie",
+    "contacto de ventas no da ingreso",
+    "número de registro recupera tienda"
+  ],
+  "width": 390
+}
