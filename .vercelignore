@@ -1,4 +1,7 @@
 # Heather todavía no dio permiso para publicar su tienda: sus fotos y su logo no se suben a Vercel.
 # Allí la tienda de demo es MUÑA (ficticia, moda) y /heather da 404 (lib/datos).
+# Vale para el repo entero aunque Vercel construya desde frontend/ (Root Directory): por eso las dos formas de cada ruta.
 public/heather
 public/mi-tienda
+frontend/public/heather
+frontend/public/mi-tienda
