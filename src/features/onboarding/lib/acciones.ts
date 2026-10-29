@@ -1,5 +1,6 @@
 "use server";
 
+import { recordarIngreso, tiendaDeIngreso } from "@/lib/datos/ingreso";
 import { cookies } from "next/headers";
 import { tiendaNueva } from "@/lib/datos/semillas";
 import { existeTienda, guardarTienda } from "@/lib/datos/tienda";
@@ -35,7 +36,7 @@ async function primeroLibre(slug: string) {
   return `${slug}-${crypto.randomUUID().slice(0, 6)}`;
 }
 
-type NuevaTienda = { nombre: string; slug: string; celularVentas: string; rubros: RubroId[]; rubroOtro?: string; duena?: string };
+type NuevaTienda = { nombre: string; slug: string; celularVentas: string; celularIngreso?: string; rubros: RubroId[]; rubroOtro?: string; duena?: string };
 
 /**
  * Crea la tienda (simulado, en los datos compartidos): arranca vacía, con su link, su WhatsApp de ventas y
@@ -49,8 +50,26 @@ export async function crearTienda(t: NuevaTienda): Promise<{ slug: string } | { 
   if (!validos(t.rubros)) return { error: "Elige al menos una opción para armar tu tienda." };
   const otro = typeof t.rubroOtro === "string" ? t.rubroOtro.trim() : "";
   if (t.rubros.includes("otro") && (otro.length < 2 || otro.length > 80)) return { error: "Cuéntanos qué vendes, en hasta 80 caracteres." };
+  const ingreso = t.celularIngreso ?? t.celularVentas;
+  if (errorCelular(ingreso)) return { error: "Revisa el número con el que te registraste." };
   const slug = await primeroLibre(base);
-  await guardarTienda(tiendaNueva({ nombre, slug, celularVentas: t.celularVentas, rubros: t.rubros, rubroOtro: t.rubros.includes("otro") ? otro : undefined, duena: t.duena?.trim() || undefined }));
-  (await cookies()).set(COOKIE_TIENDA, slug, { httpOnly: true, sameSite: "lax", secure: process.env.NODE_ENV === "production", maxAge: 60 * 60 * 24 * 180, path: "/" });
+  const datos = tiendaNueva({ nombre, slug, celularVentas: t.celularVentas, rubros: t.rubros, rubroOtro: t.rubros.includes("otro") ? otro : undefined, duena: t.duena?.trim() || undefined });
+  datos.tienda.celularIngreso = ingreso;
+  await guardarTienda(datos);
+  await recordarIngreso(ingreso, slug);
+  await recordarSesion(slug);
   return { slug };
+}
+
+async function recordarSesion(slug: string) {
+  (await cookies()).set(COOKIE_TIENDA, slug, { httpOnly: true, sameSite: "lax", secure: process.env.NODE_ENV === "production", maxAge: 60 * 60 * 24 * 180, path: "/" });
+}
+
+/** Se llama después del código simulado; no envía mensajes ni implementa autenticación real. */
+export async function ingresarTienda(celular: string): Promise<{ ok: true } | { error: string }> {
+  if (errorCelular(celular)) return { error: "Revisa tu número de WhatsApp." };
+  const slug = await tiendaDeIngreso(celular);
+  if (!slug) return { error: "No encontramos una tienda para este número. Revisa el número con el que te registraste." };
+  await recordarSesion(slug);
+  return { ok: true };
 }

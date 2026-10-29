@@ -2,6 +2,7 @@
 
 import { Percent, Tag, Truck } from "lucide-react";
 import { Card, Checkbox, Field, Opcion } from "@/components/ui";
+import { Seccion } from "@/components/panel";
 import type { ErroresCupon, FormCupon } from "../lib/reglas";
 
 type Props = { f: FormCupon; e: ErroresCupon; set: <K extends keyof FormCupon>(k: K, v: FormCupon[K]) => void };
@@ -10,13 +11,15 @@ const num = (v: string) => v.replace(/[^\d.,]/g, "");
 /** Código y tipo de descuento (Figma, Crear cupón): porcentaje, monto fijo o envío gratis. */
 export function CamposDescuento({ f, e, set }: Props) {
   return (
-    <Card className="flex flex-col gap-5 p-5 lg:p-6">
+    <Seccion id="descuento-cupon" titulo="Código y descuento">
       <Field id="campo-codigo" label="Código del cupón" value={f.codigo} onChange={(ev) => set("codigo", ev.target.value.toUpperCase().replace(/\s/g, ""))} hint="Solo letras y números, sin espacios. Tus clientes lo escriben en el carrito." error={e.codigo} autoCapitalize="characters" autoComplete="off" />
       <fieldset className="flex flex-col gap-3">
         <legend className="pb-3 text-body-sm font-semibold text-fg">Tipo de descuento</legend>
+        <div className="divide-y divide-line-subtle [&>div]:rounded-none [&>div]:border-0">
         <Opcion nombre="tipo" valor="porcentaje" icono={Percent} elegida={f.tipo === "porcentaje"} onElegir={() => set("tipo", "porcentaje")} titulo="Porcentaje" detalle="Ej.: 10% menos" />
         <Opcion nombre="tipo" valor="monto" icono={Tag} elegida={f.tipo === "monto"} onElegir={() => set("tipo", "monto")} titulo="Monto fijo" detalle="Ej.: S/ 30 menos" />
         <Opcion nombre="tipo" valor="envio" icono={Truck} elegida={f.tipo === "envio"} onElegir={() => set("tipo", "envio")} titulo="Envío gratis" detalle="No paga el envío" />
+        </div>
       </fieldset>
       {f.tipo !== "envio" && (
         <Field
@@ -31,7 +34,7 @@ export function CamposDescuento({ f, e, set }: Props) {
           error={e.valor}
         />
       )}
-    </Card>
+    </Seccion>
   );
 }
 
@@ -44,8 +47,7 @@ export function CamposCondiciones({ f, e, set }: Props) {
     </div>
   );
   return (
-    <Card as="section" aria-label="Condiciones" className="flex flex-col gap-4 p-5 lg:p-6">
-      <h2 className="encabezado-seccion text-fg">Condiciones (opcionales)</h2>
+    <Seccion id="condiciones-cupon" titulo="Condiciones (opcionales)"><div className="flex flex-col gap-5 divide-y divide-line-subtle [&>div]:pt-4 [&>div:first-child]:pt-0">
       {fila("conMinimo", "Compra mínima")}
       {f.conMinimo && <Field id="campo-minimo" className="pl-10" label="Monto mínimo de compra" prefix="S/" inputMode="decimal" value={f.minimo} onChange={(ev) => set("minimo", num(ev.target.value))} hint="El cupón funciona desde este subtotal de productos." error={e.minimo} />}
       {fila("conFechas", "Fechas de vigencia")}
@@ -61,6 +63,7 @@ export function CamposCondiciones({ f, e, set }: Props) {
       ) : (
         <p className="pl-10 text-caption text-fg-secondary">Sin límite: tus clientes lo pueden usar las veces que quieran.</p>
       )}
-    </Card>
+    </div>
+    </Seccion>
   );
 }

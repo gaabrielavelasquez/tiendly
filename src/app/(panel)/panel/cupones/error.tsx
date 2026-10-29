@@ -9,7 +9,7 @@ export default function CuponesError({ retry }: { error: Error; retry: () => voi
   return (
     <PanelMain>
       <Card>
-        <EmptyState
+        <EmptyState simple
           icon={CloudOff}
           title="No pudimos cargar tus cupones"
           description="Revisa tu conexión e inténtalo de nuevo. Tus cupones siguen funcionando en tu tienda."

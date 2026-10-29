@@ -30,3 +30,18 @@ export async function existe(clave: string) {
   const r = redis();
   return r ? (await r.exists(clave)) > 0 : memoria().has(clave);
 }
+
+/** Recorrido por prefijo para compatibilidad de datos anteriores; nunca cruza entornos. */
+export async function* clavesConPrefijo(prefijo: string): AsyncGenerator<string> {
+  const r = redis();
+  if (!r) {
+    for (const clave of memoria().keys()) if (clave.startsWith(prefijo)) yield clave;
+    return;
+  }
+  let cursor = "0";
+  do {
+    const pagina = await r.scan(cursor, { match: `${prefijo}*`, count: 100 });
+    cursor = pagina[0];
+    for (const clave of pagina[1]) yield clave;
+  } while (cursor !== "0");
+}

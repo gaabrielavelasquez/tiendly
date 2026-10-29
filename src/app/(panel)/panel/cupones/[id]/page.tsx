@@ -18,7 +18,7 @@ export default async function EditarCuponPage({ params }: PageProps) {
   const cupon = cupones.find((c) => c.id === id);
   if (!cupon) notFound();
   return (
-    <PanelMain>
+    <PanelMain className="gap-10 pb-32 lg:gap-12 [&_h1]:font-display-light">
       <FormularioCupon cupon={cupon} estado={estadoCupon(cupon, hoyLima())} otros={cupones.filter((c) => c.id !== id)} />
     </PanelMain>
   );

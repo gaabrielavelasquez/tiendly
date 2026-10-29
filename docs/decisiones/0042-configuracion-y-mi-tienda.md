@@ -1,7 +1,7 @@
 # 0042 · Configuración y Mi tienda aplican 0031
 
 - **Fecha:** 24-oct-2026.
-- **Estado:** solicitado por Gabi; un PR desde main f296d21, sin autorización de merge.
+- **Estado:** integrado en #34 con autorización de Gabi; merge 4ab96fa.
 - **Alcance:** Configuración, Métodos de pago, Entregas y Mi tienda. Conserva las reglas implementadas de 0003, 0007 y 0009.
 
 ## Presentación
@@ -28,4 +28,4 @@ La barra móvil de guardar aparece con cambios pendientes y reemplaza a la tab b
 
 0003/0007/0009 viven en el proyecto externo IA on Product Design y no están completos en el repo (docs/estado-core-loop.md). Google Drive no encontró Tiendly. Se preserva el comportamiento de main y las reglas documentadas en código; no se reinterpretan comisiones, planes, métodos o entrega.
 
-Tokens/build, pruebas funcionales locales en worktree/3205 y capturas Vercel antes/después a 390 y 1440; Chrome/WebKit sin scroll horizontal a 360/390 y con datos/URL largos. Guardados solo en memoria local. Detenerse con el PR abierto para revisión de Gabi.
+Tokens/build, pruebas funcionales locales en worktree/3205 y capturas Vercel antes/después a 390 y 1440; Chrome/WebKit sin scroll horizontal a 360/390 y con datos/URL largos. Guardados solo en memoria local. Producción /panel/mi-tienda confirmada a 390 en Chrome/WebKit, solo lectura.

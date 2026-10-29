@@ -1,0 +1,127 @@
+{
+  "preview": "https://tiendly-4mla7vpg9-gaabrielavelasquez-8525s-projects.vercel.app",
+  "source": "b804d74",
+  "tests": [
+    {
+      "slug": "muna",
+      "w": 390,
+      "state": "vacio"
+    },
+    {
+      "slug": "muna",
+      "w": 390,
+      "state": "error"
+    },
+    {
+      "slug": "muna",
+      "w": 390,
+      "state": "confirmacion-vacio"
+    },
+    {
+      "slug": "muna",
+      "w": 390,
+      "state": "confirmacion-error"
+    },
+    {
+      "slug": "muna",
+      "w": 390,
+      "state": "carga"
+    },
+    {
+      "slug": "muna",
+      "w": 390,
+      "state": "confirmacion-carga"
+    },
+    {
+      "slug": "glow-labo",
+      "w": 390,
+      "state": "vacio"
+    },
+    {
+      "slug": "glow-labo",
+      "w": 390,
+      "state": "error"
+    },
+    {
+      "slug": "glow-labo",
+      "w": 390,
+      "state": "confirmacion-vacio"
+    },
+    {
+      "slug": "glow-labo",
+      "w": 390,
+      "state": "confirmacion-error"
+    },
+    {
+      "slug": "glow-labo",
+      "w": 390,
+      "state": "carga"
+    },
+    {
+      "slug": "glow-labo",
+      "w": 390,
+      "state": "confirmacion-carga"
+    },
+    {
+      "slug": "muna",
+      "w": 1440,
+      "state": "vacio"
+    },
+    {
+      "slug": "muna",
+      "w": 1440,
+      "state": "error"
+    },
+    {
+      "slug": "muna",
+      "w": 1440,
+      "state": "confirmacion-vacio"
+    },
+    {
+      "slug": "muna",
+      "w": 1440,
+      "state": "confirmacion-error"
+    },
+    {
+      "slug": "muna",
+      "w": 1440,
+      "state": "carga"
+    },
+    {
+      "slug": "muna",
+      "w": 1440,
+      "state": "confirmacion-carga"
+    },
+    {
+      "slug": "glow-labo",
+      "w": 1440,
+      "state": "vacio"
+    },
+    {
+      "slug": "glow-labo",
+      "w": 1440,
+      "state": "error"
+    },
+    {
+      "slug": "glow-labo",
+      "w": 1440,
+      "state": "confirmacion-vacio"
+    },
+    {
+      "slug": "glow-labo",
+      "w": 1440,
+      "state": "confirmacion-error"
+    },
+    {
+      "slug": "glow-labo",
+      "w": 1440,
+      "state": "carga"
+    },
+    {
+      "slug": "glow-labo",
+      "w": 1440,
+      "state": "confirmacion-carga"
+    }
+  ],
+  "fixtures": "solo navegador; sin guardar ni pedir acciones del servidor"
+}
