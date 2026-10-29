@@ -1,0 +1,3 @@
+# 0044 · Cupones del panel adopta 0031
+
+Solicitado por Gabi, un PR desde main 4ab96fa y sin merge autorizado. Lista agrupada en un contenedor por sección con divisores, encabezados externos, íconos neutros, montos con el formato existente sin .00, interruptores con check. Formularios con títulos externos y barra móvil que reemplaza a las pestañas. Eliminar con confirmación nativa, foco seguro en Conservar cupón, carga/error/reintento. Se conservan límite Free de tres cupones en uso (programados cuentan), validaciones y usos/fechas de 0008. Sin nuevos tokens/dependencias o cambios en producción. El escenario carga solo retrasa la lectura en local/preview para capturar el fallback existente.

@@ -18,16 +18,17 @@ function pasaElLimite(c: Cupon, todos: Cupon[], plan: "free" | "pro") {
   return limite !== null && enUso(c, hoy()) && cuponesEnUso(otros, hoy()) >= limite;
 }
 
-export async function guardarCupon(f: FormCupon, id?: string): Promise<{ codigo: string } | { error: string; errores?: Record<string, string> }> {
-  const { cupones: todos, tienda } = await datosPanel();
-  const actual = id ? todos.find((c) => c.id === id) : undefined;
-  if (id && !actual) return { error: "Este cupón ya no existe." };
-  const errores = validarCupon(f, todos.filter((c) => c.id !== id));
-  if (Object.keys(errores).length) return { error: "Revisa los campos marcados.", errores };
-  const cupon = aCupon(f, { id: actual?.id ?? `c-${Date.now()}`, usos: actual?.usos ?? 0 });
-  if (pasaElLimite(cupon, todos, tienda.plan)) return { error: LIMITE };
-  await mutarPanel((d) => guardar(d.cupones, cupon));
-  return { codigo: cupon.codigo };
+export async function guardarCupon(f: FormCupon, id?: string): Promise<{ codigo: string; cupon: Cupon } | { error: string; errores?: Record<string, string> }> {
+  return mutarPanel((d) => {
+    const actual = id ? d.cupones.find((c) => c.id === id) : undefined;
+    if (id && !actual) return { error: "Este cupón ya no existe." };
+    const errores = validarCupon(f, d.cupones.filter((c) => c.id !== id));
+    if (Object.keys(errores).length) return { error: "Revisa los campos marcados.", errores };
+    const cupon = aCupon(f, { id: actual?.id ?? `c-${crypto.randomUUID()}`, usos: actual?.usos ?? 0 });
+    if (pasaElLimite(cupon, d.cupones, d.tienda.plan)) return { error: LIMITE };
+    guardar(d.cupones, cupon);
+    return { codigo: cupon.codigo, cupon };
+  });
 }
 
 /** Pausar o activar desde la lista (interruptor de cada cupón). */

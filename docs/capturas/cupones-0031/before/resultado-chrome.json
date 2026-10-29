@@ -1,0 +1,104 @@
+{
+  "preview": "https://tiendly-ju9e56qi3-gaabrielavelasquez-8525s-projects.vercel.app",
+  "module": "cupones",
+  "phase": "before",
+  "tests": [
+    {
+      "engine": "chrome",
+      "n": "lista",
+      "w": 390,
+      "scroll": 390
+    },
+    {
+      "engine": "chrome",
+      "n": "vacio",
+      "w": 390,
+      "scroll": 390
+    },
+    {
+      "engine": "chrome",
+      "n": "limite",
+      "w": 390,
+      "scroll": 390
+    },
+    {
+      "engine": "chrome",
+      "n": "error",
+      "w": 390,
+      "scroll": 390
+    },
+    {
+      "engine": "chrome",
+      "n": "crear",
+      "w": 390,
+      "scroll": 390
+    },
+    {
+      "engine": "chrome",
+      "n": "validacion",
+      "w": 390,
+      "scroll": 390
+    },
+    {
+      "engine": "chrome",
+      "n": "editar",
+      "w": 390,
+      "scroll": 390
+    },
+    {
+      "engine": "chrome",
+      "n": "eliminar",
+      "w": 390,
+      "scroll": 390
+    },
+    {
+      "engine": "chrome",
+      "n": "lista",
+      "w": 1440,
+      "scroll": 1440
+    },
+    {
+      "engine": "chrome",
+      "n": "vacio",
+      "w": 1440,
+      "scroll": 1440
+    },
+    {
+      "engine": "chrome",
+      "n": "limite",
+      "w": 1440,
+      "scroll": 1440
+    },
+    {
+      "engine": "chrome",
+      "n": "error",
+      "w": 1440,
+      "scroll": 1440
+    },
+    {
+      "engine": "chrome",
+      "n": "crear",
+      "w": 1440,
+      "scroll": 1440
+    },
+    {
+      "engine": "chrome",
+      "n": "validacion",
+      "w": 1440,
+      "scroll": 1440
+    },
+    {
+      "engine": "chrome",
+      "n": "editar",
+      "w": 1440,
+      "scroll": 1440
+    },
+    {
+      "engine": "chrome",
+      "n": "eliminar",
+      "w": 1440,
+      "scroll": 1440
+    }
+  ],
+  "writes": "solo datos de prueba en navegador; ninguna acción del servidor"
+}

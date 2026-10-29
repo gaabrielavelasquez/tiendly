@@ -18,7 +18,7 @@ export default async function NuevoCuponPage() {
   const limite = limiteCupones(tienda.plan);
   if (limite !== null && cuponesEnUso(cupones, hoyLima()) >= limite) redirect("/panel/cupones");
   return (
-    <PanelMain>
+    <PanelMain className="gap-10 pb-32 lg:gap-12 [&_h1]:font-display-light">
       <FormularioCupon otros={cupones} />
     </PanelMain>
   );

@@ -32,4 +32,6 @@ Una decisión por archivo: contexto, decisión y consecuencias. Las anteriores a
 
 | 0043 | [Checkout y confirmaciones: pase 0031](0043-checkout-pase-0031.md) | Solicitada por Gabi; sin merge |
 
+| 0044 | [Cupones: pase 0031](0044-cupones-pase-0031.md) | En revisión, sin merge |
+
 Para una decisión nueva: copia la estructura de 0026, usa el número siguiente y súmala a esta tabla.
