@@ -1,4 +1,5 @@
 export { Aviso, type TextoAviso } from "./aviso";
+export { AvisoDemo } from "./aviso-demo";
 export { Buscador } from "./buscador";
 export { EncabezadoSeccion } from "./encabezado-seccion";
 export { FiltrosRapidos, type OpcionFiltro } from "./filtros-rapidos";
