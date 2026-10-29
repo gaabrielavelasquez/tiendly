@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { Button, Field } from "@/components/ui";
+import { cn } from "@/lib/cn";
 import { BotonGoogle } from "./boton-google";
 import { useOnboarding } from "../hooks/use-onboarding";
 import { ingresoCelularActivo } from "../lib/ingreso-celular";
@@ -65,7 +66,8 @@ export function StepRegistro() {
         </>
       )}
       <BotonGoogle />
-      <div className="mt-auto flex flex-col gap-3 pt-2 text-center lg:mt-0 lg:pt-6">
+      {/* Con el número, el pie baja al fondo en móvil; solo con Google queda junto al botón. */}
+      <div className={cn("flex flex-col gap-3 pt-2 text-center lg:mt-0 lg:pt-6", ingresoCelularActivo && "mt-auto")}>
         <p className="text-body-sm text-fg-secondary">
           {crear ? "¿Ya tienes tienda? " : "¿Todavía no tienes tienda? "}
           <button type="button" className="link-text inline-flex min-h-11 items-center" onClick={() => set({ modo: crear ? "ingresar" : "crear" })}>
