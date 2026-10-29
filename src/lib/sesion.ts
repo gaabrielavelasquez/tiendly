@@ -26,7 +26,7 @@ export async function datosPanel(): Promise<DatosTienda> {
 export const tiendaActual = async (): Promise<TiendaSesion> => (await datosPanel()).tienda;
 
 /** En producción el panel sin sesión abre la demo: se puede mirar, pero no guardar (ni con la cookie a mano). */
-const demoProtegida = (slug: string) => process.env.VERCEL_ENV === "production" && esDemo(slug);
+export const demoProtegida = (slug: string) => process.env.VERCEL_ENV === "production" && esDemo(slug);
 
 /** Cambia los datos de la tienda del panel (acciones de servidor). */
 export async function mutarPanel<T>(cambio: (d: DatosTienda) => T | Promise<T>): Promise<T> {

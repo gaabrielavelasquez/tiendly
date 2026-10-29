@@ -1,6 +1,6 @@
 import { connection } from "next/server";
-import { MobileTopbar, SesionPanel, Sidebar, TabBar } from "@/components/panel";
-import { tiendaActual } from "@/lib/sesion";
+import { AvisoDemo, MobileTopbar, SesionPanel, Sidebar, TabBar } from "@/components/panel";
+import { demoProtegida, tiendaActual } from "@/lib/sesion";
 
 /**
  * Panel de la tienda (tema Tiendly, valores de :root). Desktop: barra lateral; la zona de cuenta va en la
@@ -16,6 +16,7 @@ export default async function PanelLayout({ children }: { children: React.ReactN
         <Sidebar />
         <div className="flex min-w-0 flex-1 flex-col">
           <MobileTopbar nombreTienda={tienda.nombre} duena={tienda.duena ?? tienda.nombre} />
+          {demoProtegida(tienda.slug) && <AvisoDemo />}
           {children}
           <TabBar />
         </div>
