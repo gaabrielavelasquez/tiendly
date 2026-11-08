@@ -4,6 +4,7 @@ import { productSlug, validateProduct, type Product, type ProductInput } from ".
 
 export interface CatalogRepository {
   list(storeId: string): Promise<Product[]>;
+  saveMany(changes: { product: Product; expectedVersion: number | null }[], ownerId: string): Promise<Product[]>;
   save(product: Product, ownerId: string, expectedVersion: number | null): Promise<Product>;
 }
 export type CatalogDependencies = StoreDependencies & { catalog: CatalogRepository };

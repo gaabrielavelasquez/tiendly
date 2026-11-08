@@ -32,14 +32,16 @@ export class D1Catalog implements CatalogRepository {
     });
   }
   async save(p: Product, ownerId: string, expectedVersion: number | null): Promise<Product> {
+    return (await this.saveMany([{ product:p, expectedVersion }],ownerId))[0];
+  }
+  private statements(p: Product, ownerId: string, expectedVersion: number | null) {
     const values=[p.slug,p.name,p.description,p.sku,JSON.stringify(p.categories),p.status,p.priceCents,p.compareAtCents,p.offer?.from??null,p.offer?.until??null,p.photoOption??null,p.primaryImage,JSON.stringify(Object.keys(p.photos)),p.measurements===undefined?'inherited':p.measurements===null?'none':'custom',p.measurements==null?null:JSON.stringify(p.measurements),p.version,p.updatedAt];
     const scope=[p.storeId,p.id];
     const membership="EXISTS(SELECT 1 FROM memberships WHERE store_id=? AND user_id=? AND role='owner')";
     const write=expectedVersion===null
       ?this.db.prepare(`INSERT INTO products(store_id,id,created_at,${COLUMNS.join(',')}) SELECT ${Array(3+COLUMNS.length).fill('?').join(',')} WHERE ${membership} RETURNING created_at`).bind(p.storeId,p.id,p.createdAt,...values,p.storeId,ownerId)
       :this.db.prepare(`UPDATE products SET ${COLUMNS.map(c=>c+'=?').join(',')} WHERE store_id=? AND id=? AND version=? AND ${membership} RETURNING created_at`).bind(...values,...scope,expectedVersion,p.storeId,ownerId);
-    try {
-      const result=await this.db.batch([
+    return [
         write,
         this.db.prepare('INSERT INTO write_guards(ok) VALUES(changes())'),
         this.db.prepare('DELETE FROM write_guards'),
@@ -49,8 +51,19 @@ export class D1Catalog implements CatalogRepository {
         ...p.options.map((o,position)=>this.db.prepare('INSERT INTO product_options(store_id,product_id,position,name,kind,values_json) VALUES(?,?,?,?,?,?)').bind(...scope,position,o.name,o.kind,JSON.stringify(o.values))),
         ...p.variants.map(v=>this.db.prepare('INSERT INTO product_variants(store_id,product_id,variant_key,values_json,stock,active) VALUES(?,?,?,?,?,1) ON CONFLICT(store_id,product_id,variant_key) DO UPDATE SET values_json=excluded.values_json,stock=excluded.stock,active=1').bind(...scope,variantKey(v.values),JSON.stringify(v.values),v.stock)),
         ...Object.entries(p.photos).flatMap(([group,urls])=>urls.map((url,position)=>this.db.prepare('INSERT INTO product_photos(store_id,product_id,photo_group,position,url) VALUES(?,?,?,?,?)').bind(...scope,group,position,url))),
-      ]);
-      return {...p,createdAt:(result[0].results[0] as {created_at:string}).created_at};
+    ];
+  }
+  async saveMany(changes:{product:Product;expectedVersion:number|null}[],ownerId:string):Promise<Product[]> {
+    if (!changes.length) return [];
+    const batches=changes.map(c=>this.statements(c.product,ownerId,c.expectedVersion));
+    try {
+      const result=await this.db.batch(batches.flat());
+      let offset=0;
+      return changes.map((change,index)=>{
+        const row=result[offset].results[0] as {created_at:string};
+        offset+=batches[index].length;
+        return {...change.product,createdAt:row.created_at};
+      });
     } catch(error) {
       if(/CHECK constraint failed|UNIQUE constraint failed/.test(String(error))) throw new BusinessError('conflict');
       throw error;

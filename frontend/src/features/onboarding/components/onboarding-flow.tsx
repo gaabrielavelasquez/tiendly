@@ -45,9 +45,9 @@ function Flujo() {
 }
 
 /** Onboarding O1–O4 / OD1–OD4 (decisión 0013). Datos simulados hasta que exista el backend. */
-export function OnboardingFlow({ linksEjemplo, baseTienda }: { linksEjemplo: string[]; baseTienda: string }) {
+export function OnboardingFlow({ linksEjemplo, baseTienda, googleName, testLogin }: { linksEjemplo: string[]; baseTienda: string; googleName?: string; testLogin: boolean }) {
   return (
-    <OnboardingProvider linksEjemplo={linksEjemplo} baseTienda={baseTienda}>
+    <OnboardingProvider linksEjemplo={linksEjemplo} baseTienda={baseTienda} googleName={googleName} testLogin={testLogin}>
       <Flujo />
     </OnboardingProvider>
   );
