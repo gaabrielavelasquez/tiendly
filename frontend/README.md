@@ -14,6 +14,14 @@ npm run dev          # genera los tokens y levanta http://localhost:3000
 - `/demo`: vitrina con tema Editorial.
 - `/registro`: onboarding.
 
+## Preview de Cloudflare
+
+El primer entorno de pruebas está en [tiendly-preview.tiendly.workers.dev](https://tiendly-preview.tiendly.workers.dev/muna). Usa MUÑA y datos temporales en memoria; todavía no conecta D1, R2 ni Google real.
+
+Para repetir la publicación desde un worktree aislado, ejecuta en esta carpeta `npm ci --include-workspace-root` y `npm run deploy:cloudflare-preview`. Requiere el perfil Wrangler `tiendly`. El comando compila vinext, verifica las exclusiones de fotos privadas y publica únicamente el Worker `tiendly-preview` en la cuenta Tiendly. No usarlo para producción.
+
+Configuración, capturas y límites de esta prueba: [verificación del preview](../docs/verificacion/cloudflare-preview/README.md).
+
 ## Tokens: una sola fuente
 
 ```

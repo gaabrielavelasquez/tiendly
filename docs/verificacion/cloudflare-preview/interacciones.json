@@ -1,0 +1,22 @@
+[
+  {
+    "engine": "chromium",
+    "cartHasProduct": true,
+    "logoutUrl": "https://tiendly-preview.tiendly.workers.dev/registro",
+    "sessionRemoved": true,
+    "errors": []
+  },
+  {
+    "engine": "webkit",
+    "cartHasProduct": true,
+    "logoutUrl": "https://tiendly-preview.tiendly.workers.dev/registro",
+    "sessionRemoved": true,
+    "errors": [
+      "/tiendly-preview.tiendly.workers.dev/panel/productos/m4?_rsc=CKbEeYicR5iKqMIp due to access control checks.",
+      "/tiendly-preview.tiendly.workers.dev/panel/productos/nuevo?_rsc=CKbEeYicR5iKqMIp due to access control checks.",
+      "/tiendly-preview.tiendly.workers.dev/panel/mi-tienda?_rsc=CKbEeYicR5iKqMIp due to access control checks.",
+      "/tiendly-preview.tiendly.workers.dev/panel/pedidos?_rsc=CKbEeYicR5iKqMIp due to access control checks.",
+      "/tiendly-preview.tiendly.workers.dev/panel?_rsc=CKbEeYicR5iKqMIp due to access control checks."
+    ]
+  }
+]
