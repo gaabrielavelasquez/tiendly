@@ -11,14 +11,14 @@ const worker = JSON.parse(await readFile(resolve(source, "worker.config.json"), 
 
 // Solo recursos del preview, nunca producción. Los valores secretos se guardan
 // con Wrangler, no se leen ni se escriben en este manifiesto.
-assert.equal(worker.name, "tiendly-preview");
+assert.equal(worker.name, "preview");
 assert.equal(worker.manifest.mainModule, "index.js");
 assert.deepEqual(Object.keys(worker.manifest.modules), []);
 assert.deepEqual(worker.env, {
   ASSETS: { type: "assets" },
   UPLOADS: { type: "r2", name: "tiendly-preview-images" },
   DB: { type: "d1", name: "tiendly-preview", id: "9fcfd54b-56a2-4cb9-af11-800e5191e93d" },
-  BETTER_AUTH_URL: { type: "text", value: "https://tiendly-preview.tiendly.workers.dev" },
+  BETTER_AUTH_URL: { type: "text", value: "https://preview.tiendly.workers.dev" },
   BETTER_AUTH_SECRET: { type: "secret" },
   GOOGLE_CLIENT_ID: { type: "secret" },
   GOOGLE_CLIENT_SECRET: { type: "secret" },

@@ -1,0 +1,15 @@
+{
+  "checkedAt": "2026-11-08T23:49:23.707Z",
+  "status": 200,
+  "completeOAuth": false,
+  "authorizationOrigin": "https://accounts.google.com",
+  "callback": "https://preview.tiendly.workers.dev/api/auth/callback/google",
+  "matchesPreviewClient": true,
+  "scopes": "email profile openid",
+  "destination": {
+    "origin": "https://accounts.google.com",
+    "path": "/v3/signin/identifier"
+  },
+  "text": "Sign in with Google\nSign in\n\nto continue to tiendly.workers.dev\n\nEmail or phone\n\nForgot email?\n\nNext\nCreate account\nAfrikaans\nazərbaycan\nbosanski\ncatalà\nČeština\nCymraeg\nDansk\nDeutsch\neesti\nEnglish (United Kingdom)\nEnglish (United States)\nEspañol (España)\nEspañol (Latinoamérica)\neuskara\nFilipino\nFrançais (Canada)\nFrançais (France)\nGaeilge\ngalego\nHrvatski\nIndonesia\nisiZulu\níslenska\nItaliano\nKiswahili\nlatviešu\nlietuvių\nmagyar\nMelayu\nNederlands\nnorsk\no‘zbek\npolski\nPortuguês (Brasil)\nPortuguês (Portugal)\nromână\nshqip\nSlovenčina\nslovenščina\nsrpski (latinica)\nSuomi\nSvenska\nTiếng Việt\nTürkçe\nΕλληνικά\nбеларуская\nбългарски\nкыргызча\nқазақ тілі\nмакедонски\nмонгол\nРусский\nсрпски (ћирилица)\nУкраїнська\nქართული\nհայերեն\n‫עברית‬‎\n‫اردو‬‎\n‫العربية‬‎\n‫فارسی‬‎\nአማርኛ\nनेपाली\nमराठी\nहिन्दी\nঅসমীয়া\nবাংলা\nਪੰਜਾਬੀ\nગુજરા",
+  "googleAcceptsRequest": true
+}

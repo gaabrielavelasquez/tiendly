@@ -1,0 +1,236 @@
+{
+  "origin": "https://preview.tiendly.workers.dev",
+  "complete": true,
+  "results": [
+    {
+      "engine": "chromium",
+      "width": 390,
+      "route": "/registro",
+      "status": 200,
+      "scrollWidth": 390,
+      "brokenImages": [],
+      "errors": [],
+      "bad": [],
+      "pass": true
+    },
+    {
+      "engine": "chromium",
+      "width": 390,
+      "route": "/muna",
+      "status": 200,
+      "scrollWidth": 390,
+      "brokenImages": [],
+      "errors": [],
+      "bad": [],
+      "pass": true
+    },
+    {
+      "engine": "chromium",
+      "width": 390,
+      "route": "/panel/productos",
+      "status": 200,
+      "scrollWidth": 390,
+      "brokenImages": [],
+      "errors": [],
+      "bad": [],
+      "pass": true
+    },
+    {
+      "engine": "chromium",
+      "width": 1440,
+      "route": "/registro",
+      "status": 200,
+      "scrollWidth": 1440,
+      "brokenImages": [],
+      "errors": [],
+      "bad": [],
+      "pass": true
+    },
+    {
+      "engine": "chromium",
+      "width": 1440,
+      "route": "/muna",
+      "status": 200,
+      "scrollWidth": 1440,
+      "brokenImages": [],
+      "errors": [],
+      "bad": [],
+      "pass": true
+    },
+    {
+      "engine": "chromium",
+      "width": 1440,
+      "route": "/panel/productos",
+      "status": 200,
+      "scrollWidth": 1440,
+      "brokenImages": [],
+      "errors": [],
+      "bad": [],
+      "pass": true
+    },
+    {
+      "engine": "chromium",
+      "width": 360,
+      "route": "/registro",
+      "status": 200,
+      "scrollWidth": 360,
+      "brokenImages": [],
+      "errors": [],
+      "bad": [],
+      "pass": true
+    },
+    {
+      "engine": "chromium",
+      "width": 360,
+      "route": "/muna",
+      "status": 200,
+      "scrollWidth": 360,
+      "brokenImages": [],
+      "errors": [],
+      "bad": [],
+      "pass": true
+    },
+    {
+      "engine": "chromium",
+      "width": 360,
+      "route": "/panel/productos",
+      "status": 200,
+      "scrollWidth": 360,
+      "brokenImages": [],
+      "errors": [],
+      "bad": [],
+      "pass": true
+    },
+    {
+      "engine": "webkit",
+      "width": 390,
+      "route": "/registro",
+      "status": 200,
+      "scrollWidth": 390,
+      "brokenImages": [],
+      "errors": [],
+      "bad": [],
+      "pass": true
+    },
+    {
+      "engine": "webkit",
+      "width": 390,
+      "route": "/muna",
+      "status": 200,
+      "scrollWidth": 390,
+      "brokenImages": [],
+      "errors": [],
+      "bad": [],
+      "pass": true
+    },
+    {
+      "engine": "webkit",
+      "width": 390,
+      "route": "/panel/productos",
+      "status": 200,
+      "scrollWidth": 390,
+      "brokenImages": [],
+      "errors": [],
+      "bad": [],
+      "pass": true
+    },
+    {
+      "engine": "webkit",
+      "width": 1440,
+      "route": "/registro",
+      "status": 200,
+      "scrollWidth": 1440,
+      "brokenImages": [],
+      "errors": [],
+      "bad": [],
+      "pass": true
+    },
+    {
+      "engine": "webkit",
+      "width": 1440,
+      "route": "/muna",
+      "status": 200,
+      "scrollWidth": 1440,
+      "brokenImages": [],
+      "errors": [],
+      "bad": [],
+      "pass": true
+    },
+    {
+      "engine": "webkit",
+      "width": 1440,
+      "route": "/panel/productos",
+      "status": 200,
+      "scrollWidth": 1440,
+      "brokenImages": [],
+      "errors": [],
+      "bad": [],
+      "pass": true
+    },
+    {
+      "engine": "webkit",
+      "width": 360,
+      "route": "/registro",
+      "status": 200,
+      "scrollWidth": 360,
+      "brokenImages": [],
+      "errors": [],
+      "bad": [],
+      "pass": true
+    },
+    {
+      "engine": "webkit",
+      "width": 360,
+      "route": "/muna",
+      "status": 200,
+      "scrollWidth": 360,
+      "brokenImages": [],
+      "errors": [],
+      "bad": [],
+      "pass": true
+    },
+    {
+      "engine": "webkit",
+      "width": 360,
+      "route": "/panel/productos",
+      "status": 200,
+      "scrollWidth": 360,
+      "brokenImages": [],
+      "errors": [],
+      "bad": [],
+      "pass": true
+    }
+  ],
+  "access": [
+    {
+      "path": "/api/business/stores",
+      "forgedSlug": false,
+      "status": 401
+    },
+    {
+      "path": "/api/business/catalog",
+      "forgedSlug": false,
+      "status": 401
+    },
+    {
+      "path": "/api/business/catalog",
+      "forgedSlug": true,
+      "status": 401
+    },
+    {
+      "path": "/api/auth/get-session",
+      "forgedSlug": false,
+      "status": 200
+    },
+    {
+      "path": "/heather",
+      "forgedSlug": false,
+      "status": 404
+    },
+    {
+      "path": "/images/missing/missing.png",
+      "forgedSlug": false,
+      "status": 404
+    }
+  ]
+}
