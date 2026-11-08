@@ -17,3 +17,5 @@ cd frontend
 npm install
 npm run dev
 ```
+
+El flujo de integración usa `main`, `dev` y PRs por módulo; consulta [el procedimiento y el estado de adopción](docs/gitflow.md).
