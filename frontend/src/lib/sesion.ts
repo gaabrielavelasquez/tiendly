@@ -1,3 +1,4 @@
+import { storeStorage } from "@/lib/store-storage";
 import { environment, testLoginAllowed } from "@tiendly/backend/rules";
 import { ownedPanelSlug } from "./panel-access";
 import { cookies } from "next/headers";
@@ -17,8 +18,8 @@ export async function slugPanel(): Promise<string> {
     const slug = (await cookies()).get(COOKIE_TIENDA)?.value;
     return slug && /^[a-z0-9-]{1,40}$/.test(slug) && (await datosTienda(slug)) ? slug : slugDemo();
   }
-  try { return (await ownedPanelSlug()) ?? slugDemo(); }
-  catch { return slugDemo(); }
+  if (!(await storeStorage())) return slugDemo();
+  return (await ownedPanelSlug()) ?? slugDemo();
 }
 
 /** Todos los datos de la tienda del panel. */

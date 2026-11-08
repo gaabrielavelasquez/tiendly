@@ -38,13 +38,18 @@ export function ProductosVista({ productos, filtroInicial, hoy }: VistaProps) {
   const subtitulo = c.conteos.todos
     ? `${plural(c.conteos.todos, "producto", "productos")}${atencion ? ` · ${plural(atencion, "necesita", "necesitan")} reposición` : ""}.`
     : "Aquí vas a ver tu catálogo, con stock y precios.";
-  const acciones = { cantidad: c.elegidos.length, conOferta: c.conOferta, onPausar: () => c.pausar(c.elegidos), onQuitarOferta: c.quitarOferta, onPonerEnOferta: () => setHoja(true) };
+  const acciones = { cantidad: c.elegidos.length, conOferta: c.conOferta, guardando: c.guardando, onPausar: () => c.pausar(c.elegidos), onQuitarOferta: c.quitarOferta, onPonerEnOferta: () => setHoja(true) };
   const todosMarcados = c.visibles.length > 0 && c.visibles.every((p) => c.seleccion.has(p.id));
 
   return (
     <>
       {/* Un solo CTA por vista: con el catálogo vacío, el botón vive dentro del estado vacío. */}
       <PanelHeader titulo="Productos" subtitulo={subtitulo} accion={c.conteos.todos ? <NuevoProducto /> : undefined} />
+      {c.guardando && <p role="status" className="text-body-sm text-fg-secondary">Guardando cambios.</p>}
+      {c.fallo && <div role="alert" className="text-body-sm text-error">
+        <p>{c.fallo}</p>
+        <Button variant="quiet" size="sm" onClick={() => window.location.reload()}>Recargar catálogo</Button>
+      </div>}
       {c.conteos.todos > 0 && !c.modoSeleccion && <NuevoProducto className="w-full lg:hidden" />}
 
       {c.conteos.todos === 0 ? (
@@ -92,7 +97,7 @@ export function ProductosVista({ productos, filtroInicial, hoy }: VistaProps) {
         <HojaOferta productos={c.elegidos} hoy={hoy} onCerrar={() => setHoja(false)}
           onAplicar={async (o) => { const e = await c.ponerEnOferta(o); if (!e) setHoja(false); return e; }} />
       )}
-      <AvisoDeshacer aviso={c.aviso} onDeshacer={c.deshacer} />
+      <AvisoDeshacer aviso={c.aviso} onDeshacer={c.deshacer} guardando={c.guardando} />
     </>
   );
 }

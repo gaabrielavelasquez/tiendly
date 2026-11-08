@@ -15,7 +15,7 @@ const CAMPOS: (keyof Errores)[] = ["nombre", "precio", "precioAntes", "ofertaHas
  * el id nuevo para no duplicarlo al volver a guardar. "Las fotos cambian según" sigue a Color o Tono hasta que
  * la persona la elige a mano.
  */
-export function useFormularioProducto(inicial: FormProducto, id?: string, urlInicial?: string | null) {
+export function useFormularioProducto(inicial: FormProducto, id?: string, urlInicial?: string | null, versionInicial?: number) {
   const [form, setForm] = useState(inicial);
   const [urlTienda, setUrlTienda] = useState(urlInicial ?? null);
   const [base, setBase] = useState(() => JSON.stringify(inicial));
@@ -26,6 +26,8 @@ export function useFormularioProducto(inicial: FormProducto, id?: string, urlIni
   const [fotosManual, setFotosManual] = useState(!!id);
   const timer = useRef<number | undefined>(undefined);
   const idGuardado = useRef(id ?? null);
+  const versionGuardada = useRef(versionInicial);
+  const envioEnCurso = useRef(false);
   /** Error al guardar (red o servidor); lo escrito no se pierde. */
   const [fallo, setFallo] = useState("");
 
@@ -59,6 +61,7 @@ export function useFormularioProducto(inicial: FormProducto, id?: string, urlIni
 
   /** Devuelve la cantidad de errores; 0 si se guardó. */
   const guardar = useCallback(async () => {
+    if (envioEnCurso.current) return 0;
     setIntentoGuardar(true);
     const e = validar(form);
     const cantidad = Object.keys(e).length;
@@ -68,22 +71,25 @@ export function useFormularioProducto(inicial: FormProducto, id?: string, urlIni
       requestAnimationFrame(() => document.getElementById(`campo-${primero}`)?.focus());
       return cantidad;
     }
+    envioEnCurso.current = true;
     setGuardando(true);
     setFallo("");
     let r: Awaited<ReturnType<typeof guardarProducto>>;
     let imagenes = form.imagenes;
     try {
       imagenes = await Promise.all(form.imagenes.map(async (i) => ({ ...i, url: await fotoParaGuardar(i.url) })));
-      r = await guardarProducto(idGuardado.current, { ...form, imagenes });
+      r = await guardarProducto(idGuardado.current, { ...form, imagenes }, versionGuardada.current);
     } catch {
       r = { error: "No pudimos guardar el producto. Revisa tu conexión e inténtalo de nuevo." };
     }
+    envioEnCurso.current = false;
     setGuardando(false);
     if ("error" in r) {
       setFallo(r.error);
       return 0;
     }
     idGuardado.current = r.id;
+    versionGuardada.current = r.version;
     setUrlTienda(r.urlTienda);
     const urls = r.urls;
     imagenes = imagenes.map((i, n) => ({ ...i, url: urls[n] ?? i.url }));

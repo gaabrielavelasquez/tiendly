@@ -10,6 +10,7 @@ import { esHeather } from "@/lib/datos/semillas";
 import { TIENDAS_EJEMPLO } from "@/lib/datos/tiendas-ejemplo";
 import { identidadDe } from "@/features/mi-tienda/lib/datos";
 import { datosTienda } from "@/lib/datos/tienda";
+import { OFERTAS } from "./categorias";
 
 // Vitrina pública: lo que ve el cliente. Lee el mismo catálogo que el panel, pero solo lo publicado.
 
@@ -47,9 +48,6 @@ export type FichaProducto = ProductoVitrina & {
   /** Solo si la tienda la cargó en el producto: sin tabla, no hay link "Ver tabla de tallas". */
   tablaTallas?: TablaTallas;
 };
-
-/** Id de la sección de ofertas en el menú y en ?categoria= (0034). */
-export const OFERTAS = "ofertas";
 
 /** Portada de una sola foto, con su titular y bajada (hoy, la de MUÑA; Mi tienda todavía no la publica). */
 export type PortadaPropia = { src: string; alt: string; titulo: string; bajada: string };

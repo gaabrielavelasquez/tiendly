@@ -7,13 +7,13 @@ import { Button } from "@/components/ui";
 import { plural } from "@/lib/formato";
 import { motionTokens } from "@/styles/tokens";
 
-type BarraSeleccionProps = { cantidad: number; conOferta: number; onPausar: () => void; onQuitarOferta: () => void; onPonerEnOferta: () => void; onLimpiar: () => void };
+type BarraSeleccionProps = { cantidad: number; conOferta: number; guardando?: boolean; onPausar: () => void; onQuitarOferta: () => void; onPonerEnOferta: () => void; onLimpiar: () => void };
 
 /**
  * Acciones en lote en desktop (0027 y 0034): aparece al marcar productos. Pausar, Quitar oferta (si alguno tiene) y
  * Poner en oferta. En móvil, la barra fija de abajo (BarraSeleccionMovil).
  */
-export function BarraSeleccion({ cantidad, conOferta, onPausar, onQuitarOferta, onPonerEnOferta, onLimpiar }: BarraSeleccionProps) {
+export function BarraSeleccion({ cantidad, conOferta, guardando, onPausar, onQuitarOferta, onPonerEnOferta, onLimpiar }: BarraSeleccionProps) {
   const reduce = useReducedMotion();
   return (
     <AnimatePresence initial={false}>
@@ -32,16 +32,16 @@ export function BarraSeleccion({ cantidad, conOferta, onPausar, onQuitarOferta, 
             <Button variant="ghost" size="sm" onClick={onLimpiar}>
               Quitar selección
             </Button>
-            <Button variant="secondary" size="sm" onClick={onPausar}>
+            <Button variant="secondary" size="sm" disabled={guardando} onClick={onPausar}>
               <span className="flex items-center gap-1.5">
                 <Pause aria-hidden strokeWidth={1.6} className="size-4" />
                 Pausar
               </span>
             </Button>
-            <Button variant="secondary" size="sm" onClick={onQuitarOferta} disabled={!conOferta}>
+            <Button variant="secondary" size="sm" onClick={onQuitarOferta} disabled={guardando || !conOferta}>
               Quitar oferta
             </Button>
-            <Button variant="secondary" size="sm" onClick={onPonerEnOferta}>
+            <Button variant="secondary" size="sm" disabled={guardando} onClick={onPonerEnOferta}>
               <span className="flex items-center gap-1.5">
                 <Tag aria-hidden strokeWidth={1.6} className="size-4" />
                 Poner en oferta

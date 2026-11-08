@@ -33,21 +33,24 @@ const INICIAL: OnboardingState = {
 };
 
 /** `linksEjemplo`: el link de cada tienda de ejemplo con el formato real (TIENDLY_URL_TIENDAS), para la vista previa. */
-type Ctx = { state: OnboardingState; set: (p: Partial<OnboardingState>) => void; reset: () => void; linksEjemplo: string[]; baseTienda: string };
+type Ctx = { state: OnboardingState; set: (p: Partial<OnboardingState>) => void; reset: () => void; linksEjemplo: string[]; baseTienda: string; testLogin: boolean };
 const OnboardingContext = createContext<Ctx | null>(null);
 
 /** Estado del onboarding. Se guarda en sessionStorage para sobrevivir a un refresh (si se puede). */
-export function OnboardingProvider({ linksEjemplo, baseTienda, children }: { linksEjemplo: string[]; baseTienda: string; children: React.ReactNode }) {
-  const [state, setState] = useState<OnboardingState>(INICIAL);
+export function OnboardingProvider({ linksEjemplo, baseTienda, testLogin, googleName, children }: { linksEjemplo: string[]; baseTienda: string; testLogin: boolean; googleName?: string; children: React.ReactNode }) {
+  const [state, setState] = useState<OnboardingState>({ ...INICIAL, ...(googleName ? { paso: "datos", nombreGoogle: googleName } : {}) });
 
   useEffect(() => {
     try {
       const raw = sessionStorage.getItem(CLAVE_ONBOARDING);
-      if (raw) setState({ ...INICIAL, ...JSON.parse(raw) });
+      if (raw) {
+        const saved = { ...INICIAL, ...JSON.parse(raw) };
+        setState(googleName ? { ...saved, paso: "datos", nombreGoogle: googleName } : { ...saved, paso: "registro" });
+      }
     } catch {
       /* sin storage: el flujo funciona igual en memoria */
     }
-  }, []);
+  }, [googleName]);
 
   const set = useCallback((p: Partial<OnboardingState>) => {
     setState((prev) => {
@@ -66,7 +69,7 @@ export function OnboardingProvider({ linksEjemplo, baseTienda, children }: { lin
     setState(INICIAL);
   }, []);
 
-  return <OnboardingContext.Provider value={{ state, set, reset, linksEjemplo, baseTienda }}>{children}</OnboardingContext.Provider>;
+  return <OnboardingContext.Provider value={{ state, set, reset, linksEjemplo, baseTienda, testLogin }}>{children}</OnboardingContext.Provider>;
 }
 
 export function useOnboarding() {

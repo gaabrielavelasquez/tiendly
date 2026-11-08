@@ -24,15 +24,15 @@ import { SeccionPrecio } from "./seccion-precio";
 import { SeccionStock } from "./seccion-stock";
 
 /** `hoy`: día de Lima (para la oferta); `categorias`: las que ya usa la tienda; `tablas`: las tablas de tallas de sus otros productos. */
-type FormularioProps = { titulo: string; inicial: FormProducto; id?: string; urlTienda?: string | null; hoy: string; categorias: Categoria[]; tablas: TablaDeOtro[] };
+type FormularioProps = { titulo: string; inicial: FormProducto; id?: string; version?: number; urlTienda?: string | null; hoy: string; categorias: Categoria[]; tablas: TablaDeOtro[] };
 
 /**
  * Crear / editar producto con el pase 0031: títulos de sección fuera de los contenedores, un contenedor por sección y
  * 40 · 48 px entre secciones. Desktop: 2/3 contenido y 1/3 ajustes (Estado y Categoría); móvil: una columna, con
  * "Guardar producto" fijo abajo (la barra de pestañas no se muestra aquí). Opciones genéricas (0032) y oferta (0034).
  */
-export function FormularioProducto({ titulo, inicial, id, urlTienda, hoy, categorias, tablas }: FormularioProps) {
-  const f = useFormularioProducto(inicial, id, urlTienda);
+export function FormularioProducto({ titulo, inicial, id, version, urlTienda, hoy, categorias, tablas }: FormularioProps) {
+  const f = useFormularioProducto(inicial, id, urlTienda, version);
   const reduce = useReducedMotion();
   const [resumen, setResumen] = useState("");
 

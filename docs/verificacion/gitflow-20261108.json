@@ -1,0 +1,15 @@
+{
+  "date": "2026-11-08",
+  "scope": "Local recovered feat/onboarding-d1 worktree; not deployed-preview or end-to-end acceptance",
+  "node": "v26.10.0",
+  "backendTests": {"passed": 12, "failed": 0, "storage": "Miniflare local D1/R2"},
+  "backendTypecheck": "pass",
+  "frontendTypecheck": "pass",
+  "tokenCheck": "pass, 367 files",
+  "nextBuild": "pass, default Turbopack",
+  "vinextBuild": "pass with sourcemap and route-classification warnings",
+  "typecheckAfterVinext": "pass; next typegen regenerates Next route declarations",
+  "cloudflareAssetExclusions": "verified by existing build script",
+  "notRun": ["remote D1", "Google browser OAuth", "remote R2", "deployed preview acceptance", "end-to-end checkout"],
+  "productionChanged": false
+}

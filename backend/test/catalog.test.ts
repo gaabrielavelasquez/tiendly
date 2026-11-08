@@ -66,6 +66,25 @@ test('catalog version conflicts and failed child rows roll back the complete agg
  }finally{await mf.dispose();}
 });
 
+test('bulk edits and undo reject a stale member without changing the rest of the selection',async()=>{
+ const {mf,db,deps,store}=await fixture();
+ try {
+  const first=await saveProduct(deps,{userId:'owner'},null,null,input(store.id));
+  const second=await saveProduct(deps,{userId:'owner'},null,null,{...input(store.id),name:'Vela de cedro'});
+  const winner=await saveProduct(deps,{userId:'owner'},second.id,second.version,{...second,description:'Editado en otra pestaña.'});
+  const before=await deps.catalog.list(store.id);
+  await assert.rejects(deps.catalog.saveMany([first,second].map(product=>({product:{...product,status:'paused',version:product.version+1},expectedVersion:product.version})),'owner'),code('conflict'));
+  assert.deepEqual(await deps.catalog.list(store.id),before);
+  const paused=await deps.catalog.saveMany([first,winner].map(product=>({product:{...product,status:'paused',version:product.version+1},expectedVersion:product.version})),'owner');
+  assert.deepEqual(paused.map(product=>product.version),[2,3]);
+  await saveProduct(deps,{userId:'owner'},first.id,2,{...first,name:'Jarrón actualizado'});
+  const beforeUndo=await deps.catalog.list(store.id);
+  await assert.rejects(deps.catalog.saveMany(paused.map(product=>({product:{...product,status:'active',version:product.version+1},expectedVersion:product.version})),'owner'),code('conflict'));
+  assert.deepEqual(await deps.catalog.list(store.id),beforeUndo);
+  assert.equal((await db.prepare('SELECT COUNT(*) AS n FROM write_guards').first<{n:number}>())?.n,0);
+ }finally{await mf.dispose();}
+});
+
 test('R2 images are scoped, size/type checked and served without OAuth dependencies',async()=>{
  const {mf,deps,store,bucket}=await fixture();
  try {

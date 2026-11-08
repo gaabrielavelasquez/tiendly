@@ -1,18 +1,30 @@
+"use client";
+
+import { useState } from "react";
 import { Button } from "@/components/ui";
 
-/**
- * "Continuar con Google" según las guías de marca de Google (Sign in with Google): botón neutro con borde, el logo
- * "G" oficial a todo color y sin alterar (public/icons/google-g.svg, a la izquierda del texto) y el texto
- * localizado oficial. Con backend: conectar al flujo de Google Identity Services.
- */
+/** Inicia OAuth mediante Better Auth; el botón conserva su estilo existente. */
 export function BotonGoogle() {
-  return (
-    <Button type="button" variant="secondary" block>
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string>();
+  async function ingresar() {
+    setLoading(true); setError(undefined);
+    try {
+      const response = await fetch("/api/auth/sign-in/social", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ provider: "google", callbackURL: "/registro?google=1", errorCallbackURL: "/registro?error=google" }) });
+      const data = await response.json();
+      if (!response.ok || typeof data.url !== "string") throw new Error();
+      const url = new URL(data.url);
+      if (url.protocol !== "https:" || url.hostname !== "accounts.google.com") throw new Error();
+      window.location.assign(url.href);
+    } catch { setError("No pudimos ingresar con Google. Inténtalo de nuevo."); setLoading(false); }
+  }
+  return <>
+    <Button type="button" variant="secondary" block loading={loading} disabled={loading} onClick={ingresar}>
       <span className="inline-flex items-center gap-3">
-        {/* SVG estático de 18 px: next/image no aporta nada. */}
         <img src="/icons/google-g.svg" alt="" aria-hidden className="size-4.5 shrink-0" />
         Continuar con Google
       </span>
     </Button>
-  );
+    {error && <p role="alert" className="text-body-sm text-error">{error}</p>}
+  </>;
 }

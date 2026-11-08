@@ -9,3 +9,5 @@ export type { CatalogDependencies } from './catalog/application/catalog.ts';
 export { D1Catalog } from './catalog/adapters/d1-catalog.ts';
 export { uploadImage, readImage, MAX_IMAGE_BYTES } from './catalog/adapters/r2-images.ts';
 export { catalogHandler } from './runtime/catalog-handler.ts';
+export { D1Settings } from './settings/adapters/d1-settings.ts';
+export type { StoreConfiguration } from './settings/adapters/d1-settings.ts';

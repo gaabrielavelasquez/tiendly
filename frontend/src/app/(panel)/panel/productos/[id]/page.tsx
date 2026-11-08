@@ -20,7 +20,7 @@ export default async function EditarProductoPage({ params }: PageProps) {
   if (!producto) notFound();
   return (
     <PanelMain className="lg:pt-0">
-      <FormularioProducto titulo={producto.nombre} inicial={desdeProducto(producto)} id={producto.id} urlTienda={producto.estado === "activo" ? `/${slug}/${slugProducto(producto.nombre)}` : null} hoy={hoyLima()} categorias={categorias} tablas={tablas} />
+      <FormularioProducto titulo={producto.nombre} inicial={desdeProducto(producto)} id={producto.id} version={producto.version} urlTienda={producto.estado === "activo" ? `/${slug}/${slugProducto(producto.nombre)}` : null} hoy={hoyLima()} categorias={categorias} tablas={tablas} />
     </PanelMain>
   );
 }
