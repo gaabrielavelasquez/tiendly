@@ -1,5 +1,7 @@
 "use server";
 
+import { testLoginAllowed } from "@tiendly/backend/rules";
+
 import { recordarIngreso, tiendaDeIngreso } from "@/lib/datos/ingreso";
 import { cookies } from "next/headers";
 import { tiendaNueva } from "@/lib/datos/semillas";
@@ -43,6 +45,7 @@ type NuevaTienda = { nombre: string; slug: string; celularVentas: string; celula
  * plan Free. Este navegador la recuerda (cookie): desde aquí el panel es el de esta tienda.
  */
 export async function crearTienda(t: NuevaTienda): Promise<{ slug: string } | { error: string }> {
+  if (!testLoginAllowed(process.env.TIENDLY_ENTORNO, process.env.TIENDLY_TEST_LOGIN)) return { error: "Continúa con Google para crear tu tienda." };
   const nombre = t.nombre.trim();
   const base = aSlug(t.slug);
   if (nombre.length < 2 || !base) return { error: "Escribe el nombre de tu negocio." };
@@ -67,6 +70,7 @@ async function recordarSesion(slug: string) {
 
 /** Se llama después del código simulado; no envía mensajes ni implementa autenticación real. */
 export async function ingresarTienda(celular: string): Promise<{ ok: true } | { error: string }> {
+  if (!testLoginAllowed(process.env.TIENDLY_ENTORNO, process.env.TIENDLY_TEST_LOGIN)) return { error: "Continúa con Google para ingresar." };
   if (errorCelular(celular)) return { error: "Revisa tu número de WhatsApp." };
   const slug = await tiendaDeIngreso(celular);
   if (!slug) return { error: "No encontramos una tienda para este número. Revisa el número con el que te registraste." };
