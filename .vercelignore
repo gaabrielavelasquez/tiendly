@@ -5,3 +5,7 @@ public/heather
 public/mi-tienda
 frontend/public/heather
 frontend/public/mi-tienda
+
+# Worktrees y respaldos privados locales no son entradas de despliegue.
+.worktrees
+.backend-rescue

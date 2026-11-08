@@ -21,12 +21,12 @@ Si la rama tiene workspace y lockfile en la raíz, sustituye la instalación por
 
 | Orden | Rama | Destino inicial | Estado al preparar la transición |
 |---|---|---|---|
-| 1 | `chore/gitflow` | `dev` | Workflow, CI, plantilla y registro de integración. |
-| 2 | `chore/cierre-la-bodega` (#45) | `dev` | Traspaso documental, sin código funcional. |
-| 3 | `chore/cloudflare-foundation` | `dev` | Experimento vinext y prueba D1; aceptación de runtime pendiente. |
-| 4 | `feat/identity-stores` | `chore/cloudflare-foundation` | Identidad/tiendas; Google real pendiente. |
-| 5 | `feat/catalog` | `feat/identity-stores` | Catálogo/R2; bucket y aceptación remotos pendientes. |
-| 6 | `feat/onboarding-d1` | `feat/catalog` | Integración recuperada de 32 archivos; aceptación E2E pendiente. |
+| 1 | `chore/gitflow` ([#46](https://github.com/gaabrielavelasquez/tiendly/pull/46)) | `dev` | Workflow, CI, plantilla y registro de integración. |
+| 2 | `chore/cierre-la-bodega` ([#45](https://github.com/gaabrielavelasquez/tiendly/pull/45)) | `dev` | Traspaso documental, sin código funcional. |
+| 3 | `chore/cloudflare-foundation` ([#47](https://github.com/gaabrielavelasquez/tiendly/pull/47)) | `dev` | Experimento vinext y prueba D1; aceptación de runtime pendiente. |
+| 4 | `feat/identity-stores` ([#48](https://github.com/gaabrielavelasquez/tiendly/pull/48)) | `chore/cloudflare-foundation` | Identidad/tiendas; Google real pendiente. |
+| 5 | `feat/catalog` ([#49](https://github.com/gaabrielavelasquez/tiendly/pull/49)) | `feat/identity-stores` | Catálogo/R2; bucket y aceptación remotos pendientes. |
+| 6 | `feat/onboarding-d1` ([#50](https://github.com/gaabrielavelasquez/tiendly/pull/50)) | `feat/catalog` | Integración recuperada de 32 archivos; aceptación E2E pendiente. |
 
 Se preservan los commits y la pila existentes. Tras aprobar e integrar cada base, cambiar el destino del PR dependiente a `dev`, comprobar conflictos y volver a ejecutar CI. Los PRs funcionales permanecen como borradores mientras falte aceptación. La documentación del estado de módulos está en el PR #45 y en los traspasos de las ramas de implementación.
 
@@ -34,13 +34,15 @@ Se preservan los commits y la pila existentes. Tras aprobar e integrar cada base
 
 Los worktrees de implementación y documentación se movieron desde `/private/tmp` a `.worktrees/cloudflare` y `.worktrees/cierre-bodega`, dentro del proyecto. El checkout principal sigue en `main`; su modificación previa de `AGENTS.md` no pertenece a estos PRs.
 
-Antes de guardar la integración se creó `.backend-rescue/20261108-gitflow/`: bundle de las referencias originales, diff binario y archivo de los 32 archivos modificados/nuevos con manifiesto SHA-256. El contenido se cotejó después del traslado. Ambas carpetas son locales e ignoradas por Git; no publicar variables, estado de Wrangler ni credenciales.
+Antes de guardar la integración se creó `.backend-rescue/20261108-gitflow/`: bundle de las referencias originales, diff binario y archivo de los 32 archivos modificados/nuevos con manifiesto SHA-256. El contenido se cotejó después del traslado. Ambas carpetas son locales e ignoradas por Git y por `.vercelignore`; no publicar variables, estado de Wrangler ni credenciales.
 
 ## CI y entornos
 
 `.github/workflows/ci.yml` ejecuta instalación desde lockfile, tokens, build Next y tipos. Cuando existen, también verifica tipos/tests locales de backend y build Cloudflare. Next y vinext se ejecutan en secuencia; `typecheck` debe regenerar los tipos de Next si el build vinext los reemplazó. CI no recibe secretos de Cloudflare, Google, Redis o Vercel ni ejecuta migraciones remotas.
 
 La CI nueva entra con el PR del workflow. Antes de que se integre, las ramas que aún no la contienen pueden no mostrar esos checks; no confundir su ausencia con un resultado aprobado.
+
+La primera ejecución de [CI del PR #46](https://github.com/gaabrielavelasquez/tiendly/actions/runs/42525671412) pasó en GitHub: instalación, tokens, build Next y tipos. Los pasos condicionales de backend/Cloudflare no ejercitaron esos módulos, porque esa rama todavía no los contiene. En la pila local completa sí pasan los 12 tests de backend, tipos, tokens y ambos builds; la evidencia está en `docs/verificacion/gitflow-20261108.json` de #50.
 
 El preview Cloudflare de la app, su base D1 y su bucket R2 siguen pendientes de aprovisionamiento y aceptación. `dev` todavía no tiene despliegue conectado. No configurar variables de producción para resolver esa falta.
 
