@@ -9,3 +9,7 @@ Aquí vive lo que corre del lado del servidor fuera de la app Next.js: la base d
 | `scripts/` | Scripts de una sola vez, como la mudanza desde Redis y Blob o el respaldo semanal. | PR 6 |
 
 Las consultas a la base de datos que usa la app viven en `frontend/src/lib/datos/`, porque corren dentro de la app (ver §3.1.1 del plan).
+
+## Traspaso del backend anterior
+
+El [cierre de la-bodega](../docs/backend/traspaso-la-bodega.md) documenta el reemplazo de cada módulo, el avance en ramas todavía fuera de `main`, el respaldo y la baja remota pendiente. Los [criterios conservados](../docs/backend/requisitos-conservados.md) permiten seguir el trabajo sin consultar el clon anterior. Este cierre documental no incorpora la implementación ni acredita el core loop migrado.
