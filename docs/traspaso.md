@@ -1,3 +1,14 @@
+# Aceptación local después de #45/#46 · 8-nov-2026
+
+- `dev` confirmado en `b8f6f38`; ramas #47–#50 sincronizadas mediante merge commits sin reescritura. La CI completa pasa ahora también en infraestructura, identidad, catálogo e integración. No se integraron esos PRs a `dev`.
+- Infraestructura ajusta CI a la etapa donde backend aún no tiene scripts. Identidad y los módulos siguientes sí ejecutan sus tipos y pruebas.
+- Se corrigieron fotos rotas en catálogo/R2: vinext sirve directamente las imágenes que ya redujo el navegador; Next/Vercel conserva su optimizador. Configuración compartida validada con `satisfies NextConfig`, sin casts.
+- Seis flujos completos locales de formulario en Chrome/WebKit a 360/390/1440 pasan con D1/R2, imágenes decodificadas, guardado/edición/recarga, error de red/reintento y rechazo de versiones desactualizadas. Evidencia, capturas y procedimiento en [d1-local](verificacion/d1-local/README.md). La sesión de esta aceptación es sintética, no OAuth real.
+- Los 12 tests de backend, tipos, tokens y builds Next/vinext pasan. OAuth real y aceptación desplegada siguen pendientes. El Worker local del agente queda disponible en `http://localhost:3215/registro` para la prueba de Google solicitada al usuario; no tocar el puerto 3100.
+- Pagos y comunicaciones siguen simulados. No hubo nuevos despliegues Cloudflare ni cambios remotos de base, secretos o datos productivos.
+
+---
+
 # Resguardo e integración Gitflow · 8-nov-2026
 
 - El trabajo antes sin commit se guardó en `823d1a2` sobre `feat/onboarding-d1`. El worktree vive ahora en `.worktrees/cloudflare` dentro del proyecto; el checkout principal sigue en `main` y conserva su modificación previa de `AGENTS.md`.
