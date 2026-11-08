@@ -14,6 +14,7 @@ import { canUse, effectivePlan } from "../src/stores/domain/store.ts";
 import { createStore, renameStore, ownedStore, type StoreDependencies } from "../src/stores/application/stores.ts";
 import { D1Stores } from "../src/stores/adapters/d1-stores.ts";
 import { createRuntime } from "../src/runtime/business.ts";
+import { catalogHandler } from "../src/runtime/catalog-handler.ts";
 import { storesHandler } from "../src/runtime/stores-handler.ts";
 
 const input = { slug: "home-objects", name: "  Objetos para casa  ", salesPhone: "900000000", categories: ["home", "handmade"], otherCategory: "" };
@@ -27,7 +28,7 @@ async function fixture() {
   return { mf, db, deps };
 }
 async function migrate(db: D1Database) {
-  for (const file of ["0001_auth.sql", "0002_stores.sql"]) {
+  for (const file of ["0001_auth.sql", "0002_stores.sql", "0003_catalog.sql"]) {
     const sql = await readFile(new URL(`../db/migrations/${file}`, import.meta.url), "utf8");
     for (const statement of sql.replace(/^--.*$/gm, "").split(";").filter(x => x.trim())) await db.prepare(statement).run();
   }
@@ -100,6 +101,13 @@ test("real Better Auth session boundary rejects forged slug cookies, foreign IDs
     const created=await storesHandler(request("POST",login.headers,input),runtime);
     assert.equal(created.status,201);
     const store=(await created.json() as {store:{id:string}}).store;
+    const catalogBody={product:{name:"Private product",description:"",sku:"",categories:[],status:"paused",priceCents:100,compareAtCents:null,offer:null,options:[],variants:[{values:[],stock:0}],primaryImage:null,photos:{},storeId:"foreign",id:"forged"}};
+    const productResponse=await catalogHandler(request("POST",login.headers,catalogBody),runtime);
+    assert.equal(productResponse.status,201);
+    const product=(await productResponse.json() as {product:{storeId:string;id:string}}).product;
+    assert.equal(product.storeId,store.id);assert.notEqual(product.id,"forged");
+    assert.equal((await catalogHandler(request("GET",{cookie:"tiendly_tienda=muna"}),runtime)).status,401);
+    assert.equal((await catalogHandler(request("GET",otherLogin.headers),runtime)).status,403);
     const foreign=await storesHandler(request("PATCH",otherLogin.headers,{id:store.id,version:1,name:"Foreign"}),runtime);
     assert.equal(foreign.status,403);
     assert.equal((await storesHandler(request("PATCH",{...Object.fromEntries(login.headers),origin:"https://foreign.invalid"},{id:store.id,version:1,name:"Foreign"}),runtime)).status,403);
@@ -124,4 +132,17 @@ test("owned stores and initial settings survive a runtime restart",async()=>{
    assert.equal((await new D1Stores(db).findOwned("persistent"))?.id,store.id);
    assert.equal((await db.prepare('SELECT COUNT(*) AS n FROM payment_settings').first<{n:number}>())?.n,1);
  }finally{await mf.dispose();await rm(directory,{recursive:true,force:true});}
+});
+
+test("Google authorization URLs use the exact configured origin and callback path", async () => {
+ const {mf,db}=await fixture();
+ try {
+  for(const baseURL of ['http://localhost:3215','https://tiendly-preview.dmalvaradog26.workers.dev']) {
+   const auth=createAuth(db,{...config,baseURL});
+   const response=await auth.handler(new Request(baseURL+'/api/auth/sign-in/social',{method:'POST',headers:{origin:baseURL,'content-type':'application/json'},body:JSON.stringify({provider:'google',callbackURL:'/registro?google=1'})}));
+   assert.equal(response.status,200);
+   const payload=await response.json() as {url:string};
+   assert.equal(new URL(payload.url).searchParams.get('redirect_uri'),baseURL+'/api/auth/callback/google');
+  }
+ }finally{await mf.dispose();}
 });

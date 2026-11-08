@@ -13,7 +13,7 @@
   },
   "scripts": {
     "typecheck": "tsc --noEmit",
-    "test": "node --test test/*.test.ts"
+    "test": "node --test test/*.test.ts test/*.test.mjs"
   },
   "exports": {
     "./rules": "./src/rules.ts",

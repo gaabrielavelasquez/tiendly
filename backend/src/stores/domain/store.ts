@@ -18,7 +18,7 @@ export type Store = {
 };
 export type StoreInput = Pick<Store, "slug" | "name" | "salesPhone" | "categories" | "otherCategory">;
 export const CATEGORIES = ["accessories", "beauty", "footwear", "food", "home", "handmade", "clothing", "secondhand", "technology", "other"] as const;
-const RESERVED = new Set(["api", "tienda", "moda", "zapatos", "belleza", "tiendly", "admin", "heather", "demo", "panel", "registro", "kit", "muna", "keyhaus", "glow-labo", "aurora"]);
+const RESERVED = new Set(["images", "api", "tienda", "moda", "zapatos", "belleza", "tiendly", "admin", "heather", "demo", "panel", "registro", "kit", "muna", "keyhaus", "glow-labo", "aurora"]);
 export const INITIAL_APPEARANCE: Appearance = { theme: "neutral", accent: "theme", logo: "", cover: "", welcome: "", instagram: "", hours: "" };
 
 export function validateStoreInput(value: StoreInput): StoreInput {
