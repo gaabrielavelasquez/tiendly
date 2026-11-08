@@ -65,7 +65,7 @@ export function StepDatos({ slug }: { slug: EstadoSlug & { reintentar: () => voi
         inputMode="numeric"
         value={formatear(state.celularVentas)}
         onChange={(e) => set({ celularVentas: soloDigitos(e.target.value) })}
-        hint="Es el número con el que te registraste. Puedes poner otro."
+        hint="Tus clientes te escribirán a este número."
         error={errores.celular}
       />
       <Button type="submit" className="mt-auto lg:mt-2" block loading={creando} disabled={creando || slug.estado !== "listo"}>

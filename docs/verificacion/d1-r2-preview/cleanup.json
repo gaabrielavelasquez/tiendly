@@ -1,0 +1,13 @@
+{
+  "database": "tiendly-preview",
+  "remaining": {
+    "users": 0,
+    "sessions": 0,
+    "stores": 0,
+    "products": 0,
+    "write_guards": 0
+  },
+  "foreignKeyViolations": [],
+  "completedJourneys": 6,
+  "r2BucketObjectsAfterCleanup": 0
+}

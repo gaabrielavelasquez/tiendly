@@ -55,4 +55,5 @@ jobs:
           if node -e 'process.exit(JSON.parse(require("fs").readFileSync("package.json", "utf8")).scripts["build:vinext"] ? 0 : 1)'; then
             npm run build:vinext
             npm run typecheck
+            npm run prepare:wrangler-preview --if-present
           fi

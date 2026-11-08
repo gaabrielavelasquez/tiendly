@@ -13,6 +13,12 @@ export default defineConfig({
     },
     env: {
       ASSETS: bindings.assets(),
+      UPLOADS: bindings.r2({ name: "tiendly-preview-images" }),
+      DB: bindings.d1({ name: "tiendly-preview", id: "9fcfd54b-56a2-4cb9-af11-800e5191e93d" }),
+      BETTER_AUTH_URL: bindings.text("https://tiendly-preview.tiendly.workers.dev"),
+      BETTER_AUTH_SECRET: bindings.secret(),
+      GOOGLE_CLIENT_ID: bindings.secret(),
+      GOOGLE_CLIENT_SECRET: bindings.secret(),
       TIENDLY_TIENDA_DEMO: bindings.text("muna"),
       TIENDLY_ENTORNO: bindings.text("preview"),
     },

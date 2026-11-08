@@ -14,12 +14,12 @@ const TITULAR = {
 
 /** O1 / OD1 · Registro con WhatsApp o Google. */
 export function StepRegistro() {
-  const { state, set } = useOnboarding();
+  const { state, set, testLogin } = useOnboarding();
   const [digitos, setDigitos] = useState(state.celular);
   const [error, setError] = useState<string>();
   const [enviando, setEnviando] = useState(false);
   const crear = state.modo !== "ingresar";
-  const [titulo, contexto] = TITULAR[crear ? "crear" : "ingresar"];
+  const [titulo, contexto] = crear ? TITULAR.crear : ["Ingresa a tu tienda.", testLogin ? TITULAR.ingresar[1] : "Continúa con Google."];
 
   async function enviar(e: React.FormEvent) {
     e.preventDefault();
@@ -40,6 +40,7 @@ export function StepRegistro() {
         </h1>
         {crear && <p className="text-body text-pretty text-fg-secondary">Tu link para vender por WhatsApp e Instagram. Sin tarjeta.</p>}
       </header>
+      {testLogin && <>
       <Field
         label="Tu número de WhatsApp"
         prefix="+51"
@@ -59,6 +60,7 @@ export function StepRegistro() {
       <div className="flex items-center gap-3 text-body-sm text-fg-secondary" aria-hidden>
         <span className="h-px flex-1 bg-line-subtle" />o<span className="h-px flex-1 bg-line-subtle" />
       </div>
+      </>}
       <BotonGoogle />
       <div className="mt-auto flex flex-col gap-3 pt-2 text-center lg:mt-0 lg:pt-6">
         <p className="text-body-sm text-fg-secondary">

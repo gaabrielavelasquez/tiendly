@@ -8,7 +8,7 @@ import type { Aviso } from "../hooks/use-catalogo";
 const ease = [...motionTokens.easing] as [number, number, number, number];
 
 /** Aviso tras una acción en lote (pausar, poner o quitar oferta), con "Deshacer". role="status": el lector lo anuncia. */
-export function AvisoDeshacer({ aviso, onDeshacer }: { aviso: Aviso | null; onDeshacer: () => void }) {
+export function AvisoDeshacer({ aviso, onDeshacer, guardando }: { aviso: Aviso | null; onDeshacer: () => void; guardando?: boolean }) {
   const reduce = useReducedMotion();
   return (
     <div role="status" className="pointer-events-none fixed inset-x-4 bottom-20 z-30 flex justify-center lg:inset-x-auto lg:right-8 lg:bottom-8">
@@ -22,13 +22,14 @@ export function AvisoDeshacer({ aviso, onDeshacer }: { aviso: Aviso | null; onDe
             className="pointer-events-auto flex w-full max-w-sm items-center justify-between gap-4 rounded-card bg-inverse py-2 pr-2 pl-4 text-body-sm text-fg-inverse shadow-overlay"
           >
             <span>{aviso.texto}</span>
-            <button
+            {aviso.previos.length > 0 && <button
               type="button"
               onClick={onDeshacer}
+              disabled={guardando}
               className="h-9 shrink-0 rounded-theme px-3 font-semibold text-fg-inverse transition-colors hover:bg-fg-inverse/10"
             >
               Deshacer
-            </button>
+            </button>}
           </motion.div>
         )}
       </AnimatePresence>

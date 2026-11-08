@@ -24,6 +24,8 @@ export type TablaTallas = { medidas: string[]; filas: Record<string, string[]> }
 /** 1 producto con variantes (decisión 0004, actualizada por 0032): las variantes son opciones genéricas. */
 export type Producto = {
   id: string;
+  /** Versión canónica al usar el catálogo D1. */
+  version?: number;
   nombre: string;
   /** Opcional (decisión 0027): se carga en "Más opciones". */
   sku?: string;

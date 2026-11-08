@@ -1,5 +1,12 @@
 "use server";
 
+import { headers } from "next/headers";
+import { createStore, ownedStore } from "@tiendly/backend/server";
+import { businessRuntime } from "@/lib/business-runtime";
+import { storeStorage } from "@/lib/store-storage";
+import { CATEGORY_IDS } from "@/lib/store-mapping";
+import { testLoginAllowed } from "@tiendly/backend/rules";
+
 import { recordarIngreso, tiendaDeIngreso } from "@/lib/datos/ingreso";
 import { cookies } from "next/headers";
 import { tiendaNueva } from "@/lib/datos/semillas";
@@ -43,6 +50,17 @@ type NuevaTienda = { nombre: string; slug: string; celularVentas: string; celula
  * plan Free. Este navegador la recuerda (cookie): desde aquí el panel es el de esta tienda.
  */
 export async function crearTienda(t: NuevaTienda): Promise<{ slug: string } | { error: string }> {
+  if (await storeStorage()) {
+    const { runtime } = await businessRuntime();
+    const actor = await runtime.actor(await headers());
+    if (!actor) return { error: "Continúa con Google para crear tu tienda." };
+    const existing = await ownedStore(runtime.stores, actor);
+    if (existing) return { slug: existing.slug };
+    if (!validos(t.rubros)) return { error: "Elige al menos una opción para armar tu tienda." };
+    const store = await createStore(runtime.stores, actor, { name: t.nombre, slug: await primeroLibre(aSlug(t.slug)), salesPhone: t.celularVentas, categories: t.rubros.map(id => CATEGORY_IDS[id]), otherCategory: t.rubroOtro ?? "" });
+    return { slug: store.slug };
+  }
+  if (!testLoginAllowed(process.env.TIENDLY_ENTORNO, process.env.TIENDLY_TEST_LOGIN)) return { error: "Continúa con Google para crear tu tienda." };
   const nombre = t.nombre.trim();
   const base = aSlug(t.slug);
   if (nombre.length < 2 || !base) return { error: "Escribe el nombre de tu negocio." };
@@ -67,6 +85,7 @@ async function recordarSesion(slug: string) {
 
 /** Se llama después del código simulado; no envía mensajes ni implementa autenticación real. */
 export async function ingresarTienda(celular: string): Promise<{ ok: true } | { error: string }> {
+  if (!testLoginAllowed(process.env.TIENDLY_ENTORNO, process.env.TIENDLY_TEST_LOGIN)) return { error: "Continúa con Google para ingresar." };
   if (errorCelular(celular)) return { error: "Revisa tu número de WhatsApp." };
   const slug = await tiendaDeIngreso(celular);
   if (!slug) return { error: "No encontramos una tienda para este número. Revisa el número con el que te registraste." };

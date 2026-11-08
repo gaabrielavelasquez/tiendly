@@ -1,3 +1,46 @@
+# Aceptación local después de #45/#46 · 8-nov-2026
+
+- `dev` confirmado en `b8f6f38`; ramas #47–#50 sincronizadas mediante merge commits sin reescritura. La CI completa pasa ahora también en infraestructura, identidad, catálogo e integración. No se integraron esos PRs a `dev`.
+- Infraestructura ajusta CI a la etapa donde backend aún no tiene scripts. Identidad y los módulos siguientes sí ejecutan sus tipos y pruebas.
+- Se corrigieron fotos rotas en catálogo/R2: vinext sirve directamente las imágenes que ya redujo el navegador; Next/Vercel conserva su optimizador. Configuración compartida validada con `satisfies NextConfig`, sin casts.
+- Seis flujos completos locales de formulario en Chrome/WebKit a 360/390/1440 pasan con D1/R2, imágenes decodificadas, guardado/edición/recarga, error de red/reintento y rechazo de versiones desactualizadas. Evidencia, capturas y procedimiento en [d1-local](verificacion/d1-local/README.md). La sesión de esta aceptación es sintética, no OAuth real.
+- Los 12 tests de backend, tipos, tokens y builds Next/vinext pasan. OAuth real y aceptación desplegada siguen pendientes. El Worker local del agente queda disponible en `http://localhost:3215/registro` para la prueba de Google solicitada al usuario; no tocar el puerto 3100.
+- Pagos y comunicaciones siguen simulados. No hubo nuevos despliegues Cloudflare ni cambios remotos de base, secretos o datos productivos.
+
+---
+
+# Resguardo e integración Gitflow · 8-nov-2026
+
+- El trabajo antes sin commit se guardó en `823d1a2` sobre `feat/onboarding-d1`. El worktree vive ahora en `.worktrees/cloudflare` dentro del proyecto; el checkout principal sigue en `main` y conserva su modificación previa de `AGENTS.md`.
+- `dev` se creó desde `main` (`e635050`). El workflow y CI se proponen en #46, sin merge. Se publican PRs apilados de infraestructura → identidad/tiendas → catálogo/R2 → integración; el mapa definitivo está en `docs/gitflow.md` del PR #46. No hacer merge sin aprobación de Gabi.
+- Los formularios ya envían versiones al guardar, pausar, ofertar y deshacer; la aceptación de navegador todavía está pendiente. `relationalStore` compone catálogo y configuración inicial, pero devuelve pedidos/inventario/cupones vacíos. `mutarTienda` rechaza operaciones aún no migradas.
+- Se corrigieron dos bloqueos de compilación: `typecheck` regenera tipos de Next tras vinext y la constante OFERTAS usada por el cliente quedó separada del módulo que consulta D1. No cambian diseño ni tokens.
+- Verificación local después del traslado: 12/12 tests de backend, tipos de frontend/backend, tokens, build Next habitual y build vinext pasan. También pasa `typecheck` después de vinext; se verifica exclusión de assets Heather/mi-tienda. Evidencia resumida en `docs/verificacion/gitflow-20261108.json`. Persisten avisos de sourcemaps y clasificación de rutas del experimento vinext.
+- Falta Google real, R2 remoto, aceptación de formularios/persistencia/vitrina en preview, ventas/reservas/cupones, comandos de configuración y tareas. No hubo deploy de app, migraciones remotas ni cambios de datos de producción. Pagos y comunicaciones siguen simulados.
+
+---
+
+# Catálogo/R2 y callbacks OAuth · 8-nov-2026
+
+- Rama `feat/catalog`, sobre `feat/identity-stores` (`91c6d58`), en `/private/tmp/tiendly-cloudflare`. Sin cambios en main ni en el servidor de Gabi.
+- Callbacks exactos y configuración en `docs/configuracion/google-oauth.md`. Subdominio Workers de la cuenta comprobado por API: `dmalvaradog26`. Preview previsto `https://tiendly-preview.dmalvaradog26.workers.dev`, todavía sin deploy de app. El usuario confirmó que ya configuró el cliente OAuth; secretos aún no incorporados al runtime por esta sesión.
+- Catálogo: dominio puro, comandos, D1 relacional, API de lista/creación/actualización y mapeo de los tipos españoles del frontend. Migración `0003_catalog.sql` aplicada solo en la D1 desechable. Se preservan claves, céntimos, galerías y tablas de medidas; variantes retiradas conservan fila.
+- R2: upload con titularidad/origen, límite 5 MB y JPEG/PNG/WebP verificados por firma/MIME; ruta de imagen del mismo origen sin dependencia de OAuth. Prueba local R2, sin bucket remoto/deploy.
+- Once tests locales pasan. Prueba remota de catálogo pasa concurrencia, rollback, aislamiento y semántica; datos sintéticos eliminados al finalizar. Evidencia en `docs/verificacion/cloudflare/catalog-remote.json`.
+- **Integración todavía parcial:** los formularios/páginas antiguos no llaman a estos endpoints. Falta conectar Google/onboarding y componer lecturas D1 de panel/vitrina. Ventas/asignaciones de stock, promociones, configuración editable y tareas siguen pendientes. No presentar el core loop como migrado ni desplegarlo todavía.
+
+---
+
+# Identidad y tiendas · 8-nov-2026 · en curso
+
+- Base guardada en `chore/cloudflare-foundation` (`76adead`). Continuación `feat/identity-stores` en `/private/tmp/tiendly-cloudflare`; rama principal y servidor de Gabi intactos. Sin merge/deploy de app.
+- Implementados backend `identity` y `stores`, migraciones `0001_auth.sql`/`0002_stores.sql`, sesiones Better Auth nativas D1, API de tienda propia/crear/renombrar, configuración inicial vacía y escrituras atómicas/versionadas. Ver `backend/README.md`.
+- Cinco pruebas locales pasan: políticas, autorización real con sesión Better Auth, carreras, rollback y reinicio. Las migraciones y comandos reales también pasan en D1 remoto desechable: `docs/verificacion/cloudflare/stores-remote.json`. El probe elimina su tienda/usuario sintéticos.
+- El usuario está creando Google OAuth. Callback local `http://localhost:3215/api/auth/callback/google`. Secretos sin configurar; los endpoints compilados responden 503 de forma segura. La navegación Google real queda pendiente.
+- El panel ya no confía en la cookie de slug salvo `TIENDLY_ENTORNO=local|preview` + `TIENDLY_TEST_LOGIN=true`. Entorno ausente/inválido restringe como producción. El ingreso por teléfono simulado queda bloqueado fuera de esas pruebas. El nuevo API no escribe documentos Redis.
+- **Integración todavía parcial:** el botón Google y la creación del onboarding aún no llaman al API nuevo. Falta catálogo/R2 y componer los DTOs de la tienda D1 para panel/vitrina antes de conectar ese formulario. Catálogo/ventas/cupones/configuración editable siguen pendientes. No presentar este trabajo como core loop migrado.
+- Builds Next/vinext se ejecutan **secuencialmente**: ambos generan tipos en `.next`; en paralelo se pisan. El error de tipos al ejecutarlos juntos se resolvió repitiendo Next por separado.
+
 # Continuación tras #45 y #46 · 8-nov-2026
 
 - `dev` en `b8f6f38` contiene ambos PRs con merge commit. Se sincronizan las ramas funcionales conservando su historial, sin integrar los PRs #47–#50 a `dev`.
@@ -33,6 +76,26 @@
 ---
 
 # Traspaso · 29-oct-2026
+
+## D1 y R2 conectados al preview · 8-nov-2026
+
+Diego autorizó continuar con almacenamiento real de pruebas. La rama `feat/cloudflare-preview-storage` sale de `origin/feat/catalog` (`bd6bc97`, con #50 integrado) y reutiliza el despliegue de #51 mediante cherry-pick. No se integra la pila en `dev` o `main` ni se cambia el checkout principal.
+
+Cuenta Tiendly: Worker `tiendly-preview`, D1 `tiendly-preview` (`9fcfd54b-56a2-4cb9-af11-800e5191e93d`) y bucket privado `tiendly-preview-images`. Aplicadas las tres migraciones de autenticación, tiendas y catálogo. Worker publicado en https://tiendly-preview.tiendly.workers.dev, versión `5d3c1503-9e75-4c79-8451-a354b27b7712`. Los recursos de producción, Redis/Blob, Vercel y DNS siguen intactos.
+
+PASS: tokens, builds Next/vinext, tipos frontend/backend, 14 tests de backend y tres pruebas del manifiesto. Seis recorridos remotos Chromium/WebKit a 390/1440/360 verifican tienda, catálogo vacío, foto R2, guardados, recargas, reintento y conflictos entre pestañas; 36 checkpoints sin overflow. Acceso remoto: cookie de slug falsa 401, origen ajeno/ausente 403, imagen inválida 400 y sesión revocada 401. [Evidencia y capturas](verificacion/d1-r2-preview/README.md).
+
+Google real sigue pendiente. Las sesiones sintéticas se crean solo desde el harness administrativo y se limpian por ID; no hay ingreso de prueba público ni Google ficticio. `BETTER_AUTH_SECRET` se generó privadamente y se guardó cifrado en el Worker. No se crean pedidos ni se envían mensajes/cobros. Faltan ventas/reservas/cupones, comandos de configuración y tareas; las escrituras no migradas se rechazan, sin recurrir a documentos en memoria. La autorización de este preview no autoriza merges ni corte de producción.
+
+## Primer despliegue de pruebas en Cloudflare · 8-nov-2026
+
+Diego autorizó publicar el primer preview en la cuenta Tiendly. Desde `dev` (`08d896f`, base #47), rama `chore/cloudflare-first-preview`, worktree aislado `/private/tmp/tiendly-cloudflare-preview`. App publicada en https://tiendly-preview.tiendly.workers.dev, demo `/muna` y panel `/panel/productos`; versión `ea2967a9-0b38-4e8a-963b-24f697fb3ac5`.
+
+Publicación reproducible con `npm run deploy:cloudflare-preview`, dentro de `frontend/`, mediante `npx wrangler --profile tiendly`. La entrada conserva respuestas/cookies, bloquea las rutas privadas antes de streaming y marca el preview noindex. No incluye las fotos de Heather ni `mi-tienda`. No se cambió la rama principal, el servidor de Gabi, Vercel, DNS, Redis ni producción, ni se integraron ramas funcionales de backend.
+
+PASS: tokens, build Next, build vinext, tipos, dos pruebas de entrada, 42 revisiones remotas Chromium/WebKit 390/1440/360 sin overflow ni imágenes rotas. Carrito y cierre de cookie probados con sesión sintética; WebKit registra prefetched requests cancelados al salir. [Evidencia y capturas](verificacion/cloudflare-preview/README.md).
+
+Límites: memoria temporal por instancia, sin persistencia D1/R2 ni Google real. OTP/pagos/SUNAT/bancos/envíos siguen simulados; sin mensajes o cobros. R2 ya permite consultas pero no tiene buckets. Sigue pendiente integrar persistencia/fotos, automatizar despliegues de `dev` y completar aceptación funcional; ningún merge o corte de producción está autorizado.
 
 Para el agente que sigue (Codex) y para Gabi. Antes de tocar código, lee [`AGENTS.md`](../AGENTS.md), [`CLAUDE.md`](../CLAUDE.md), [`frontend/DESIGN.md`](../frontend/DESIGN.md) y las decisiones de [`docs/decisiones/`](decisiones/README.md).
 

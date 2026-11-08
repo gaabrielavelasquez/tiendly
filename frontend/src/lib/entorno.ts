@@ -1,5 +1,4 @@
-/**
- * Herramientas de desarrollo (decisión 0027): la página /kit y los escenarios simulados (?escenario=).
- * Se ven en local y en los previews de Vercel; en producción, no.
- */
-export const herramientasDev = process.env.VERCEL_ENV ? process.env.VERCEL_ENV !== "production" : process.env.NODE_ENV !== "production";
+import { environment } from "@tiendly/backend/rules";
+
+/** Herramientas disponibles solo en un entorno local o preview explícito. */
+export const herramientasDev = environment(process.env.TIENDLY_ENTORNO) !== "production";

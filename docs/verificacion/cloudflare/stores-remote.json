@@ -1,0 +1,14 @@
+{
+  "date": "2026-11-08",
+  "mode": "wrangler dev --remote",
+  "database": "tiendly-atomicity-probe-20261108",
+  "migrations": ["0001_auth.sql", "0002_stores.sql"],
+  "results": {
+    "competingCreates": true,
+    "competingEdits": true,
+    "foreignRejected": true,
+    "initialSettings": true
+  },
+  "cleanup": "The probe deleted its synthetic store and user after checking the results.",
+  "scope": "Real stores application commands and D1 adapter. Google OAuth redirect and full onboarding remain unverified."
+}
