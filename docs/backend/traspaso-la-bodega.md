@@ -7,7 +7,7 @@ Fecha de revisión: 8-nov-2026. Este documento permite continuar el backend desd
 - Origen histórico: `triple0-labs/la-bodega`, commit `fbeeecc31a3ab9df83b25d068c7c9fd387fb9598`. Su `main` remoto coincide con el clon revisado; no había cambios locales ni archivos sin seguimiento.
 - Tiendly integrado: `main`, commit `e63505001226544c6c056ddfafddd4ebb19d4b00`. `backend/` contiene la estructura inicial.
 - Avance de implementación: `76adead` (`chore/cloudflare-foundation`), `91c6d58` (`feat/identity-stores`) y `c00ae43` (`feat/catalog`). Son ramas locales apiladas, todavía fuera de `main` al revisar.
-- Integración en curso: rama `feat/onboarding-d1`, worktree `/private/tmp/tiendly-cloudflare`, sobre `c00ae43`, con cambios sin commit. Esos cambios no forman parte de este cierre documental.
+- Integración en curso: rama `feat/onboarding-d1`, worktree `/Users/diego/sandbox/tiendly/.worktrees/cloudflare`, sobre `c00ae43`, con integración resguardada en `823d1a2` después de la exploración inicial. Esos cambios no forman parte de este cierre documental.
 - Las reglas vigentes siguen en [CLAUDE.md](../../CLAUDE.md), [DESIGN.md](../../frontend/DESIGN.md), las [decisiones](../decisiones/README.md) y el [plan de backend](../plan-backend.md). La actualización del 8-nov del plan está en la rama de implementación; el cuerpo histórico del 29-oct todavía describe otra secuencia.
 
 El código de Tiendly no importa `@labodega/*`, no declara ese workspace ni necesita el clon para construir. El backend nuevo reemplaza responsabilidades; no es un traslado literal de paquetes Postgres.
@@ -105,7 +105,7 @@ La baja remota requiere inventariar recursos de Coolify/VPS, dominios, Postgres,
 
 ## Próximos pasos del backend
 
-1. Terminar y verificar la integración en `feat/onboarding-d1`. En el estado inspeccionado, `guardarProducto` exige versión para editar pero el hook del formulario no la envía; hay llamadas de acciones en lote sin versiones. Resolver el contrato completo antes de aceptar el catálogo.
+1. Terminar y verificar la integración en `feat/onboarding-d1`. El resguardo posterior ya transmite versiones desde formularios y acciones en lote; falta aceptación completa de catálogo. Los builds/tipos y 12 tests locales pasan en esa rama. La creación de `dev` y el PR #46 preparan el workflow; este PR documental apunta a `dev` y sigue sin merge.
 2. Verificar Google real → crear tienda → producto/foto → recarga → vitrina en el runtime Cloudflare. R2 remoto y persistencia entre sesiones todavía requieren aceptación.
 3. Implementar `sales` y `promotions`: checkout idempotente, stock/reservas, contador, cupones e historial atómicos sobre el esquema final. La prueba remota de plataforma no sustituye estas pruebas de negocio.
 4. Migrar comandos de configuración, Mi tienda y Afiliación; actualmente `mutarTienda` rechaza escrituras con bindings D1. La lectura provisional devuelve pedidos, inventario y cupones vacíos; eso no acredita su migración.
