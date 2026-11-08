@@ -11,7 +11,10 @@
     "prebuild": "npm run tokens && npm run check:tokens",
     "build": "next build",
     "start": "next start",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "next typegen && tsc --noEmit",
+    "dev:vinext": "node scripts/cloudflare-assets.mjs prepare && vite dev --port 3215",
+    "build:vinext": "npm run tokens && npm run check:tokens && node scripts/cloudflare-assets.mjs prepare && vite build && node scripts/cloudflare-assets.mjs verify",
+    "start:vinext": "vite preview"
   },
   "dependencies": {
     "@fontsource-variable/inter": "^5.3.0",
@@ -30,14 +33,21 @@
     "next": "16.4.2",
     "react": "19.3.1",
     "react-dom": "19.3.1",
-    "tailwind-merge": "^3.7.0"
+    "tailwind-merge": "^3.7.0",
+    "react-server-dom-webpack": "19.3.1"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4.3.3",
     "@types/node": "^22.10.0",
     "@types/react": "^19.3.0",
     "@types/react-dom": "^19.3.0",
+    "@vinext/cloudflare": "1.3.3",
     "tailwindcss": "^4.3.3",
-    "typescript": "^5.9.3"
+    "typescript": "^5.9.3",
+    "vinext": "1.4.4",
+    "vite": "8.3.0",
+    "@vitejs/plugin-react": "6.2.1",
+    "@vitejs/plugin-rsc": "0.5.39",
+    "@cloudflare/vite-plugin": "2.0.0-beta.v.12"
   }
 }

@@ -11,6 +11,10 @@ next-env.d.ts
 # Fotos originales (pesadas): solo se publican las versiones optimizadas de public/
 /frontend/fotos-originales/
 
+# Local Worker state and generated deployment files
+.wrangler/
+.cloudflare/
+
 # Worktrees y respaldos locales: nunca forman parte del proyecto publicado.
 /.worktrees/
 /.backend-rescue/

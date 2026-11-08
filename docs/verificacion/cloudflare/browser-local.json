@@ -1,0 +1,212 @@
+[
+  {
+    "engine": "chromium",
+    "width": 390,
+    "path": "/muna",
+    "status": 200,
+    "scrollWidth": 390,
+    "body": "MUÑA\nPiezas para usar mucho\n\nRopa, carteras y botines en pocas unidades. Pide por WhatsApp y coordinamos la entrega.\n\nVer productos\nOfertas\nDescuento de\n−20 %\nFalda Lluvia\nS/ 199\nPrecio anterior:\nS/ 249\nTodos los product",
+    "brokenImages": [],
+    "failures": [],
+    "bad": []
+  },
+  {
+    "engine": "chromium",
+    "width": 390,
+    "path": "/panel/productos",
+    "status": 200,
+    "scrollWidth": 390,
+    "body": "MUÑA\n\nM\nProductos\n\n8 productos · 4 necesitan reposición.\n\nNuevo producto\nBuscar productos por nombre o SKU\nSeleccionar\nTodos\n8\nActivos\n8\nEn oferta\n1\nBajo stock\n4\nAgotados\n0\nPausados\n0\nConjunto Arena\n1 color · 3 tallas\nS/",
+    "brokenImages": [],
+    "failures": [],
+    "bad": []
+  },
+  {
+    "engine": "chromium",
+    "width": 390,
+    "path": "/registro",
+    "status": 200,
+    "scrollWidth": 390,
+    "body": "tiendly\n\nCrea tu tienda gratis.\nLista en 2 minutos.\n\nTu link para vender por WhatsApp e Instagram. Sin tarjeta.\n\nTu número de WhatsApp\n+51\n\nTe mandamos un código por WhatsApp. No usamos contraseñas.\n\nRecibir código por W",
+    "brokenImages": [
+      "http://localhost:3215/_next/image?url=%2Ftiendas-ejemplo%2Fkeyhaus%2Fportada.webp&w=640&q=75",
+      "http://localhost:3215/_next/image?url=%2Ftiendas-ejemplo%2Fglow-labo%2Fportada.webp&w=640&q=75"
+    ],
+    "failures": [],
+    "bad": []
+  },
+  {
+    "engine": "chromium",
+    "width": 1440,
+    "path": "/muna",
+    "status": 200,
+    "scrollWidth": 1440,
+    "body": "MUÑA\nOfertas\nRopa\nAccesorios\nBotas\nTacos\nPiezas para usar mucho\n\nRopa, carteras y botines en pocas unidades. Pide por WhatsApp y coordinamos la entrega.\n\nVer productos\nOfertas\nDescuento de\n−20 %\nFalda Lluvia\nS/ 199\nPreci",
+    "brokenImages": [],
+    "failures": [],
+    "bad": []
+  },
+  {
+    "engine": "chromium",
+    "width": 1440,
+    "path": "/panel/productos",
+    "status": 200,
+    "scrollWidth": 1440,
+    "body": "tiendly\nInicio\nPedidos\nProductos\nCupones\nMi tienda\nConfiguración\nProductos\n\n8 productos · 4 necesitan reposición.\n\nNuevo producto\nM\nBuscar productos por nombre o SKU\nTodos\n8\nActivos\n8\nEn oferta\n1\nBajo stock\n4\nAgotados\n0\n",
+    "brokenImages": [],
+    "failures": [],
+    "bad": []
+  },
+  {
+    "engine": "chromium",
+    "width": 1440,
+    "path": "/registro",
+    "status": 200,
+    "scrollWidth": 1440,
+    "body": "tiendly\n\nAsí se verá tu tienda.\nMUÑA\nConjunto Arena\nS/ 389\nCartera Noche\nS/ 199\nBotín Otoño\nS/ 289\nFalda Lluvia\nS/ 249\n\nlocalhost:3215/muna\n\nkeyhaus\nTeclado K75\nS/ 459\nSwitches ×70\nS/ 129\nMouse Hoshi\nS/ 239\nSplit Sora\nS/",
+    "brokenImages": [],
+    "failures": [],
+    "bad": []
+  },
+  {
+    "engine": "chromium",
+    "width": 360,
+    "path": "/muna",
+    "status": 200,
+    "scrollWidth": 360,
+    "body": "MUÑA\nPiezas para usar mucho\n\nRopa, carteras y botines en pocas unidades. Pide por WhatsApp y coordinamos la entrega.\n\nVer productos\nOfertas\nDescuento de\n−20 %\nFalda Lluvia\nS/ 199\nPrecio anterior:\nS/ 249\nTodos los product",
+    "brokenImages": [],
+    "failures": [],
+    "bad": []
+  },
+  {
+    "engine": "chromium",
+    "width": 360,
+    "path": "/panel/productos",
+    "status": 200,
+    "scrollWidth": 360,
+    "body": "MUÑA\n\nM\nProductos\n\n8 productos · 4 necesitan reposición.\n\nNuevo producto\nBuscar productos por nombre o SKU\nSeleccionar\nTodos\n8\nActivos\n8\nEn oferta\n1\nBajo stock\n4\nAgotados\n0\nPausados\n0\nConjunto Arena\n1 color · 3 tallas\nS/",
+    "brokenImages": [],
+    "failures": [],
+    "bad": []
+  },
+  {
+    "engine": "chromium",
+    "width": 360,
+    "path": "/registro",
+    "status": 200,
+    "scrollWidth": 360,
+    "body": "tiendly\n\nCrea tu tienda gratis.\nLista en 2 minutos.\n\nTu link para vender por WhatsApp e Instagram. Sin tarjeta.\n\nTu número de WhatsApp\n+51\n\nTe mandamos un código por WhatsApp. No usamos contraseñas.\n\nRecibir código por W",
+    "brokenImages": [
+      "http://localhost:3215/_next/image?url=%2Ftiendas-ejemplo%2Fkeyhaus%2Fportada.webp&w=640&q=75",
+      "http://localhost:3215/_next/image?url=%2Ftiendas-ejemplo%2Fglow-labo%2Fportada.webp&w=640&q=75"
+    ],
+    "failures": [],
+    "bad": []
+  },
+  {
+    "engine": "webkit",
+    "width": 390,
+    "path": "/muna",
+    "status": 200,
+    "scrollWidth": 390,
+    "body": "MUÑA\nPiezas para usar mucho\n\nRopa, carteras y botines en pocas unidades. Pide por WhatsApp y coordinamos la entrega.\n\nVer productos\nOfertas\nDescuento de−20 %\nFalda Lluvia\nS/ 199\nPrecio anterior:S/ 249\nTodos los productos",
+    "brokenImages": [],
+    "failures": [],
+    "bad": []
+  },
+  {
+    "engine": "webkit",
+    "width": 390,
+    "path": "/panel/productos",
+    "status": 200,
+    "scrollWidth": 390,
+    "body": "MUÑA\n\nM\nProductos\n\n8 productos · 4 necesitan reposición.\n\nNuevo producto\nBuscar productos por nombre o SKU\nSeleccionar\nTodos\n8\nActivos\n8\nEn oferta\n1\nBajo stock\n4\nAgotados\n0\nPausados\n0\nConjunto Arena\n1 color · 3 tallas\nS/",
+    "brokenImages": [],
+    "failures": [],
+    "bad": []
+  },
+  {
+    "engine": "webkit",
+    "width": 390,
+    "path": "/registro",
+    "status": 200,
+    "scrollWidth": 390,
+    "body": "tiendly\n\nCrea tu tienda gratis.\nLista en 2 minutos.\n\nTu link para vender por WhatsApp e Instagram. Sin tarjeta.\n\nTu número de WhatsApp\n+51\n\nTe mandamos un código por WhatsApp. No usamos contraseñas.\n\nRecibir código por W",
+    "brokenImages": [
+      "http://localhost:3215/_next/image?url=%2Ftiendas-ejemplo%2Fkeyhaus%2Fportada.webp&w=640&q=75",
+      "http://localhost:3215/_next/image?url=%2Ftiendas-ejemplo%2Fglow-labo%2Fportada.webp&w=640&q=75"
+    ],
+    "failures": [],
+    "bad": []
+  },
+  {
+    "engine": "webkit",
+    "width": 1440,
+    "path": "/muna",
+    "status": 200,
+    "scrollWidth": 1440,
+    "body": "MUÑA\nOfertas\nRopa\nAccesorios\nBotas\nTacos\nPiezas para usar mucho\n\nRopa, carteras y botines en pocas unidades. Pide por WhatsApp y coordinamos la entrega.\n\nVer productos\nOfertas\nDescuento de−20 %\nFalda Lluvia\nS/ 199\nPrecio",
+    "brokenImages": [],
+    "failures": [],
+    "bad": []
+  },
+  {
+    "engine": "webkit",
+    "width": 1440,
+    "path": "/panel/productos",
+    "status": 200,
+    "scrollWidth": 1440,
+    "body": "tiendly\nInicio\nPedidos\nProductos\nCupones\nMi tienda\nConfiguración\nProductos\n\n8 productos · 4 necesitan reposición.\n\nNuevo producto\nM\nBuscar productos por nombre o SKU\nTodos\n8\nActivos\n8\nEn oferta\n1\nBajo stock\n4\nAgotados\n0\n",
+    "brokenImages": [],
+    "failures": [],
+    "bad": []
+  },
+  {
+    "engine": "webkit",
+    "width": 1440,
+    "path": "/registro",
+    "status": 200,
+    "scrollWidth": 1440,
+    "body": "tiendly\n\nAsí se verá tu tienda.\nMUÑA\nConjunto Arena\nS/ 389\nCartera Noche\nS/ 199\nBotín Otoño\nS/ 289\nFalda Lluvia\nS/ 249\n\nlocalhost:3215/muna\n\nkeyhaus\nTeclado K75\nS/ 459\nSwitches ×70\nS/ 129\nMouse Hoshi\nS/ 239\nSplit Sora\nS/",
+    "brokenImages": [],
+    "failures": [],
+    "bad": []
+  },
+  {
+    "engine": "webkit",
+    "width": 360,
+    "path": "/muna",
+    "status": 200,
+    "scrollWidth": 360,
+    "body": "MUÑA\nPiezas para usar mucho\n\nRopa, carteras y botines en pocas unidades. Pide por WhatsApp y coordinamos la entrega.\n\nVer productos\nOfertas\nDescuento de−20 %\nFalda Lluvia\nS/ 199\nPrecio anterior:S/ 249\nTodos los productos",
+    "brokenImages": [],
+    "failures": [],
+    "bad": []
+  },
+  {
+    "engine": "webkit",
+    "width": 360,
+    "path": "/panel/productos",
+    "status": 200,
+    "scrollWidth": 360,
+    "body": "MUÑA\n\nM\nProductos\n\n8 productos · 4 necesitan reposición.\n\nNuevo producto\nBuscar productos por nombre o SKU\nSeleccionar\nTodos\n8\nActivos\n8\nEn oferta\n1\nBajo stock\n4\nAgotados\n0\nPausados\n0\nConjunto Arena\n1 color · 3 tallas\nS/",
+    "brokenImages": [],
+    "failures": [],
+    "bad": []
+  },
+  {
+    "engine": "webkit",
+    "width": 360,
+    "path": "/registro",
+    "status": 200,
+    "scrollWidth": 360,
+    "body": "tiendly\n\nCrea tu tienda gratis.\nLista en 2 minutos.\n\nTu link para vender por WhatsApp e Instagram. Sin tarjeta.\n\nTu número de WhatsApp\n+51\n\nTe mandamos un código por WhatsApp. No usamos contraseñas.\n\nRecibir código por W",
+    "brokenImages": [
+      "http://localhost:3215/_next/image?url=%2Ftiendas-ejemplo%2Fkeyhaus%2Fportada.webp&w=640&q=75",
+      "http://localhost:3215/_next/image?url=%2Ftiendas-ejemplo%2Fglow-labo%2Fportada.webp&w=640&q=75"
+    ],
+    "failures": [],
+    "bad": []
+  }
+]

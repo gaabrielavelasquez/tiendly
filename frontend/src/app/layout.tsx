@@ -1,5 +1,15 @@
 import type { Metadata } from "next";
 import { MotionProvider } from "@/components/motion/motion-provider";
+import "@fontsource-variable/inter";
+import "@fontsource/outfit/500.css";
+import "@fontsource/outfit/600.css";
+import "@fontsource/outfit/700.css";
+import "@fontsource-variable/outfit";
+import "@fontsource/instrument-serif/400.css";
+import "@fontsource/bricolage-grotesque/700.css";
+import "@fontsource/bricolage-grotesque/800.css";
+import "@fontsource/plus-jakarta-sans/700.css";
+import "@fontsource/plus-jakarta-sans/800.css";
 import "@/styles/globals.css";
 
 export const metadata: Metadata = {
