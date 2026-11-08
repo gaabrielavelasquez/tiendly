@@ -11,7 +11,7 @@
     "prebuild": "npm run tokens && npm run check:tokens",
     "build": "next build",
     "start": "next start",
-    "typecheck": "tsc --noEmit",
+    "typecheck": "next typegen && tsc --noEmit",
     "dev:vinext": "node scripts/cloudflare-assets.mjs prepare && vite dev --port 3215",
     "build:vinext": "npm run tokens && npm run check:tokens && node scripts/cloudflare-assets.mjs prepare && vite build && node scripts/cloudflare-assets.mjs verify",
     "start:vinext": "vite preview"
