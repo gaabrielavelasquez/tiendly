@@ -1,0 +1,18 @@
+{
+  "checkedAt": "2026-11-08T23:53:11.196Z",
+  "bucket": "tiendly-preview-images",
+  "scope": "Temporary synthetic object uploaded with Wrangler; read through deployed Worker without authentication.",
+  "read": {
+    "status": 200,
+    "contentType": "image/png",
+    "cacheControl": "public, max-age=31536000, immutable",
+    "nosniff": "nosniff",
+    "bytes": 93
+  },
+  "decoded": {
+    "width": 2,
+    "height": 2
+  },
+  "pass": true,
+  "temporaryObjectRemoved": true
+}

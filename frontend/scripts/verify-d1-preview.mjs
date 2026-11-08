@@ -141,7 +141,7 @@ for(const[engineName,engine]of Object.entries({chromium,webkit})){
   }catch(error){results.push({engine:engineName,width,pass:false,error:error.message});throw error;}finally{
    if(store){for(const key of images){assert(key.startsWith(store.id+'/'));await cloud(`/accounts/${account}/r2/buckets/tiendly-preview-images/objects/${key}`,undefined,'DELETE');}}
    await sql('DELETE FROM stores WHERE id IN (SELECT store_id FROM memberships WHERE user_id=?)',[user]);await sql('DELETE FROM user WHERE id=?',[user]);await context.close();
-   await writeFile(resolve(out,'result.json'),JSON.stringify({complete:results.length===6&&results.every(result=>result.pass),scope:'Deployed Tiendly preview, synthetic signed sessions, real remote D1/R2; Google OAuth remains pending',results},null,2)+'\n');
+   await writeFile(resolve(out,'result.json'),JSON.stringify({complete:results.length===6&&results.every(result=>result.pass),scope:'Deployed Tiendly preview, synthetic signed sessions, real remote D1/R2; this harness does not test Google OAuth',results},null,2)+'\n');
   }
  }}finally{await browser.close();}
 }
