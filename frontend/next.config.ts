@@ -1,6 +1,6 @@
 import type { NextConfig } from "next";
 
-const nextConfig: NextConfig = {
+const nextConfig = {
   transpilePackages: ["@tiendly/backend"],
   reactStrictMode: true,
   // Enlaces compartidos de la demo antes del cambio de nombres: conservan sus parámetros.
@@ -24,6 +24,6 @@ const nextConfig: NextConfig = {
   experimental: { serverActions: { bodySizeLimit: "8mb" } },
   // Fotos de productos subidas desde el panel (Vercel Blob). Las de Heather son locales (public/heather).
   images: { remotePatterns: [{ protocol: "https", hostname: "*.public.blob.vercel-storage.com" }] },
-};
+} satisfies NextConfig;
 
 export default nextConfig;
