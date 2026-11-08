@@ -24,3 +24,7 @@ En Next/Vercel los nuevos endpoints responden 503 porque todavía no hay un adap
 El onboarding visual aún no llama al nuevo API ni inicia OAuth. Catálogo, ventas, cupones y configuración editable todavía usan los módulos anteriores; no pueden considerarse migrados. El panel antiguo queda restringido por sesión/titularidad, salvo pruebas explícitas. No hay importación Redis/Blob ni compatibilidad de escritura de una tienda nueva D1 con esos documentos. Completar el mapeo de DTOs y las consultas de catálogo antes de conectar la creación desde el formulario.
 
 El siguiente módulo es `catalog`: variantes/opciones/ofertas/galerías/medidas, SQL por tenant y almacenamiento R2. Luego siguen checkout, comandos de pedidos, promociones, configuración y tareas. El plan vigente está en [`docs/plan-backend.md`](../docs/plan-backend.md).
+
+## Traspaso del backend anterior
+
+El [cierre de la-bodega](../docs/backend/traspaso-la-bodega.md) documenta el reemplazo de cada módulo, el avance en ramas todavía fuera de `main`, el respaldo y la baja remota pendiente. Los [criterios conservados](../docs/backend/requisitos-conservados.md) permiten seguir el trabajo sin consultar el clon anterior. Este cierre documental no incorpora la implementación ni acredita el core loop migrado.

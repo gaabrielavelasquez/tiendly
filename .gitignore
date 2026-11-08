@@ -17,3 +17,7 @@ next-env.d.ts
 
 .dev.vars*
 !.dev.vars.example
+
+# Worktrees y respaldos locales: nunca forman parte del proyecto publicado.
+/.worktrees/
+/.backend-rescue/

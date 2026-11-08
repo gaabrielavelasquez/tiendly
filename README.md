@@ -12,8 +12,12 @@ Tiendas online para quien vende por Instagram y WhatsApp en Perú: panel de la t
 
 Antes de cambiar algo, lee [`AGENTS.md`](AGENTS.md) y [`CLAUDE.md`](CLAUDE.md).
 
+El backend anterior queda como historial externo. Su [traspaso a Tiendly](docs/backend/traspaso-la-bodega.md) contiene el estado por módulo, los requisitos conservados y lo pendiente; no hace falta clonar `la-bodega` dentro del proyecto.
+
 ```bash
 cd frontend
 npm install
 npm run dev
 ```
+
+El flujo de integración usa `main`, `dev` y PRs por módulo; consulta [el procedimiento y el estado de adopción](docs/gitflow.md).
