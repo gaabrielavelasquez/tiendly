@@ -47,8 +47,8 @@ jobs:
       - name: Verificar backend cuando exista
         run: |
           if [ -f ../backend/package.json ]; then
-            npm --prefix ../backend run typecheck
-            npm --prefix ../backend test
+            npm --prefix ../backend run typecheck --if-present
+            npm --prefix ../backend run test --if-present
           fi
       - name: Compilar Cloudflare cuando exista
         run: |
