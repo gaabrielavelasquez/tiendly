@@ -14,3 +14,7 @@ next-env.d.ts
 # Local Worker state and generated deployment files
 .wrangler/
 .cloudflare/
+
+# Worktrees y respaldos locales: nunca forman parte del proyecto publicado.
+/.worktrees/
+/.backend-rescue/
