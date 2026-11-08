@@ -1,0 +1,112 @@
+{
+  "reviewed_on": "2026-11-08",
+  "source_repository": "https://github.com/triple0-labs/la-bodega",
+  "source_commit": "fbeeecc31a3ab9df83b25d068c7c9fd387fb9598",
+  "bundle_sha256": "2146a387dc68fc2881b7864a8d14bb11736842d090130db79ad337cfba8ed3ea",
+  "documents": [
+    {
+      "path": "docs/00-indice/developer_onboarding.md",
+      "sha256": "1b30b17b843539e71ed1c465cb30fcb448548ae1e56b8286c4ae27504d2acb03"
+    },
+    {
+      "path": "docs/00-indice/glossary.md",
+      "sha256": "3ebbe162fe7a4cc4aafe7dcf21735ad3133fc1fd3d9384544366babbc1ff12ea"
+    },
+    {
+      "path": "docs/01-producto/casos_de_uso.md",
+      "sha256": "d66312650850330da49a7c65e20079a53f74a50aae0158da0f855b73e2a1b87d"
+    },
+    {
+      "path": "docs/01-producto/requerimientos.md",
+      "sha256": "a9bb5023fd85aad5c492245e625958e3984633e5507a6a942519e4a732f2149e"
+    },
+    {
+      "path": "docs/01-producto/roadmap.md",
+      "sha256": "baa0192a1ccff9ce8b8529d5644102ff7d5892ff6bee0dae5210c1239da367a8"
+    },
+    {
+      "path": "docs/02-dominio/modelo_de_datos_tecnico.md",
+      "sha256": "f0d8789eab7224ce5ebd23e8e6eba1ae69261c60b9946e122195eca1468f567b"
+    },
+    {
+      "path": "docs/02-dominio/modelo_de_dominio.md",
+      "sha256": "8156f3768e681fb00d19d07230bc3f42729c8e70bf93efcea7dcde51b22a55dd"
+    },
+    {
+      "path": "docs/03-arquitectura/arquitectura_tecnica.md",
+      "sha256": "561eab979f3ee8db5c3704183179598ddf7c5a51d81eb9ea8da3e0646b7c614e"
+    },
+    {
+      "path": "docs/03-arquitectura/shared_kernel.md",
+      "sha256": "849743a4f3521584dd4d19c9d7e833e4ba456e26c871906c7362cd65cd6b4665"
+    },
+    {
+      "path": "docs/04-bounded-contexts/modulo_catalog.md",
+      "sha256": "7ae203a1518b4d423f8d5b564541d5eefe8adcec265bad9b4335da1a95aea2bf"
+    },
+    {
+      "path": "docs/04-bounded-contexts/modulo_identity_access.md",
+      "sha256": "12e682c8a973237d2309908dcdb6ea81bfb75c27bccebce5dc09db8f4f8415c5"
+    },
+    {
+      "path": "docs/04-bounded-contexts/modulo_sales.md",
+      "sha256": "1d3359c260a024b7eebb50ccaec8248acdb238ae3953d9a71e69a711bd959da9"
+    },
+    {
+      "path": "docs/04-bounded-contexts/modulo_store_management.md",
+      "sha256": "f5307f3c5e1b61d0d489a70d9a28a0d178ecc20bcce49b216707a437b51bab58"
+    },
+    {
+      "path": "docs/05-cross-cutting/autenticacion_y_sesiones.md",
+      "sha256": "58084afef81794926e8bc823c22b4c72255053b892932b5983252653762fe7ca"
+    },
+    {
+      "path": "docs/05-cross-cutting/feature_flags_y_capacidades.md",
+      "sha256": "4fe84ea2cca87fb83825e2ffe3356aaae50bfd0d97912d640b20e81f1787ca42"
+    },
+    {
+      "path": "docs/05-cross-cutting/jobs_outbox_y_webhooks.md",
+      "sha256": "fb93c7dddb0add44d30af2b76f92b8f61912ea4dad7f9603a92fe8cbc1afc326"
+    },
+    {
+      "path": "docs/05-cross-cutting/multitenancy.md",
+      "sha256": "d5063e17d2803c8d728f22d5e8c360e96be19a895bc82227002163d1415fc698"
+    },
+    {
+      "path": "docs/06-infra-y-calidad/docker_y_entornos.md",
+      "sha256": "f3d843abf20d63dde6fd73b25ec598f26f1de35128ecdda3fc14faba9e76e8e2"
+    },
+    {
+      "path": "docs/06-infra-y-calidad/observability.md",
+      "sha256": "1ce14d7593e30a072064036b3457d0e3c949ad0f263ba3cc81f722c26b90a5b8"
+    },
+    {
+      "path": "docs/06-infra-y-calidad/stack_y_versiones.md",
+      "sha256": "d3e4ea63ff61c0568f93a6554beb34ef3fe03f78cc5794c1fbb2d703d255cefa"
+    },
+    {
+      "path": "docs/06-infra-y-calidad/testing.md",
+      "sha256": "07bcedfaf16e8bc3a5e5af57d92cb5bf2fb970a8cea8cb9adde635df15059d17"
+    },
+    {
+      "path": "docs/07-decisiones-y-operacion/adrs/README.md",
+      "sha256": "52e5ed81e9b9a1da62d488e5a85ffb0db7858f194e9b4e33153135bb359057a6"
+    },
+    {
+      "path": "docs/07-decisiones-y-operacion/api-contracts/openapi.yaml",
+      "sha256": "6b46e83a6171f44fc8e32b0e57d6b0fdb8f3f608b0f4ad37c988a238e76bca6c"
+    },
+    {
+      "path": "docs/07-decisiones-y-operacion/runbooks/deployment.md",
+      "sha256": "86bf997a05b30a8f567f8bda9327fdad2851a804e6500931c190f64dcca0a252"
+    },
+    {
+      "path": "docs/07-decisiones-y-operacion/runbooks/error_recovery.md",
+      "sha256": "69b5b66de822bfeaceb96e8dcb53e0b690c5f72a156e7d362781cf31da038fbe"
+    },
+    {
+      "path": "docs/README.md",
+      "sha256": "dd3bb31823109d246c7929e786eef74d906e9ada7b34ed677aabdc2b11b95ea1"
+    }
+  ]
+}
