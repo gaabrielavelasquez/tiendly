@@ -30,6 +30,11 @@
 - **Integración todavía parcial:** el botón Google y la creación del onboarding aún no llaman al API nuevo. Falta catálogo/R2 y componer los DTOs de la tienda D1 para panel/vitrina antes de conectar ese formulario. Catálogo/ventas/cupones/configuración editable siguen pendientes. No presentar este trabajo como core loop migrado.
 - Builds Next/vinext se ejecutan **secuencialmente**: ambos generan tipos en `.next`; en paralelo se pisan. El error de tipos al ejecutarlos juntos se resolvió repitiendo Next por separado.
 
+# Continuación tras #45 y #46 · 8-nov-2026
+
+- `dev` en `b8f6f38` contiene ambos PRs con merge commit. Se sincronizan las ramas funcionales conservando su historial, sin integrar los PRs #47–#50 a `dev`.
+- La CI ya forma parte de la base de integración. La aceptación y los pendientes funcionales de cada PR siguen vigentes; main y producción permanecen intactos.
+
 ---
 
 # Avance Cloudflare · 8-nov-2026
@@ -48,6 +53,14 @@
 - Workspace npm y experimento vinext: `vinext check` informa 94 % y el build termina, pero el output incluye imágenes sin permiso de `public/heather` y `public/mi-tienda`. **No desplegar** hasta excluir y verificar; `.vercelignore` no protege Cloudflare. Faltan pruebas de flujos, cookies, revalidación, uploads y navegador.
 - Wrangler autenticado; creada base vacía `tiendly-atomicity-probe-20261108` (ID `6180e7fb-4501-4702-a5b0-f284b6e90faa`) para la prueba. La prueba aún no se ejecutó; eliminar la base al terminar. No se tocó producción.
 - Pendiente: prueba remota de lotes, concurrencia y rollback; identidad, tablas, R2, checkout y tareas. `cf` y Wrangler mantienen sesiones separadas; Node local no satisface el engine de `cf`.
+
+# Cierre documental de la-bodega · 8-nov-2026
+
+- El [mapa de traspaso](backend/traspaso-la-bodega.md) y los [criterios conservados](backend/requisitos-conservados.md) permiten continuar desde Tiendly sin un clon anidado. Incluyen inventario de las 26 fuentes, diferencias deliberadas y estado por módulo.
+- Retiro local con bundle verificable y clon original guardados fuera del proyecto en `/Users/diego/tiendly-respaldos/la-bodega-20261108/`. El remoto de GitHub sigue intacto. **Baja remota pendiente**, por indicación del usuario: existen workflows activos y un despliegue QA histórico; no se conoce el estado de Coolify/VPS ni de sus datos.
+- El trabajo funcional permanece en `/Users/diego/sandbox/tiendly/.worktrees/cloudflare`, `feat/onboarding-d1`, con cambios sin commit sobre `c00ae43`. No se modificó ese worktree. No presentar identidad/tiendas/catálogo como core loop completo ni incorporar versiones parciales a producción.
+- Próximo trabajo: terminar integración y versiones desde formularios; verificar Google/R2 remotos; implementar ventas/reservas/cupones y comandos de configuración; completar tareas y aceptación. Pagos/comunicaciones siguen simulados. Este cierre no despliega la migración Cloudflare ni hace merge, y no toca datos de producción.
+- Validación del cierre: 26/26 documentos clasificados y cotejados por SHA-256 contra restauración independiente del bundle; enlaces locales y `git diff --check` pasan. `npm run check:tokens` y `npm run build -- --webpack` pasan en el worktree aparte. El build habitual con Turbopack falla por el permiso del puerto interno (`EPERM`), incluso al reintentar fuera del sandbox. Sin cambios de código/UI ni capturas nuevas; no se modificó el servidor principal.
 
 ---
 

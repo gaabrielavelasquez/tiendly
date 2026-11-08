@@ -6,6 +6,8 @@
 >
 > **Experimento inicial:** vinext compila; la preparación y verificación de assets excluye Heather y mi-tienda. La prueba remota de D1 pasa (stock, cupón, versiones concurrentes y rollback completo). Ver `docs/verificacion/cloudflare/d1-remote.json`. La aplicación todavía requiere integración y aceptación.
 
+> **Estado al 8-nov-2026:** este documento conserva el plan base del 29-oct. La implementación posterior en ramas locales y las diferencias con el backend anterior están inventariadas en el [cierre del traspaso de la-bodega](backend/traspaso-la-bodega.md). Consultarlo antes de ejecutar la secuencia histórica: el avance nuevo usa D1 relacional desde el inicio y aún no está integrado a `main`. Este PR solo cierra documentación y retiro local, no aprueba el corte de producción.
+
 - **Fecha:** 29-oct-2026.
 - **Para:** Gabi (decide) y Diego (retoma el plan más adelante).
 - **Estado:** propuesta con las decisiones de Gabi del 29-oct-2026 (§12). No se aplicó nada: ni carpetas movidas, ni código, ni datos de producción.
