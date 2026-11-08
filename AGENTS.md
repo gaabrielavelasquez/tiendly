@@ -39,7 +39,7 @@ No dupliques esas reglas aquí: si algo cambia, se cambia en `CLAUDE.md` o `fron
 
 ## Workflow (resumen de `CLAUDE.md` §7)
 
-1. Una rama por módulo, desde `main`. Un PR por rama.
+1. Una rama por módulo desde `dev`, PR hacia `dev`; publicación mediante PR `dev` → `main`. Para dependencias apiladas y hotfixes, ver `CLAUDE.md` §7.
 2. Mobile-first: primero 390 px, después 1440 px.
 3. Antes del PR, en `frontend/`: `npm run check:tokens` y `npm run build` sin errores.
 4. Revisa las pantallas en el navegador a 390 y 1440 px y adjunta capturas al PR.

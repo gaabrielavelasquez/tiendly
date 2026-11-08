@@ -83,11 +83,19 @@ Vigente hasta completar el Core Loop (onboarding → productos → vitrina → p
 
 ## 7. Workflow
 
-1. **Una rama por módulo**, creada desde `main` (`feat/<módulo>`; `chore/<tema>` para lo que no es pantalla).
+1. **Ramas permanentes:** `main` contiene la versión publicada; `dev` reúne la próxima versión y usa datos de pruebas separados. No se publica ni se migra producción al actualizar `dev`.
+   - **Una rama y un PR por módulo**, desde `dev` actualizado: `feat/<módulo>`, `fix/<tema>` o `chore/<tema>`. El PR apunta a `dev`.
+   - **Ramas apiladas:** cuando un módulo depende de otro todavía sin integrar, se crea desde esa rama y el PR apunta a ella. La descripción identifica la dependencia. Al integrar la base, se cambia el destino del PR a `dev` y se vuelve a validar el diff y los checks.
+   - **Publicación:** un PR de `dev` hacia `main` reúne una versión aceptada. Un hotfix urgente sale de `main`, entra por PR y después se lleva a `dev` por otro PR.
+   - **Integración:** merge commit, sin squash ni force-push; no se reescribe el historial de las ramas publicadas. Ningún merge, tampoco a `dev`, se hace sin la aprobación de Gabi.
 2. **Mobile-first:** primero a 390 px, después a 1440 px.
 3. **Cuatro estados en cada vista:** carga, vacío, con datos y error.
 4. **Antes de abrir el PR,** en `frontend/`: `npm run check:tokens` y `npm run build`, los dos sin errores.
 5. **Revisar las pantallas en el navegador** a 390 px y a 1440 px.
 6. **Probar con datos reales y largos, y sin scroll horizontal en móvil:** antes de abrir el PR, revisar cada pantalla con URLs largas (p. ej. la de una preview de Vercel, no `localhost`), nombres de tienda y de producto largos y precios altos. En 360 px y 390 px, `document.documentElement.scrollWidth` no puede pasar del ancho de la pantalla. Textos que no cortan (links, nombres): una línea con `truncate`, y `min-w-0` en sus contenedores flex o grid (en una grilla, columnas `minmax(0, 1fr)`, p. ej. `grid-cols-1`).
 7. **Abrir un PR con capturas** de cada pantalla en los dos tamaños.
-8. **Nunca hacer merge sin la aprobación de Gabi.**
+8. **Nunca hacer merge sin la aprobación de Gabi.** Los borradores sirven para resguardar y revisar trabajo incompleto; deben declarar los checks fallidos, evidencia pendiente y simulaciones. No se marcan listos hasta completar las verificaciones aplicables.
+9. **Checks automáticos:** CI verifica tokens, build y tipos del frontend; cuando existe el paquete de backend, también sus tipos y pruebas locales. El runtime Cloudflare se compila por separado, sin secretos ni migraciones remotas. Los builds de Next y vinext se ejecutan secuencialmente porque comparten archivos generados.
+10. **Entornos:** `dev` y los PRs usan memoria o recursos exclusivos de prueba; nunca credenciales, bases ni buckets de producción. Los despliegues de producción, cambios de DNS y migraciones requieren su aprobación específica. La creación de una rama no configura un despliegue.
+
+Procedimiento y estado de adopción: [`docs/gitflow.md`](docs/gitflow.md).
