@@ -1,0 +1,9 @@
+{
+  "database": "tiendly-preview",
+  "id": "9fcfd54b-56a2-4cb9-af11-800e5191e93d",
+  "applied": [
+    "0001_auth.sql",
+    "0002_stores.sql",
+    "0003_catalog.sql"
+  ]
+}

@@ -17,7 +17,7 @@ export type Bindings = {
   GOOGLE_CLIENT_SECRET?: string;
 };
 export function authConfiguration(bindings: Bindings): AuthConfiguration {
-  if (!bindings.BETTER_AUTH_URL || !bindings.BETTER_AUTH_SECRET || !bindings.GOOGLE_CLIENT_ID || !bindings.GOOGLE_CLIENT_SECRET) throw new Error("Authentication is not configured");
+  if (!bindings.BETTER_AUTH_URL || !bindings.BETTER_AUTH_SECRET) throw new Error("Authentication is not configured");
   return { baseURL: bindings.BETTER_AUTH_URL, secret: bindings.BETTER_AUTH_SECRET, googleClientId: bindings.GOOGLE_CLIENT_ID, googleClientSecret: bindings.GOOGLE_CLIENT_SECRET };
 }
 export function createRuntime(bindings: Bindings) {

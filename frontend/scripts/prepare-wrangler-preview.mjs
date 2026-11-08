@@ -9,13 +9,19 @@ const source = resolve(root, ".cloudflare/output/v0/workers/default");
 const output = resolve(root, ".wrangler/preview");
 const worker = JSON.parse(await readFile(resolve(source, "worker.config.json"), "utf8"));
 
-// Este puente solo permite el primer preview con memoria, nunca producción,
-// secretos ni bindings de datos. Ampliarlo requiere revisar esa integración.
+// Solo recursos del preview, nunca producción. Los valores secretos se guardan
+// con Wrangler, no se leen ni se escriben en este manifiesto.
 assert.equal(worker.name, "tiendly-preview");
 assert.equal(worker.manifest.mainModule, "index.js");
 assert.deepEqual(Object.keys(worker.manifest.modules), []);
 assert.deepEqual(worker.env, {
   ASSETS: { type: "assets" },
+  UPLOADS: { type: "r2", name: "tiendly-preview-images" },
+  DB: { type: "d1", name: "tiendly-preview", id: "9fcfd54b-56a2-4cb9-af11-800e5191e93d" },
+  BETTER_AUTH_URL: { type: "text", value: "https://tiendly-preview.tiendly.workers.dev" },
+  BETTER_AUTH_SECRET: { type: "secret" },
+  GOOGLE_CLIENT_ID: { type: "secret" },
+  GOOGLE_CLIENT_SECRET: { type: "secret" },
   TIENDLY_TIENDA_DEMO: { type: "text", value: "muna" },
   TIENDLY_ENTORNO: { type: "text", value: "preview" },
 });
@@ -57,6 +63,13 @@ await writeFile(resolve(output, "wrangler.json"), JSON.stringify({
   workers_dev: true,
   preview_urls: true,
   observability: { enabled: true },
+  d1_databases: [{
+    binding: "DB",
+    database_name: worker.env.DB.name,
+    database_id: worker.env.DB.id,
+    migrations_dir: resolve(root, "../backend/db/migrations"),
+  }],
+  r2_buckets: [{ binding: "UPLOADS", bucket_name: worker.env.UPLOADS.name }],
   assets: {
     directory: "assets",
     binding: "ASSETS",
@@ -65,10 +78,9 @@ await writeFile(resolve(output, "wrangler.json"), JSON.stringify({
     run_worker_first: worker.assets.runWorkerFirst,
   },
   vars: {
+    BETTER_AUTH_URL: worker.env.BETTER_AUTH_URL.value,
     TIENDLY_TIENDA_DEMO: worker.env.TIENDLY_TIENDA_DEMO.value,
     TIENDLY_ENTORNO: worker.env.TIENDLY_ENTORNO.value,
-    // Compatibilidad temporal: el código actual todavía consulta VERCEL_ENV.
-    VERCEL_ENV: "preview",
   },
 }, null, 2) + "\n");
-console.log("Preview preparado para Wrangler: cuenta Tiendly, MUÑA y memoria temporal.");
+console.log("Preview preparado para Wrangler: cuenta Tiendly, D1 y R2 exclusivos de pruebas.");

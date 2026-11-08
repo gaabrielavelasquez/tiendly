@@ -3,3 +3,4 @@ BETTER_AUTH_URL=http://localhost:3215
 BETTER_AUTH_SECRET=
 GOOGLE_CLIENT_ID=
 GOOGLE_CLIENT_SECRET=
+# Google puede quedar vacío mientras se conectan D1/R2. No hay otro ingreso público.

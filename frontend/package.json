@@ -16,7 +16,8 @@
     "build:vinext": "npm run tokens && npm run check:tokens && node scripts/cloudflare-assets.mjs prepare && vite build && node scripts/cloudflare-assets.mjs verify",
     "start:vinext": "vite preview",
     "prepare:wrangler-preview": "node scripts/cloudflare-assets.mjs verify && node scripts/prepare-wrangler-preview.mjs && node --test scripts/wrangler-preview.test.mjs",
-    "deploy:cloudflare-preview": "npm run build:vinext && npm run prepare:wrangler-preview && npx wrangler deploy --profile tiendly --config .wrangler/preview/wrangler.json"
+    "deploy:cloudflare-preview": "npm run build:vinext && npm run prepare:wrangler-preview && npx wrangler deploy --profile tiendly --config .wrangler/preview/wrangler.json",
+    "migrate:cloudflare-preview": "npx wrangler d1 migrations apply DB --remote --profile tiendly --config .wrangler/preview/wrangler.json"
   },
   "dependencies": {
     "@fontsource-variable/inter": "^5.3.0",

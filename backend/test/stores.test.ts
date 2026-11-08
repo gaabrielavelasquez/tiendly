@@ -146,3 +146,29 @@ test("Google authorization URLs use the exact configured origin and callback pat
   }
  }finally{await mf.dispose();}
 });
+
+test("D1 sessions work without Google while public sign-in remains disabled", async () => {
+ const {mf,db}=await fixture();
+ try {
+  const {auth,runtime}=createRuntime({DB:db,TIENDLY_ENTORNO:"preview",BETTER_AUTH_URL:config.baseURL,BETTER_AUTH_SECRET:config.secret});
+  assert.equal(await runtime.actor(new Headers({cookie:"tiendly_tienda=muna"})),null);
+  const response=await auth.handler(new Request(config.baseURL+'/api/auth/sign-in/social',{method:'POST',headers:{origin:config.baseURL,'content-type':'application/json'},body:JSON.stringify({provider:'google',callbackURL:'/registro'})}));
+  assert(response.status>=400);
+  assert.equal(response.headers.get('location'),null);
+  const helpers=(await betterAuth({...auth.options,plugins:[testUtils()]}).$context).test;
+  const owner=await helpers.saveUser(helpers.createUser({email:"storage-only@example.invalid"}));
+  const login=await helpers.login({userId:owner.id});
+  assert.equal((await runtime.actor(login.headers))?.userId,owner.id);
+  await auth.api.signOut({headers:login.headers});
+  assert.equal(await runtime.actor(login.headers),null);
+ }finally{await mf.dispose();}
+});
+
+test("partial Google credentials and missing session secrets fail closed", async () => {
+ const {mf,db}=await fixture();
+ try {
+  assert.throws(()=>createRuntime({DB:db,BETTER_AUTH_URL:config.baseURL}));
+  assert.throws(()=>createAuth(db,{baseURL:config.baseURL,secret:config.secret,googleClientId:"only-one-half"}));
+  assert.throws(()=>createAuth(db,{baseURL:config.baseURL,secret:config.secret,googleClientSecret:"only-one-half"}));
+ }finally{await mf.dispose();}
+});

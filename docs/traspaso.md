@@ -77,6 +77,16 @@
 
 # Traspaso · 29-oct-2026
 
+## D1 y R2 conectados al preview · 8-nov-2026
+
+Diego autorizó continuar con almacenamiento real de pruebas. La rama `feat/cloudflare-preview-storage` sale de `origin/feat/catalog` (`bd6bc97`, con #50 integrado) y reutiliza el despliegue de #51 mediante cherry-pick. No se integra la pila en `dev` o `main` ni se cambia el checkout principal.
+
+Cuenta Tiendly: Worker `tiendly-preview`, D1 `tiendly-preview` (`9fcfd54b-56a2-4cb9-af11-800e5191e93d`) y bucket privado `tiendly-preview-images`. Aplicadas las tres migraciones de autenticación, tiendas y catálogo. Worker publicado en https://tiendly-preview.tiendly.workers.dev, versión `5d3c1503-9e75-4c79-8451-a354b27b7712`. Los recursos de producción, Redis/Blob, Vercel y DNS siguen intactos.
+
+PASS: tokens, builds Next/vinext, tipos frontend/backend, 14 tests de backend y tres pruebas del manifiesto. Seis recorridos remotos Chromium/WebKit a 390/1440/360 verifican tienda, catálogo vacío, foto R2, guardados, recargas, reintento y conflictos entre pestañas; 36 checkpoints sin overflow. Acceso remoto: cookie de slug falsa 401, origen ajeno/ausente 403, imagen inválida 400 y sesión revocada 401. [Evidencia y capturas](verificacion/d1-r2-preview/README.md).
+
+Google real sigue pendiente. Las sesiones sintéticas se crean solo desde el harness administrativo y se limpian por ID; no hay ingreso de prueba público ni Google ficticio. `BETTER_AUTH_SECRET` se generó privadamente y se guardó cifrado en el Worker. No se crean pedidos ni se envían mensajes/cobros. Faltan ventas/reservas/cupones, comandos de configuración y tareas; las escrituras no migradas se rechazan, sin recurrir a documentos en memoria. La autorización de este preview no autoriza merges ni corte de producción.
+
 ## Primer despliegue de pruebas en Cloudflare · 8-nov-2026
 
 Diego autorizó publicar el primer preview en la cuenta Tiendly. Desde `dev` (`08d896f`, base #47), rama `chore/cloudflare-first-preview`, worktree aislado `/private/tmp/tiendly-cloudflare-preview`. App publicada en https://tiendly-preview.tiendly.workers.dev, demo `/muna` y panel `/panel/productos`; versión `ea2967a9-0b38-4e8a-963b-24f697fb3ac5`.

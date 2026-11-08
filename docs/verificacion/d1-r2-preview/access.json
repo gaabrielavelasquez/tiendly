@@ -1,0 +1,10 @@
+{
+  "unauthenticated": 401,
+  "forgedSlugCookie": 401,
+  "crossOrigin": 403,
+  "missingOrigin": 403,
+  "invalidImage": 400,
+  "googleUnavailable": 404,
+  "sessionRevoked": 401,
+  "pass": true
+}

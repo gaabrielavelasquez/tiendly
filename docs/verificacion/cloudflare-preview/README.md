@@ -1,5 +1,7 @@
 # Primer preview en Cloudflare · 8-nov-2026
 
+Informe histórico del primer despliegue, que usaba memoria temporal. La siguiente integración conecta [D1 y R2 del preview](../d1-r2-preview/README.md); ese informe describe el estado actual.
+
 Publicado con autorización de Diego en la cuenta **Tiendly**, desde `dev` (`08d896f`), en la rama `chore/cloudflare-first-preview`.
 
 - App: https://tiendly-preview.tiendly.workers.dev
