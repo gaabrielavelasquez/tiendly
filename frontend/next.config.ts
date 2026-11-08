@@ -1,6 +1,7 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  transpilePackages: ["@tiendly/backend"],
   reactStrictMode: true,
   // Enlaces compartidos de la demo antes del cambio de nombres: conservan sus parámetros.
   async redirects() {

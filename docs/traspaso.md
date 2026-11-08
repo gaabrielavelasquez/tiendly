@@ -1,3 +1,13 @@
+# Identidad y tiendas · 8-nov-2026 · en curso
+
+- Base guardada en `chore/cloudflare-foundation` (`76adead`). Continuación `feat/identity-stores` en `/private/tmp/tiendly-cloudflare`; rama principal y servidor de Gabi intactos. Sin merge/deploy de app.
+- Implementados backend `identity` y `stores`, migraciones `0001_auth.sql`/`0002_stores.sql`, sesiones Better Auth nativas D1, API de tienda propia/crear/renombrar, configuración inicial vacía y escrituras atómicas/versionadas. Ver `backend/README.md`.
+- Cinco pruebas locales pasan: políticas, autorización real con sesión Better Auth, carreras, rollback y reinicio. Las migraciones y comandos reales también pasan en D1 remoto desechable: `docs/verificacion/cloudflare/stores-remote.json`. El probe elimina su tienda/usuario sintéticos.
+- El usuario está creando Google OAuth. Callback local `http://localhost:3215/api/auth/callback/google`. Secretos sin configurar; los endpoints compilados responden 503 de forma segura. La navegación Google real queda pendiente.
+- El panel ya no confía en la cookie de slug salvo `TIENDLY_ENTORNO=local|preview` + `TIENDLY_TEST_LOGIN=true`. Entorno ausente/inválido restringe como producción. El ingreso por teléfono simulado queda bloqueado fuera de esas pruebas. El nuevo API no escribe documentos Redis.
+- **Integración todavía parcial:** el botón Google y la creación del onboarding aún no llaman al API nuevo. Falta catálogo/R2 y componer los DTOs de la tienda D1 para panel/vitrina antes de conectar ese formulario. Catálogo/ventas/cupones/configuración editable siguen pendientes. No presentar este trabajo como core loop migrado.
+- Builds Next/vinext se ejecutan **secuencialmente**: ambos generan tipos en `.next`; en paralelo se pisan. El error de tipos al ejecutarlos juntos se resolvió repitiendo Next por separado.
+
 # Continuación tras #45 y #46 · 8-nov-2026
 
 - `dev` en `b8f6f38` contiene ambos PRs con merge commit. Se sincronizan las ramas funcionales conservando su historial, sin integrar los PRs #47–#50 a `dev`.
