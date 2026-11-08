@@ -1,3 +1,14 @@
+# Resguardo e integración Gitflow · 8-nov-2026
+
+- El trabajo antes sin commit se guardó en `823d1a2` sobre `feat/onboarding-d1`. El worktree vive ahora en `.worktrees/cloudflare` dentro del proyecto; el checkout principal sigue en `main` y conserva su modificación previa de `AGENTS.md`.
+- `dev` se creó desde `main` (`e635050`). El workflow y CI se proponen en #46, sin merge. Se publican PRs apilados de infraestructura → identidad/tiendas → catálogo/R2 → integración; el mapa definitivo está en `docs/gitflow.md` del PR #46. No hacer merge sin aprobación de Gabi.
+- Los formularios ya envían versiones al guardar, pausar, ofertar y deshacer; la aceptación de navegador todavía está pendiente. `relationalStore` compone catálogo y configuración inicial, pero devuelve pedidos/inventario/cupones vacíos. `mutarTienda` rechaza operaciones aún no migradas.
+- Se corrigieron dos bloqueos de compilación: `typecheck` regenera tipos de Next tras vinext y la constante OFERTAS usada por el cliente quedó separada del módulo que consulta D1. No cambian diseño ni tokens.
+- Verificación local después del traslado: 12/12 tests de backend, tipos de frontend/backend, tokens, build Next habitual y build vinext pasan. También pasa `typecheck` después de vinext; se verifica exclusión de assets Heather/mi-tienda. Evidencia resumida en `docs/verificacion/gitflow-20261108.json`. Persisten avisos de sourcemaps y clasificación de rutas del experimento vinext.
+- Falta Google real, R2 remoto, aceptación de formularios/persistencia/vitrina en preview, ventas/reservas/cupones, comandos de configuración y tareas. No hubo deploy de app, migraciones remotas ni cambios de datos de producción. Pagos y comunicaciones siguen simulados.
+
+---
+
 # Catálogo/R2 y callbacks OAuth · 8-nov-2026
 
 - Rama `feat/catalog`, sobre `feat/identity-stores` (`91c6d58`), en `/private/tmp/tiendly-cloudflare`. Sin cambios en main ni en el servidor de Gabi.
