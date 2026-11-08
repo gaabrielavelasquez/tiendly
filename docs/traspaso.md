@@ -1,3 +1,22 @@
+# Avance Cloudflare · 8-nov-2026
+
+- Worktree `/private/tmp/tiendly-cloudflare`, rama `chore/cloudflare-foundation`. Next.js build, tokens y TypeScript pasan. Vinext build pasa y verifica exclusión de Heather/mi-tienda; Chrome/WebKit locales cubren MUÑA, Productos y Registro en 360/390/1440; faltan acciones y aceptación completa en preview desplegado.
+- **Prueba D1 remota PASS:** última unidad, último cupón, versión desactualizada, ediciones concurrentes y rollback de pedido/asignación/redención/contador/historial. Evidencia en `docs/verificacion/cloudflare/d1-remote.json`, confirmada mediante lectura SQL remota independiente. La condición de plataforma se supera; aún hacen falta pruebas sobre el esquema final.
+- Base desechable `tiendly-atomicity-probe-20261108`; código e instrucciones en `backend/probes/d1/`. No desplegar ese Worker como app. No contiene datos de clientes.
+- El usuario confirmó que aún no existe cliente OAuth de Google ni origen previsto del preview. Son requisitos pendientes para verificar el ingreso real. No se transfirieron secretos.
+- Migración de negocio pendiente: identidad, tablas en `backend/db/migrations/`, R2, checkout, promociones, configuración, tareas y aceptación. No hubo deploy de aplicación, merge ni cambios de datos existentes.
+
+---
+
+# Migración Cloudflare · trabajo en curso, 8-nov-2026
+
+- Worktree `/private/tmp/tiendly-cloudflare`, rama `chore/cloudflare-foundation`, desde `main` e635050. Servidor de Gabi intacto.
+- Workspace npm y experimento vinext: `vinext check` informa 94 % y el build termina, pero el output incluye imágenes sin permiso de `public/heather` y `public/mi-tienda`. **No desplegar** hasta excluir y verificar; `.vercelignore` no protege Cloudflare. Faltan pruebas de flujos, cookies, revalidación, uploads y navegador.
+- Wrangler autenticado; creada base vacía `tiendly-atomicity-probe-20261108` (ID `6180e7fb-4501-4702-a5b0-f284b6e90faa`) para la prueba. La prueba aún no se ejecutó; eliminar la base al terminar. No se tocó producción.
+- Pendiente: prueba remota de lotes, concurrencia y rollback; identidad, tablas, R2, checkout y tareas. `cf` y Wrangler mantienen sesiones separadas; Node local no satisface el engine de `cf`.
+
+---
+
 # Traspaso · 29-oct-2026
 
 Para el agente que sigue (Codex) y para Gabi. Antes de tocar código, lee [`AGENTS.md`](../AGENTS.md), [`CLAUDE.md`](../CLAUDE.md), [`frontend/DESIGN.md`](../frontend/DESIGN.md) y las decisiones de [`docs/decisiones/`](decisiones/README.md).

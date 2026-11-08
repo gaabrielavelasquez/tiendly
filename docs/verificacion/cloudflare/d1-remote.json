@@ -1,0 +1,23 @@
+{
+  "date": "2026-11-08",
+  "mode": "wrangler dev --remote",
+  "database": "tiendly-atomicity-probe-20261108",
+  "results": {
+    "stock": true,
+    "coupon": true,
+    "stale": true,
+    "competingEdits": true,
+    "rollback": true
+  },
+  "independentRemoteRead": {
+    "served_by": "v3-prod",
+    "region": "ENAM",
+    "orders": 2,
+    "allocations": 1,
+    "redemptions": 1,
+    "history": 0,
+    "coupon_remaining": 1,
+    "version": 3
+  },
+  "scope": "Disposable SQL proof only. Does not verify application checkout, tenancy or expiry races."
+}

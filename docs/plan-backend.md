@@ -1,5 +1,11 @@
 # Plan de backend · Tiendly
 
+> **Actualización de la migración a Cloudflare (8-nov-2026):** lo siguiente reemplaza las propuestas históricas que lo contradigan. D1 será relacional desde el inicio; no habrá etapa de documentos JSON ni importación de Redis/Blob. Las migraciones SQL ordenadas van en `backend/db/migrations/`. Un solo paquete de backend agrupa `identity`, `stores`, `catalog`, `sales`, `promotions` y `settings` en dominio, aplicación y adaptadores. Las imágenes van a R2. El ingreso será Google mediante Better Auth y la autorización dependerá de la propiedad, no de la cookie de slug.
+>
+> Antes de implementar checkout, comprobar en D1 remoto desechable la atomicidad y los conflictos de stock, cupones y versión. Los intentos de checkout reservan números idempotentemente; el token controla el acceso al comprobante. Se conservan visuales, envíos y simulaciones actuales; el rediseño de envíos y los banners quedan fuera. La fecha de corte se fija tras la aceptación y producción requiere aprobación de Gabi.
+>
+> **Experimento inicial:** vinext compila; la preparación y verificación de assets excluye Heather y mi-tienda. La prueba remota de D1 pasa (stock, cupón, versiones concurrentes y rollback completo). Ver `docs/verificacion/cloudflare/d1-remote.json`. La aplicación todavía requiere integración y aceptación.
+
 - **Fecha:** 29-oct-2026.
 - **Para:** Gabi (decide) y Diego (retoma el plan más adelante).
 - **Estado:** propuesta con las decisiones de Gabi del 29-oct-2026 (§12). No se aplicó nada: ni carpetas movidas, ni código, ni datos de producción.
@@ -129,7 +135,7 @@ Esto sale de leer `src/lib/datos/` y `src/features/*/lib/` en `main` (`e87804d`,
 | Configuración del Worker de la app | `frontend/wrangler.jsonc` y `frontend/open-next.config.ts` (PR 2) |
 | Variables locales (no van al repo) | `frontend/.dev.vars` |
 | Semillas de las demos | `frontend/src/lib/datos/semillas.ts` (como hoy) |
-| Migraciones SQL | `backend/db/migraciones/`. El binding de D1 en `frontend/wrangler.jsonc` apunta ahí con `migrations_dir: "../backend/db/migraciones"` [17]. |
+| Migraciones SQL | `backend/db/migrations/`. El binding de D1 en `frontend/wrangler.jsonc` apunta ahí con `migrations_dir: "../backend/db/migraciones"` [17]. |
 | Worker del cron | `backend/workers/tareas/`, con su propio `wrangler.jsonc` y el mismo binding de D1 |
 | Scripts (mudanza, respaldo) | `backend/scripts/` |
 | API separado, si llega | `backend/api/` |
@@ -183,7 +189,7 @@ Dos datos de D1 que cambian cómo se programa:
 |---|---|---|
 | Forma | El mismo documento por tienda de hoy, en una fila de D1, con un número de versión. | Tablas por módulo: tiendas, productos, variantes, pedidos, cupones… |
 | Cambia en el código | `almacen.ts`, `tienda.ts`, `ingreso.ts` y `fotos.ts`, en `frontend/src/lib/datos/`. El resto de la app no se entera. | Cada módulo pasa a sus propias consultas, uno por PR. |
-| Migraciones | `backend/db/migraciones/0001_etapa_1.sql` | `backend/db/migraciones/0002_…` en adelante, una por módulo |
+| Migraciones | `backend/db/migrations/0001_etapa_1.sql` | `backend/db/migrations/0002_…` en adelante, una por módulo |
 | Arregla | Guardados que se pisan (§2.4-1), stock y número duplicados (§2.4-2), entornos mezclados (§2.4-3). | Además: búsquedas y reportes entre tiendas, sin tope de tamaño, auditoría por fila. |
 | Horas estimadas | 5–6 h | 25–35 h |
 | Límite | Una fila de D1 pesa hasta 2 MB. Con fotos como URLs, una tienda llega a cientos de pedidos antes de acercarse. Se vigila el tamaño. | — |
@@ -535,7 +541,7 @@ Todo sale de `main` actualizado, en ramas y worktrees aparte (AGENTS.md), y **na
 | 0 | Pasos sin PR (2–6 nov) | Aprobar este plan (#42); cerrar #22; **cerrar #40 sin borrar su rama**; revisar que `tiendly.pe` esté libre y **comprarlo**; **poner el repo en privado** (§13); activar Workers Paid. | 1–2 | Gabi |
 | 1 | `chore/monorepo` | Mover todo a `frontend/` y crear `backend/` (§10). Sin cambios de código. Renombre del repo justo después (§10.4). | 2–3 | Gabi o agente |
 | 2 | `chore/cloudflare-prueba` | **La prueba de riesgo:** la app actual en un Worker de prueba, sin datos (memoria). `frontend/wrangler.jsonc`, `frontend/open-next.config.ts`, `.dev.vars` en `.gitignore`. Mide CPU por visita y peso del Worker; prueba acciones de servidor, `revalidatePath`, fotos y `next/image`. Cambia `VERCEL_ENV` por `TIENDLY_ENTORNO` con la regla de §7.1 y sus pruebas. | 4–6 | Diego o agente |
-| 3 | `feat/d1-etapa-1` | `backend/db/migraciones/0001_etapa_1.sql` (tablas de §4.2), `frontend/src/lib/datos/almacen.ts` sobre D1 con versión, D1 local, demos sembradas, arreglos del checkout de §4.2, plan `beta_plus` con capacidades y `betaHasta` (§4.4), `backend/README.md` con los comandos. | 6–7 | Agente, con revisión de Diego |
+| 3 | `feat/d1-etapa-1` | `backend/db/migrations/0001_etapa_1.sql` (tablas de §4.2), `frontend/src/lib/datos/almacen.ts` sobre D1 con versión, D1 local, demos sembradas, arreglos del checkout de §4.2, plan `beta_plus` con capacidades y `betaHasta` (§4.4), `backend/README.md` con los comandos. | 6–7 | Agente, con revisión de Diego |
 | 4 | `feat/fotos-r2` | `frontend/src/lib/datos/fotos.ts` sobre R2, ruta `/fotos/<clave>`, `frontend/next.config.ts` sin Blob. | 2–3 | Agente |
 | 5 | `feat/ingreso-google` | Better Auth + Google, `miembros`, `slugPanel()` desde la sesión, permisos en cada acción del panel, ingreso de prueba en local/preview y los commits de #40 (rama `fix/seguridad-ingreso`). | 7–9 | **Diego** (en paralelo con 3 y 4) |
 | 6 | Mudanza | Script de §8.2, bases y buckets de producción, `tiendly.pe` apuntando al Worker, Workers Builds conectado a `main`, cambio de §8.3. | 3–4 | Gabi + agente |
