@@ -1,3 +1,14 @@
+# Catálogo/R2 y callbacks OAuth · 8-nov-2026
+
+- Rama `feat/catalog`, sobre `feat/identity-stores` (`91c6d58`), en `/private/tmp/tiendly-cloudflare`. Sin cambios en main ni en el servidor de Gabi.
+- Callbacks exactos y configuración en `docs/configuracion/google-oauth.md`. Subdominio Workers de la cuenta comprobado por API: `dmalvaradog26`. Preview previsto `https://tiendly-preview.dmalvaradog26.workers.dev`, todavía sin deploy de app. El usuario confirmó que ya configuró el cliente OAuth; secretos aún no incorporados al runtime por esta sesión.
+- Catálogo: dominio puro, comandos, D1 relacional, API de lista/creación/actualización y mapeo de los tipos españoles del frontend. Migración `0003_catalog.sql` aplicada solo en la D1 desechable. Se preservan claves, céntimos, galerías y tablas de medidas; variantes retiradas conservan fila.
+- R2: upload con titularidad/origen, límite 5 MB y JPEG/PNG/WebP verificados por firma/MIME; ruta de imagen del mismo origen sin dependencia de OAuth. Prueba local R2, sin bucket remoto/deploy.
+- Once tests locales pasan. Prueba remota de catálogo pasa concurrencia, rollback, aislamiento y semántica; datos sintéticos eliminados al finalizar. Evidencia en `docs/verificacion/cloudflare/catalog-remote.json`.
+- **Integración todavía parcial:** los formularios/páginas antiguos no llaman a estos endpoints. Falta conectar Google/onboarding y componer lecturas D1 de panel/vitrina. Ventas/asignaciones de stock, promociones, configuración editable y tareas siguen pendientes. No presentar el core loop como migrado ni desplegarlo todavía.
+
+---
+
 # Identidad y tiendas · 8-nov-2026 · en curso
 
 - Base guardada en `chore/cloudflare-foundation` (`76adead`). Continuación `feat/identity-stores` en `/private/tmp/tiendly-cloudflare`; rama principal y servidor de Gabi intactos. Sin merge/deploy de app.

@@ -13,6 +13,7 @@ export default defineConfig({
     },
     env: {
       ASSETS: bindings.assets(),
+      UPLOADS: bindings.r2({ name: "tiendly-preview-images" }),
       DB: bindings.d1({ name: "tiendly-preview" }),
       BETTER_AUTH_URL: bindings.secret(),
       BETTER_AUTH_SECRET: bindings.secret(),

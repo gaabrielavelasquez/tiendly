@@ -21,9 +21,19 @@ El Worker de la app declara D1 y cuatro valores privados: `BETTER_AUTH_URL`, `BE
 
 En Next/Vercel los nuevos endpoints responden 503 porque todavía no hay un adaptador de bindings para ese runtime. En Cloudflare también responden 503 mientras falte configuración. Ningún error concede acceso por cookie de slug. El cierre de sesión revoca la sesión persistida y elimina sus cookies.
 
-El onboarding visual aún no llama al nuevo API ni inicia OAuth. Catálogo, ventas, cupones y configuración editable todavía usan los módulos anteriores; no pueden considerarse migrados. El panel antiguo queda restringido por sesión/titularidad, salvo pruebas explícitas. No hay importación Redis/Blob ni compatibilidad de escritura de una tienda nueva D1 con esos documentos. Completar el mapeo de DTOs y las consultas de catálogo antes de conectar la creación desde el formulario.
+El onboarding visual aún no llama al nuevo API ni inicia OAuth. Los formularios y páginas de catálogo, ventas, cupones y configuración editable todavía usan los módulos anteriores; no pueden considerarse migrados. El panel antiguo queda restringido por sesión/titularidad, salvo pruebas explícitas. No hay importación Redis/Blob ni compatibilidad de escritura de una tienda nueva D1 con esos documentos. Completar el mapeo de DTOs y las consultas de catálogo antes de conectar la creación desde el formulario.
 
 El siguiente módulo es `catalog`: variantes/opciones/ofertas/galerías/medidas, SQL por tenant y almacenamiento R2. Luego siguen checkout, comandos de pedidos, promociones, configuración y tareas. El plan vigente está en [`docs/plan-backend.md`](../docs/plan-backend.md).
+
+## Catálogo y R2 · siguiente rama `feat/catalog`
+
+`catalog` ya tiene reglas puras, comandos y un adaptador relacional D1. La migración `0003_catalog.sql` guarda productos, opciones, variantes y galerías por tienda. Las variantes retiradas conservan su fila; no se borran las claves que podrían referenciar asignaciones de ventas. Una versión esperada protege el agregado completo, incluidos los cambios de sus tablas hijas. Se conservan los IDs, las claves `valor|valor`, el cálculo del slug, el orden de opciones/galerías, los grupos vacíos y los tres modos de tabla de medidas.
+
+`GET/POST/PUT /api/business/catalog` permite listar, crear y actualizar el catálogo propio. El cuerpo de escritura lleva `product` con los nombres ingleses del dominio; PUT agrega `id` y `version`. La tienda y el ID nuevo se asignan en el servidor, no desde el cuerpo. `frontend/src/lib/catalog-mapping.ts` traduce los tipos existentes y los céntimos en ese borde.
+
+`POST /api/business/images` acepta bytes JPEG, PNG o WebP, hasta 5 MB, con sesión, titularidad y origen permitido. El servidor verifica cabeceras mágicas y MIME; conserva el achicado de imágenes existente del cliente. El binding R2 es `UPLOADS`. Devuelve `/images/<store-id>/<uuid>.<ext>`, servido sin dependencia de OAuth y con MIME, `nosniff` y caché inmutable. No hay servicio pago de transformaciones. El bucket del preview aún no fue creado ni desplegado: la prueba R2 realizada es local.
+
+Once tests locales verifican identidad/tiendas/catálogo/R2 y sesiones reales; la prueba remota de catálogo está en `probes/catalog/` y `docs/verificacion/cloudflare/catalog-remote.json`. Las páginas y los formularios antiguos todavía no usan estos endpoints. Falta integrar el onboarding/OAuth y las lecturas de panel/vitrina, sembrar solo demos aprobadas y completar ventas/promociones/configuración/tareas. La escritura de stock deberá validarse contra asignaciones cuando llegue ventas; no desplegar el core loop antes de esa integración.
 
 ## Traspaso del backend anterior
 
