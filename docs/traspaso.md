@@ -77,6 +77,16 @@
 
 # Traspaso · 29-oct-2026
 
+## Primer despliegue de pruebas en Cloudflare · 8-nov-2026
+
+Diego autorizó publicar el primer preview en la cuenta Tiendly. Desde `dev` (`08d896f`, base #47), rama `chore/cloudflare-first-preview`, worktree aislado `/private/tmp/tiendly-cloudflare-preview`. App publicada en https://tiendly-preview.tiendly.workers.dev, demo `/muna` y panel `/panel/productos`; versión `ea2967a9-0b38-4e8a-963b-24f697fb3ac5`.
+
+Publicación reproducible con `npm run deploy:cloudflare-preview`, dentro de `frontend/`, mediante `npx wrangler --profile tiendly`. La entrada conserva respuestas/cookies, bloquea las rutas privadas antes de streaming y marca el preview noindex. No incluye las fotos de Heather ni `mi-tienda`. No se cambió la rama principal, el servidor de Gabi, Vercel, DNS, Redis ni producción, ni se integraron ramas funcionales de backend.
+
+PASS: tokens, build Next, build vinext, tipos, dos pruebas de entrada, 42 revisiones remotas Chromium/WebKit 390/1440/360 sin overflow ni imágenes rotas. Carrito y cierre de cookie probados con sesión sintética; WebKit registra prefetched requests cancelados al salir. [Evidencia y capturas](verificacion/cloudflare-preview/README.md).
+
+Límites: memoria temporal por instancia, sin persistencia D1/R2 ni Google real. OTP/pagos/SUNAT/bancos/envíos siguen simulados; sin mensajes o cobros. R2 ya permite consultas pero no tiene buckets. Sigue pendiente integrar persistencia/fotos, automatizar despliegues de `dev` y completar aceptación funcional; ningún merge o corte de producción está autorizado.
+
 Para el agente que sigue (Codex) y para Gabi. Antes de tocar código, lee [`AGENTS.md`](../AGENTS.md), [`CLAUDE.md`](../CLAUDE.md), [`frontend/DESIGN.md`](../frontend/DESIGN.md) y las decisiones de [`docs/decisiones/`](decisiones/README.md).
 
 **Estructura (PR 1, monorepo):** la app vive en `frontend/` y los comandos `npm` se corren ahí; `backend/` guarda la base de datos, los Workers y los scripts. En los registros con fecha de este documento, las rutas `src/…`, `public/…`, `next.config.ts` y `DESIGN.md` son anteriores a ese cambio: hoy van con `frontend/` adelante.
