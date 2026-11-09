@@ -1,0 +1,40 @@
+{
+  "checkedAt": "2026-11-09T12:34:42.875597+00:00",
+  "origin": "https://preview.tiendly.workers.dev",
+  "pageResponsesAndRuntimeChecks": 48,
+  "cartJourneys": 6,
+  "registrationImageFollowups": 6,
+  "localCheckCommands": 8,
+  "backendTests": 14,
+  "manifestTests": 3,
+  "accessChecks": 8,
+  "oauthInitiation": {
+    "status": 200,
+    "host": "accounts.google.com",
+    "callback": "https://preview.tiendly.workers.dev/api/auth/callback/google",
+    "scopes": "email profile openid",
+    "hasState": true,
+    "pass": true
+  },
+  "readOnlyD1": {
+    "migrations": 3,
+    "googleAccounts": 1,
+    "activeSessions": 1,
+    "stores": 1,
+    "products": 1,
+    "foreignKeyViolations": 0,
+    "rowsWritten": 0
+  },
+  "commerceMigrationComplete": false,
+  "gitflowEnforced": false,
+  "limitations": [
+    "Anonymous panel routes display the demo, not the private store.",
+    "No authenticated catalog writes or real image uploads were repeated.",
+    "Commerce modules and scheduled tasks remain incomplete.",
+    "Branch protections require administrator access; Cloudflare deployment remains manual."
+  ],
+  "sourceCommit": "80620c42e68c62b2ce26e59e93829f586e924bb6",
+  "integratedBy": "01ab1861bd430e8c26735eb32a8e631b33ab9557",
+  "evidenceScope": "Read-only public preview audit; browser-local cart changes; no new authenticated login or business writes.",
+  "imageScanFollowup": "Offscreen lazy registration images were explicitly requested and decoded successfully in all six browser/size combinations."
+}

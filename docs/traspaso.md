@@ -1,3 +1,20 @@
+# Estado vigente · Gitflow y preview · 9-nov-2026
+
+Este bloque y [docs/gitflow.md](gitflow.md) describen el estado actual. Los registros que siguen son históricos: sus ramas temporales, pendientes y autorizaciones corresponden a la fecha de cada entrada.
+
+- [#53](https://github.com/gaabrielavelasquez/tiendly/pull/53) integrado en `dev` con merge commit `01ab186`, tras autorización de Diego. Infraestructura/identidad/tiendas/catálogo/onboarding/D1/R2 ya llegaron a `dev` por #47/#52. `main` permanece en `e635050`.
+- Preview vigente: https://preview.tiendly.workers.dev, Worker `preview`, Google exclusivo de pruebas, D1 `tiendly-preview` y R2 `tiendly-preview-images`. OAuth real y persistencia de tienda/producto están verificados. [Evidencia de OAuth](verificacion/oauth-preview/README.md); [aceptación D1/R2](verificacion/d1-r2-preview/README.md).
+- Auditoría pública del 9-nov: 48 cargas Chrome/WebKit a 390/1440/360 sin overflow ni errores JS, seis recorridos de carrito, APIs protegidas e inicio OAuth correctos. Lectura D1: tres migraciones, cuenta Google/sesión activa y tienda/producto, sin infracciones de claves foráneas ni escrituras. No se repitieron ingreso real ni guardados autenticados. [Resumen](verificacion/gitflow-20261109.json).
+- Los dos worktrees restantes de `/private/tmp` se movieron completos a `.worktrees/cloudflare-preview-legacy` y `.worktrees/cloudflare-storage-legacy`. HEAD, estado limpio y hashes de configuración/runtime se conservaron. Bundle y manifiestos privados en `.backend-rescue/worktree-move-20261109/`; no se borraron ramas ni archivos.
+- Checkout principal en `dev` actualizado, sin cambio de rama ni builds. Este pase documental usa `chore/gitflow-cleanup`, worktree Orca persistente en `/Users/diego/orca/workspaces/tiendly/gitflow-cleanup`, desde `origin/dev` actualizado. `.devflow.json` fija `dev`; Orca usa `origin/dev` como base local y muestra worktrees externos.
+- CI pasa en `dev` y #53. El despliegue Cloudflare continúa manual; no se publican Workers ni se ejecutan migraciones por un merge. Protecciones `main`/`dev` pendientes de administración: [ajustes concretos](configuracion/github-protecciones.md). La cuenta del agente solo tiene escritura.
+- Siguiente módulo: automatización aislada del preview; después, ventas/pedidos/stock/reservas/checkout/cupones, guardados de configuración/Mi tienda y tareas, cada uno con PR hacia `dev`. El core loop de Cloudflare todavía no está completo. Pagos, SUNAT, bancos, envíos y comunicaciones siguen simulados; no hubo cambios productivos.
+- La aprobación de merge de #53 no autoriza integrar el PR documental nuevo ni otros PRs.
+
+---
+
+# Historial de sesiones anteriores
+
 # Dominio y Google del preview · 8-nov-2026
 
 - Rama `chore/oauth-preview` desde `dev` (`41bea81`), worktree `.worktrees/oauth-preview`. Nuevo Worker `preview`: https://preview.tiendly.workers.dev. D1 `tiendly-preview` y R2 `tiendly-preview-images` conservados; no se ejecutaron migraciones ni se publicaron recursos de producción.
