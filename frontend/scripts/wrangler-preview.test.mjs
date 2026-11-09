@@ -29,13 +29,13 @@ test("las rutas excluidas responden 404 antes de entrar a la app", async () => {
 test("el manifiesto solo conecta D1/R2 de pruebas y no publica secretos ni ingreso simulado", async () => {
   const config = JSON.parse(await readFile(new URL("../.wrangler/preview/wrangler.json", import.meta.url), "utf8"));
   assert.equal(config.account_id, "59f2586c7dd8a0467d1f9e444129e03a");
-  assert.equal(config.name, "tiendly-preview");
+  assert.equal(config.name, "preview");
   assert.equal(config.d1_databases.length, 1);
   assert.equal(config.d1_databases[0].database_name, "tiendly-preview");
   assert.equal(config.d1_databases[0].database_id, "9fcfd54b-56a2-4cb9-af11-800e5191e93d");
   assert.deepEqual(config.r2_buckets, [{ binding: "UPLOADS", bucket_name: "tiendly-preview-images" }]);
   assert.deepEqual(Object.keys(config.vars).sort(), ["BETTER_AUTH_URL", "TIENDLY_ENTORNO", "TIENDLY_TIENDA_DEMO"]);
   assert.equal(config.vars.TIENDLY_ENTORNO, "preview");
-  assert.equal(config.vars.BETTER_AUTH_URL, "https://tiendly-preview.tiendly.workers.dev");
+  assert.equal(config.vars.BETTER_AUTH_URL, "https://preview.tiendly.workers.dev");
   assert.equal(config.routes, undefined);
 });

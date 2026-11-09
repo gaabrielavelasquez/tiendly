@@ -5,7 +5,7 @@ import { execFileSync } from 'node:child_process';
 import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 import { resolve } from 'node:path';
-const origin='https://tiendly-preview.tiendly.workers.dev';
+const origin='https://preview.tiendly.workers.dev';
 const root=fileURLToPath(new URL('../',import.meta.url));
 const out=resolve(root,'../docs/verificacion/d1-r2-preview');
 const secretFile=process.argv[2];
@@ -14,7 +14,7 @@ const variables=JSON.parse(await readFile(secretFile,'utf8'));
 assert(variables.BETTER_AUTH_SECRET?.length>=32);
 const config=JSON.parse(await readFile(resolve(root,'.wrangler/preview/wrangler.json'),'utf8'));
 const account='59f2586c7dd8a0467d1f9e444129e03a',database='9fcfd54b-56a2-4cb9-af11-800e5191e93d';
-assert.equal(config.account_id,account);assert.equal(config.name,'tiendly-preview');
+assert.equal(config.account_id,account);assert.equal(config.name,'preview');
 assert.equal(config.d1_databases[0].database_id,database);
 assert.equal(config.vars.BETTER_AUTH_URL,origin);assert.equal(config.vars.TIENDLY_ENTORNO,'preview');
 assert.equal(config.vars.TIENDLY_TEST_LOGIN,undefined);
@@ -141,7 +141,7 @@ for(const[engineName,engine]of Object.entries({chromium,webkit})){
   }catch(error){results.push({engine:engineName,width,pass:false,error:error.message});throw error;}finally{
    if(store){for(const key of images){assert(key.startsWith(store.id+'/'));await cloud(`/accounts/${account}/r2/buckets/tiendly-preview-images/objects/${key}`,undefined,'DELETE');}}
    await sql('DELETE FROM stores WHERE id IN (SELECT store_id FROM memberships WHERE user_id=?)',[user]);await sql('DELETE FROM user WHERE id=?',[user]);await context.close();
-   await writeFile(resolve(out,'result.json'),JSON.stringify({complete:results.length===6&&results.every(result=>result.pass),scope:'Deployed Tiendly preview, synthetic signed sessions, real remote D1/R2; Google OAuth remains pending',results},null,2)+'\n');
+   await writeFile(resolve(out,'result.json'),JSON.stringify({complete:results.length===6&&results.every(result=>result.pass),scope:'Deployed Tiendly preview, synthetic signed sessions, real remote D1/R2; this harness does not test Google OAuth',results},null,2)+'\n');
   }
  }}finally{await browser.close();}
 }

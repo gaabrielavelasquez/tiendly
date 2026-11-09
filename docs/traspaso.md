@@ -1,3 +1,13 @@
+# Dominio y Google del preview · 8-nov-2026
+
+- Rama `chore/oauth-preview` desde `dev` (`41bea81`), worktree `.worktrees/oauth-preview`. Nuevo Worker `preview`: https://preview.tiendly.workers.dev. D1 `tiendly-preview` y R2 `tiendly-preview-images` conservados; no se ejecutaron migraciones ni se publicaron recursos de producción.
+- Preview y producción usan clientes Google separados. Credenciales del JSON de «Tiendly Preview» cargadas solo como secretos del Worker nuevo, sin cambiar su secreto de sesión ni publicar valores. El archivo privado temporal del primer despliegue se eliminó. El Worker anterior conserva su app sin Google.
+- Google acepta la autorización con el cliente/callback correctos. La lectura remota de D1 confirma una cuenta Google, una sesión activa, una tienda y un producto persistidos: ingreso real y operaciones autenticadas verificados. Evidencia agregada sin datos personales. La primera prueba falló porque el JSON inicial pertenecía a otro cliente.
+- Tokens, builds Next/vinext, tipos frontend/backend, 14 tests de backend y 3 pruebas del manifiesto pasan. 18 comprobaciones desplegadas Chrome/WebKit a 390/1440/360 sin overflow, imágenes rotas ni errores JS. R2 remoto pasa subida CLI/lectura pública/decodificación de una imagen sintética; se eliminó únicamente ese objeto. El producto real todavía no tiene fotos en R2. [Informe y capturas](verificacion/oauth-preview/README.md).
+- PR #53 hacia `dev`, sin merge autorizado. Producción, ventas/reservas/cupones, guardados de configuración y tareas siguen pendientes; pagos y comunicaciones continúan simulados.
+
+---
+
 # Aceptación local después de #45/#46 · 8-nov-2026
 
 - `dev` confirmado en `b8f6f38`; ramas #47–#50 sincronizadas mediante merge commits sin reescritura. La CI completa pasa ahora también en infraestructura, identidad, catálogo e integración. No se integraron esos PRs a `dev`.

@@ -1,0 +1,11 @@
+{
+  "checkedAt": "2026-11-08T23:51:15.297Z",
+  "database": "tiendly-preview",
+  "counts": {
+    "users": 1,
+    "google_accounts": 1,
+    "active_google_sessions": 1,
+    "stores": 1,
+    "products": 1
+  }
+}

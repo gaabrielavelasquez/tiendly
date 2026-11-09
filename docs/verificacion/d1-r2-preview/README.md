@@ -1,5 +1,7 @@
 # D1 y R2 del preview · 8-nov-2026
 
+> Informe histórico del Worker `tiendly-preview`. La dirección y el acceso con Google se actualizan en [OAuth en preview](../oauth-preview/README.md). Sus pruebas siguen documentadas aquí; no acreditan OAuth real.
+
 Integración autorizada por Diego para el entorno de pruebas de la cuenta Tiendly. No migra datos de Redis/Blob ni cambia Vercel, DNS o producción.
 
 ## Recursos conectados

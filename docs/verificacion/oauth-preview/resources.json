@@ -1,0 +1,65 @@
+{
+  "checkedAt": "2026-11-08T23:49:42.223Z",
+  "worker": "preview",
+  "origin": "https://preview.tiendly.workers.dev",
+  "versions": [
+    {
+      "version_id": "1ba07106-5577-4fdc-8814-0b6e637417fa",
+      "percentage": 100
+    }
+  ],
+  "bindings": [
+    {
+      "name": "ASSETS",
+      "type": "assets"
+    },
+    {
+      "name": "BETTER_AUTH_SECRET",
+      "type": "secret_text"
+    },
+    {
+      "name": "BETTER_AUTH_URL",
+      "type": "plain_text",
+      "text": "https://preview.tiendly.workers.dev"
+    },
+    {
+      "name": "DB",
+      "type": "d1",
+      "id": "9fcfd54b-56a2-4cb9-af11-800e5191e93d"
+    },
+    {
+      "name": "GOOGLE_CLIENT_ID",
+      "type": "secret_text"
+    },
+    {
+      "name": "GOOGLE_CLIENT_SECRET",
+      "type": "secret_text"
+    },
+    {
+      "name": "TIENDLY_ENTORNO",
+      "type": "plain_text",
+      "text": "preview"
+    },
+    {
+      "name": "TIENDLY_TIENDA_DEMO",
+      "type": "plain_text",
+      "text": "muna"
+    },
+    {
+      "name": "UPLOADS",
+      "type": "r2_bucket",
+      "bucket": "tiendly-preview-images"
+    }
+  ],
+  "migrations": [
+    {
+      "name": "0001_auth.sql"
+    },
+    {
+      "name": "0002_stores.sql"
+    },
+    {
+      "name": "0003_catalog.sql"
+    }
+  ]
+}
