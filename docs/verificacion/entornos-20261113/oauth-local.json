@@ -1,0 +1,8 @@
+{
+  "origin": "http://localhost:3215",
+  "authorizationStatus": 200,
+  "callback": "http://localhost:3215/api/auth/callback/google",
+  "googleHost": "accounts.google.com",
+  "redirectMismatch": true,
+  "scope": "OAuth initiation only; no account login or callback session completed."
+}
