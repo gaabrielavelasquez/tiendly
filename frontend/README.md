@@ -4,25 +4,22 @@ Panel de la tienda, vitrina y onboarding. Antes de tocar UI, lee `DESIGN.md` (ma
 
 ## Arrancar
 
-```bash
-npm install
-npm run dev          # genera los tokens y levanta http://localhost:3000
+Para la app con backend Cloudflare, desde esta carpeta en un worktree aislado:
+
+```sh
+npm ci --prefix ..
+npm run dev:cloudflare
 ```
 
-- `/kit`: UI Kit en vivo.
-- `/panel`: panel de la tienda.
-- `/demo`: vitrina con tema Editorial.
-- `/registro`: onboarding.
+Abre `http://localhost:3215/registro`. El comando prepara variables privadas y migraciones D1 locales; R2 también se emula. Para ingresar con Google se necesitan las credenciales del cliente de pruebas y su callback local. `npm run dev` conserva el servidor Next anterior, sin los bindings D1 de la migración.
 
-## Preview de Cloudflare
+## QA y producción
 
-El entorno de pruebas está en [tiendly-preview.tiendly.workers.dev](https://tiendly-preview.tiendly.workers.dev/muna). Las tiendas y los catálogos propios usan D1; las fotos subidas usan R2. MUÑA sigue como demo de ejemplo. Google real, pedidos, cupones y configuración editable siguen pendientes de integración.
+QA vigente: [preview.tiendly.workers.dev](https://preview.tiendly.workers.dev/muna), Worker `preview`, D1/R2 exclusivos de pruebas y Google configurado. El dominio anterior `tiendly-preview.tiendly.workers.dev` es histórico. Producción continúa en Vercel desde `main`.
 
-Para repetir la publicación desde un worktree aislado, ejecuta en esta carpeta `npm ci --include-workspace-root` y `npm run deploy:cloudflare-preview`. Requiere el perfil Wrangler `tiendly`. El comando compila vinext, verifica las exclusiones de fotos privadas y publica únicamente el Worker `tiendly-preview` en la cuenta Tiendly. No usarlo para producción.
+CI valida los cambios; el despliegue alojado queda desactivado. Desde un commit limpio, `npm run release:qa` valida y publica usando el perfil Wrangler local `tiendly`. Si ya se completaron los checks Next/backend, usa `npm run deploy:cloudflare-preview`. Los PRs no publican el QA automáticamente. No ejecuta migraciones remotas. `npm run verify:qa` confirma salud y SHA del artefacto construido.
 
-En el primer aprovisionamiento, después del build y de `npm run prepare:wrangler-preview`, aplica el esquema con `npm run migrate:cloudflare-preview`. Los despliegues posteriores conservan el secreto de sesión ya guardado en el Worker. Nunca uses recursos o secretos de producción para este entorno.
-
-Configuración, capturas y límites actuales: [D1/R2 en preview](../docs/verificacion/d1-r2-preview/README.md). El [informe del primer despliegue](../docs/verificacion/cloudflare-preview/README.md) conserva la evidencia histórica de la versión en memoria.
+Procedimiento, credenciales, aislamiento y pendientes: [Desarrollo local, QA y producción](../docs/configuracion/entornos.md). Evidencia previa: [OAuth](../docs/verificacion/oauth-preview/README.md) y [D1/R2](../docs/verificacion/d1-r2-preview/README.md). El core loop de comercio todavía no está migrado.
 
 ## Tokens: una sola fuente
 

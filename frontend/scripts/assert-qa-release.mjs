@@ -1,0 +1,10 @@
+import assert from "node:assert/strict";
+import { execFileSync } from "node:child_process";
+import { readFile } from "node:fs/promises";
+const release = JSON.parse(await readFile(new URL("../.wrangler/preview/release.json", import.meta.url), "utf8"));
+const head = execFileSync("git", ["rev-parse", "HEAD"], { encoding: "utf8" }).trim();
+assert.equal(release.revision, head, "El artefacto no corresponde al HEAD actual.");
+assert.equal(release.dirty, false, "Compila desde un commit limpio antes de publicar QA.");
+assert.equal(execFileSync("git", ["status", "--porcelain"], { encoding: "utf8" }).trim(), "", "Hay cambios sin guardar después del build.");
+if (process.env.GITHUB_SHA) assert.equal(release.revision, process.env.GITHUB_SHA);
+console.log(`Artefacto QA confirmado: ${release.revision}.`);

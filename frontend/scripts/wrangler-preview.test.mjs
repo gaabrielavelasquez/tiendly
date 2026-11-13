@@ -3,7 +3,8 @@ import { readFile } from "node:fs/promises";
 import test from "node:test";
 
 const source = await readFile(new URL("../.wrangler/preview/bundle/preview-entry.js", import.meta.url), "utf8");
-const stubbed = source.replace('import app from "./index.js";', `
+const health = await readFile(new URL("./qa-health.mjs", import.meta.url), "utf8");
+const stubbed = source.replace('import { qaHealth } from "./preview-health.js";', health.replace("export async function", "async function")).replace('import app from "./index.js";', `
 const app = { fetch: async () => new Response("contenido", {
   status: 201, headers: { "Content-Type": "text/plain", "Set-Cookie": "sesion=prueba; HttpOnly" },
 }) };
@@ -38,4 +39,13 @@ test("el manifiesto solo conecta D1/R2 de pruebas y no publica secretos ni ingre
   assert.equal(config.vars.TIENDLY_ENTORNO, "preview");
   assert.equal(config.vars.BETTER_AUTH_URL, "https://preview.tiendly.workers.dev");
   assert.equal(config.routes, undefined);
+});
+
+
+test("la entrada publica el health del commit sin entrar a la app", async () => {
+  const response = await entry.fetch(new Request("https://preview.example/_tiendly/health"), {}, {});
+  assert.equal(response.status, 503);
+  const body = await response.json();
+  assert.match(body.revision, /^[a-f0-9]{40}$/);
+  assert.equal(body.status, "unavailable");
 });

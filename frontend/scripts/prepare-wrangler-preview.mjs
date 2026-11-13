@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import { cp, mkdir, readFile, readdir, rm, writeFile } from "node:fs/promises";
 import { resolve } from "node:path";
+import { execFileSync } from "node:child_process";
 
 // La base vinext genera Build Output para cf. Wrangler necesita su propio
 // manifiesto: se copia el artefacto, sin recompilar ni cambiar la configuración fuente.
@@ -30,12 +31,22 @@ for (const privateDirectory of ["heather", "mi-tienda"]) {
   assert(!entries.includes(privateDirectory), `No se puede publicar ${privateDirectory}.`);
 }
 
+const revision = execFileSync("git", ["rev-parse", "HEAD"], { cwd: root, encoding: "utf8" }).trim();
+assert.match(revision, /^[0-9a-f]{40}$/);
+if (process.env.GITHUB_SHA) assert.equal(revision, process.env.GITHUB_SHA, "El artefacto debe corresponder al commit de CI.");
+const dirty = Boolean(execFileSync("git", ["status", "--porcelain"], { cwd: root, encoding: "utf8" }).trim());
+const release = { revision, dirty, migrations: (await readdir(resolve(root, "../backend/db/migrations"))).filter(name => name.endsWith(".sql")).sort() };
+
 await rm(output, { recursive: true, force: true });
 await mkdir(output, { recursive: true });
 await cp(resolve(source, "bundle"), resolve(output, "bundle"), { recursive: true });
 await cp(resolve(source, "assets"), resolve(output, "assets"), { recursive: true });
+await cp(resolve(root, "scripts/qa-health.mjs"), resolve(output, "bundle/preview-health.js"));
+await writeFile(resolve(output, "release.json"), JSON.stringify(release, null, 2) + "\n");
 await writeFile(resolve(output, "bundle/preview-entry.js"), `
 import app from "./index.js";
+import { qaHealth } from "./preview-health.js";
+const release = ${JSON.stringify(release)};
 export default {
   async fetch(request, env, context) {
     // El runtime puede haber iniciado streaming antes de ejecutar notFound().
@@ -44,6 +55,7 @@ export default {
     if (/^\\/(heather|mi-tienda)(\\/|$)/.test(path)) {
       return new Response("Not found", { status: 404, headers: { "X-Robots-Tag": "noindex" } });
     }
+    if (path === "/_tiendly/health") return qaHealth(request, env, release);
     const result = await app.fetch(request, env, context);
     const response = new Response(result.body, result);
     response.headers.set("X-Robots-Tag", "noindex, nofollow, noarchive");

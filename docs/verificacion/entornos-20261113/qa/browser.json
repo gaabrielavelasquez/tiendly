@@ -1,0 +1,180 @@
+{
+  "origin": "https://preview.tiendly.workers.dev",
+  "health": {
+    "status": "ok",
+    "environment": "preview",
+    "revision": "de9fc3ab8628efea3f41714ac4468393d78dd924",
+    "dirty": false,
+    "checks": {
+      "environment": true,
+      "auth": true,
+      "database": true,
+      "images": true
+    }
+  },
+  "scope": "Public pages and demo panel only, no authenticated writes or OAuth login.",
+  "results": [
+    {
+      "engine": "chromium",
+      "width": 390,
+      "path": "/registro",
+      "status": 200,
+      "scrollWidth": 390,
+      "broken": [],
+      "errors": []
+    },
+    {
+      "engine": "chromium",
+      "width": 390,
+      "path": "/muna",
+      "status": 200,
+      "scrollWidth": 390,
+      "broken": [],
+      "errors": []
+    },
+    {
+      "engine": "chromium",
+      "width": 390,
+      "path": "/panel/productos",
+      "status": 200,
+      "scrollWidth": 390,
+      "broken": [],
+      "errors": []
+    },
+    {
+      "engine": "chromium",
+      "width": 1440,
+      "path": "/registro",
+      "status": 200,
+      "scrollWidth": 1440,
+      "broken": [],
+      "errors": []
+    },
+    {
+      "engine": "chromium",
+      "width": 1440,
+      "path": "/muna",
+      "status": 200,
+      "scrollWidth": 1440,
+      "broken": [],
+      "errors": []
+    },
+    {
+      "engine": "chromium",
+      "width": 1440,
+      "path": "/panel/productos",
+      "status": 200,
+      "scrollWidth": 1440,
+      "broken": [],
+      "errors": []
+    },
+    {
+      "engine": "chromium",
+      "width": 360,
+      "path": "/registro",
+      "status": 200,
+      "scrollWidth": 360,
+      "broken": [],
+      "errors": []
+    },
+    {
+      "engine": "chromium",
+      "width": 360,
+      "path": "/muna",
+      "status": 200,
+      "scrollWidth": 360,
+      "broken": [],
+      "errors": []
+    },
+    {
+      "engine": "chromium",
+      "width": 360,
+      "path": "/panel/productos",
+      "status": 200,
+      "scrollWidth": 360,
+      "broken": [],
+      "errors": []
+    },
+    {
+      "engine": "webkit",
+      "width": 390,
+      "path": "/registro",
+      "status": 200,
+      "scrollWidth": 390,
+      "broken": [],
+      "errors": []
+    },
+    {
+      "engine": "webkit",
+      "width": 390,
+      "path": "/muna",
+      "status": 200,
+      "scrollWidth": 390,
+      "broken": [],
+      "errors": []
+    },
+    {
+      "engine": "webkit",
+      "width": 390,
+      "path": "/panel/productos",
+      "status": 200,
+      "scrollWidth": 390,
+      "broken": [],
+      "errors": []
+    },
+    {
+      "engine": "webkit",
+      "width": 1440,
+      "path": "/registro",
+      "status": 200,
+      "scrollWidth": 1440,
+      "broken": [],
+      "errors": []
+    },
+    {
+      "engine": "webkit",
+      "width": 1440,
+      "path": "/muna",
+      "status": 200,
+      "scrollWidth": 1440,
+      "broken": [],
+      "errors": []
+    },
+    {
+      "engine": "webkit",
+      "width": 1440,
+      "path": "/panel/productos",
+      "status": 200,
+      "scrollWidth": 1440,
+      "broken": [],
+      "errors": []
+    },
+    {
+      "engine": "webkit",
+      "width": 360,
+      "path": "/registro",
+      "status": 200,
+      "scrollWidth": 360,
+      "broken": [],
+      "errors": []
+    },
+    {
+      "engine": "webkit",
+      "width": 360,
+      "path": "/muna",
+      "status": 200,
+      "scrollWidth": 360,
+      "broken": [],
+      "errors": []
+    },
+    {
+      "engine": "webkit",
+      "width": 360,
+      "path": "/panel/productos",
+      "status": 200,
+      "scrollWidth": 360,
+      "broken": [],
+      "errors": []
+    }
+  ]
+}

@@ -1,3 +1,13 @@
+# Entornos local/QA · 13-nov-2026 · en revisión
+
+- Trabajo en `chore/environment-setup`, worktree Orca persistente `/Users/diego/orca/workspaces/tiendly/environment-setup`, desde `dev` `01ab186`. El worktree del chat es histórico y no se modifica.
+- Desarrollo local aislado con `npm run dev:cloudflare`: D1/R2 emulados propios, migraciones locales automáticas y secreto de sesión estable. Seis recorridos Chromium/WebKit a 390/1440/360 y 36 checkpoints: PASS.
+- Cliente Google de preview configurado privadamente en local; falta autorizar `http://localhost:3215/api/auth/callback/google` y completar ingreso real. Google devuelve `redirect_uri_mismatch`; no presentar sesiones sintéticas como OAuth aceptado.
+- Publicación QA desde esta máquina mediante `npm run release:qa`, usando `npx wrangler --profile tiendly`. El job GitHub queda opt-in y apagado; no se requiere crear token para el flujo elegido. Perfil local y secretos no se copian a GitHub.
+- [Procedimiento de entornos](configuracion/entornos.md) y [evidencia](verificacion/entornos-20261113/README.md). QA publicado con perfil `tiendly`, código `de9fc3a`, versión `e82b6aca-8aee-49f3-ae95-d5399680b2e6`: health/smoke y 18 cargas públicas Chrome/WebKit 390/1440/360 PASS. [PR #56](https://github.com/gaabrielavelasquez/tiendly/pull/56) en borrador por OAuth local. Servidor 3215 disponible en terminal Orca «Local dev · 3215». Pendientes: callback e ingreso Google local, revisión sin merge y módulos de comercio; producción Cloudflare requiere aceptación y aprobación específica. Producción Vercel/DNS/datos intactos.
+
+---
+
 # Dominio y Google del preview · 8-nov-2026
 
 - Rama `chore/oauth-preview` desde `dev` (`41bea81`), worktree `.worktrees/oauth-preview`. Nuevo Worker `preview`: https://preview.tiendly.workers.dev. D1 `tiendly-preview` y R2 `tiendly-preview-images` conservados; no se ejecutaron migraciones ni se publicaron recursos de producción.
