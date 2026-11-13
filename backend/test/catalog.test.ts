@@ -1,4 +1,5 @@
 import { test } from 'node:test';
+import { conflictWinner } from './helpers/conflict-winner.ts';
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import { Miniflare, convertV4MiniflareOptions } from 'miniflare';
@@ -54,15 +55,31 @@ test('catalog version conflicts and failed child rows roll back the complete agg
  const {mf,db,deps,store}=await fixture();
  try {
   const p=await saveProduct(deps,{userId:'owner'},null,null,input(store.id));
-  const attempts=await Promise.allSettled([saveProduct(deps,{userId:'owner'},p.id,1,{...input(store.id),description:'First.'}),saveProduct(deps,{userId:'owner'},p.id,1,{...input(store.id),description:'Second.'})]);
-  assert.equal(attempts.filter(x=>x.status==='fulfilled').length,1);
-  const before=(await deps.catalog.list(store.id))[0];
+  const winner = await conflictWinner([
+    saveProduct(deps, { userId: 'owner' }, p.id, 1, {
+      ...input(store.id), description: 'First.',
+      variants: [{ values: ['Beige'], stock: 17 }, { values: ['Azul'], stock: 3 }],
+      photos: { Beige: [`/images/${store.id}/second.jpg`, `/images/${store.id}/first.jpg`], Azul: [] },
+    }),
+    saveProduct(deps, { userId: 'owner' }, p.id, 1, {
+      ...input(store.id), description: 'Second.',
+      options: [{ name: 'Color', kind: 'color', values: ['Azul', 'Beige'] }],
+      variants: [{ values: ['Azul'], stock: 8 }, { values: ['Beige'], stock: 6 }],
+      photos: { Azul: [`/images/${store.id}/blue.jpg`], Beige: [] },
+    }),
+  ]);
+  assert.equal(winner.version, 2);
+  assert.deepEqual(await deps.catalog.list(store.id), [winner]);
+  const before = winner;
   await assert.rejects(deps.catalog.save({...before,name:'Invalid write',version:3,variants:[{values:['Beige'],stock:-1}]},'owner',2),code('conflict'));
   assert.deepEqual((await deps.catalog.list(store.id))[0],before);
   await createStore(deps,{userId:'foreign'},{slug:'other-catalog',name:'Other store',salesPhone:'900000001',categories:['home'],otherCategory:''});
   await assert.rejects(saveProduct(deps,{userId:'foreign'},p.id,2,input(store.id)),code('invalid'));
   await assert.rejects(deps.catalog.save({...before,name:'Foreign',version:3},'foreign',2),code('conflict'));
   assert.equal((await db.prepare('SELECT COUNT(*) AS n FROM write_guards').first<{n:number}>())?.n,0);
+  const next = await saveProduct(deps, { userId: 'owner' }, p.id, winner.version, { ...winner, description: 'After the conflict.' });
+  assert.equal(next.version, 3);
+  assert.deepEqual(await deps.catalog.list(store.id), [next]);
  }finally{await mf.dispose();}
 });
 
