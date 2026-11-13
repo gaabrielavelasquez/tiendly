@@ -37,4 +37,4 @@ Las pruebas de persistencia de tienda/producto/R2 anteriores están en [D1/R2](.
 
 OAuth de preview aceptado por Google y sesión real verificada en D1. La lectura posterior también confirma tienda/producto persistidos; falta que la cuenta suba su primera foto de producto. Producción y su dominio siguen sin publicar. Ventas/reservas/cupones, guardados de configuración y tareas no están migrados. Pagos, SUNAT, bancos, envíos y comunicaciones siguen simulados. No se enviaron mensajes ni cobros.
 
-PR [#53](https://github.com/gaabrielavelasquez/tiendly/pull/53) hacia `dev`. No hay merge autorizado.
+Actualización del 9-nov-2026: PR [#53](https://github.com/gaabrielavelasquez/tiendly/pull/53) integrado en `dev` con merge commit `01ab186`, tras autorización de Diego. La evidencia anterior conserva la fecha y el alcance de su ejecución; este merge no volvió a desplegar el Worker ni publicó producción.
