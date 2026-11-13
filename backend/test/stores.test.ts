@@ -1,4 +1,5 @@
 import { test } from "node:test";
+import { conflictWinner } from "./helpers/conflict-winner.ts";
 import assert from "node:assert/strict";
 import { readFile, mkdtemp, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
@@ -70,18 +71,39 @@ test("database constraints settle concurrent owners, slugs and expected versions
   const { mf, db, deps } = await fixture();
   try {
     await user(db, "one"); await user(db, "two"); await user(db, "three");
-    const ownerRace = await Promise.allSettled([createStore(deps,{userId:"one"},input), createStore(deps,{userId:"one"},{...input,slug:"other-store"})]);
-    assert.equal(ownerRace.filter(x=>x.status==="fulfilled").length,1);
-    assert.equal((await db.prepare('SELECT COUNT(*) AS n FROM stores').first<{n:number}>())?.n,1);
-    const slugRace = await Promise.allSettled([createStore(deps,{userId:"two"},{...input,slug:"shared"}),createStore(deps,{userId:"three"},{...input,slug:"shared"})]);
-    assert.equal(slugRace.filter(x=>x.status==="fulfilled").length,1);
-    const store=(await deps.stores.findOwned("one"))!;
-    const edits=await Promise.allSettled([renameStore(deps,{userId:"one"},store.id,1,"First name"),renameStore(deps,{userId:"one"},store.id,1,"Second name")]);
-    assert.equal(edits.filter(x=>x.status==="fulfilled").length,1);
-    assert.equal((await deps.stores.findOwned("one"))?.version,2);
-    assert.equal((await db.prepare('SELECT COUNT(*) AS n FROM write_guards').first<{n:number}>())?.n,0);
-    await db.prepare('UPDATE stores SET is_demo=1 WHERE id=?').bind(store.id).run();
-    await assert.rejects(renameStore(deps,{userId:"one"},store.id,2,"Demo write"),errorCode("forbidden"));
+    const ownerWinner = await conflictWinner([
+      createStore(deps, { userId: "one" }, input),
+      createStore(deps, { userId: "one" }, { ...input, slug: "other-store" }),
+    ]);
+    assert.deepEqual(await deps.stores.findOwned("one"), ownerWinner);
+    const unusedSlug = ownerWinner.slug === input.slug ? "other-store" : input.slug;
+    assert.equal(await deps.stores.findBySlug(unusedSlug), null);
+    for (const table of ["stores", "memberships", "payment_settings", "delivery_settings"]) {
+      assert.equal((await db.prepare(`SELECT COUNT(*) AS n FROM ${table}`).first<{ n: number }>())?.n, 1, table);
+    }
+    const slugWinner = await conflictWinner([
+      createStore(deps, { userId: "two" }, { ...input, slug: "shared" }),
+      createStore(deps, { userId: "three" }, { ...input, slug: "shared" }),
+    ]);
+    assert.deepEqual(await deps.stores.findBySlug("shared"), slugWinner);
+    const slugOwner = await deps.stores.ownerId(slugWinner.id);
+    assert.ok(slugOwner === "two" || slugOwner === "three");
+    assert.equal(await deps.stores.findOwned(slugOwner === "two" ? "three" : "two"), null);
+    for (const table of ["stores", "memberships", "payment_settings", "delivery_settings"]) {
+      assert.equal((await db.prepare(`SELECT COUNT(*) AS n FROM ${table}`).first<{ n: number }>())?.n, 2, table);
+    }
+    const editWinner = await conflictWinner([
+      renameStore(deps, { userId: "one" }, ownerWinner.id, 1, "First name"),
+      renameStore(deps, { userId: "one" }, ownerWinner.id, 1, "Second name"),
+    ]);
+    assert.equal(editWinner.version, 2);
+    assert.deepEqual(await deps.stores.findOwned("one"), editWinner);
+    assert.equal((await db.prepare('SELECT COUNT(*) AS n FROM write_guards').first<{ n: number }>())?.n, 0);
+    const next = await renameStore(deps, { userId: "one" }, editWinner.id, 2, "After the conflict");
+    assert.equal(next.version, 3);
+    assert.deepEqual(await deps.stores.findOwned("one"), next);
+    await db.prepare('UPDATE stores SET is_demo=1 WHERE id=?').bind(next.id).run();
+    await assert.rejects(renameStore(deps, { userId: "one" }, next.id, 3, "Demo write"), errorCode("forbidden"));
   } finally { await mf.dispose(); }
 });
 

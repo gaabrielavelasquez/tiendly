@@ -18,6 +18,7 @@ async function local(path,data,method=data?'POST':'GET'){
 }
 const database=(await local('/d1/database')).find(item=>item.name==='DB');assert(database,'Local DB is required.');
 const sql=(statement,params=[])=>local(`/d1/database/${encodeURIComponent(database.uuid)}/raw`,{sql:statement,params:params.map(String)});
+const navigation = process.env.TIENDLY_QA_RUNTIME === 'dev' ? { waitUntil: 'networkidle' } : {};
 const results=[];
 async function fixture(context){
  const id=`ui-qa-${randomUUID()}`,token=randomUUID(),now=Date.now();
@@ -35,13 +36,18 @@ async function checkpoint(page,engine,width,name){
  if(width!==360)await page.screenshot({path:resolve(out,`${engine}-${width}-${name}.png`),fullPage:true});return{name,scrollWidth};
 }
 async function catalog(context){const response=await context.request.get(`${origin}/api/business/catalog`);assert.equal(response.status(),200);return(await response.json()).products;}
+async function waitForCatalog(context,predicate){
+ const deadline=Date.now()+30000;
+ do { const products=await catalog(context); if(predicate(products[0]))return products; await new Promise(resolve=>setTimeout(resolve,200)); } while(Date.now()<deadline);
+ throw new Error('El catálogo local no confirmó precio y versión del guardado.');
+}
 for(const[engineName,engine]of Object.entries({chromium,webkit})){
  const browser=await engine.launch();
  try{for(const width of[390,1440,360]){
   const context=await browser.newContext({viewport:{width,height:844}}),user=await fixture(context),checks=[],images=[];
   let store;const page=await context.newPage(),errors=[];page.on('pageerror',error=>errors.push(error.message));
   try{
-   await page.goto(`${origin}/registro`);await page.getByLabel('Nombre de tu negocio',{exact:true}).waitFor();
+   await page.goto(`${origin}/registro`, navigation);await page.getByLabel('Nombre de tu negocio',{exact:true}).waitFor();
    await page.getByLabel('Nombre de tu negocio',{exact:true}).fill(`Objetos cotidianos de cerámica e impresión 3D para casa ${randomUUID().slice(0,8)}`);
    await page.getByRole('button',{name:'Hogar y decoración',exact:true}).click();await page.getByLabel('WhatsApp de ventas',{exact:true}).fill('900000000');
    await page.getByRole('button',{name:'Crear mi tienda',exact:true}).click();await page.getByRole('heading',{name:/Tu tienda está lista/}).waitFor();
@@ -58,9 +64,9 @@ for(const[engineName,engine]of Object.entries({chromium,webkit})){
    assert(products[0].primaryImage.startsWith(`/images/${store.id}/`));images.push(products[0].primaryImage.slice('/images/'.length));
    checks.push(await checkpoint(page,engineName,width,'producto-guardado'));
    await page.getByLabel('Precio',{exact:true}).fill('98765.43');await page.getByRole('button',{name:'Guardar producto',exact:true}).click();
-   await page.waitForFunction(async()=>(await(await fetch('/api/business/catalog')).json()).products[0]?.priceCents===9876543);
+   await waitForCatalog(context,p=>p?.priceCents===9876543&&p?.version===2);
    products=await catalog(context);assert.equal(products.length,1,'A second save must update, not duplicate.');assert.equal(products[0].version,2);
-   await page.goto(`${origin}/panel/productos/${products[0].id}`);assert.equal(await page.getByLabel('Precio',{exact:true}).inputValue(),'98765.43');
+   await page.goto(`${origin}/panel/productos/${products[0].id}`, navigation);assert.equal(await page.getByLabel('Precio',{exact:true}).inputValue(),'98765.43');
    checks.push(await checkpoint(page,engineName,width,'producto-recargado'));
    await page.getByLabel('Precio',{exact:true}).fill('98765.44');
    await page.route('**/panel/productos/**',route=>route.request().method()==='POST'?route.abort('failed'):route.continue());
@@ -71,25 +77,25 @@ for(const[engineName,engine]of Object.entries({chromium,webkit})){
    checks.push(await checkpoint(page,engineName,width,'error-recuperable'));
    await page.unroute('**/panel/productos/**');
    await page.getByRole('button',{name:'Guardar producto',exact:true}).click();
-   await page.waitForFunction(async()=>(await(await fetch('/api/business/catalog')).json()).products[0]?.priceCents===9876544);
+   await waitForCatalog(context,p=>p?.priceCents===9876544&&p?.version===3);
    assert.equal((await catalog(context))[0].version,3);
-   const stale=await context.newPage();await stale.goto(`${origin}/panel/productos/${products[0].id}`);
+   const stale=await context.newPage();await stale.goto(`${origin}/panel/productos/${products[0].id}`, navigation);
    await page.getByLabel('Precio',{exact:true}).fill('98765.45');
    await page.getByRole('button',{name:'Guardar producto',exact:true}).click();
-   await page.waitForFunction(async()=>(await(await fetch('/api/business/catalog')).json()).products[0]?.version===4);
+   await waitForCatalog(context,p=>p?.priceCents===9876545&&p?.version===4);
    await stale.getByLabel('Precio',{exact:true}).fill('11111.11');
    await stale.getByRole('button',{name:'Guardar producto',exact:true}).click();
    await stale.getByText('El producto cambió. Recarga la página antes de guardar.',{exact:true}).waitFor();
    assert.equal((await catalog(context))[0].priceCents,9876545);
    assert.equal(await stale.getByLabel('Precio',{exact:true}).inputValue(),'11111.11');
    checks.push(await checkpoint(stale,engineName,width,'conflicto-de-version'));await stale.close();
-   const publicPage=await context.newPage();await publicPage.goto(`${origin}/${store.slug}`);await publicPage.getByText(name,{exact:true}).waitFor();
+   const publicPage=await context.newPage();await publicPage.goto(`${origin}/${store.slug}`, navigation);await publicPage.getByText(name,{exact:true}).waitFor();
    assert.equal((await context.request.get(`${origin}${products[0].primaryImage}`)).status(),200);checks.push(await checkpoint(publicPage,engineName,width,'vitrina'));
    assert.deepEqual(errors,[],'Uncaught client errors.');results.push({engine:engineName,width,pass:true,checks});
   }catch(error){results.push({engine:engineName,width,pass:false,error:error.message});throw error;}finally{
    if(store){const listed=await local('/r2/buckets');const bucket=(Array.isArray(listed)?listed:listed.buckets).find(item=>item.name===(process.env.TIENDLY_QA_BUCKET??'tiendly-preview-images'));assert(bucket,'The configured local QA R2 bucket must exist.');for(const key of images)await local(`/r2/buckets/${encodeURIComponent(bucket.name)}/objects/${encodeURIComponent(key)}`,undefined,'DELETE');}
    await sql('DELETE FROM stores WHERE id IN (SELECT store_id FROM memberships WHERE user_id=?)',[user]);await sql('DELETE FROM user WHERE id=?',[user]);await context.close();
-   await writeFile(resolve(out,'result.json'),JSON.stringify({complete:results.length===6&&results.every(result=>result.pass),scope:'Local built Worker, synthetic signed sessions, real local D1/R2; Google OAuth and remote preview remain pending',results},null,2)+'\n');
+   await writeFile(resolve(out,'result.json'),JSON.stringify({complete:results.length===6&&results.every(result=>result.pass),scope:`Local ${process.env.TIENDLY_QA_RUNTIME??'built'} Worker, synthetic signed sessions, real local D1/R2; does not verify Google OAuth or remote preview`,results},null,2)+'\n');
   }
  }}finally{await browser.close();}
 }
