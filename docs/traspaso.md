@@ -4,7 +4,7 @@
 - Desarrollo local aislado con `npm run dev:cloudflare`: D1/R2 emulados propios, migraciones locales automáticas y secreto de sesión estable. Seis recorridos Chromium/WebKit a 390/1440/360 y 36 checkpoints: PASS.
 - Cliente Google de preview configurado privadamente en local; falta autorizar `http://localhost:3215/api/auth/callback/google` y completar ingreso real. Google devuelve `redirect_uri_mismatch`; no presentar sesiones sintéticas como OAuth aceptado.
 - Publicación QA desde esta máquina mediante `npm run release:qa`, usando `npx wrangler --profile tiendly`. El job GitHub queda opt-in y apagado; no se requiere crear token para el flujo elegido. Perfil local y secretos no se copian a GitHub.
-- [Procedimiento de entornos](configuracion/entornos.md) y [evidencia](verificacion/entornos-20261113/README.md). Pendientes: terminar publicación/verificación QA de este PR, revisión sin merge y módulos de comercio; producción Cloudflare requiere aceptación y aprobación específica. Producción Vercel/DNS/datos intactos.
+- [Procedimiento de entornos](configuracion/entornos.md) y [evidencia](verificacion/entornos-20261113/README.md). QA publicado con perfil `tiendly`, código `de9fc3a`, versión `e82b6aca-8aee-49f3-ae95-d5399680b2e6`: health/smoke y 18 cargas públicas Chrome/WebKit 390/1440/360 PASS. [PR #56](https://github.com/gaabrielavelasquez/tiendly/pull/56) en borrador por OAuth local. Servidor 3215 disponible en terminal Orca «Local dev · 3215». Pendientes: callback e ingreso Google local, revisión sin merge y módulos de comercio; producción Cloudflare requiere aceptación y aprobación específica. Producción Vercel/DNS/datos intactos.
 
 ---
 

@@ -28,7 +28,23 @@ Se encontró privadamente el JSON del cliente que coincide con el usado por QA; 
 
 ## Publicación QA
 
-Pendiente de completar en esta rama tras los builds. Se usa el perfil Wrangler local `tiendly`, sin crear API tokens. El job alojado queda desactivado salvo activación explícita de `QA_AUTO_DEPLOY` y credencial separada. El QA no se publica por abrir un PR.
+Publicado con `npm run release:qa` y el perfil Wrangler local `tiendly`, sin crear API tokens. Código funcional `de9fc3ab8628efea3f41714ac4468393d78dd924`; versión `e82b6aca-8aee-49f3-ae95-d5399680b2e6`. El job alojado queda desactivado salvo activación explícita de `QA_AUTO_DEPLOY` y credencial separada. El QA no se publica por abrir un PR.
+
+PASS: tokens, tipos frontend/backend, build Next/Turbopack, build vinext, 14 tests backend, cinco tests de entornos y cuatro del manifiesto. Se revisaron 929 archivos del artefacto: ninguno contiene los valores de las credenciales locales. Los avisos previos de sourcemaps/clasificación de vinext permanecen; no se cambian dependencias ni lockfile. Node local 26.10.0 es anterior al mínimo declarado 26.12.0, pero estos checks pasan; CI usa Node 26 del runner.
+
+Health publicado: 200, SHA coincidente, artefacto limpio, entorno preview, esquema D1, R2 y configuración OAuth correctos. Smoke: Registro/MUÑA 200, sesión null, APIs de negocio 401, rutas privadas 404 y noindex. Esas comprobaciones son de solo lectura. Para cotejar el cliente Google se inició OAuth en QA: puede crear estado transitorio de autorización; no se crearon cuentas, tiendas, productos ni pedidos en QA.
+
+[18 comprobaciones públicas QA](qa/browser.json): Chromium/WebKit a 390/1440/360, Registro, MUÑA y Productos demo sin sesión; 200, sin overflow, imágenes rotas ni errores JS. Las imágenes diferidas de los carruseles se cargan explícitamente antes de verificar decodificación. Capturas inspeccionadas sin edición.
+
+| Vista QA | Chromium 390 | WebKit 1440 |
+|---|---|---|
+| Registro | [Ver](qa/chromium-390-registro.jpg) | [Ver](qa/webkit-1440-registro.jpg) |
+| MUÑA | [Ver](qa/chromium-390-muna.jpg) | [Ver](qa/webkit-1440-muna.jpg) |
+| Productos demo | [Ver](qa/chromium-390-productos.jpg) | [Ver](qa/webkit-1440-productos.jpg) |
+
+[PR #56](https://github.com/gaabrielavelasquez/tiendly/pull/56), borrador por el callback/ingreso Google local pendiente. La evidencia nueva no repite las escrituras autenticadas remotas: se conserva la [aceptación D1/R2 previa](../d1-r2-preview/README.md). La última subida de evidencia/documentación no cambia el código funcional desplegado.
+
+Desarrollo local queda corriendo en el worktree `environment-setup`, terminal Orca «Local dev · 3215», con migraciones al día. Se detuvo el proceso propio antes de los builds y se volvió a arrancar después. No se cambió la rama ni se ejecutaron builds en el checkout principal o el worktree histórico del chat.
 
 ## Alcance y pendientes
 
