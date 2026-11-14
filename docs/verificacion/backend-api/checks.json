@@ -28,8 +28,10 @@
   "tokens": "pass",
   "artifactFilesScanned": 1847,
   "privateCredentialMatches": 0,
-  "remoteDeployment": false,
   "realGoogleLogin": "pending callback and acceptance",
   "productionChanges": false,
-  "sourceRevision": "563d414"
+  "sourceRevision": "563d414",
+  "remoteSplitDeployment": false,
+  "ciVerifiedRevision": "b87a73f",
+  "vercelPreview": "build passed; legacy mode; protected; browser measurement pending"
 }

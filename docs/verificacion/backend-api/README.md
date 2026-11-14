@@ -1,6 +1,6 @@
 # Primer corte de API separada · aceptación local
 
-Código funcional: `563d414`. Rama `feat/backend-api`, worktree Orca `backend-api`, desde `dev` `8f2906f`. [Alcance y comandos](../../backend/separacion-api.md).
+Código funcional: `563d414`. [PR #57](https://github.com/gaabrielavelasquez/tiendly/pull/57), en borrador. Rama `feat/backend-api`, worktree Orca `backend-api`, desde `dev` `8f2906f`. [Alcance y comandos](../../backend/separacion-api.md).
 
 ## Resultado
 
@@ -33,4 +33,6 @@ Capturas originales del navegador de desarrollo, sin edición de imágenes. Se i
 - Publicar y aceptar el par de servicios en QA. Solo se compiló el Worker API; `api-preview` es un destino preparado, no un despliegue realizado. El frontend QA actual no se reemplazó y sus secretos no se movieron. Mantener el PR en borrador mientras falte esta aceptación.
 - La medición Vercel requerida para el PR no acredita el modo API mientras no haya backend conectado allí. Las capturas de este informe son locales y no se presentan como evidencia remota.
 
-Ventas/reservas/pedidos/checkout/cupones/ajustes editables/tareas y métricas siguen fuera de este primer corte. No se migraron ni borraron datos productivos. Pagos y comunicaciones continúan simulados. No se cambiaron estilos, tokens, DNS, Vercel ni el Worker QA existente. No hubo merge.
+Ventas/reservas/pedidos/checkout/cupones/ajustes editables/tareas y métricas siguen fuera de este primer corte. No se migraron ni borraron datos productivos. Pagos y comunicaciones continúan simulados. No se cambiaron estilos, tokens, DNS, configuración de Vercel ni el Worker QA existente. El preview automático de Vercel del PR compiló correctamente y conserva el runtime anterior; está protegido y esta sesión de CLI no tiene autenticación para medirlo. No hubo merge.
+
+CI y Vercel del head `b87a73f`: verdes. La autorización Google real configurada devuelve 200 a través del proxy local, una cookie de estado y el callback exacto nuevo; no se completó el consentimiento/callback. Los dos procesos locales quedan disponibles en terminales Orca «Next UI 3220» y «API local 3221».
