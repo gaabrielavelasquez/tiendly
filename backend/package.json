@@ -9,11 +9,17 @@
     "miniflare": "5.20261104.0-beta"
   },
   "dependencies": {
-    "better-auth": "1.7.18"
+    "better-auth": "1.7.18",
+    "@tiendly/contracts": "0.1.0"
   },
   "scripts": {
     "typecheck": "tsc --noEmit",
-    "test": "node --test test/*.test.ts test/*.test.mjs"
+    "test": "node --test test/*.test.ts test/*.test.mjs",
+    "dev:api": "node scripts/dev-api.mjs",
+    "build:api": "wrangler deploy --dry-run --outdir .wrangler/api-build",
+    "migrate:local": "wrangler d1 migrations apply DB --local",
+    "build:api:qa": "wrangler deploy --config wrangler.preview.jsonc --dry-run --outdir .wrangler/api-qa-build",
+    "deploy:api:qa": "node scripts/deploy-api-qa.mjs"
   },
   "exports": {
     "./rules": "./src/rules.ts",

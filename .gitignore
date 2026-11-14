@@ -21,3 +21,6 @@ next-env.d.ts
 # Worktrees y respaldos locales: nunca forman parte del proyecto publicado.
 /.worktrees/
 /.backend-rescue/
+
+# API frontend example contains only public local endpoints.
+!.env.api.example

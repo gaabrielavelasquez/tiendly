@@ -1,0 +1,12 @@
+{
+  "$schema": "../node_modules/wrangler/config-schema.json",
+  "name": "api-preview",
+  "account_id": "59f2586c7dd8a0467d1f9e444129e03a",
+  "main": "src/runtime/api.ts",
+  "compatibility_date": "2026-11-08",
+  "compatibility_flags": ["nodejs_compat"],
+  "workers_dev": true,
+  "vars": { "TIENDLY_ENTORNO": "preview", "BETTER_AUTH_URL": "https://preview.tiendly.workers.dev" },
+  "d1_databases": [{ "binding": "DB", "database_name": "tiendly-preview", "database_id": "9fcfd54b-56a2-4cb9-af11-800e5191e93d", "migrations_dir": "db/migrations" }],
+  "r2_buckets": [{ "binding": "UPLOADS", "bucket_name": "tiendly-preview-images" }]
+}

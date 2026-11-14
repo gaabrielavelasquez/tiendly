@@ -1,3 +1,5 @@
+import { usingApi } from '@/lib/api-client';
+import { apiStoreData } from './api';
 import { storeStorage } from "@/lib/store-storage";
 import { relationalStore } from "./relational";
 import { D1Stores } from "@tiendly/backend/server";
@@ -55,6 +57,7 @@ const clave = (slug: string) => `${process.env.VERCEL_ENV ?? "local"}:tienda:${s
 async function cargar(slug: string): Promise<DatosTienda | null> {
   if (esHeather(slug) && slugDemo() !== "heather") return null; // Heather no es pública hasta tener su permiso
   if (RETIRADAS.has(slug)) return null; // demo retirada: 404 aunque siga en la base
+  if (usingApi()) return (await apiStoreData(slug)) ?? (esEjemplo(slug) ? semillaDe(slug) : null);
   const storage = await storeStorage();
   if (storage) return (await relationalStore(storage, slug)) ?? (esEjemplo(slug) ? semillaDe(slug) : null);
   const d = await leer<DatosTienda>(clave(slug));
@@ -69,11 +72,13 @@ async function cargar(slug: string): Promise<DatosTienda | null> {
 export const datosTienda = cache(cargar);
 
 export async function existeTienda(slug: string) {
+  if (usingApi()) return !!(await apiStoreData(slug));
   const storage = await storeStorage();
   return esEjemplo(slug) || (storage ? !!(await new D1Stores(storage.DB).findBySlug(slug)) : await existe(clave(slug)));
 }
 
 export async function guardarTienda(d: DatosTienda) {
+  if (usingApi()) throw new Error("Esta operación todavía no está disponible en la API.");
   if (await storeStorage()) throw new Error("La escritura de documentos está deshabilitada en Cloudflare.");
   await escribir(clave(d.tienda.slug), d);
 }
@@ -83,7 +88,7 @@ export async function guardarTienda(d: DatosTienda) {
  * Sin bloqueo: dos cambios al mismo tiempo en la misma tienda pueden pisarse (alcanza para el test).
  */
 export async function mutarTienda<T>(slug: string, cambio: (d: DatosTienda) => T | Promise<T>): Promise<T | null> {
-  if (await storeStorage()) throw new Error("Esta operación todavía no está disponible en el nuevo backend.");
+  if (usingApi() || await storeStorage()) throw new Error("Esta operación todavía no está disponible en el nuevo backend.");
   const d = await cargar(slug);
   if (!d) return null;
   const r = await cambio(d);

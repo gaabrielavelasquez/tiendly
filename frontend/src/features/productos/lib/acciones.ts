@@ -1,5 +1,7 @@
 "use server";
 
+import { usingApi } from '@/lib/api-client';
+import { apiCatalogResult, apiSaveProduct, apiDuplicateProduct, apiCatalogCommand } from '@/lib/catalog-api';
 import { saveProduct } from "@tiendly/backend/server";
 import { storeStorage } from "@/lib/store-storage";
 import { catalogContext, changeCatalog, catalogResult } from "@/lib/catalog-commands";
@@ -21,6 +23,7 @@ import { conOferta, duplicar, sinOferta, type OfertaEnLote } from "./reglas";
 export async function guardarProducto(id: string | null, form: FormProducto, expectedVersion?: number): Promise<{ id: string; pausado: string | null; urls: string[]; urlTienda: string | null; version?: number } | { error: string }> {
   if (Object.keys(validar(form)).length) return { error: "Revisa los campos marcados en rojo." };
   if (form.imagenes.some((i) => i.url.startsWith("blob:"))) return { error: "No pudimos subir las fotos. Inténtalo de nuevo." };
+  if (usingApi()) return apiCatalogResult(() => apiSaveProduct(id, form, expectedVersion));
   const { tienda, productos } = await datosPanel();
   const anterior = id ? productos.find((p) => p.id === id) : null;
   if (id && !anterior) return { error: "Este producto ya no existe." };
@@ -50,6 +53,7 @@ export async function guardarProducto(id: string | null, form: FormProducto, exp
 
 /** Copia pausada y sin stock, justo debajo del original. */
 export async function duplicarProducto(id: string): Promise<Producto | { error: string }> {
+  if (usingApi()) return apiCatalogResult(() => apiDuplicateProduct(id));
   if (await storeStorage()) {
     return catalogResult(async () => {
     const {runtime,actor,products} = await catalogContext();
@@ -69,6 +73,7 @@ export async function duplicarProducto(id: string): Promise<Producto | { error: 
 
 /** Pausar (uno o varios) o deshacer: deja cada producto con el estado indicado. */
 export async function cambiarEstados(estados: Record<string, Producto["estado"]>, versions: Record<string, number> = {}): Promise<Producto[] | { error: string }> {
+  if (usingApi()) return apiCatalogResult(async () => (await apiCatalogCommand({ kind: 'statuses', statuses: Object.fromEntries(Object.entries(estados).map(([id, status]) => [id, status === 'activo' ? 'active' as const : 'paused' as const])), versions })).products);
   if (await storeStorage()) return catalogResult(async () => (await changeCatalog(Object.keys(estados),versions,p => ({ ...p, estado:estados[p.id] }))).products);
   await mutarPanel((d) => {
     for (const p of d.productos) if (estados[p.id]) p.estado = estados[p.id];
@@ -83,6 +88,7 @@ const DIA = /^\d{4}-\d{2}-\d{2}$/;
  * productos como quedaron y cuántos se saltaron porque el precio no bajaba.
  */
 export async function ponerEnOferta(ids: string[], o: OfertaEnLote, versions: Record<string,number> = {}): Promise<{ productos: Producto[]; saltados: number } | { error: string }> {
+  if (usingApi()) return apiCatalogResult(async () => { const result = await apiCatalogCommand({ kind: 'offer', ids, versions, offer: { mode: o.modo === 'porcentaje' ? 'percentage' : 'price', value: o.valor, from: o.desde, until: o.hasta } }); return { productos: result.products, saltados: result.skipped }; });
   if (!(o.valor > 0) || (o.modo === "porcentaje" && o.valor >= 100)) return { error: "Revisa el descuento." };
   if ((o.desde && !DIA.test(o.desde)) || (o.hasta && !DIA.test(o.hasta)) || (o.desde && o.hasta && o.hasta < o.desde)) return { error: "Revisa las fechas." };
   if (await storeStorage()) {
@@ -107,6 +113,7 @@ export async function ponerEnOferta(ids: string[], o: OfertaEnLote, versions: Re
 
 /** Quitar la oferta en lote: cada producto vuelve a su precio normal. */
 export async function quitarOferta(ids: string[], versions: Record<string,number> = {}): Promise<Producto[] | { error: string }> {
+  if (usingApi()) return apiCatalogResult(async () => (await apiCatalogCommand({ kind: 'remove-offer', ids, versions })).products);
   if (await storeStorage()) return catalogResult(async () => (await changeCatalog(ids,versions,p => sinOferta(p))).products);
   return mutarPanel((d) => {
     d.productos = d.productos.map((p) => (ids.includes(p.id) ? sinOferta(p) : p));
@@ -116,6 +123,7 @@ export async function quitarOferta(ids: string[], versions: Record<string,number
 
 /** Deshacer una acción en lote: deja precio, oferta y estado como estaban. */
 export async function restaurarProductos(previos: Pick<Producto, "id" | "precio" | "precioAntes" | "oferta" | "estado">[], versions: Record<string,number> = {}): Promise<Producto[] | { error: string }> {
+  if (usingApi()) return apiCatalogResult(async () => (await apiCatalogCommand({ kind: 'restore', previous: previos.map(p => ({ id: p.id, status: p.estado === 'activo' ? 'active' : 'paused', priceCents: Math.round(p.precio * 100), compareAtCents: p.precioAntes === undefined ? null : Math.round(p.precioAntes * 100), offer: p.oferta ? { from: p.oferta.desde, until: p.oferta.hasta } : null })), versions })).products);
   if (await storeStorage()) return catalogResult(async () => (await changeCatalog(previos.map(p=>p.id),versions,p=>{
     const previous = previos.find(item => item.id === p.id)!;
     return { ...p, precio: previous.precio, precioAntes: previous.precioAntes, oferta: previous.oferta, estado: previous.estado };
