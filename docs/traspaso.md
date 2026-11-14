@@ -1,3 +1,14 @@
+# API HTTP separada · primer corte · 13-nov-2026
+
+- Diego aprobó separar backend para que Gabi pueda ajustar la interfaz y él mantenga reglas/datos/infraestructura. Rama `feat/backend-api`, worktree Orca persistente `/Users/diego/orca/workspaces/tiendly/backend-api`, desde `dev` `8f2906f`; checkout principal y servidor 3215 ajenos intactos.
+- [PR #57](https://github.com/gaabrielavelasquez/tiendly/pull/57), en borrador. Código funcional `563d414`: Worker autónomo de API, paquete `@tiendly/contracts`, conexión Next opt-in con `TIENDLY_API_URL`. Identidad/tiendas/catálogo/imágenes/vitrina conectados por HTTP; cálculos de oferta y escrituras/versiones en backend. Se conserva el runtime anterior mientras se completa la migración.
+- PASS local: tokens, tipos/builds Next-vinext-API, 19 tests backend, cinco de entornos y cuatro de manifiesto. Chromium/WebKit 390/1440/360: seis flujos, 42 checkpoints con tienda/producto/foto/guardado/recarga/error/reintento/conflicto/vitrina/logout y cookie revocada 401. Sesiones sintéticas; cero escrituras remotas. [Informe y capturas](verificacion/backend-api/README.md).
+- Pendientes reales: callback `http://localhost:3220/api/auth/callback/google` y aceptación Google real; despliegue/aceptación del par de servicios QA. `api-preview` solo tiene configuración preparada y dry-run. No presentar esto como Google/QA aceptados. El PR debe permanecer en borrador hasta resolverlo. [Arquitectura, responsabilidades y siguientes cortes](backend/separacion-api.md).
+- CI/Vercel de `b87a73f` verdes. El preview Vercel conserva el runtime anterior y está protegido; no se midió sin acceso. Google inicia autorización por el proxy local con 200 y callback correcto, pero no se completó el ingreso. Terminales propias «Next UI 3220» y «API local 3221» disponibles.
+- Sin cambios visuales ni tokens. Producción, datos, DNS y QA actual intactos. Ventas/checkout/reservas/cupones/ajustes/tareas/métricas pendientes. Ningún merge autorizado.
+
+---
+
 # Entornos local/QA · 13-nov-2026 · en revisión
 
 - Trabajo en `chore/environment-setup`, worktree Orca persistente `/Users/diego/orca/workspaces/tiendly/environment-setup`, desde `dev` `01ab186`. El worktree del chat es histórico y no se modifica.

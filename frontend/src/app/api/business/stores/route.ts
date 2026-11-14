@@ -1,7 +1,9 @@
+import { usingApi, proxyApi } from '@/lib/api-client';
 import { businessRuntime } from "@/lib/business-runtime";
 import { storesHandler } from "@tiendly/backend/server";
 
 async function handler(request: Request) {
+  if (usingApi()) return proxyApi(request);
   try {
     return await storesHandler(request, (await businessRuntime()).runtime);
   } catch {

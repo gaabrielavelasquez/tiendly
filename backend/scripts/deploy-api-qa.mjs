@@ -1,0 +1,18 @@
+import assert from 'node:assert/strict';
+import { assertApiQaConfig } from './api-qa-config.mjs';
+import { readFile } from 'node:fs/promises';
+import { execFileSync } from 'node:child_process';
+import { resolve } from 'node:path';
+const root = resolve(import.meta.dirname, '..');
+const config = JSON.parse(await readFile(resolve(root, 'wrangler.preview.jsonc'), 'utf8'));
+assertApiQaConfig(config);
+assert.equal(execFileSync('git', ['status', '--porcelain'], { cwd: root, encoding: 'utf8' }).trim(), '', 'Publicar solo un commit limpio.');
+const revision = execFileSync('git', ['rev-parse', 'HEAD'], { cwd: root, encoding: 'utf8' }).trim();
+for (const command of ['typecheck', 'test', 'build:api:qa']) execFileSync('npm', ['run', command], { cwd: root, stdio: 'inherit' });
+assert.equal(execFileSync('git', ['rev-parse', 'HEAD'], { cwd: root, encoding: 'utf8' }).trim(), revision);
+assert.equal(execFileSync('git', ['status', '--porcelain'], { cwd: root, encoding: 'utf8' }).trim(), '');
+execFileSync(process.execPath, [resolve(root, '../node_modules/wrangler/bin/wrangler.js'), 'deploy', '--profile', 'tiendly', '--config', 'wrangler.preview.jsonc', '--message', `API ${revision}`, '--var', `TIENDLY_REVISION:${revision}`], { cwd: root, stdio: 'inherit' });
+const response = await fetch('https://api-preview.tiendly.workers.dev/health', { signal: AbortSignal.timeout(15000) });
+assert.equal(response.status, 200, 'Revisar esquema/configuración de QA. No se ejecutaron migraciones ni rollback.');
+assert.equal((await response.json()).revision, revision, 'El health debe corresponder al commit publicado.');
+console.log(`API QA: https://api-preview.tiendly.workers.dev · commit ${revision}. El frontend se publica por separado.`);

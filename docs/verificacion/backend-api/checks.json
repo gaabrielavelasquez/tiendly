@@ -1,0 +1,37 @@
+{
+  "status": "pass",
+  "scope": "Local only; standalone API and Next.js in separate processes. Google sessions in browser flows are synthetic.",
+  "backendTests": 19,
+  "frontendEnvironmentTests": 5,
+  "frontendManifestTests": 4,
+  "browserFlows": 6,
+  "browserCheckpoints": 42,
+  "engines": [
+    "Chromium",
+    "WebKit"
+  ],
+  "widths": [
+    360,
+    390,
+    1440
+  ],
+  "builds": [
+    "Next.js",
+    "vinext",
+    "standalone API local (dry-run)",
+    "standalone API QA (dry-run)"
+  ],
+  "typechecks": [
+    "frontend",
+    "backend"
+  ],
+  "tokens": "pass",
+  "artifactFilesScanned": 1847,
+  "privateCredentialMatches": 0,
+  "realGoogleLogin": "pending callback and acceptance",
+  "productionChanges": false,
+  "sourceRevision": "563d414",
+  "remoteSplitDeployment": false,
+  "ciVerifiedRevision": "b87a73f",
+  "vercelPreview": "build passed; legacy mode; protected; browser measurement pending"
+}

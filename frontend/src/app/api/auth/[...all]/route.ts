@@ -1,6 +1,8 @@
+import { usingApi, proxyApi } from '@/lib/api-client';
 import { businessRuntime } from "@/lib/business-runtime";
 
 async function handler(request: Request) {
+  if (usingApi()) return proxyApi(request);
   try {
     return await (await businessRuntime()).auth.handler(request);
   } catch {
