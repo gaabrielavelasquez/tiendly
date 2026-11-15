@@ -1,12 +1,12 @@
 # Integración con main, dev y PRs
 
-Estado actualizado el 9-nov-2026, después de integrar [#53](https://github.com/gaabrielavelasquez/tiendly/pull/53) en `dev` con merge commit `01ab186`. Las reglas siguen en [CLAUDE.md §7](../CLAUDE.md); este documento registra su procedimiento y adopción.
+Procedimiento actualizado el 15-nov-2026, después de integrar [#57](https://github.com/gaabrielavelasquez/tiendly/pull/57) en `dev` con merge commit `acf79e7`. Las reglas siguen en [CLAUDE.md §7](../CLAUDE.md) y el estado vigente en [`docs/traspaso.md`](traspaso.md); este documento registra el procedimiento y su adopción.
 
 ## Estado actual
 
 - `main` sigue en `e635050`, sin publicación de la migración Cloudflare. La rama predeterminada continúa siendo `main`.
-- `dev` contiene infraestructura, identidad/tiendas, catálogo/R2 y onboarding/D1; desde #53 también contiene el dominio y la configuración Google del preview publicado.
-- Preview activo: **https://preview.tiendly.workers.dev**, Worker `preview`, D1 `tiendly-preview` y bucket privado `tiendly-preview-images`. Google real está verificado. El Worker anterior `tiendly-preview` se conserva como referencia, sin Google; no es el origen vigente.
+- `dev` contiene infraestructura, identidad/tiendas, catálogo/R2, onboarding/D1, el entorno QA y el primer corte de API separada.
+- QA activo: **https://preview.tiendly.workers.dev** (Worker `preview`) y **https://api-preview.tiendly.workers.dev** (Worker `api-preview`), con D1 `tiendly-preview` y bucket privado `tiendly-preview-images`. Google real está aceptado en local; **falta repetir el ingreso en QA** porque el secreto nuevo invalidó las sesiones anteriores. El Worker anterior `tiendly-preview` se conserva como referencia, sin Google.
 - La validación y el despliegue son pasos distintos: CI comprueba el código; **Cloudflare todavía se despliega manualmente**. Un merge en `dev` no publica el Worker ni ejecuta migraciones.
 - Las protecciones de `main` y `dev` siguen pendientes de una cuenta administradora. Las reglas de revisión y merge commit ya son obligatorias por el workflow, aunque GitHub aún no las impone.
 - La migración de comercio no está completa. Ventas/pedidos, checkout/reservas, cupones, guardados de configuración/Mi tienda y tareas siguen pendientes.
@@ -50,6 +50,10 @@ El PR del módulo apunta a `dev`. Para dependencias apiladas, publicación `dev`
 | [#51](https://github.com/gaabrielavelasquez/tiendly/pull/51) | Primer puente de despliegue. | Cerrado, sustituido; su cambio se incorporó en #52. |
 | [#52](https://github.com/gaabrielavelasquez/tiendly/pull/52) | Integración de la app y D1/R2 de preview. | En `dev`, merge commit `41bea81`. |
 | [#53](https://github.com/gaabrielavelasquez/tiendly/pull/53) | Dominio vigente y Google separado. | En `dev`, merge commit `01ab186`; merge autorizado por Diego el 9-nov. |
+| [#54](https://github.com/gaabrielavelasquez/tiendly/pull/54) | Limpieza de gitflow y ubicación de evidencia. | En `dev`, merge commit `8f2906f`. |
+| [#55](https://github.com/gaabrielavelasquez/tiendly/pull/55) | Pruebas concurrentes estables. | En `dev`, merge commit `4020656`. |
+| [#56](https://github.com/gaabrielavelasquez/tiendly/pull/56) | Entornos local/QA y publicación verificable. | En `dev`, merge commit `6e2aba9`. |
+| [#57](https://github.com/gaabrielavelasquez/tiendly/pull/57) | Primer corte de API separada, contratos y modo `TIENDLY_API_URL`. | En `dev`, merge commit `acf79e7`. |
 
 La pila conserva su historial. Los informes del 8-nov describen el estado de cada aceptación cuando se ejecutó; sus pendientes históricos no sustituyen el estado actual de este documento.
 
@@ -84,10 +88,10 @@ Tokens, builds Next/vinext, tipos, 14 tests de backend y tres pruebas del manifi
 Para desplegar de forma manual desde un worktree validado, ejecuta en `frontend/`:
 
 ```sh
-npm run deploy:cloudflare-preview
+npm run release:qa
 ```
 
-El comando usa el perfil Wrangler `tiendly` y conserva los secretos ya cargados. No regenera secretos de sesión ni ejecuta migraciones. `migrate:cloudflare-preview` es una operación remota separada: no forma parte del paso normal de crear rama, abrir PR o hacer merge. La automatización de despliegues queda como módulo posterior, con credenciales y recursos exclusivos de preview.
+Si los checks Next/backend ya se completaron, `npm run deploy:cloudflare-preview` repite el build de Cloudflare y publica. Ambos usan el perfil Wrangler `tiendly` y conservan los secretos ya cargados. No regeneran secretos de sesión ni ejecutan migraciones. `migrate:cloudflare-preview` es una operación remota separada: no forma parte del paso normal de crear rama, abrir PR o hacer merge. El procedimiento completo está en [`configuracion/entornos.md`](configuracion/entornos.md).
 
 ## Protecciones pendientes
 

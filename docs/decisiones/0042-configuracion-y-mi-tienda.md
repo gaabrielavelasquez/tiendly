@@ -26,6 +26,6 @@ La barra móvil de guardar aparece con cambios pendientes y reemplaza a la tab b
 
 ## Referencias y validación
 
-0003/0007/0009 viven en el proyecto externo IA on Product Design y no están completos en el repo (docs/estado-core-loop.md). Google Drive no encontró Tiendly. Se preserva el comportamiento de main y las reglas documentadas en código; no se reinterpretan comisiones, planes, métodos o entrega.
+0003/0007/0009 viven en el proyecto externo IA on Product Design y no están completos en el repo (docs/historia/estado-core-loop-2026-10-16.md). Google Drive no encontró Tiendly. Se preserva el comportamiento de main y las reglas documentadas en código; no se reinterpretan comisiones, planes, métodos o entrega.
 
 Tokens/build, pruebas funcionales locales en worktree/3205 y capturas Vercel antes/después a 390 y 1440; Chrome/WebKit sin scroll horizontal a 360/390 y con datos/URL largos. Guardados solo en memoria local. Producción /panel/mi-tienda confirmada a 390 en Chrome/WebKit, solo lectura.

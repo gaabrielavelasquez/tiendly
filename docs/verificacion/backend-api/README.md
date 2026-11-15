@@ -1,6 +1,6 @@
 # Primer corte de API separada · aceptación local
 
-Código funcional: `563d414`. [PR #57](https://github.com/gaabrielavelasquez/tiendly/pull/57), en borrador. Rama `feat/backend-api`, worktree Orca `backend-api`, desde `dev` `8f2906f`. [Alcance y comandos](../../backend/separacion-api.md).
+Código funcional: `563d414`. [PR #57](https://github.com/gaabrielavelasquez/tiendly/pull/57), integrado en `dev` con merge commit `acf79e7`. Rama `feat/backend-api`, worktree Orca `backend-api`, desde `dev` `8f2906f`. [Alcance y comandos](../../backend/separacion-api.md).
 
 ## Resultado
 
@@ -56,9 +56,9 @@ Capturas originales del navegador de desarrollo, sin edición de imágenes. Se i
 ## Pendiente antes de marcar listo
 
 - ~~Autorizar el callback local nuevo en el cliente Tiendly Preview y completar el ingreso Google real.~~ **Hecho el 15-nov-2026**: origen y callback `localhost:3220` autorizados, ingreso real, snapshot autenticado y revocación verificados. Ver [Ingreso Google real](#ingreso-google-real--15-nov-2026).
-- Publicar y aceptar el par de servicios en QA. Solo se compiló el Worker API; `api-preview` es un destino preparado, no un despliegue realizado. El frontend QA actual no se reemplazó y sus secretos no se movieron. Mantener el PR en borrador mientras falte esta aceptación.
+- ~~Publicar y aceptar el par de servicios en QA.~~ **Publicado el 15-nov-2026**: `api-preview` y `preview` en modo API con service binding. Falta repetir el ingreso Google real sobre QA para cerrar la aceptación remota. Ver [`docs/traspaso.md`](../../traspaso.md).
 - La medición Vercel requerida para el PR no acredita el modo API mientras no haya backend conectado allí. Las capturas de este informe son locales y no se presentan como evidencia remota.
 
-Ventas/reservas/pedidos/checkout/cupones/ajustes editables/tareas y métricas siguen fuera de este primer corte. No se migraron ni borraron datos productivos. Pagos y comunicaciones continúan simulados. No se cambiaron estilos, tokens, DNS, configuración de Vercel ni el Worker QA existente. El preview automático de Vercel del PR compiló correctamente y conserva el runtime anterior; está protegido y esta sesión de CLI no tiene autenticación para medirlo. No hubo merge.
+Ventas/reservas/pedidos/checkout/cupones/ajustes editables/tareas y métricas siguen fuera de este primer corte. No se migraron ni borraron datos productivos. Pagos y comunicaciones continúan simulados. No se cambiaron estilos, tokens, DNS, configuración de Vercel ni el Worker QA existente. El preview automático de Vercel del PR compiló correctamente y conserva el runtime anterior; está protegido y esta sesión de CLI no tiene autenticación para medirlo. Integrado en `dev` con el merge commit `acf79e7`.
 
-CI y Vercel del head `b87a73f`: verdes. La autorización Google real configurada devuelve 200 a través del proxy local, una cookie de estado y el callback exacto nuevo; no se completó el consentimiento/callback. Los dos procesos locales quedan disponibles en terminales Orca «Next UI 3220» y «API local 3221».
+CI y Vercel del head `b87a73f`: verdes. En esa corrida, la autorización Google real devolvió 200 a través del proxy local, una cookie de estado y el callback exacto nuevo, pero aún no se había completado el consentimiento; la aceptación posterior está en [Ingreso Google real](#ingreso-google-real--15-nov-2026). Los dos procesos locales quedan disponibles en terminales Orca «Next UI 3220» y «API local 3221».

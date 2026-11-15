@@ -1,5 +1,7 @@
 # Estado del Core Loop · Figma vs. código
 
+> **Documento histórico (16-oct-2026).** No describe el estado actual: Afiliación y Mi tienda ya están implementadas, y varias filas de "Falta" están resueltas. Se conserva como registro del origen de las decisiones 0027, 0042 y 0043. Estado vigente: [docs/traspaso.md](../traspaso.md).
+
 - **Fecha:** 16-oct-2026
 - **Figma:** `zHR0uS37OATafFq7U4NEwr`, página **Flujos** (`1:65`), módulos 1–10 (todos marcados 🟢 aprobados).
 - **Código:** rama `chore/rules` (incluye productos, pedidos y vitrina; PR #3).
@@ -33,7 +35,7 @@ El Core Loop ya funciona de punta a punta con datos simulados: la tienda configu
 
 ## En el código, pero no en Figma ni en una decisión
 
-**Resuelto en [0027](decisiones/0027-limpieza-core-loop.md)** (16-oct-2026): se quitaron la campana, el atajo ⌘K y el ticket promedio; el resto se quedó o se ajustó como dice la decisión. La lista queda como registro.
+**Resuelto en [0027](../decisiones/0027-limpieza-core-loop.md)** (16-oct-2026): se quitaron la campana, el atajo ⌘K y el ticket promedio; el resto se quedó o se ajustó como dice la decisión. La lista queda como registro.
 
 ### Panel (todos los módulos)
 1. **Campana de avisos** con punto spark y su link a `/panel/avisos` (da 404). Figma no tiene avisos.

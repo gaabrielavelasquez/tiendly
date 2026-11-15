@@ -1,5 +1,7 @@
 # Test con tiendas · Core Loop
 
+> **Documento histórico (22-oct-2026).** Las instrucciones de hosting y datos ya no aplican: QA usa D1/R2 propios y los previews no comparten la base de producción. Se conserva solo el guion de sesión. Entornos vigentes: [docs/configuracion/entornos.md](../configuracion/entornos.md).
+
 Guía para una sesión de 30 a 40 minutos con alguien que lleva una tienda real y vende por WhatsApp o Instagram. El objetivo es ver si puede armar su tienda y atender una venta sin ayuda.
 
 ## Antes de la sesión
