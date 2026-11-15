@@ -1,30 +1,27 @@
-import { BusinessError, requireActor, requireStoreWrite } from '../identity/domain/access.ts';
+import { BusinessError, requireActor, requireStoreWrite, type Actor } from '../identity/domain/access.ts';
 import { saveProduct } from '../catalog/application/catalog.ts';
 import { validateProduct, bulkPrice, type Product } from '../catalog/domain/product.ts';
-import { readJsonBody } from './request-body.ts';
+import { validCalendarDate } from '../stores/domain/store.ts';
+import { errorReply, jsonReply, readJsonBody, requireOrigin } from './request-body.ts';
 import type { BusinessRuntime } from './business.ts';
 
 function readOffer(value: unknown) {
   const offer = value as { mode: string; value: number; from?: string; until?: string } | null;
-  const date = (day: unknown) => typeof day === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(day) && !Number.isNaN(Date.parse(day + 'T00:00:00Z')) && new Date(day + 'T00:00:00Z').toISOString().slice(0, 10) === day;
-  if (!offer || !['percentage', 'price'].includes(offer.mode) || !Number.isFinite(offer.value) || offer.value <= 0 || (offer.mode === 'percentage' && offer.value >= 100) || (offer.from !== undefined && offer.from !== '' && !date(offer.from)) || (offer.until !== undefined && offer.until !== '' && !date(offer.until)) || (offer.from && offer.until && offer.from > offer.until)) throw new BusinessError('invalid');
+  if (!offer || !['percentage', 'price'].includes(offer.mode) || !Number.isFinite(offer.value) || offer.value <= 0 || (offer.mode === 'percentage' && offer.value >= 100) || (offer.from !== undefined && offer.from !== '' && !validCalendarDate(offer.from)) || (offer.until !== undefined && offer.until !== '' && !validCalendarDate(offer.until)) || (offer.from && offer.until && offer.from > offer.until)) throw new BusinessError('invalid');
   return offer;
 }
 
-export async function catalogCommand(request: Request, runtime: BusinessRuntime): Promise<Response> {
-  if (request.method !== 'POST') return Response.json({ error: 'method_not_allowed' }, { status: 405 });
-  const actor = requireActor(await runtime.actor(request.headers));
-  if (request.headers.get('origin') !== runtime.origin) throw new BusinessError('forbidden');
-  const store = await runtime.stores.stores.findOwned(actor.userId);
+export async function runCatalogCommand(runtime: BusinessRuntime, actor: Actor | null, input: Record<string, unknown>) {
+  const owner = requireActor(actor);
+  const store = await runtime.stores.stores.findOwned(owner.userId);
   if (!store) throw new BusinessError('forbidden');
-  requireStoreWrite(actor, actor.userId, store.isDemo, runtime.stores.environment);
-  const input = await readJsonBody(request, 256 * 1024);
+  requireStoreWrite(owner, owner.userId, store.isDemo, runtime.stores.environment);
   const products = await runtime.catalog.catalog.list(store.id);
   if (input.kind === 'duplicate') {
     const previous = products.find(p => p.id === input.id);
     if (!previous) throw new BusinessError('not_found');
-    const product = await saveProduct(runtime.catalog, actor, null, null, { ...previous, name: `Copia de ${previous.name}`, sku: previous.sku ? `${previous.sku}-C` : '', status: 'paused', variants: previous.variants.map(v => ({ ...v, stock: 0 })) });
-    return Response.json({ product });
+    const product = await saveProduct(runtime.catalog, owner, null, null, { ...previous, name: `Copia de ${previous.name}`, sku: previous.sku ? `${previous.sku}-C` : '', status: 'paused', variants: previous.variants.map(v => ({ ...v, stock: 0 })) });
+    return { product };
   }
   if (!['statuses', 'offer', 'remove-offer', 'restore'].includes(input.kind as string)) throw new BusinessError('invalid');
   const statuses = input.statuses as Record<string, unknown> | undefined;
@@ -54,9 +51,21 @@ export async function catalogCommand(request: Request, runtime: BusinessRuntime)
     } else {
       const prior = previous!.find(p => p.id === id);
       if (!prior) throw new BusinessError('invalid');
-      changed = { ...current, status: prior.status!, priceCents: prior.priceCents!, compareAtCents: prior.compareAtCents!, offer: prior.offer! };
+      changed = { ...current, status: prior.status!, priceCents: prior.priceCents!, compareAtCents: prior.compareAtCents ?? null, offer: prior.offer ?? null };
     }
     return [{ product: { ...current, ...validateProduct(changed, store.id), version: current.version + 1, updatedAt: runtime.catalog.now() }, expectedVersion: current.version }];
   });
-  return Response.json({ products: writes.length ? await runtime.catalog.catalog.saveMany(writes, actor.userId) : [], skipped });
+  return { products: writes.length ? await runtime.catalog.catalog.saveMany(writes, owner.userId) : [], skipped };
+}
+
+export async function catalogCommand(request: Request, runtime: BusinessRuntime): Promise<Response> {
+  try {
+    if (request.method !== 'POST') return jsonReply({ error: 'method_not_allowed' }, 405);
+    const actor = requireActor(await runtime.actor(request.headers));
+    requireOrigin(request, runtime.origin);
+    const input = await readJsonBody(request, 256 * 1024);
+    return jsonReply(await runCatalogCommand(runtime, actor, input));
+  } catch (error) {
+    return errorReply(error);
+  }
 }

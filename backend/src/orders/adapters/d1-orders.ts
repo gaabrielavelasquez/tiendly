@@ -1,30 +1,8 @@
 import type { D1Database } from "@cloudflare/workers-types";
 import { BusinessError } from "../../identity/domain/access.ts";
-import type { OrderDetail, OrderItem, OrderReceipt, OrderTotals, OrderView, OrderPaymentStatus, OrderPaymentMethod, OrderDeliveryMethod, OrderDeliveryStatus, OrderCancellation } from '@tiendly/contracts';
-export type { OrderDetail, OrderView, OrderReceipt };
-
-export type OrderRow = {
-  id: string; store_id: string; numero: number; receipt_token: string; created_at: string;
-  customer_name: string; customer_phone: string;
-  units: number; subtotal_cents: number; discount_cents: number; shipping_cents: number | null; shipping_pending: number; total_cents: number;
-  coupon_code: string | null;
-  payment_status: OrderPaymentStatus; payment_method: OrderPaymentMethod; reserve_until: string | null;
-  delivery_method: OrderDeliveryMethod; delivery_status: OrderDeliveryStatus;
-  district: string | null; address: string | null; reference: string | null; pickup_json: string | null;
-  paid_at: string | null; shipped_at: string | null; delivered_at: string | null; canceled_at: string | null; cancellation: OrderCancellation | null;
-  note: string | null; version: number;
-};
-
-/** Lo que un comando cambia: el patch pasa por el UPDATE versionado; el resto son efectos del mismo lote. */
-export type AllocationEffect = { type: 'sold' } | { type: 'reserved'; expiresAt: string } | { type: 'release' };
-export type OrderEffect =
-  | { type: 'allocation'; change: AllocationEffect }
-  | { type: 'payment'; id: string; method: OrderPaymentMethod; amountCents: number; createdAt: string; createdBy: string }
-  | { type: 'void-payments'; at: string };
-export type OrderEvent = { kind: string; at: string; actor: string };
-export type OrderPatch = Partial<Pick<OrderRow,
-  'payment_status' | 'reserve_until' | 'paid_at' | 'delivery_status' | 'shipped_at' | 'delivered_at' | 'canceled_at' | 'cancellation' | 'note' | 'version'>>;
-export type CommandPlan = { patch: OrderPatch; effects: OrderEffect[]; events: OrderEvent[] };
+import type { OrderDetail, OrderItem, OrderReceipt, OrderTotals, OrderView, OrderPaymentMethod } from '@tiendly/contracts';
+import type { AllocationEffect, CommandPlan, OrderEffect, OrderEvent, OrderPatch, OrderRow } from "../domain/commands.ts";
+export type { OrderDetail, OrderView, OrderReceipt, AllocationEffect, CommandPlan, OrderEffect, OrderEvent, OrderPatch, OrderRow };
 
 const totalsOf = (row: OrderRow): OrderTotals => ({ subtotalCents: row.subtotal_cents, discountCents: row.discount_cents, shippingCents: row.shipping_cents, shippingPending: row.shipping_pending === 1, totalCents: row.total_cents, units: row.units });
 

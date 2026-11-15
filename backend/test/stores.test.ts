@@ -1,7 +1,8 @@
 import { test } from "node:test";
 import { conflictWinner } from "./helpers/conflict-winner.ts";
+import { applyMigrations, createTestMiniflare, errorCode, insertTestUser as user } from "./helpers/test-db.ts";
 import assert from "node:assert/strict";
-import { readFile, readdir, mkdtemp, rm } from "node:fs/promises";
+import { mkdtemp, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { Miniflare, convertV4MiniflareOptions } from "miniflare";
@@ -9,7 +10,7 @@ import type { D1Database } from "@cloudflare/workers-types";
 import { betterAuth } from "better-auth";
 import { testUtils } from "better-auth/plugins";
 import { getMigrations } from "better-auth/db/migration";
-import { environment, testLoginAllowed, BusinessError } from "../src/identity/domain/access.ts";
+import { environment, testLoginAllowed } from "../src/identity/domain/access.ts";
 import { createAuth } from "../src/identity/adapters/better-auth.ts";
 import { canUse, effectivePlan } from "../src/stores/domain/store.ts";
 import { createStore, renameStore, ownedStore, type StoreDependencies } from "../src/stores/application/stores.ts";
@@ -20,24 +21,12 @@ import { storesHandler } from "../src/runtime/stores-handler.ts";
 
 const input = { slug: "home-objects", name: "  Objetos para casa  ", salesPhone: "900000000", categories: ["home", "handmade"], otherCategory: "" };
 const config = { baseURL: "http://localhost:3215", secret: "test-only-secret-with-more-than-32-characters", googleClientId: "test-only-client", googleClientSecret: "test-only-secret" };
-const newMF = (persist?: string) => new Miniflare({ ...convertV4MiniflareOptions({ modules: true, script: 'export default { fetch() { return new Response("ok") } }', compatibilityDate: "2026-11-08", d1Databases: ["DB"],  }), ...(persist ? { resourcePersistencePath: persist } : {}) });
+const newMF = (persist?: string) => new Miniflare({ ...convertV4MiniflareOptions({ modules: true, script: 'export default { fetch() { return new Response("ok") } }', compatibilityDate: "2026-11-08", d1Databases: ["DB"] }), ...(persist ? { resourcePersistencePath: persist } : {}) });
 async function fixture() {
-  const mf = newMF();
-  const db = await mf.getD1Database("DB") as unknown as D1Database;
-  await migrate(db);
+  const { mf, db } = await createTestMiniflare();
   const deps: StoreDependencies = { stores: new D1Stores(db), environment: "production", now: () => "2026-11-08T12:00:00.000Z", newId: () => crypto.randomUUID() };
   return { mf, db, deps };
 }
-async function migrate(db: D1Database) {
-  for (const file of (await readdir(new URL("../db/migrations", import.meta.url))).filter(name => name.endsWith(".sql")).sort()) {
-    const sql = await readFile(new URL(`../db/migrations/${file}`, import.meta.url), "utf8");
-    for (const statement of sql.replace(/^--.*$/gm, "").split(";").filter(x => x.trim())) await db.prepare(statement).run();
-  }
-}
-async function user(db: D1Database, id: string) {
-  await db.prepare('INSERT INTO user(id,name,email,emailVerified,createdAt,updatedAt) VALUES(?,?,?,1,?,?)').bind(id, "Test", `${id}@example.invalid`, Date.now(), Date.now()).run();
-}
-const errorCode = (code: string) => (e: unknown) => e instanceof BusinessError && e.code === code;
 
 test("environment and test login fail closed; founder expiry is a Lima calendar boundary", () => {
   for (const value of [undefined, "", "prod", "LOCAL", "production"]) { assert.equal(environment(value), "production"); assert.equal(testLoginAllowed(value, "true"), false); }
@@ -148,7 +137,7 @@ test("owned stores and initial settings survive a runtime restart",async()=>{
  let mf=newMF(directory);
  try {
    let db=await mf.getD1Database("DB") as unknown as D1Database;
-   await migrate(db);await user(db,"persistent");
+   await applyMigrations(db);await user(db,"persistent");
    const store=await createStore({stores:new D1Stores(db),environment:"local",now:()=>new Date().toISOString(),newId:()=>crypto.randomUUID()},{userId:"persistent"},input);
    await mf.dispose();mf=newMF(directory);db=await mf.getD1Database("DB") as unknown as D1Database;
    assert.equal((await new D1Stores(db).findOwned("persistent"))?.id,store.id);

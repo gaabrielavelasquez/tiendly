@@ -1,7 +1,29 @@
 import { BusinessError } from "../../identity/domain/access.ts";
-import type { OrderCommand } from '@tiendly/contracts';
+import type { OrderCommand, OrderPaymentStatus, OrderPaymentMethod, OrderDeliveryMethod, OrderDeliveryStatus, OrderCancellation } from '@tiendly/contracts';
 import { reserveUntil, RESERVE_HOURS } from "./order.ts";
-import type { AllocationEffect, CommandPlan, OrderEffect, OrderEvent, OrderPatch, OrderRow } from "../adapters/d1-orders.ts";
+
+export type OrderRow = {
+  id: string; store_id: string; numero: number; receipt_token: string; created_at: string;
+  customer_name: string; customer_phone: string;
+  units: number; subtotal_cents: number; discount_cents: number; shipping_cents: number | null; shipping_pending: number; total_cents: number;
+  coupon_code: string | null;
+  payment_status: OrderPaymentStatus; payment_method: OrderPaymentMethod; reserve_until: string | null;
+  delivery_method: OrderDeliveryMethod; delivery_status: OrderDeliveryStatus;
+  district: string | null; address: string | null; reference: string | null; pickup_json: string | null;
+  paid_at: string | null; shipped_at: string | null; delivered_at: string | null; canceled_at: string | null; cancellation: OrderCancellation | null;
+  note: string | null; version: number;
+};
+
+/** Lo que un comando cambia: el patch pasa por el UPDATE versionado; el resto son efectos del mismo lote. */
+export type AllocationEffect = { type: 'sold' } | { type: 'reserved'; expiresAt: string } | { type: 'release' };
+export type OrderEffect =
+  | { type: 'allocation'; change: AllocationEffect }
+  | { type: 'payment'; id: string; method: OrderPaymentMethod; amountCents: number; createdAt: string; createdBy: string }
+  | { type: 'void-payments'; at: string };
+export type OrderEvent = { kind: string; at: string; actor: string };
+export type OrderPatch = Partial<Pick<OrderRow,
+  'payment_status' | 'reserve_until' | 'paid_at' | 'delivery_status' | 'shipped_at' | 'delivered_at' | 'canceled_at' | 'cancellation' | 'note' | 'version'>>;
+export type CommandPlan = { patch: OrderPatch; effects: OrderEffect[]; events: OrderEvent[] };
 
 /** Deshacer solo alcanza lo recién hecho: la lista deshace en segundos, la API acota la ventana. */
 export const UNDO_WINDOW_MS = 10 * 60 * 1000;

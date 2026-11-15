@@ -1,8 +1,10 @@
-import { variantKey, priceOn } from "../../catalog/domain/product.ts";
+import { variantKey, priceOn, photoOptionIndex } from "../../catalog/domain/product.ts";
+import { limaDate } from "../../stores/domain/store.ts";
 import { BusinessError } from "../../identity/domain/access.ts";
 import type { Product } from '@tiendly/contracts';
 import type { CheckoutDelivery, CheckoutInput, OrderTotals, StoreConfiguration } from '@tiendly/contracts';
 export type { CheckoutDelivery, CheckoutInput, OrderTotals };
+export { limaDate };
 
 /** Misma geografía que checkout/lib/config.ts: el distrito define la zona y con ella el costo. */
 const LIMA = ["Barranco", "Breña", "Chorrillos", "Jesús María", "La Molina", "La Victoria", "Lince", "Magdalena del Mar", "Miraflores", "Pueblo Libre", "San Borja", "San Isidro", "San Miguel", "Santiago de Surco", "Surquillo"];
@@ -13,11 +15,6 @@ const ZONES: Record<string, 'lima' | 'callao' | 'provincias'> = {
   Cayma: 'provincias', Yanahuara: 'provincias', Cayaltí: 'provincias', Trujillo: 'provincias', Cusco: 'provincias', Piura: 'provincias',
 };
 export const zoneOfDistrict = (district: string) => ZONES[district] ?? null;
-
-/** Hoy como día AAAA-MM-DD en Lima: las ofertas y el envío gratis se miden en días de Lima. */
-export function limaDate(at: Date = new Date()): string {
-  return new Intl.DateTimeFormat('en-CA', { timeZone: 'America/Lima', year: 'numeric', month: '2-digit', day: '2-digit' }).format(at);
-}
 
 /** Horas que se separan los productos de un pedido por WhatsApp (decisión 0010). */
 export const RESERVE_HOURS = 24;
@@ -30,11 +27,7 @@ const count = (value: unknown): value is number => Number.isSafeInteger(value) &
 
 /** Grupo de fotos de una variante (misma regla que productos/lib/variantes.ts): la opción elegida, color o "Tono". */
 function photoFor(product: Product, values: string[]): string | null {
-  const index = product.photoOption !== undefined
-    ? (product.photoOption >= 0 && product.photoOption < product.options.length ? product.photoOption : -1)
-    : product.options.findIndex(option => option.kind === 'color') >= 0
-      ? product.options.findIndex(option => option.kind === 'color')
-      : product.options.findIndex(option => option.name.trim().toLowerCase() === 'tono');
+  const index = photoOptionIndex(product);
   const group = index < 0 ? '' : values[index] ?? '';
   return product.photos[group]?.[0] ?? product.primaryImage ?? null;
 }

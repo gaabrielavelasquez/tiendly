@@ -1,4 +1,5 @@
 import { BusinessError } from "../../identity/domain/access.ts";
+import { validCalendarDate } from "../../stores/domain/store.ts";
 
 import type { Option, Variant, Measurements, ProductInput, Product } from '@tiendly/contracts';
 export type { Option, Variant, Measurements, ProductInput, Product } from '@tiendly/contracts';
@@ -7,7 +8,12 @@ export const productSlug = (name: string) => name.normalize("NFD").replace(/\p{D
 const invalid = (): never => { throw new BusinessError("invalid"); };
 const string = (value: unknown, max: number): value is string => typeof value === "string" && value.length <= max;
 const cents = (value: unknown): value is number => Number.isSafeInteger(value) && (value as number) >= 0;
-const day = (value: string) => /^\d{4}-\d{2}-\d{2}$/.test(value) && !Number.isNaN(Date.parse(value + "T00:00:00Z")) && new Date(value + "T00:00:00Z").toISOString().slice(0, 10) === value;
+
+export function photoOptionIndex(input: Pick<ProductInput, "options" | "photoOption">): number {
+  if (input.photoOption !== undefined) return input.photoOption >= 0 && input.photoOption < input.options.length ? input.photoOption : -1;
+  const color = input.options.findIndex(o => o.kind === "color");
+  return color >= 0 ? color : input.options.findIndex(o => o.name.trim().toLowerCase() === "tono");
+}
 
 export function toCents(soles: number): number {
   if (!Number.isFinite(soles) || soles < 0) return invalid();
@@ -25,7 +31,7 @@ export function bulkPrice(normalCents: number, mode: "percentage" | "price", val
 export function validateProduct(input: ProductInput, storeId: string): ProductInput {
   if (!input || !string(input.name, 160) || input.name.trim().length < 2 || !productSlug(input.name) || !string(input.description, 10000) || !string(input.sku, 100) || !["active", "paused"].includes(input.status) || !cents(input.priceCents)) return invalid();
   if (input.compareAtCents !== null && (!cents(input.compareAtCents) || input.compareAtCents <= input.priceCents)) return invalid();
-  if (input.offer !== null && (!input.offer || typeof input.offer !== "object" || (input.offer.from !== undefined && (!string(input.offer.from,10) || !day(input.offer.from))) || (input.offer.until !== undefined && (!string(input.offer.until,10) || !day(input.offer.until))) || (input.offer.from && input.offer.until && input.offer.from > input.offer.until) || input.compareAtCents === null)) return invalid();
+  if (input.offer !== null && (!input.offer || typeof input.offer !== "object" || (input.offer.from !== undefined && (!string(input.offer.from,10) || !validCalendarDate(input.offer.from))) || (input.offer.until !== undefined && (!string(input.offer.until,10) || !validCalendarDate(input.offer.until))) || (input.offer.from && input.offer.until && input.offer.from > input.offer.until) || input.compareAtCents === null)) return invalid();
   if (!Array.isArray(input.categories) || input.categories.length > 30 || !input.categories.every(x => string(x, 100) && x.trim())) return invalid();
   if (!Array.isArray(input.options) || input.options.length > 3) return invalid();
   for (const option of input.options) {
@@ -41,7 +47,7 @@ export function validateProduct(input: ProductInput, storeId: string): ProductIn
     keys.add(key);
   }
   if (input.photoOption !== undefined && (!Number.isInteger(input.photoOption) || input.photoOption < -1 || input.photoOption >= input.options.length)) return invalid();
-  const photoIndex = input.photoOption ?? (input.options.some(o=>o.kind==="color") ? input.options.findIndex(o=>o.kind==="color") : input.options.findIndex(o=>o.name.trim().toLowerCase()==="tono"));
+  const photoIndex = photoOptionIndex(input);
   const validPhoto = (url: unknown) => {
     if (!string(url, 512) || url.includes("..")) return false;
     const prefix = `/images/${storeId}/`;

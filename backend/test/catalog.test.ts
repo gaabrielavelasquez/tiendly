@@ -1,31 +1,22 @@
 import { test } from 'node:test';
 import { conflictWinner } from './helpers/conflict-winner.ts';
+import { createTestMiniflare, errorCode as code, insertTestUser } from './helpers/test-db.ts';
 import assert from 'node:assert/strict';
-import { readFile, readdir } from 'node:fs/promises';
-import { Miniflare, convertV4MiniflareOptions } from 'miniflare';
-import type { D1Database, R2Bucket } from '@cloudflare/workers-types';
 import { D1Stores } from '../src/stores/adapters/d1-stores.ts';
 import { createStore } from '../src/stores/application/stores.ts';
 import { D1Catalog } from '../src/catalog/adapters/d1-catalog.ts';
 import { ownedCatalog, saveProduct } from '../src/catalog/application/catalog.ts';
 import { bulkPrice, priceOn, productSlug, toCents, validateProduct, variantKey, type ProductInput } from '../src/catalog/domain/product.ts';
 import { uploadImage, readImage, MAX_IMAGE_BYTES } from '../src/catalog/adapters/r2-images.ts';
-import { BusinessError } from '../src/identity/domain/access.ts';
 
 async function fixture() {
-  const mf=new Miniflare(convertV4MiniflareOptions({modules:true,script:'export default { fetch() { return new Response("ok") } }',compatibilityDate:'2026-11-08',d1Databases:['DB'],r2Buckets:['UPLOADS']}));
-  const db=await mf.getD1Database('DB') as unknown as D1Database;
-  for(const file of ['0001_auth.sql','0002_stores.sql','0003_catalog.sql']) {
-    const sql=await readFile(new URL(`../db/migrations/${file}`,import.meta.url),'utf8');
-    for(const statement of sql.replace(/^--.*$/gm,'').split(';').filter(x=>x.trim()))await db.prepare(statement).run();
-  }
-  for(const id of ['owner','foreign'])await db.prepare('INSERT INTO user(id,name,email,emailVerified,createdAt,updatedAt) VALUES(?,?,?,1,?,?)').bind(id,'Test',`${id}@example.invalid`,Date.now(),Date.now()).run();
-  const deps={stores:new D1Stores(db),catalog:new D1Catalog(db),environment:'production' as const,now:()=>new Date().toISOString(),newId:()=>crypto.randomUUID()};
-  const store=await createStore(deps,{userId:'owner'},{slug:'test-catalog',name:'Casa taller',salesPhone:'900000000',categories:['home'],otherCategory:''});
-  return {mf,db,deps,store,bucket:await mf.getR2Bucket('UPLOADS') as unknown as R2Bucket};
+  const { mf, db, bucket } = await createTestMiniflare({ r2: true });
+  for (const id of ['owner', 'foreign']) await insertTestUser(db, id);
+  const deps = { stores: new D1Stores(db), catalog: new D1Catalog(db), environment: 'production' as const, now: () => new Date().toISOString(), newId: () => crypto.randomUUID() };
+  const store = await createStore(deps, { userId: 'owner' }, { slug: 'test-catalog', name: 'Casa taller', salesPhone: '900000000', categories: ['home'], otherCategory: '' });
+  return { mf, db, deps, store, bucket };
 }
 const input=(storeId:string):ProductInput=>({name:'Jarrón Chloé',description:'Una pieza.',sku:'J-1',categories:['Hogar'],status:'active',priceCents:9099,compareAtCents:10000,offer:{from:'2026-11-08',until:'2026-11-09'},options:[{name:'Color',kind:'color',values:['Beige','Azul']}],variants:[{values:['Beige'],stock:2},{values:['Azul'],stock:1}],primaryImage:`/images/${storeId}/photo.jpg`,photos:{Beige:[`/images/${storeId}/first.jpg`,`/images/${storeId}/second.jpg`],Azul:[]}});
-const code=(value:string)=>(error:unknown)=>error instanceof BusinessError&&error.code===value;
 
 test('catalog money, inclusive Lima offers, variant keys and whole-sol bulk rounding',()=>{
  assert.equal(toCents(90.99),9099);assert.equal(toCents(129999.1),12999910);assert.equal(bulkPrice(9099,'percentage',20),7300);

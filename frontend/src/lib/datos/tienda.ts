@@ -72,9 +72,10 @@ async function cargar(slug: string): Promise<DatosTienda | null> {
 export const datosTienda = cache(cargar);
 
 export async function existeTienda(slug: string) {
+  if (esEjemplo(slug)) return true;
   if (usingApi()) return !!(await apiStoreData(slug));
   const storage = await storeStorage();
-  return esEjemplo(slug) || (storage ? !!(await new D1Stores(storage.DB).findBySlug(slug)) : await existe(clave(slug)));
+  return storage ? !!(await new D1Stores(storage.DB).findBySlug(slug)) : await existe(clave(slug));
 }
 
 export async function guardarTienda(d: DatosTienda) {
