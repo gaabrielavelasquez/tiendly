@@ -1,5 +1,5 @@
 export type Option = { name: string; kind: "color" | "size" | "other"; values: string[] };
-export type Variant = { values: string[]; stock: number };
+export type Variant = { values: string[]; stock: number; /** Base stock minus sold units and live reservations. Absent when there are no orders. */ availableStock?: number };
 export type Measurements = { columns: string[]; rows: Record<string, string[]> };
 export type ProductInput = {
   name: string; description: string; sku: string; categories: string[]; status: "active" | "paused";
@@ -45,3 +45,56 @@ export type CatalogCommand =
   | { kind: 'remove-offer'; ids: string[]; versions: CatalogVersions }
   | { kind: 'restore'; previous: Pick<Product, 'id' | 'status' | 'priceCents' | 'compareAtCents' | 'offer'>[]; versions: CatalogVersions };
 export type ApiErrorCode = 'unauthorized' | 'forbidden' | 'invalid' | 'conflict' | 'not_found' | 'unavailable' | 'method_not_allowed' | 'too_large';
+
+// ── Orders (storefront checkout + panel) ─────────────────────────────────────────────────────────────
+export type OrderPaymentMethod = 'card' | 'yape' | 'whatsapp';
+export type OrderPaymentStatus = 'pending' | 'paid' | 'canceled';
+export type OrderDeliveryMethod = 'delivery' | 'pickup' | 'coordinate';
+export type OrderDeliveryStatus = 'to-ship' | 'shipped' | 'delivered';
+export type OrderCancellation = 'store' | 'expired-reservation';
+export type CheckoutDelivery =
+  | { kind: 'delivery'; district: string; address: string; reference?: string }
+  | { kind: 'pickup' }
+  | { kind: 'coordinate' };
+export type CheckoutInput = {
+  /** Checkout attempt token: ties the order to its reserved number. */
+  token: string;
+  items: { productId: string; variant: string[]; quantity: number }[];
+  customer: { name: string; phone: string };
+  delivery: CheckoutDelivery;
+  payment: { method: OrderPaymentMethod };
+};
+export type OrderTotals = { subtotalCents: number; discountCents: number; shippingCents: number | null; shippingPending: boolean; totalCents: number; units: number };
+/** Storefront receipt: everything the confirmation screen needs, nothing about the panel. */
+export type OrderReceipt = { number: string; createdAt: string; totals: OrderTotals; receiptToken: string };
+export type OrderItem = { productId: string | null; name: string; variantText: string; quantity: number; unitPriceCents: number; photoUrl: string | null };
+export type OrderView = {
+  id: string; number: string; createdAt: string; version: number;
+  customer: { name: string; phone: string };
+  totals: OrderTotals;
+  payment: { status: OrderPaymentStatus; method: OrderPaymentMethod };
+  delivery: { status: OrderDeliveryStatus; method: OrderDeliveryMethod; district: string | null };
+};
+export type OrderDetail = OrderView & {
+  items: OrderItem[];
+  couponCode: string | null;
+  address: string | null;
+  reference: string | null;
+  pickup: { address: string; district: string; hours: string; note: string } | null;
+  paidAt: string | null;
+  unmarkedPayments: string[];
+  shippedAt: string | null;
+  deliveredAt: string | null;
+  canceledAt: string | null;
+  cancellation: OrderCancellation | null;
+};
+/** Panel actions run as their own command; the browser never sends prices or statuses. */
+export type OrderCommand =
+  | { kind: 'pay'; version: number }
+  | { kind: 'unpay'; version: number }
+  | { kind: 'ship'; version: number }
+  | { kind: 'unship'; version: number }
+  | { kind: 'deliver'; version: number }
+  | { kind: 'undeliver'; version: number }
+  | { kind: 'cancel'; version: number }
+  | { kind: 'undo' };
