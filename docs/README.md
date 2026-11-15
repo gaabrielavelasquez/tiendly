@@ -20,11 +20,11 @@
 | [`backend/`](backend/separacion-api.md) | API separada, criterios heredados y cierre del traspaso de `la-bodega`. |
 | [`verificacion/`](verificacion/backend-api/README.md) | Informes de aceptación con capturas y JSON. Evidencia, no estado. |
 | [`capturas/`](capturas/) | Capturas de revisión de PRs anteriores. Evidencia histórica. |
-| [`historia/`](historia/) | Documentos cerrados: plan del 29-oct, estado del Core Loop de octubre, registro cronológico del traspaso y guion de test con tiendas. **No describe el estado actual.** |
+| [`historia/`](historia/) | Documentos cerrados: plan del 29-oct, estado del Core Loop de octubre y guion de test con tiendas. **No describe el estado actual.** |
 
 ## Criterio de limpieza (15-nov-2026)
 
 - Los briefs de implementación y las revisiones de Figma de octubre se borraron: su contenido vive en el código y en las decisiones.
-- Lo que era registro y ya no estado se movió a `docs/historia/`, cada archivo con un aviso al inicio.
-- `docs/traspaso.md` dejó de ser un log: ahora es el estado; el log está en [`historia/traspaso-2026.md`](historia/traspaso-2026.md).
+- El plan del 29-oct, el estado del Core Loop de octubre y el guion de test con tiendas se movieron a `docs/historia/`, cada archivo con un aviso al inicio.
+- `docs/traspaso.md` dejó de ser un log: ahora es el estado y se sobrescribe. El detalle por sesión va en la descripción del PR; el registro cronológico anterior quedó en el historial de git.
 - Las capturas y los informes de verificación se conservan como evidencia de PR. No son fuente de verdad sobre el estado.

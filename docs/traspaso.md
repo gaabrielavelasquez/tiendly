@@ -1,6 +1,6 @@
 # Estado y traspaso · Tiendly
 
-Punto de entrada para saber dónde quedó el trabajo. Última actualización: **15-nov-2026**. El registro cronológico completo (agosto–noviembre) está en [`docs/historia/traspaso-2026.md`](historia/traspaso-2026.md); no lo leas como estado vigente.
+Punto de entrada para saber dónde quedó el trabajo. Última actualización: **15-nov-2026**. Este documento se sobrescribe cuando cambia el estado; el detalle de cada sesión vive en la descripción de su PR y en el historial de git.
 
 ## Dónde está todo
 
