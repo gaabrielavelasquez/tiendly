@@ -1,15 +1,24 @@
 import 'server-only';
 import type { Product, CatalogCommand } from '@tiendly/contracts';
+import { BusinessError } from '@tiendly/backend/rules';
 import { apiJson, privateSnapshot, ApiError } from './api-client';
 import { toCatalogInput, fromCatalog } from './catalog-mapping';
 import { subirFotos } from './datos/fotos';
 import { aProducto, faltaParaPublicar, type FormProducto } from '@/features/productos/lib/formulario';
 
+const CATALOG_ERRORS: Record<string, string> = {
+  conflict: 'El catálogo cambió. Recarga la página antes de guardar.',
+  unauthorized: 'Ingresa de nuevo para guardar los cambios.',
+  forbidden: 'No tienes permiso para cambiar este catálogo.',
+  invalid: 'Revisa los datos del producto antes de guardar.',
+};
+
+/** Normaliza errores de API y dominio de catálogo sin filtrar detalles internos al cliente. */
 export async function apiCatalogResult<T>(action: () => Promise<T>): Promise<T | { error: string }> {
   try { return await action(); }
   catch (error) {
-    const messages: Record<string, string> = { conflict: 'El catálogo cambió. Recarga la página antes de guardar.', unauthorized: 'Ingresa de nuevo para guardar los cambios.', forbidden: 'No tienes permiso para cambiar este catálogo.', invalid: 'Revisa los datos del producto antes de guardar.' };
-    return { error: error instanceof ApiError ? messages[error.code] ?? 'No pudimos guardar los cambios. Inténtalo de nuevo.' : 'No pudimos guardar los cambios. Inténtalo de nuevo.' };
+    const code = error instanceof ApiError || error instanceof BusinessError ? error.code : undefined;
+    return { error: (code && CATALOG_ERRORS[code]) ?? 'No pudimos guardar los cambios. Inténtalo de nuevo.' };
   }
 }
 export async function apiSaveProduct(id: string | null, form: FormProducto, expectedVersion?: number) {

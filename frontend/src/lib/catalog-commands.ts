@@ -6,18 +6,7 @@ import { toCatalogInput, fromCatalog } from './catalog-mapping';
 import type { Producto } from '@/features/productos/types';
 
 /** Los conflictos llegan al cliente con una recuperación útil, sin exponer errores internos. */
-export async function catalogResult<T>(command: () => Promise<T>): Promise<T | { error: string }> {
- try { return await command(); }
- catch (error) {
-  if (error instanceof BusinessError) {
-   if (error.code === 'conflict') return { error: 'El catálogo cambió. Recarga la página antes de guardar.' };
-   if (error.code === 'unauthorized') return { error: 'Ingresa de nuevo para guardar los cambios.' };
-   if (error.code === 'forbidden') return { error: 'No tienes permiso para cambiar este catálogo.' };
-   if (error.code === 'invalid') return { error: 'Revisa los datos del producto antes de guardar.' };
-  }
-  return { error: 'No pudimos guardar los cambios. Inténtalo de nuevo.' };
- }
-}
+export { apiCatalogResult as catalogResult } from './catalog-api';
 
 export async function catalogContext() {
  const {runtime}=await businessRuntime();

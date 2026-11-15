@@ -1,13 +1,13 @@
 "use server";
 
-import { usingApi, apiJson, privateSnapshot } from '@/lib/api-client';
+import { usingApi, apiJson, privateSnapshot, ApiError } from '@/lib/api-client';
 import type { Store } from '@tiendly/contracts';
 import { headers } from "next/headers";
 import { createStore, ownedStore } from "@tiendly/backend/server";
 import { businessRuntime } from "@/lib/business-runtime";
 import { storeStorage } from "@/lib/store-storage";
 import { CATEGORY_IDS } from "@/lib/store-mapping";
-import { testLoginAllowed } from "@tiendly/backend/rules";
+import { BusinessError, testLoginAllowed } from "@tiendly/backend/rules";
 
 import { recordarIngreso, tiendaDeIngreso } from "@/lib/datos/ingreso";
 import { cookies } from "next/headers";
@@ -51,23 +51,52 @@ type NuevaTienda = { nombre: string; slug: string; celularVentas: string; celula
  * Crea la tienda (simulado, en los datos compartidos): arranca vacía, con su link, su WhatsApp de ventas y
  * plan Free. Este navegador la recuerda (cookie): desde aquí el panel es el de esta tienda.
  */
+const STORE_ERRORS: Record<string, string> = {
+  unauthorized: "Continúa con Google para crear tu tienda.",
+  conflict: "Ese link ya está ocupado. Elige otro para tu tienda.",
+  invalid: "Revisa los datos de tu tienda antes de crearla.",
+};
+
+function storeError(error: unknown): { error: string } {
+  const code = error instanceof ApiError || error instanceof BusinessError ? error.code : undefined;
+  return { error: (code && STORE_ERRORS[code]) ?? "No pudimos crear tu tienda. Inténtalo de nuevo." };
+}
+
+async function storePayload(t: NuevaTienda) {
+  return {
+    name: t.nombre,
+    slug: await primeroLibre(aSlug(t.slug)),
+    salesPhone: t.celularVentas,
+    categories: t.rubros.map(id => CATEGORY_IDS[id]),
+    otherCategory: t.rubroOtro ?? "",
+  };
+}
+
 export async function crearTienda(t: NuevaTienda): Promise<{ slug: string } | { error: string }> {
   if (usingApi()) {
-    const existing = await privateSnapshot();
-    if (existing) return { slug: existing.store.slug };
-    if (!validos(t.rubros)) return { error: 'Elige al menos una opción para armar tu tienda.' };
-    const { store } = await apiJson<{ store: Store }>('/api/business/stores', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ name: t.nombre, slug: await primeroLibre(aSlug(t.slug)), salesPhone: t.celularVentas, categories: t.rubros.map(id => CATEGORY_IDS[id]), otherCategory: t.rubroOtro ?? '' }) });
-    return { slug: store.slug };
+    try {
+      const existing = await privateSnapshot();
+      if (existing) return { slug: existing.store.slug };
+      if (!validos(t.rubros)) return { error: 'Elige al menos una opción para armar tu tienda.' };
+      const { store } = await apiJson<{ store: Store }>('/api/business/stores', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(await storePayload(t)) });
+      return { slug: store.slug };
+    } catch (error) {
+      return storeError(error);
+    }
   }
   if (await storeStorage()) {
-    const { runtime } = await businessRuntime();
-    const actor = await runtime.actor(await headers());
-    if (!actor) return { error: "Continúa con Google para crear tu tienda." };
-    const existing = await ownedStore(runtime.stores, actor);
-    if (existing) return { slug: existing.slug };
-    if (!validos(t.rubros)) return { error: "Elige al menos una opción para armar tu tienda." };
-    const store = await createStore(runtime.stores, actor, { name: t.nombre, slug: await primeroLibre(aSlug(t.slug)), salesPhone: t.celularVentas, categories: t.rubros.map(id => CATEGORY_IDS[id]), otherCategory: t.rubroOtro ?? "" });
-    return { slug: store.slug };
+    try {
+      const { runtime } = await businessRuntime();
+      const actor = await runtime.actor(await headers());
+      if (!actor) return { error: "Continúa con Google para crear tu tienda." };
+      const existing = await ownedStore(runtime.stores, actor);
+      if (existing) return { slug: existing.slug };
+      if (!validos(t.rubros)) return { error: "Elige al menos una opción para armar tu tienda." };
+      const store = await createStore(runtime.stores, actor, await storePayload(t));
+      return { slug: store.slug };
+    } catch (error) {
+      return storeError(error);
+    }
   }
   if (!testLoginAllowed(process.env.TIENDLY_ENTORNO, process.env.TIENDLY_TEST_LOGIN)) return { error: "Continúa con Google para crear tu tienda." };
   const nombre = t.nombre.trim();

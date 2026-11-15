@@ -11,16 +11,14 @@ import { D1Catalog } from '../catalog/adapters/d1-catalog.ts';
 import { D1Settings } from '../settings/adapters/d1-settings.ts';
 import { D1Orders } from '../orders/adapters/d1-orders.ts';
 import { withAvailability } from '../orders/domain/order.ts';
-import { effectivePlan, type Store } from '../stores/domain/store.ts';
-import { BusinessError, requireActor, requireStoreWrite } from '../identity/domain/access.ts';
+import { effectivePlan, limaDate, type Store } from '../stores/domain/store.ts';
+import { requireActor } from '../identity/domain/access.ts';
+import { errorReply, jsonReply } from './request-body.ts';
 
-const statuses = { unauthorized: 401, forbidden: 403, invalid: 400, conflict: 409, not_found: 404 };
-const json = (body: unknown, status = 200) => Response.json(body, { status, headers: { 'Cache-Control': 'private, no-store' } });
 function storeView(store: Store): StoreView {
-  const today = new Intl.DateTimeFormat('en-CA', { timeZone: 'America/Lima', year: 'numeric', month: '2-digit', day: '2-digit' }).format(new Date());
-  return { id: store.id, slug: store.slug, name: store.name, salesPhone: store.salesPhone, categories: store.categories, otherCategory: store.otherCategory, offerSectionName: store.offerSectionName, appearance: store.appearance, onboarding: store.onboarding, createdAt: store.createdAt, isDemo: store.isDemo, effectivePlan: effectivePlan(store.plan, store.founderUntil, today) === 'free' ? 'free' : 'pro' };
+  return { id: store.id, slug: store.slug, name: store.name, salesPhone: store.salesPhone, categories: store.categories, otherCategory: store.otherCategory, offerSectionName: store.offerSectionName, appearance: store.appearance, onboarding: store.onboarding, createdAt: store.createdAt, isDemo: store.isDemo, effectivePlan: effectivePlan(store.plan, store.founderUntil, limaDate()) === 'free' ? 'free' : 'pro' };
 }
-async function snapshot(bindings: Bindings, store: Store, publicOnly: boolean): Promise<StoreSnapshot> {
+export async function storeSnapshot(bindings: Bindings, store: Store, publicOnly: boolean): Promise<StoreSnapshot> {
   const [configuration, catalog, taken] = await Promise.all([
     new D1Settings(bindings.DB).read(store.id),
     new D1Catalog(bindings.DB).list(store.id),
@@ -38,15 +36,15 @@ async function dispatch(request: Request, bindings: Bindings): Promise<Response>
   const url = new URL(request.url);
   try {
     if (url.pathname.startsWith('/images/')) {
-      if (!['GET', 'HEAD'].includes(request.method)) return json({ error: 'method_not_allowed' }, 405);
+      if (!['GET', 'HEAD'].includes(request.method)) return jsonReply({ error: 'method_not_allowed' }, 405);
       if (!bindings.UPLOADS) throw new Error('R2 unavailable');
       const response = await readImage(bindings.UPLOADS, url.pathname.slice('/images/'.length));
       return request.method === 'HEAD' ? new Response(null, response) : response;
     }
     if (url.pathname === '/health') {
-      if (request.method !== 'GET') return json({ error: 'method_not_allowed' }, 405);
+      if (request.method !== 'GET') return jsonReply({ error: 'method_not_allowed' }, 405);
       await bindings.DB.prepare('SELECT id FROM stores LIMIT 1').all();
-      return json({ status: 'ok', service: 'tiendly-api', contract: 1, revision: bindings.TIENDLY_REVISION ?? null });
+      return jsonReply({ status: 'ok', service: 'tiendly-api', contract: 1, revision: bindings.TIENDLY_REVISION ?? null });
     }
     const publicStore = url.pathname.match(/^\/api\/public\/stores\/([a-z0-9-]{1,40})(\/checkout|\/orders)?$/);
     if (publicStore) {
@@ -54,11 +52,11 @@ async function dispatch(request: Request, bindings: Bindings): Promise<Response>
         const context = createRuntime(bindings);
         return await publicCheckout(request, context.runtime, publicStore[1], publicStore[2] === '/checkout' ? 'reserve' : 'create');
       }
-      if (request.method !== 'GET') return json({ error: 'method_not_allowed' }, 405);
+      if (request.method !== 'GET') return jsonReply({ error: 'method_not_allowed' }, 405);
       const store = await new D1Stores(bindings.DB).findBySlug(publicStore[1]);
-      return store ? json({ snapshot: await snapshot(bindings, store, true) }) : json({ error: 'not_found' }, 404);
+      return store ? jsonReply({ snapshot: await storeSnapshot(bindings, store, true) }) : jsonReply({ error: 'not_found' }, 404);
     }
-    if (!url.pathname.startsWith('/api/auth/') && !url.pathname.startsWith('/api/business/orders') && !['/api/business/stores', '/api/business/catalog', '/api/business/images', '/api/business/snapshot', '/api/business/catalog/commands'].includes(url.pathname)) return json({ error: 'not_found' }, 404);
+    if (!url.pathname.startsWith('/api/auth/') && !url.pathname.startsWith('/api/business/orders') && !['/api/business/stores', '/api/business/catalog', '/api/business/images', '/api/business/snapshot', '/api/business/catalog/commands'].includes(url.pathname)) return jsonReply({ error: 'not_found' }, 404);
     const context = createRuntime(bindings);
     const { runtime, auth } = context;
     await auth.$context;
@@ -73,14 +71,14 @@ async function dispatch(request: Request, bindings: Bindings): Promise<Response>
     if (url.pathname === '/api/business/images') return await imagesHandler(request, context);
     if (url.pathname.startsWith('/api/business/orders')) return await ordersHandler(request, runtime);
     if (url.pathname === '/api/business/snapshot') {
-      if (request.method !== 'GET') return json({ error: 'method_not_allowed' }, 405);
+      if (request.method !== 'GET') return jsonReply({ error: 'method_not_allowed' }, 405);
       const actor = requireActor(await runtime.actor(request.headers));
       const store = await runtime.stores.stores.findOwned(actor.userId);
-      return json({ snapshot: store ? await snapshot(bindings, store, false) : null });
+      return jsonReply({ snapshot: store ? await storeSnapshot(bindings, store, false) : null });
     }
-    return json({ error: 'not_found' }, 404);
+    return jsonReply({ error: 'not_found' }, 404);
   } catch (error) {
-    return json({ error: error instanceof BusinessError ? error.code : 'unavailable' }, error instanceof BusinessError ? statuses[error.code] : 503);
+    return errorReply(error);
   }
 }
 export async function apiFetch(request: Request, bindings: Bindings): Promise<Response> {

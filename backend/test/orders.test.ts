@@ -1,10 +1,8 @@
 import { test } from 'node:test';
+import { createTestMiniflare } from './helpers/test-db.ts';
 import assert from 'node:assert/strict';
-import { readFile, readdir } from 'node:fs/promises';
-import { Miniflare, convertV4MiniflareOptions } from 'miniflare';
 import { betterAuth } from 'better-auth';
 import { testUtils } from 'better-auth/plugins';
-import type { D1Database } from '@cloudflare/workers-types';
 import type { OrderDetail, OrderReceipt, OrderView, Product, Store, StoreConfiguration, StoreSnapshot } from '@tiendly/contracts';
 import { limaDate, resolveItems, shippingFor, totals, validateCheckout, zoneOfDistrict } from '../src/orders/domain/order.ts';
 import { createRuntime, type Bindings } from '../src/runtime/business.ts';
@@ -13,12 +11,7 @@ import { apiFetch } from '../src/runtime/api.ts';
 const origin = 'http://localhost:3220';
 
 async function fixture() {
-  const mf = new Miniflare(convertV4MiniflareOptions({ modules: true, script: 'export default {fetch(){return new Response("ok")}}', compatibilityDate: '2026-11-08', d1Databases: ['DB'] }));
-  const db = await mf.getD1Database('DB') as unknown as D1Database;
-  for (const file of (await readdir(new URL('../db/migrations', import.meta.url))).filter(name => name.endsWith('.sql')).sort()) {
-    const sql = await readFile(new URL(`../db/migrations/${file}`, import.meta.url), 'utf8');
-    for (const statement of sql.replace(/^--.*$/gm, '').split(';').filter(x => x.trim())) await db.prepare(statement).run();
-  }
+  const { mf, db } = await createTestMiniflare();
   const bindings: Bindings = { DB: db, BETTER_AUTH_URL: origin, BETTER_AUTH_SECRET: 'test-only-secret-that-has-at-least-32-characters', GOOGLE_CLIENT_ID: 'test-only-client', GOOGLE_CLIENT_SECRET: 'test-only-secret', TIENDLY_ENTORNO: 'local' };
   const { auth } = createRuntime(bindings);
   const helpers = (await betterAuth({ ...auth.options, plugins: [testUtils()] }).$context).test;

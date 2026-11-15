@@ -16,7 +16,7 @@ export async function cerrarSesion() {
       const pair = cookie.split(';', 1)[0];
       const index = pair.indexOf('=');
       if (index < 1) continue;
-      jar.set(pair.slice(0, index), '', { path: '/', httpOnly: true, sameSite: 'lax', secure: process.env.NODE_ENV === 'production', maxAge: 0 });
+      jar.set(pair.slice(0, index), '', { path: '/', httpOnly: true, sameSite: 'lax', secure: /;\s*Secure/i.test(cookie) || process.env.NODE_ENV === 'production', maxAge: 0 });
     }
     jar.delete(COOKIE_TIENDA);
     return;

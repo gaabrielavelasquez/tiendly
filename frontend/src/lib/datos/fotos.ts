@@ -9,21 +9,26 @@ import { put } from "@vercel/blob";
 // se ve desde cualquier dispositivo. Sin token (desarrollo local), la foto queda como data URL.
 
 /** Sube las fotos nuevas (data URL) y devuelve las URL definitivas; las demás quedan igual. */
+function parseDataImage(url: string): { contentType: string; bytes: Uint8Array<ArrayBuffer> } | null {
+  if (!url.startsWith('data:')) return null;
+  const match = url.match(/^data:(image\/(?:jpeg|png|webp));base64,([A-Za-z0-9+/=]+)$/);
+  if (!match) throw new Error('Revisa el formato de la imagen.');
+  return { contentType: match[1], bytes: new Uint8Array(Buffer.from(match[2], 'base64')) };
+}
+
 export async function subirFotos(slug: string, urls: string[]): Promise<string[]> {
   if (usingApi()) return Promise.all(urls.map(async url => {
-    if (!url.startsWith('data:')) return url;
-    const match = url.match(/^data:(image\/(?:jpeg|png|webp));base64,([A-Za-z0-9+/=]+)$/);
-    if (!match) throw new Error('Revisa el formato de la imagen.');
-    return (await apiJson<{ url: string }>('/api/business/images', { method: 'POST', headers: { 'content-type': match[1] }, body: Buffer.from(match[2], 'base64') })).url;
+    const parsed = parseDataImage(url);
+    if (!parsed) return url;
+    return (await apiJson<{ url: string }>('/api/business/images', { method: 'POST', headers: { 'content-type': parsed.contentType }, body: parsed.bytes })).url;
   }));
   if (await storeStorage()) {
     const { runtime, uploads } = await businessRuntime();
     const actor = await runtime.actor(await headers());
     if (!uploads || !actor || (await ownedStore(runtime.stores, actor))?.slug !== slug) throw new Error("No se pudieron guardar las imágenes.");
     return Promise.all(urls.map(async url => {
-      const match = url.match(/^data:(image\/(?:jpeg|png|webp));base64,([A-Za-z0-9+/=]+)$/);
-      if (url.startsWith("data:") && !match) throw new Error("Revisa el formato de la imagen.");
-      return match ? uploadImage(runtime.stores, uploads, actor, new Uint8Array(Buffer.from(match[2], "base64")), match[1]) : url;
+      const parsed = parseDataImage(url);
+      return parsed ? uploadImage(runtime.stores, uploads, actor, parsed.bytes, parsed.contentType) : url;
     }));
   }
   if (!process.env.BLOB_READ_WRITE_TOKEN) return urls;

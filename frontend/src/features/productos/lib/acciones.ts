@@ -3,6 +3,7 @@
 import { usingApi } from '@/lib/api-client';
 import { apiCatalogResult, apiSaveProduct, apiDuplicateProduct, apiCatalogCommand } from '@/lib/catalog-api';
 import { saveProduct } from "@tiendly/backend/server";
+import { toCents } from "@tiendly/backend/rules";
 import { storeStorage } from "@/lib/store-storage";
 import { catalogContext, changeCatalog, catalogResult } from "@/lib/catalog-commands";
 import { toCatalogInput, fromCatalog } from "@/lib/catalog-mapping";
@@ -123,7 +124,7 @@ export async function quitarOferta(ids: string[], versions: Record<string,number
 
 /** Deshacer una acción en lote: deja precio, oferta y estado como estaban. */
 export async function restaurarProductos(previos: Pick<Producto, "id" | "precio" | "precioAntes" | "oferta" | "estado">[], versions: Record<string,number> = {}): Promise<Producto[] | { error: string }> {
-  if (usingApi()) return apiCatalogResult(async () => (await apiCatalogCommand({ kind: 'restore', previous: previos.map(p => ({ id: p.id, status: p.estado === 'activo' ? 'active' : 'paused', priceCents: Math.round(p.precio * 100), compareAtCents: p.precioAntes === undefined ? null : Math.round(p.precioAntes * 100), offer: p.oferta ? { from: p.oferta.desde, until: p.oferta.hasta } : null })), versions })).products);
+  if (usingApi()) return apiCatalogResult(async () => (await apiCatalogCommand({ kind: 'restore', previous: previos.map(p => ({ id: p.id, status: p.estado === 'activo' ? 'active' : 'paused', priceCents: toCents(p.precio), compareAtCents: p.precioAntes === undefined ? null : toCents(p.precioAntes), offer: p.oferta ? { from: p.oferta.desde, until: p.oferta.hasta } : null })), versions })).products);
   if (await storeStorage()) return catalogResult(async () => (await changeCatalog(previos.map(p=>p.id),versions,p=>{
     const previous = previos.find(item => item.id === p.id)!;
     return { ...p, precio: previous.precio, precioAntes: previous.precioAntes, oferta: previous.oferta, estado: previous.estado };

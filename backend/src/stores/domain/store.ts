@@ -3,7 +3,7 @@ import { BusinessError } from "../../identity/domain/access.ts";
 import type { Plan, Capability, Appearance, Store, StoreInput } from '@tiendly/contracts';
 export type { Plan, Capability, Appearance, Store, StoreInput } from '@tiendly/contracts';
 export const CATEGORIES = ["accessories", "beauty", "footwear", "food", "home", "handmade", "clothing", "secondhand", "technology", "other"] as const;
-const RESERVED = new Set(["images", "api", "tienda", "moda", "zapatos", "belleza", "tiendly", "admin", "heather", "demo", "panel", "registro", "kit", "muna", "keyhaus", "glow-labo", "aurora"]);
+export const RESERVED = new Set(["images", "api", "tienda", "moda", "zapatos", "belleza", "tiendly", "admin", "heather", "demo", "panel", "registro", "kit", "muna", "keyhaus", "glow-labo", "aurora"]);
 export const INITIAL_APPEARANCE: Appearance = { theme: "neutral", accent: "theme", logo: "", cover: "", welcome: "", instagram: "", hours: "" };
 
 export function validateStoreInput(value: StoreInput): StoreInput {
@@ -16,10 +16,14 @@ export function validateStoreInput(value: StoreInput): StoreInput {
   return { slug: value.slug, name, salesPhone: value.salesPhone, categories: [...new Set(value.categories)], otherCategory: value.categories.includes("other") ? otherCategory : "" };
 }
 
-function validCalendarDate(value: string): boolean {
-  if (!/^\d{4}-\d{2}-\d{2}$/.test(value)) return false;
+export function validCalendarDate(value: unknown): value is string {
+  if (typeof value !== "string" || !/^\d{4}-\d{2}-\d{2}$/.test(value)) return false;
   const date = new Date(`${value}T00:00:00.000Z`);
   return !Number.isNaN(date.valueOf()) && date.toISOString().slice(0, 10) === value;
+}
+
+export function limaDate(at: Date = new Date()): string {
+  return new Intl.DateTimeFormat("en-CA", { timeZone: "America/Lima", year: "numeric", month: "2-digit", day: "2-digit" }).format(at);
 }
 
 export function effectivePlan(plan: unknown, founderUntil: string | null, limaDate: string): Plan {
