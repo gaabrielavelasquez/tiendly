@@ -85,4 +85,4 @@ El smoke exige ese SHA, health 200 y noindex, Registro/MUÑA 200, APIs de negoci
 
 ## Límites funcionales
 
-Identidad, tiendas y catálogo/fotos están conectados a D1/R2. Ventas/pedidos, stock/reservas, checkout, cupones, guardados de configuración/Mi tienda y tareas siguen pendientes. Pagos, SUNAT, bancos, envíos y comunicaciones continúan simulados. No se importan datos desde Redis/Blob en este módulo.
+Identidad, tiendas, catálogo/fotos, checkout y pedidos están conectados a D1/R2. Cupones, guardados de configuración/Mi tienda y tareas siguen pendientes (sin API no hay cupones activos en el checkout). Pagos, SUNAT, bancos, envíos y comunicaciones continúan simulados. No se importan datos desde Redis/Blob en este módulo.

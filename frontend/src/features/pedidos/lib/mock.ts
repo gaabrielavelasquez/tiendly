@@ -2,9 +2,12 @@ import type { DetallePedido, Escenario, Pedido } from "../types";
 import { esHeather } from "@/lib/datos/semillas";
 import { datosTienda } from "@/lib/datos/tienda";
 import { ahoraIso, alPresente } from "@/lib/reloj";
+import { ApiError, apiJson, usingApi } from "@/lib/api-client";
+import { pedidoConDetalle, pedidoDe } from "./api";
+import type { OrderDetail, OrderView } from "@tiendly/contracts";
 import { DETALLES, unidades } from "./detalle-mock";
 
-// Pedidos simulados de una tienda que vende por WhatsApp (Heather), hasta tener backend.
+// Pedidos de la tienda. Con API: vienen de D1 por HTTP. Sin API: almacén local + pedidos de demo.
 // Coinciden con Inicio: hoy hay 3 por enviar (2 delivery y 1 recojo) y 2 reservas que vencen esta noche.
 
 // Las fechas están escritas alrededor del jueves 15-oct-2026, 6:30 p. m.; al leerlas se corren al presente
@@ -54,6 +57,10 @@ export function leerEscenario(valor: string | string[] | undefined): Escenario {
 export async function obtenerPedidos(escenario: Escenario, slug: string, ahora = ahoraIso()): Promise<Pedido[]> {
   if (escenario === "error") throw new Error("No se pudo cargar Pedidos (simulado).");
   if (escenario === "vacio") return [];
+  if (usingApi()) {
+    const { orders } = await apiJson<{ orders: OrderView[] }>("/api/business/orders");
+    return orders.map(pedidoDe); // la API ya devuelve lo más nuevo primero
+  }
   const d = await datosTienda(slug);
   return [...(d?.pedidos.creados ?? []).map((c) => c.pedido), ...demo(slug, ahora).map(conUnidades)];
 }
@@ -61,20 +68,29 @@ export async function obtenerPedidos(escenario: Escenario, slug: string, ahora =
 /** Los pedidos simulados (#TL-1035 a #TL-1047) son de Heather, corridos al presente; las demás tiendas solo tienen los de su vitrina. */
 const demo = (slug: string, ahora: string) => (esHeather(slug) ? PEDIDOS.map((p) => ({ ...p, creadoEl: alPresente(p.creadoEl, ahora) })) : []);
 
-/** El historial del detalle de la demo, corrido al presente como su pedido. */
-function detalleAlPresente(d: DetallePedido, ahora: string): DetallePedido {
-  const mover = (v?: string) => (v ? alPresente(v, ahora) : v);
-  return { ...d, pagadoEl: mover(d.pagadoEl), enviadoEl: mover(d.enviadoEl), entregadoEl: mover(d.entregadoEl), canceladoEl: mover(d.canceladoEl) };
-}
-
 /** La cantidad de productos de la lista sale del detalle, así no se desalinean. */
 const conUnidades = (p: Pedido): Pedido => (DETALLES[p.id] ? { ...p, items: unidades(DETALLES[p.id]) } : p);
 
 /** Un pedido con su detalle (para /panel/pedidos/[id]). `null` si no existe. */
 export async function obtenerPedido(slug: string, id: string, ahora = ahoraIso()): Promise<{ pedido: Pedido; detalle: DetallePedido } | null> {
+  if (usingApi()) {
+    try {
+      const { order } = await apiJson<{ order: OrderDetail | null }>(`/api/business/orders/${encodeURIComponent(id)}`);
+      return order ? pedidoConDetalle(order) : null;
+    } catch (error) {
+      if (error instanceof ApiError && error.status === 404) return null;
+      throw error;
+    }
+  }
   const creado = (await datosTienda(slug))?.pedidos.creados.find((c) => c.pedido.id === id);
   if (creado) return { pedido: creado.pedido, detalle: creado.detalle };
   const pedido = demo(slug, ahora).find((p) => p.id === id);
   const detalle = DETALLES[id];
   return pedido && detalle ? { pedido: conUnidades(pedido), detalle: detalleAlPresente(detalle, ahora) } : null;
+}
+
+/** El historial del detalle de la demo, corrido al presente como su pedido. */
+function detalleAlPresente(d: DetallePedido, ahora: string): DetallePedido {
+  const mover = (v?: string) => (v ? alPresente(v, ahora) : v);
+  return { ...d, pagadoEl: mover(d.pagadoEl), enviadoEl: mover(d.enviadoEl), entregadoEl: mover(d.entregadoEl), canceladoEl: mover(d.canceladoEl) };
 }

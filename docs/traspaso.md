@@ -1,3 +1,13 @@
+# Checkout y pedidos en la API · 15-nov-2026 · en revisión
+
+- Corte en `feat/checkout-pedidos-api` (worktree Orca `api-checkout-pedidos`, desde `dev` `acf79e7`): la vitrina crea pedidos en D1 y el panel de Pedidos lee y ejecuta acciones contra la API. Sin cambios visuales ni de copy.
+- Backend: migración `0004_orders.sql` (pedidos, líneas, reservas de stock, pagos, eventos e intentos de checkout). `POST /api/public/stores/:slug/checkout` reserva el número TL-#### idempotentemente por token; `POST /api/public/stores/:slug/orders` crea el pedido recalculando precios, envío y stock en un solo lote con guard de sobrevenda. `GET /api/business/orders(/:id)` y `POST .../commands` (pay, unpay, ship, unship, deliver, undeliver, cancel, undo) con conflicto por versión. Los snapshots suman `availableStock` por variante: base − vendidos − reservas vigentes; una reserva vencida se libera al calcular.
+- Frontend: `reservarNumero`/`registrarPedido` usan la API en modo API (token generado en el navegador); el detalle del pedido manda comandos con versión y reconcilia la respuesta; `lib/datos/api.ts` traduce `availableStock` a la asignación sintética que ya muestra el panel. Cupones y la lectura de la confirmación siguen fuera (la confirmación vive en el navegador).
+- Verificación: 24 tests de backend (sobrevenda concurrente, reserva idempotente, expiración, comandos y deshacer) y aceptación E2E local nueva `frontend/scripts/verify-checkout-local.mjs` PASS en Chromium y WebKit a 390 px: comprar con tarjeta simulada, stock descontado, pedidos en el panel, enviar/deshacer/desmarcar/cancelar y liberación de stock. `verify-api-local.mjs` PASS completo en Chromium 390/1440/360; en WebKit falla por el ruido preexistente del test de aborto (reproducido sin este corte). `typecheck`, `check:tokens`, `build` y `test:environments` PASS.
+- Pendiente: aplicar la migración `0004` en D1 de QA y republicar el par QA (backend con `deploy:api:qa`, frontend con `TIENDLY_API_URL`); cupones, confirmación por token de comprobante, límite de frecuencia del checkout público y ajustes editables siguen en la lista del plan.
+
+---
+
 # Par QA en modo API · 15-nov-2026
 
 - `api-preview` publicado en https://api-preview.tiendly.workers.dev (versión `127dcf37`, revisión `44f381e`) con D1/R2 de QA. Secretos cargados desde la pareja privada del cliente Preview y un `BETTER_AUTH_SECRET` nuevo; no se imprimieron valores ni se copiaron a GitHub.

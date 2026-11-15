@@ -13,6 +13,8 @@ export type Pedido = {
   /** Número visible, p. ej. "TL-1042" (decisión 0028). */
   numero: string;
   creadoEl: string;
+  /** Versión canónica en la API: con ella, cada comando rechaza el que llegó tarde. */
+  version?: number;
   cliente: { nombre: string; celular: string };
   items: number;
   total: number;
