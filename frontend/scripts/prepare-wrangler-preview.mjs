@@ -15,7 +15,7 @@ const worker = JSON.parse(await readFile(resolve(source, "worker.config.json"), 
 assert.equal(worker.name, "preview");
 assert.equal(worker.manifest.mainModule, "index.js");
 assert.deepEqual(Object.keys(worker.manifest.modules), []);
-const { TIENDLY_API_URL: apiUrlBinding, ...workerEnv } = worker.env;
+const { TIENDLY_API_URL: apiUrlBinding, API: apiBinding, ...workerEnv } = worker.env;
 assert.deepEqual(workerEnv, {
   ASSETS: { type: "assets" },
   UPLOADS: { type: "r2", name: "tiendly-preview-images" },
@@ -28,7 +28,12 @@ assert.deepEqual(workerEnv, {
   TIENDLY_ENTORNO: { type: "text", value: "preview" },
 });
 // El modo API es opt-in por publicación y solo admite el Worker de API de QA.
-if (apiUrlBinding) assert.deepEqual(apiUrlBinding, { type: "text", value: "https://api-preview.tiendly.workers.dev" });
+if (apiUrlBinding) {
+  assert.deepEqual(apiUrlBinding, { type: "text", value: "https://api-preview.tiendly.workers.dev" });
+  assert.deepEqual(apiBinding, { type: "worker", worker: "api-preview" });
+} else {
+  assert.equal(apiBinding, undefined);
+}
 const entries = await readdir(resolve(source, "assets"));
 for (const privateDirectory of ["heather", "mi-tienda"]) {
   assert(!entries.includes(privateDirectory), `No se puede publicar ${privateDirectory}.`);
@@ -59,6 +64,7 @@ export default {
       return new Response("Not found", { status: 404, headers: { "X-Robots-Tag": "noindex" } });
     }
     if (path === "/_tiendly/health") return qaHealth(request, env, release);
+    if (env.API) globalThis.__TIENDLY_API = env.API;
     const result = await app.fetch(request, env, context);
     const response = new Response(result.body, result);
     response.headers.set("X-Robots-Tag", "noindex, nofollow, noarchive");
@@ -85,6 +91,7 @@ await writeFile(resolve(output, "wrangler.json"), JSON.stringify({
     migrations_dir: resolve(root, "../backend/db/migrations"),
   }],
   r2_buckets: [{ binding: "UPLOADS", bucket_name: worker.env.UPLOADS.name }],
+  ...(worker.env.API ? { services: [{ binding: "API", service: worker.env.API.worker }] } : {}),
   assets: {
     directory: "assets",
     binding: "ASSETS",

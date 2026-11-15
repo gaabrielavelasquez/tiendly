@@ -16,6 +16,17 @@ function endpoint(path: string): URL {
 export class ApiError extends Error {
   constructor(public readonly code: ApiErrorCode, public readonly status: number) { super(code); }
 }
+/**
+ * En QA el Worker de preview habla con la API por service binding: un fetch
+ * público a otro Worker de la misma zona falla con el error 1042 de Cloudflare.
+ * La entrada generada del preview expone el binding como `__TIENDLY_API`; en
+ * Next local no existe y se usa el fetch normal.
+ */
+type ApiService = { fetch(input: string, init?: RequestInit): Promise<Response> };
+async function apiFetch(target: URL, init: RequestInit): Promise<Response> {
+  const binding = (globalThis as { __TIENDLY_API?: ApiService }).__TIENDLY_API;
+  return binding ? binding.fetch(target.toString(), init) : fetch(target, init);
+}
 export async function apiResponse(path: string, init: RequestInit = {}): Promise<Response> {
   const incoming = await headers();
   const forwarded = new Headers(init.headers);
@@ -25,7 +36,7 @@ export async function apiResponse(path: string, init: RequestInit = {}): Promise
     const origin = incoming.get('origin');
     if (origin) forwarded.set('origin', origin);
   }
-  try { return await fetch(endpoint(path), { ...init, headers: forwarded, cache: 'no-store', redirect: 'manual', signal: AbortSignal.timeout(15000) }); }
+  try { return await apiFetch(endpoint(path), { ...init, headers: forwarded, cache: 'no-store', redirect: 'manual', signal: AbortSignal.timeout(15000) }); }
   catch { throw new ApiError('unavailable', 503); }
 }
 export async function apiJson<T>(path: string, init: RequestInit = {}): Promise<T> {
@@ -57,7 +68,7 @@ export async function proxyApi(request: Request): Promise<Response> {
     forwarded.delete('host');
     forwarded.delete('connection');
     const init: RequestInit & { duplex: 'half' } = { method: request.method, headers: forwarded, body: ['GET', 'HEAD'].includes(request.method) ? undefined : request.body, duplex: 'half', redirect: 'manual', cache: 'no-store', signal: AbortSignal.timeout(15000) };
-    const response = await fetch(endpoint(url.pathname + url.search), init);
+    const response = await apiFetch(endpoint(url.pathname + url.search), init);
     const output = new Response(response.body, response);
     // fetch decompresses upstream bodies; the downstream response must describe those bytes.
     output.headers.delete('content-encoding');

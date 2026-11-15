@@ -25,7 +25,7 @@ export default defineConfig({
       GOOGLE_CLIENT_SECRET: bindings.secret(),
       TIENDLY_TIENDA_DEMO: bindings.text("muna"),
       TIENDLY_ENTORNO: bindings.text("preview"),
-      ...(apiUrl ? { TIENDLY_API_URL: bindings.text(apiUrl) } : {}),
+      ...(apiUrl ? { TIENDLY_API_URL: bindings.text(apiUrl), API: bindings.worker({ worker: "api-preview" }) } : {}),
     },
   }),
 });

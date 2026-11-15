@@ -40,6 +40,7 @@ test("el manifiesto solo conecta D1/R2 de pruebas y no publica secretos ni ingre
   assert.deepEqual(Object.keys(vars).sort(), ["BETTER_AUTH_URL", "TIENDLY_ENTORNO", "TIENDLY_TIENDA_DEMO"]);
   assert.equal(vars.TIENDLY_ENTORNO, "preview");
   assert.equal(vars.BETTER_AUTH_URL, "https://preview.tiendly.workers.dev");
+  if (config.services !== undefined) assert.deepEqual(config.services, [{ binding: "API", service: "api-preview" }]);
   assert.equal(config.routes, undefined);
 });
 
@@ -50,4 +51,11 @@ test("la entrada publica el health del commit sin entrar a la app", async () => 
   const body = await response.json();
   assert.match(body.revision, /^[a-f0-9]{40}$/);
   assert.equal(body.status, "unavailable");
+});
+
+test("la entrada expone el service binding de la API cuando está configurado", async () => {
+  const api = { fetch: async () => new Response("api") };
+  await entry.fetch(new Request("https://preview.example/muna"), { API: api }, {});
+  assert.equal(globalThis.__TIENDLY_API, api);
+  delete globalThis.__TIENDLY_API;
 });
