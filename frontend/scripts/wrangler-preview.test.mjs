@@ -35,9 +35,11 @@ test("el manifiesto solo conecta D1/R2 de pruebas y no publica secretos ni ingre
   assert.equal(config.d1_databases[0].database_name, "tiendly-preview");
   assert.equal(config.d1_databases[0].database_id, "9fcfd54b-56a2-4cb9-af11-800e5191e93d");
   assert.deepEqual(config.r2_buckets, [{ binding: "UPLOADS", bucket_name: "tiendly-preview-images" }]);
-  assert.deepEqual(Object.keys(config.vars).sort(), ["BETTER_AUTH_URL", "TIENDLY_ENTORNO", "TIENDLY_TIENDA_DEMO"]);
-  assert.equal(config.vars.TIENDLY_ENTORNO, "preview");
-  assert.equal(config.vars.BETTER_AUTH_URL, "https://preview.tiendly.workers.dev");
+  const { TIENDLY_API_URL: apiUrl, ...vars } = config.vars;
+  if (apiUrl !== undefined) assert.equal(apiUrl, "https://api-preview.tiendly.workers.dev");
+  assert.deepEqual(Object.keys(vars).sort(), ["BETTER_AUTH_URL", "TIENDLY_ENTORNO", "TIENDLY_TIENDA_DEMO"]);
+  assert.equal(vars.TIENDLY_ENTORNO, "preview");
+  assert.equal(vars.BETTER_AUTH_URL, "https://preview.tiendly.workers.dev");
   assert.equal(config.routes, undefined);
 });
 

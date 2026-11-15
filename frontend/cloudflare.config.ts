@@ -1,5 +1,9 @@
 import { bindings, defineConfig, defineWorker } from "cf/config";
 
+// La publicación en modo API es explícita: sin la variable, el Worker conserva
+// el runtime anterior. El origen debe ser el Worker de API aceptado para QA.
+const apiUrl = process.env.TIENDLY_API_URL?.trim();
+
 export default defineConfig({
   worker: defineWorker({
     name: "preview",
@@ -21,6 +25,7 @@ export default defineConfig({
       GOOGLE_CLIENT_SECRET: bindings.secret(),
       TIENDLY_TIENDA_DEMO: bindings.text("muna"),
       TIENDLY_ENTORNO: bindings.text("preview"),
+      ...(apiUrl ? { TIENDLY_API_URL: bindings.text(apiUrl) } : {}),
     },
   }),
 });

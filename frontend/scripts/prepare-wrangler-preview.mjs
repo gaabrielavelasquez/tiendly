@@ -15,7 +15,8 @@ const worker = JSON.parse(await readFile(resolve(source, "worker.config.json"), 
 assert.equal(worker.name, "preview");
 assert.equal(worker.manifest.mainModule, "index.js");
 assert.deepEqual(Object.keys(worker.manifest.modules), []);
-assert.deepEqual(worker.env, {
+const { TIENDLY_API_URL: apiUrlBinding, ...workerEnv } = worker.env;
+assert.deepEqual(workerEnv, {
   ASSETS: { type: "assets" },
   UPLOADS: { type: "r2", name: "tiendly-preview-images" },
   DB: { type: "d1", name: "tiendly-preview", id: "9fcfd54b-56a2-4cb9-af11-800e5191e93d" },
@@ -26,6 +27,8 @@ assert.deepEqual(worker.env, {
   TIENDLY_TIENDA_DEMO: { type: "text", value: "muna" },
   TIENDLY_ENTORNO: { type: "text", value: "preview" },
 });
+// El modo API es opt-in por publicación y solo admite el Worker de API de QA.
+if (apiUrlBinding) assert.deepEqual(apiUrlBinding, { type: "text", value: "https://api-preview.tiendly.workers.dev" });
 const entries = await readdir(resolve(source, "assets"));
 for (const privateDirectory of ["heather", "mi-tienda"]) {
   assert(!entries.includes(privateDirectory), `No se puede publicar ${privateDirectory}.`);
@@ -93,6 +96,7 @@ await writeFile(resolve(output, "wrangler.json"), JSON.stringify({
     BETTER_AUTH_URL: worker.env.BETTER_AUTH_URL.value,
     TIENDLY_TIENDA_DEMO: worker.env.TIENDLY_TIENDA_DEMO.value,
     TIENDLY_ENTORNO: worker.env.TIENDLY_ENTORNO.value,
+    ...(worker.env.TIENDLY_API_URL ? { TIENDLY_API_URL: worker.env.TIENDLY_API_URL.value } : {}),
   },
 }, null, 2) + "\n");
 console.log("Preview preparado para Wrangler: cuenta Tiendly, D1 y R2 exclusivos de pruebas.");

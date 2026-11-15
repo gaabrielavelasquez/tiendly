@@ -49,7 +49,7 @@ Una vez aceptada la configuración QA y cargados sus secretos por el responsable
 npm --prefix ../backend run deploy:api:qa
 ```
 
-El script exige commit limpio, cuenta/Worker/bindings exactos de QA, verifica tipos/tests/build y publica solo la API. El frontend debe activarse y publicarse por separado con `TIENDLY_API_URL=https://api-preview.tiendly.workers.dev`. No activar el modo API en producción: faltan los módulos de comercio. Las credenciales Google y la clave de sesión permanecen en el backend; para conservar sesiones existentes al cambiar de runtime hay que preparar la continuidad de esa clave antes del cambio. El comando no mueve secretos del Worker anterior.
+El script exige commit limpio, cuenta/Worker/bindings exactos de QA, verifica tipos/tests/build y publica solo la API. El frontend debe activarse y publicarse por separado con `TIENDLY_API_URL=https://api-preview.tiendly.workers.dev npm run release:qa` desde `frontend/`; sin esa variable el Worker `preview` conserva el runtime anterior. No activar el modo API en producción: faltan los módulos de comercio. Las credenciales Google y la clave de sesión permanecen en el backend; para conservar sesiones existentes al cambiar de runtime hay que preparar la continuidad de esa clave antes del cambio. El comando no mueve secretos del Worker anterior.
 
 Un cambio de UI compatible solo despliega frontend. Un cambio compatible de backend solo despliega API. Cambios de contrato requieren compatibilidad hacia atrás: desplegar primero soporte backend y después consumidores; retirar campos solo tras migrarlos. Las migraciones remotas son un paso específico, separado del despliegue. Un rollback de código no revierte datos ni esquema.
 
