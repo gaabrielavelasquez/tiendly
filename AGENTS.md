@@ -12,7 +12,7 @@ No dupliques esas reglas aquí: si algo cambia, se cambia en `CLAUDE.md` o `fron
 
 - **`frontend/`:** la app Next.js (código, `DESIGN.md`, tokens y scripts). **Los comandos `npm` se corren en `frontend/`.**
 - **`backend/`:** base de datos, Workers y scripts (ver [`backend/README.md`](backend/README.md) y [`docs/plan-backend.md`](docs/plan-backend.md)).
-- **En la raíz:** `docs/`, `AGENTS.md` y `CLAUDE.md`, que valen para las dos partes.
+- **En la raíz:** `docs/`, `AGENTS.md` y `CLAUDE.md`, que valen para las dos partes. El índice de `docs/` está en [`docs/README.md`](docs/README.md).
 - **`.vercelignore` va en la raíz, no en `frontend/`:** con el Root Directory de Vercel en `frontend`, Vercel no aplica un `.vercelignore` dentro de esa carpeta, y se subirían las fotos de Heather, que no dio su permiso (comprobado en #44). Cada ruta va en sus dos formas: `public/heather` y `frontend/public/heather`.
 
 ## Recordatorios que más se olvidan
@@ -34,7 +34,7 @@ No dupliques esas reglas aquí: si algo cambia, se cambia en `CLAUDE.md` o `fron
   - 0034: ofertas con precio antes, fechas y sección con nombre propio; la etiqueta de descuento va en el color de selección del tema, nunca en rojo.
   - 0035: ficha en dos columnas desde 768 px.
   - 0036: el carrito es un drawer; /carrito sigue como página.
-  - 0037 (en el PR #27): tabla de tallas por producto.
+  - 0037: tabla de tallas por producto.
 - **Datos simulados:** pagos, SUNAT, bancos y envíos son mocks. No envíes mensajes, cobros ni confirmaciones reales, y no uses números de teléfono reales para pruebas.
 
 ## Workflow (resumen de `CLAUDE.md` §7)
@@ -55,5 +55,5 @@ No dupliques esas reglas aquí: si algo cambia, se cambia en `CLAUDE.md` o `fron
 - **No cambies la rama del espacio de trabajo principal sin avisar:** Gabi lo usa con su servidor de desarrollo (`cd frontend && TIENDLY_TIENDA_DEMO=muna PORT=3100 npx next dev`). Para otra rama, usa un `git worktree` aparte y otro puerto. Nunca cierres un proceso que no levantaste.
 - No corras `npm run build` en la carpeta del servidor de desarrollo (pisa `.next`): hazlo en el worktree.
 - No incluyas archivos ajenos en los commits (por ejemplo, `.DS_Store`).
-- Al terminar, deja en el PR qué quedó pendiente y qué se simuló, para que el próximo agente siga desde ahí. El estado general y las próximas tareas están en [`docs/traspaso.md`](docs/traspaso.md).
+- Al terminar, deja en el PR qué quedó pendiente y qué se simuló, para que el próximo agente siga desde ahí. El estado general y las próximas tareas están en [`docs/traspaso.md`](docs/traspaso.md): se sobrescribe cuando cambia el estado, sin anexar entradas fechadas. El detalle de la sesión va en la descripción del PR.
 - **Datos de producción** (Upstash Redis, claves `production:tienda:<slug>`): no los borres ni los reinicies sin el ok de Gabi.

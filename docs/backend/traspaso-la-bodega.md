@@ -8,7 +8,7 @@ Fecha de revisión: 8-nov-2026. Este documento permite continuar el backend desd
 - Tiendly integrado: `main`, commit `e63505001226544c6c056ddfafddd4ebb19d4b00`. `backend/` contiene la estructura inicial.
 - Avance de implementación: `76adead` (`chore/cloudflare-foundation`), `91c6d58` (`feat/identity-stores`) y `c00ae43` (`feat/catalog`). Son ramas locales apiladas, todavía fuera de `main` al revisar.
 - Integración en curso: rama `feat/onboarding-d1`, worktree `/Users/diego/sandbox/tiendly/.worktrees/cloudflare`, sobre `c00ae43`, con integración resguardada en `823d1a2` después de la exploración inicial. Esos cambios no forman parte de este cierre documental.
-- Las reglas vigentes siguen en [CLAUDE.md](../../CLAUDE.md), [DESIGN.md](../../frontend/DESIGN.md), las [decisiones](../decisiones/README.md) y el [plan de backend](../plan-backend.md). La actualización del 8-nov del plan está en la rama de implementación; el cuerpo histórico del 29-oct todavía describe otra secuencia.
+- Las reglas vigentes siguen en [CLAUDE.md](../../CLAUDE.md), [DESIGN.md](../../frontend/DESIGN.md), las [decisiones](../decisiones/README.md) y el [plan de backend](../plan-backend.md). El plan base del 29-oct, con la secuencia anterior a la migración, se conserva en [`docs/historia/plan-backend-2026-10-29.md`](../historia/plan-backend-2026-10-29.md).
 
 El código de Tiendly no importa `@labodega/*`, no declara ese workspace ni necesita el clon para construir. El backend nuevo reemplaza responsabilidades; no es un traslado literal de paquetes Postgres.
 

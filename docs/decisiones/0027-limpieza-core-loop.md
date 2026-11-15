@@ -2,7 +2,7 @@
 
 - **Fecha:** 16-oct-2026
 - **Estado:** aceptada (Gabi). Vigente.
-- **Origen:** la lista "Para decidir" de `docs/estado-core-loop.md`.
+- **Origen:** la lista "Para decidir" de `docs/historia/estado-core-loop-2026-10-16.md`.
 
 ## Contexto
 

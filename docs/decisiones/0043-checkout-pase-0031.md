@@ -18,7 +18,7 @@ Montos Regular/tabulares, moneda y céntimos atenuados, SemiBold solo en total. 
 
 0009: delivery por distrito/zona, precio/plazo, envío gratis desde monto, recojo o coordinación según configuración. Reglas, cálculo y acciones del servidor sin cambios. Durante envío se bloquean cambios y doble clic; fallo de red vuelve al formulario para reintentar. Error al preparar número tiene reintento.
 
-Las decisiones originales 0007/0008/0009 están fuera del repo (docs/estado-core-loop.md); se conservan las reglas implementadas y referencias existentes, sin reinterpretarlas. Cuatro estados de carga, vacío, datos y error/reintento.
+Las decisiones originales 0007/0008/0009 están fuera del repo (docs/historia/estado-core-loop-2026-10-16.md); se conservan las reglas implementadas y referencias existentes, sin reinterpretarlas. Cuatro estados de carga, vacío, datos y error/reintento.
 
 ## Validación
 
