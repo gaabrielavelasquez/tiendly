@@ -57,7 +57,7 @@ No se despliega automáticamente por abrir PR o hacer merge. Mantener ramas por 
 
 ## Siguientes cortes
 
-1. Aceptación real de Google tras autorizar el callback local y del par de servicios en QA.
+1. Aceptación real de Google en QA. El callback local y el ingreso real ya se aceptaron el 15-nov-2026 ([evidencia](../verificacion/backend-api/google-local-20261115.json)); falta publicar y aceptar el par de servicios en QA.
 2. Publicación frontend independiente y previews autenticados: mantener un origen QA fijo al principio; los dominios efímeros requieren diseño explícito de OAuth/cookies.
 3. Completar ventas/reservas/pedidos/checkout/cupones/ajustes/tareas en la API y retirar el acceso interno anterior por módulo.
 4. Retirar el runtime/backend anterior del frontend cuando todos los consumidores estén migrados.

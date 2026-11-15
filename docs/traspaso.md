@@ -1,3 +1,12 @@
+# Ingreso Google real local · 15-nov-2026
+
+- Diego autorizó el origen y callback `http://localhost:3220` en el cliente OAuth **Tiendly Preview**; **Tiendly Prod** no se tocó. No se generaron credenciales nuevas: el runtime local siguió con la pareja privada de `.dev.vars`. Rama `feat/backend-api`, head `3110ed5`, tres commits sobre `dev` `8f2906f`; worktree intacto, sin cambios de código.
+- Ingreso real PASS en el par local Next 3220 + API 3221: cuenta `google`, sesión D1 con vencimiento a 7 días y tienda `Panch` (`panch`, versión 1) creada por el onboarding a través de la API separada. `/api/business/snapshot` autenticado 200; `sign-out` 200; la misma cookie pasa a 401 y `session` queda en 0; `/api/public/stores/panch` 200. 19 tests de backend y CI del head en verde. [Evidencia](verificacion/backend-api/google-local-20261115.json).
+- La prueba de revocación eliminó la sesión local: hay que volver a ingresar en el 3220 para seguir probando. No hubo escrituras remotas, migraciones ni despliegues; el 3100 de Gabi no se tocó.
+- Pendiente para cerrar #57: publicar y aceptar el par QA (`deploy:api:qa` + frontend con `TIENDLY_API_URL`), que requiere cargar los secretos del cliente Preview en el Worker `api-preview`. Después, revisión y merge a `dev` solo con aprobación de Gabi. Siguen fuera ventas/pedidos, checkout, cupones, ajustes editables, tareas y métricas.
+
+---
+
 # API HTTP separada · primer corte · 13-nov-2026
 
 - Diego aprobó separar backend para que Gabi pueda ajustar la interfaz y él mantenga reglas/datos/infraestructura. Rama `feat/backend-api`, worktree Orca persistente `/Users/diego/orca/workspaces/tiendly/backend-api`, desde `dev` `8f2906f`; checkout principal y servidor 3215 ajenos intactos.

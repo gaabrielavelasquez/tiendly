@@ -11,7 +11,21 @@ PASS local con Next.js convencional en localhost:3220 y API Worker autónoma en 
 - Seis recorridos Chromium/WebKit a 390, 1440 y 360; 42 checkpoints sin scroll horizontal ni imágenes rotas. Tienda vacía, nombre largo, precio S/ 129,999.10, foto sintética subida a R2, guardado/recarga sin duplicado, fallo de red/reintento, edición concurrente, vitrina y salida. La cookie previa al logout recibe 401.
 - Se revisaron 1 847 archivos de artefactos frontend/API; cero coincidencias con las credenciales privadas locales.
 
-Las sesiones del harness son sintéticas firmadas en D1 emulado; no equivalen a Google real. La imagen gris es un fixture de canvas. Se limpiaron por ID los usuarios/tiendas/imágenes creados en los recorridos completos. Una lectura final del emulador no encontró usuarios ui-qa pendientes. Ningún recurso remoto recibió escrituras.
+Las sesiones del harness originales son sintéticas firmadas en D1 emulado; no equivalían a Google real. La imagen gris es un fixture de canvas. Se limpiaron por ID los usuarios/tiendas/imágenes creados en los recorridos completos. Una lectura final del emulador no encontró usuarios ui-qa pendientes. Ningún recurso remoto recibió escrituras.
+
+## Ingreso Google real · 15-nov-2026
+
+Diego registró el origen `http://localhost:3220` y el callback `http://localhost:3220/api/auth/callback/google` en el cliente **Tiendly Preview** (`292177294857-u1ag…`). El cliente **Tiendly Prod** no se modificó. El runtime local siguió usando la pareja de preview que ya tenía en `.dev.vars`; no se generaron credenciales nuevas.
+
+Ingreso real completado en `http://localhost:3220/registro` con la API en `127.0.0.1:3221`:
+
+- Cuenta nueva con proveedor `google` y una sola sesión, creada el `2026-11-15 20:53:58 UTC` y con vencimiento el `2026-11-22`.
+- El onboarding creó la tienda `Panch` (`panch`, versión 1) a través de la API separada: la identidad real escribe en D1.
+- `GET /api/business/snapshot` con la cookie de esa sesión: **200**. `POST /api/auth/sign-out`: **200**. La misma cookie vuelve a responder **401** y la tabla `session` queda en 0.
+- `GET /api/public/stores/panch`: **200** con la tienda y sus productos.
+- 19 tests de backend siguen pasando. CI del head `3110ed5` en verde.
+
+Detalle en [google-local-20261115.json](google-local-20261115.json). La prueba de revocación eliminó la sesión local; hay que volver a ingresar para continuar en el 3220. No hubo escrituras remotas, migraciones ni despliegues.
 
 ## Capturas
 
@@ -29,7 +43,7 @@ Capturas originales del navegador de desarrollo, sin edición de imágenes. Se i
 
 ## Pendiente antes de marcar listo
 
-- Autorizar el callback local nuevo en el cliente Tiendly Preview y completar el ingreso Google real. La pareja de Google de pruebas está configurada privadamente en backend/.dev.vars y no se cambió el secreto de sesión local generado. No se publican valores.
+- ~~Autorizar el callback local nuevo en el cliente Tiendly Preview y completar el ingreso Google real.~~ **Hecho el 15-nov-2026**: origen y callback `localhost:3220` autorizados, ingreso real, snapshot autenticado y revocación verificados. Ver [Ingreso Google real](#ingreso-google-real--15-nov-2026).
 - Publicar y aceptar el par de servicios en QA. Solo se compiló el Worker API; `api-preview` es un destino preparado, no un despliegue realizado. El frontend QA actual no se reemplazó y sus secretos no se movieron. Mantener el PR en borrador mientras falte esta aceptación.
 - La medición Vercel requerida para el PR no acredita el modo API mientras no haya backend conectado allí. Las capturas de este informe son locales y no se presentan como evidencia remota.
 

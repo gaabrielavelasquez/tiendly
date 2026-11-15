@@ -1,0 +1,47 @@
+{
+  "fecha": "2026-11-15",
+  "alcance": "Aceptación del ingreso Google real en el par local de la API separada",
+  "rama": "feat/backend-api",
+  "head": "3110ed546361fc5748465030604c1df51dca58d6",
+  "baseDev": "8f2906f",
+  "servicios": {
+    "next": "http://localhost:3220",
+    "api": "http://127.0.0.1:3221",
+    "puerto3100": "libre, no se tocó el servidor de Gabi"
+  },
+  "google": {
+    "cliente": "Tiendly Preview",
+    "clientIdSufijo": "…fckmdfhc",
+    "origenAutorizado": "http://localhost:3220",
+    "callback": "http://localhost:3220/api/auth/callback/google",
+    "clienteProd": "sin cambios"
+  },
+  "d1Local": {
+    "users": 1,
+    "accounts": 1,
+    "proveedor": "google",
+    "sesionesAntesDelLogout": 1,
+    "sesionCreadaUtc": "2026-11-15T20:53:58.525Z",
+    "sesionExpiraUtc": "2026-11-22T20:53:58.525Z",
+    "sesionesDespuesDelLogout": 0,
+    "stores": 1,
+    "tienda": "panch",
+    "version": 1
+  },
+  "checks": {
+    "oauthStart": { "status": 200, "redirectUri": "http://localhost:3220/api/auth/callback/google" },
+    "ingresoReal": "PASS: cuenta google, sesión D1 y tienda creada por el onboarding",
+    "snapshotAutenticado": { "status": 200, "forma": "{ snapshot }" },
+    "signOut": { "status": 200 },
+    "cookieRevocada": { "status": 401 },
+    "publicaPanch": { "status": 200, "productosIncluidos": true },
+    "testsBackend": { "pasados": 19, "fallidos": 0 },
+    "ciHead": "verde (Tokens/build/tests y Vercel Preview Comments)"
+  },
+  "limites": [
+    "La sesión local se eliminó con la prueba de revocación; hay que volver a ingresar para seguir usando el 3220.",
+    "No se ejecutaron escrituras remotas, migraciones ni despliegues.",
+    "El par QA sigue sin publicar: api-preview no existe todavía.",
+    "Las capturas y recorridos sintéticos anteriores no acreditan Google; esta entrada sí proviene de un ingreso real."
+  ]
+}
