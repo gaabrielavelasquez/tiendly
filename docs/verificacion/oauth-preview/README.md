@@ -1,5 +1,7 @@
 # Dominio y OAuth del preview · 8-nov-2026
 
+> Informe de esa fecha. El 15-nov-2026 el par QA se republicó en modo API con un `BETTER_AUTH_SECRET` nuevo, que invalidó estas sesiones: el ingreso Google real debe repetirse sobre QA. Ver [`docs/traspaso.md`](../../traspaso.md).
+
 La app de pruebas se publica en **https://preview.tiendly.workers.dev**, Worker `preview`, artefacto `4e566e5c-255e-4645-af55-ebb74e31acda` (la versión activa tras cargar secretos está en `resources.json`). El cambio fue solicitado por Diego; no publica `main` ni habilita producción.
 
 ## Recursos y credenciales

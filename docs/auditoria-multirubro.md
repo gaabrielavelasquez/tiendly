@@ -1,7 +1,7 @@
 # Auditoría multirubro (decisión 0032)
 
 - **Fecha:** 22-oct-2026
-- **Estado:** aprobada por Gabi el 22-oct-2026, con las respuestas del final. PR 1 y PR 4 en curso; PR 3 espera su ok sobre una propuesta a 390 y 1440 px.
+- **Estado:** aprobada por Gabi el 22-oct-2026, con las respuestas del final. Se conserva como registro del plan multirrubro; el trabajo se ejecutó en los PR posteriores (0032–0038). El estado vigente está en [`docs/traspaso.md`](traspaso.md).
 - **Alcance:** todo lo que hoy asume moda (color × talla, calzado, ejemplos de Heather) en el modelo de datos, el panel, la vitrina, la compra y los pedidos.
 
 Esfuerzo: **S** (menos de medio día), **M** (1 a 2 días), **L** (3 días o más). Riesgo: qué se puede romper.
