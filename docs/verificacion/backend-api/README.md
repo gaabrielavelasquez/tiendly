@@ -27,6 +27,18 @@ Ingreso real completado en `http://localhost:3220/registro` con la API en `127.0
 
 Detalle en [google-local-20261115.json](google-local-20261115.json). La prueba de revocación eliminó la sesión local; hay que volver a ingresar para continuar en el 3220. No hubo escrituras remotas, migraciones ni despliegues.
 
+## Par QA en modo API · 15-nov-2026
+
+La API y el frontend ya se publican por separado en Cloudflare, sin migraciones y sin tocar el Worker anterior ni los datos existentes.
+
+- `api-preview` desplegado en https://api-preview.tiendly.workers.dev (versión `127dcf37`, revisión `44f381e`) con la D1/R2 de QA. Los secretos se cargaron desde la pareja privada del cliente **Tiendly Preview**; el secreto de sesión es nuevo y no se publicó.
+- `preview` publicado en modo API (versión `2fd21f83`, revisión `0d1db3f`) con `TIENDLY_API_URL`. El modo es opt-in por variable de entorno: sin ella, el Worker conserva el runtime anterior. No se activó en producción.
+- **Cloudflare bloquea el fetch público entre Workers de la misma zona** (error 1042). El primer intento devolvía 500 en las páginas: el subrequest nunca llegaba a `api-preview`. Se resolvió con un **service binding** `API` y una entrada que lo expone al runtime; `api-client` lo usa cuando existe y cae a `fetch` normal en local.
+- `verify:qa`: `/registro` 200, `/muna` 200, `/api/auth/get-session` 200, `/api/business/stores` y `/api/business/catalog` 401, rutas privadas 404. La tienda real `panchi-house` responde 200 con su contenido a través del proxy, y `/api/public/stores/panchi-house` 200.
+- Rollback de código: `npx wrangler rollback --profile tiendly --config .wrangler/preview/wrangler.json` hacia la versión `e82b6aca` (runtime anterior). No revierte datos.
+
+Límites: las sesiones del runtime anterior en QA quedan invalidadas por el secreto nuevo, así que hay que repetir el ingreso Google en el preview para aceptarlo de punta a punta. No se ejecutaron migraciones remotas ni se tocó producción, datos productivos o DNS.
+
 ## Capturas
 
 Capturas originales del navegador de desarrollo, sin edición de imágenes. Se inspeccionaron muestras representativas a 390/1440. La marca de Next en desarrollo no pertenece al diseño de la app.

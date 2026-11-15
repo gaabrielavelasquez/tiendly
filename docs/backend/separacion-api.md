@@ -58,7 +58,7 @@ No se despliega automáticamente por abrir PR o hacer merge. Mantener ramas por 
 ## Siguientes cortes
 
 1. Aceptación real de Google en QA. El callback local y el ingreso real ya se aceptaron el 15-nov-2026 ([evidencia](../verificacion/backend-api/google-local-20261115.json)); falta publicar y aceptar el par de servicios en QA.
-2. Publicación frontend independiente y previews autenticados: mantener un origen QA fijo al principio; los dominios efímeros requieren diseño explícito de OAuth/cookies.
+2. Publicación frontend independiente y previews autenticados: el par QA ya se publicó el 15-nov-2026 con `TIENDLY_API_URL` y service binding ([evidencia](../verificacion/backend-api/README.md)); falta repetir el ingreso Google real sobre QA y definir el origen fijo antes de usar dominios efímeros.
 3. Completar ventas/reservas/pedidos/checkout/cupones/ajustes/tareas en la API y retirar el acceso interno anterior por módulo.
 4. Retirar el runtime/backend anterior del frontend cuando todos los consumidores estén migrados.
 5. Definir eventos y métricas con Gabi; backend emite los hechos de negocio confirmados y un dashboard permite consultarlos sin SQL ni cambios de código.

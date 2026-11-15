@@ -1,3 +1,13 @@
+# Par QA en modo API · 15-nov-2026
+
+- `api-preview` publicado en https://api-preview.tiendly.workers.dev (versión `127dcf37`, revisión `44f381e`) con D1/R2 de QA. Secretos cargados desde la pareja privada del cliente Preview y un `BETTER_AUTH_SECRET` nuevo; no se imprimieron valores ni se copiaron a GitHub.
+- `preview` republicado en modo API (versión `2fd21f83`, revisión `0d1db3f`) con `TIENDLY_API_URL` opt-in. Sin la variable conserva el runtime anterior. Producción intacta.
+- Hallazgo: Cloudflare rechaza el fetch público entre Workers de la misma zona (error 1042); el subrequest no llegaba a la API y las páginas daban 500. Se corrigió con un **service binding** `API`; `api-client` lo usa cuando existe y mantiene `fetch` normal en local.
+- `verify:qa` PASS: `/registro` 200, `/muna` 200, `/api/auth/get-session` 200, `/api/business/stores` y `/api/business/catalog` 401, rutas privadas 404. `panchi-house` 200 a través del proxy y `/api/public/stores/panchi-house` 200. Sin escrituras de datos.
+- Las sesiones del runtime anterior quedan invalidadas por el secreto nuevo: falta repetir el ingreso Google real en el preview para cerrar la aceptación remota. Rollback de código a `e82b6aca` con `wrangler rollback`; no revierte datos. Sin migraciones remotas ni cambios de DNS.
+
+---
+
 # Ingreso Google real local · 15-nov-2026
 
 - Diego autorizó el origen y callback `http://localhost:3220` en el cliente OAuth **Tiendly Preview**; **Tiendly Prod** no se tocó. No se generaron credenciales nuevas: el runtime local siguió con la pareja privada de `.dev.vars`. Rama `feat/backend-api`, head `3110ed5`, tres commits sobre `dev` `8f2906f`; worktree intacto, sin cambios de código.
