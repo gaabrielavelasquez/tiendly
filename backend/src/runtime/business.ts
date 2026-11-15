@@ -5,8 +5,11 @@ import { createAuth, authenticatedActor, type AuthConfiguration } from "../ident
 import { environment, type Actor } from "../identity/domain/access.ts";
 import { D1Stores } from "../stores/adapters/d1-stores.ts";
 import type { StoreDependencies } from "../stores/application/stores.ts";
+import { D1Settings } from "../settings/adapters/d1-settings.ts";
+import { D1Orders } from "../orders/adapters/d1-orders.ts";
+import type { OrderDependencies } from "../orders/application/orders.ts";
 
-export type BusinessRuntime = { stores: StoreDependencies; catalog: CatalogDependencies; actor: (headers: Headers) => Promise<Actor | null>; origin: string };
+export type BusinessRuntime = { stores: StoreDependencies; catalog: CatalogDependencies; orders: OrderDependencies; actor: (headers: Headers) => Promise<Actor | null>; origin: string };
 export type Bindings = {
   DB: D1Database;
   UPLOADS?: R2Bucket;
@@ -25,12 +28,23 @@ export function createRuntime(bindings: Bindings) {
   if (!bindings.DB) throw new Error("D1 is not configured");
   const config = authConfiguration(bindings);
   const auth = createAuth(bindings.DB, config);
-  const stores: StoreDependencies = { stores: new D1Stores(bindings.DB), environment: environment(bindings.TIENDLY_ENTORNO), now: () => new Date().toISOString(), newId: () => crypto.randomUUID() };
+  const stores = new D1Stores(bindings.DB);
+  const catalog = new D1Catalog(bindings.DB);
+  const settings = new D1Settings(bindings.DB);
+  const orders = new D1Orders(bindings.DB);
+  const environment = environmentOf(bindings);
+  const now = () => new Date().toISOString();
+  const newId = () => crypto.randomUUID();
+  const base = { environment, now, newId };
   const runtime: BusinessRuntime = {
-    stores,
-    catalog: { ...stores, catalog: new D1Catalog(bindings.DB) },
+    stores: { stores, ...base },
+    catalog: { stores, ...base, catalog },
+    orders: { stores, catalog, settings, orders, now, newId },
     actor: headers => authenticatedActor(auth, headers),
     origin: config.baseURL,
   };
   return { auth, runtime, uploads: bindings.UPLOADS };
+}
+function environmentOf(bindings: Bindings) {
+  return environment(bindings.TIENDLY_ENTORNO);
 }

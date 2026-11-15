@@ -12,14 +12,14 @@ import { TarjetaNotas } from "./tarjeta-notas";
 import { TarjetaPago } from "./tarjeta-pago";
 import { TarjetaCliente, TarjetaEntrega } from "./tarjetas-laterales";
 
-type DetalleProps = { pedido: Pedido; detalle: DetallePedido; ahora: string };
+type DetalleProps = { pedido: Pedido; detalle: DetallePedido; ahora: string; conApi?: boolean };
 
 /**
  * Detalle del pedido en dos columnas (2/3 productos e historial, 1/3 cliente, entrega y notas),
  * con la misma lógica que el formulario de producto. Las acciones avisan; cancelar requiere confirmar y no se puede deshacer.
  */
-export function DetallePedidoVista({ pedido, detalle, ahora }: DetalleProps) {
-  const d = useDetallePedido(pedido, detalle, ahora);
+export function DetallePedidoVista({ pedido, detalle, ahora, conApi = false }: DetalleProps) {
+  const d = useDetallePedido(pedido, detalle, ahora, conApi);
 
   return (
     <div className="flex flex-col gap-10 pb-[calc(var(--spacing)*36+env(safe-area-inset-bottom))] lg:gap-12 lg:pb-0">

@@ -6,6 +6,7 @@ import { obtenerPedido } from "@/features/pedidos/lib/mock";
 import { prepararEscenario } from "@/features/pedidos/lib/escenarios";
 import { ahoraIso } from "@/lib/reloj";
 import { slugPanel } from "@/lib/sesion";
+import { usingApi } from "@/lib/api-client";
 
 export const metadata: Metadata = { title: "Pedido · Tiendly" };
 
@@ -20,7 +21,7 @@ export default async function DetallePedidoPage({ params, searchParams }: PagePr
   if (!datos) notFound();
   return (
     <PanelMain className="lg:pt-0">
-      <DetallePedidoVista pedido={datos.pedido} detalle={datos.detalle} ahora={ahora} />
+      <DetallePedidoVista pedido={datos.pedido} detalle={datos.detalle} ahora={ahora} conApi={usingApi()} />
     </PanelMain>
   );
 }

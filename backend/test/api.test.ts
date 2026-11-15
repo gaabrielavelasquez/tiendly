@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { readFile } from 'node:fs/promises';
+import { readFile, readdir } from 'node:fs/promises';
 import { Miniflare, convertV4MiniflareOptions } from 'miniflare';
 import { betterAuth } from 'better-auth';
 import { testUtils } from 'better-auth/plugins';
@@ -13,7 +13,7 @@ const origin = 'http://localhost:3220';
 async function fixture() {
   const mf = new Miniflare(convertV4MiniflareOptions({ modules: true, script: 'export default {fetch(){return new Response("ok")}}', compatibilityDate: '2026-11-08', d1Databases: ['DB'], r2Buckets: ['UPLOADS'] }));
   const db = await mf.getD1Database('DB') as unknown as D1Database;
-  for (const file of ['0001_auth.sql', '0002_stores.sql', '0003_catalog.sql']) {
+  for (const file of (await readdir(new URL('../db/migrations', import.meta.url))).filter(name => name.endsWith('.sql')).sort()) {
     const sql = await readFile(new URL(`../db/migrations/${file}`, import.meta.url), 'utf8');
     for (const statement of sql.replace(/^--.*$/gm, '').split(';').filter(x => x.trim())) await db.prepare(statement).run();
   }

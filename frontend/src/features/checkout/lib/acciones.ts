@@ -1,5 +1,6 @@
 "use server";
 
+import { ApiError, usingApi, apiJson } from "@/lib/api-client";
 import { agregarPedido, horaPedido, siguienteNumero } from "@/features/pedidos/lib/almacen";
 import { RESERVA_HORAS } from "@/features/pedidos/lib/reglas";
 import { asignarStock } from "@/features/productos/lib/inventario";
@@ -14,9 +15,11 @@ import type { Cupon as CuponTienda } from "@/features/cupones/types";
 import { usarEnCarrito } from "@/features/cupones/lib/reglas";
 import { hoyLima } from "@/lib/reloj";
 import type { Cupon } from "../types";
+import type { OrderReceipt } from "@tiendly/contracts";
 import { calcularTotales, faltaEnvioGratis, resolverLineas, validarDatos } from "./reglas";
 
-// Acciones de la vitrina que llegan al panel (Pedidos). Simulado: escriben en los datos de la tienda (lib/datos).
+// Acciones de la vitrina. Sin API: escriben en los datos de la tienda (lib/datos). Con API
+// (TIENDLY_API_URL): el backend recalcula precios, valida el stock y guarda el pedido en D1.
 
 /** Hoy en el reloj de la demo (los cupones vencen por día). */
 
@@ -35,7 +38,16 @@ export async function aplicarCupon(tienda: string, codigo: string, productos: nu
 }
 
 /** Reserva el número del pedido al llegar al pago (el mensaje de WhatsApp ya lo muestra). */
-export async function reservarNumero(tienda: string): Promise<string | null> {
+export async function reservarNumero(tienda: string, token?: string): Promise<string | null> {
+  if (usingApi()) {
+    if (!token) return null;
+    try {
+      return (await apiJson<{ number: string }>(`/api/public/stores/${tienda}/checkout`, { method: "POST", body: JSON.stringify({ token }), headers: { "Content-Type": "application/json" } })).number;
+    } catch (error) {
+      if (error instanceof ApiError && error.code === "not_found") return null;
+      throw error; // la vista ya muestra el reintento
+    }
+  }
   return mutarTienda(tienda, (d) => siguienteNumero(d.pedidos));
 }
 
@@ -64,6 +76,8 @@ export async function revisarStock(tienda: string, items: ItemCarrito[], cupon?:
 type Entrada = {
   tienda: string;
   numero: string;
+  /** Token del intento de checkout: con API, une la reserva del número con la creación del pedido. */
+  token?: string;
   items: ItemCarrito[];
   cupon?: string;
   datos: Datos;
@@ -71,12 +85,54 @@ type Entrada = {
   metodo: MetodoPago;
 };
 
+/** "Plata|36" → ["Plata", "36"]; "" → []. Los valores no llevan "|": lo garantiza el formulario. */
+const valoresVariante = (variante: string) => (variante === "" ? [] : variante.split("|"));
+
+const entregaApi = (e: Entrada["entrega"]) =>
+  e.tipo === "recojo" ? { kind: "pickup" } : e.tipo === "coordinar" ? { kind: "coordinate" } : { kind: "delivery", district: e.distrito, address: e.direccion, ...(e.referencia ? { reference: e.referencia } : {}) };
+
+const metodoApi = (m: MetodoPago) => (m === "tarjeta" ? "card" : m);
+
+/** Céntimos del backend → soles de la vista (Totales). */
+function totalesDe(r: OrderReceipt["totals"]): Totales {
+  return {
+    productos: r.subtotalCents / 100,
+    unidades: r.units,
+    descuento: r.discountCents / 100,
+    envio: r.shippingCents === null ? null : r.shippingCents / 100,
+    envioGratis: r.shippingCents === 0,
+    ...(r.shippingPending ? { envioPorCoordinar: true } : {}),
+    total: r.totalCents / 100,
+  };
+}
+
 /**
  * Crea el pedido en Panel › Pedidos con su estado (decisiones 0007 y 0010): pagado con tarjeta o Yape
  * → "Pagado · Por enviar"; por WhatsApp → "Pago pendiente" con reserva de 24 h. Precios, cupón y envío
  * se recalculan aquí con el catálogo: no se confía en los montos que manda el navegador.
  */
 export async function registrarPedido(e: Entrada): Promise<{ creadoEl: string; totales: Totales } | { error: string }> {
+  if (usingApi()) {
+    if (!e.token) return { error: "No pudimos preparar tu pedido. Inténtalo de nuevo." };
+    const body = {
+      token: e.token,
+      items: e.items.map(({ id, variante, cantidad }) => ({ productId: id, variant: valoresVariante(variante), quantity: cantidad })),
+      customer: { name: e.datos.nombre.trim(), phone: e.datos.celular.replace(/\D/g, "") },
+      delivery: entregaApi(e.entrega),
+      payment: { method: metodoApi(e.metodo) },
+    };
+    try {
+      const r = await apiJson<{ order: OrderReceipt }>(`/api/public/stores/${e.tienda}/orders`, { method: "POST", body: JSON.stringify(body), headers: { "Content-Type": "application/json" } });
+      return { creadoEl: r.order.createdAt, totales: totalesDe(r.order.totals) };
+    } catch (error) {
+      if (error instanceof ApiError) {
+        if (error.code === "conflict") return { error: "Alguien más llevó lo último de un producto. Revisa tu carrito e inténtalo de nuevo." };
+        if (error.code === "invalid") return { error: "Revisa tu pedido y tus datos." };
+        if (error.code === "not_found") return { error: "La tienda no existe." };
+      }
+      throw error; // sin API o caída: la vista muestra el reintento
+    }
+  }
   const compra = await obtenerCompra(e.tienda);
   if (!compra) return { error: "La tienda no existe." };
   const lineas = resolverLineas(e.items, compra.catalogo);

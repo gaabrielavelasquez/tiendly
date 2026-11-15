@@ -1,7 +1,7 @@
 import { test } from "node:test";
 import { conflictWinner } from "./helpers/conflict-winner.ts";
 import assert from "node:assert/strict";
-import { readFile, mkdtemp, rm } from "node:fs/promises";
+import { readFile, readdir, mkdtemp, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { Miniflare, convertV4MiniflareOptions } from "miniflare";
@@ -29,7 +29,7 @@ async function fixture() {
   return { mf, db, deps };
 }
 async function migrate(db: D1Database) {
-  for (const file of ["0001_auth.sql", "0002_stores.sql", "0003_catalog.sql"]) {
+  for (const file of (await readdir(new URL("../db/migrations", import.meta.url))).filter(name => name.endsWith(".sql")).sort()) {
     const sql = await readFile(new URL(`../db/migrations/${file}`, import.meta.url), "utf8");
     for (const statement of sql.replace(/^--.*$/gm, "").split(";").filter(x => x.trim())) await db.prepare(statement).run();
   }

@@ -33,6 +33,8 @@ export function VistaCompra({ datos: { tienda, categorias, catalogo, reglas } }:
   const c = useCompra(reglas.delivery ? "delivery" : reglas.recojo ? "recojo" : "coordinar");
   const router = useRouter();
   const [numero, setNumero] = useState<string | null>(null);
+  // Un token por intento de compra: une la reserva del número con la creación del pedido en la API.
+  const [token] = useState(() => crypto.randomUUID());
   const [enviando, setEnviando] = useState(false);
   const [cerrando, setCerrando] = useState(false);
   const [error, setError] = useState(""); // pedido creado: no mostrar "carrito vacío" mientras navega
@@ -44,13 +46,13 @@ export function VistaCompra({ datos: { tienda, categorias, catalogo, reglas } }:
 
   function prepararNumero() {
     setError("");
-    reservarNumero(tienda.slug).then(n => n ? setNumero(n) : setError("No pudimos preparar tu pedido. Inténtalo de nuevo."))
+    reservarNumero(tienda.slug, token).then(n => n ? setNumero(n) : setError("No pudimos preparar tu pedido. Inténtalo de nuevo."))
       .catch(() => setError("No pudimos preparar tu pedido. Revisa tu conexión e inténtalo de nuevo."));
   }
   // El número se reserva al llegar al pago: el mensaje de WhatsApp ya lo muestra.
   useEffect(() => {
     if (c.paso === "pago" && !numero) prepararNumero();
-  }, [c.paso, numero]);
+  }, [c.paso, numero, token, tienda.slug]);
 
   const mensaje = numero && c.entrega ? mensajePedido({ tienda: tienda.nombre, numero, lineas, cupon: carrito.cupon?.codigo, totales, datos: c.datos, entrega: c.entrega }) : "";
 
@@ -73,6 +75,7 @@ export function VistaCompra({ datos: { tienda, categorias, catalogo, reglas } }:
     const r = await registrarPedido({
       tienda: tienda.slug,
       numero,
+      token,
       items,
       cupon: carrito.cupon?.codigo,
       datos: c.datos,

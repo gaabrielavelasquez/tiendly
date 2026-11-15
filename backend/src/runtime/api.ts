@@ -4,10 +4,13 @@ import { storesHandler } from './stores-handler.ts';
 import { catalogHandler } from './catalog-handler.ts';
 import { catalogCommand } from './catalog-commands.ts';
 import { imagesHandler } from './images-handler.ts';
+import { ordersHandler, publicCheckout } from './orders-handler.ts';
 import { readImage } from '../catalog/adapters/r2-images.ts';
 import { D1Stores } from '../stores/adapters/d1-stores.ts';
 import { D1Catalog } from '../catalog/adapters/d1-catalog.ts';
 import { D1Settings } from '../settings/adapters/d1-settings.ts';
+import { D1Orders } from '../orders/adapters/d1-orders.ts';
+import { withAvailability } from '../orders/domain/order.ts';
 import { effectivePlan, type Store } from '../stores/domain/store.ts';
 import { BusinessError, requireActor, requireStoreWrite } from '../identity/domain/access.ts';
 
@@ -18,9 +21,15 @@ function storeView(store: Store): StoreView {
   return { id: store.id, slug: store.slug, name: store.name, salesPhone: store.salesPhone, categories: store.categories, otherCategory: store.otherCategory, offerSectionName: store.offerSectionName, appearance: store.appearance, onboarding: store.onboarding, createdAt: store.createdAt, isDemo: store.isDemo, effectivePlan: effectivePlan(store.plan, store.founderUntil, today) === 'free' ? 'free' : 'pro' };
 }
 async function snapshot(bindings: Bindings, store: Store, publicOnly: boolean): Promise<StoreSnapshot> {
-  const [configuration, catalog] = await Promise.all([new D1Settings(bindings.DB).read(store.id), new D1Catalog(bindings.DB).list(store.id)]);
+  const [configuration, catalog, taken] = await Promise.all([
+    new D1Settings(bindings.DB).read(store.id),
+    new D1Catalog(bindings.DB).list(store.id),
+    // El stock que se ve (vitrina y panel) es el disponible: base menos vendidos y reservas vigentes.
+    new D1Orders(bindings.DB).availability(store.id, new Date().toISOString()),
+  ]);
+  const available = withAvailability(catalog, taken);
   // SKU is a private merchant reference. Paused products never leave the public API.
-  const products = publicOnly ? catalog.filter(p => p.status === 'active').map(p => ({ ...p, sku: '' })) : catalog;
+  const products = publicOnly ? available.filter(p => p.status === 'active').map(p => ({ ...p, sku: '' })) : available;
   return { store: storeView(store), configuration, products };
 }
 
@@ -39,13 +48,17 @@ async function dispatch(request: Request, bindings: Bindings): Promise<Response>
       await bindings.DB.prepare('SELECT id FROM stores LIMIT 1').all();
       return json({ status: 'ok', service: 'tiendly-api', contract: 1, revision: bindings.TIENDLY_REVISION ?? null });
     }
-    const publicStore = url.pathname.match(/^\/api\/public\/stores\/([a-z0-9-]{1,40})$/);
+    const publicStore = url.pathname.match(/^\/api\/public\/stores\/([a-z0-9-]{1,40})(\/checkout|\/orders)?$/);
     if (publicStore) {
+      if (publicStore[2]) {
+        const context = createRuntime(bindings);
+        return await publicCheckout(request, context.runtime, publicStore[1], publicStore[2] === '/checkout' ? 'reserve' : 'create');
+      }
       if (request.method !== 'GET') return json({ error: 'method_not_allowed' }, 405);
       const store = await new D1Stores(bindings.DB).findBySlug(publicStore[1]);
       return store ? json({ snapshot: await snapshot(bindings, store, true) }) : json({ error: 'not_found' }, 404);
     }
-    if (!url.pathname.startsWith('/api/auth/') && !['/api/business/stores', '/api/business/catalog', '/api/business/images', '/api/business/snapshot', '/api/business/catalog/commands'].includes(url.pathname)) return json({ error: 'not_found' }, 404);
+    if (!url.pathname.startsWith('/api/auth/') && !url.pathname.startsWith('/api/business/orders') && !['/api/business/stores', '/api/business/catalog', '/api/business/images', '/api/business/snapshot', '/api/business/catalog/commands'].includes(url.pathname)) return json({ error: 'not_found' }, 404);
     const context = createRuntime(bindings);
     const { runtime, auth } = context;
     await auth.$context;
@@ -58,6 +71,7 @@ async function dispatch(request: Request, bindings: Bindings): Promise<Response>
     if (url.pathname === '/api/business/catalog') return await catalogHandler(request, runtime);
     if (url.pathname === '/api/business/catalog/commands') return await catalogCommand(request, runtime);
     if (url.pathname === '/api/business/images') return await imagesHandler(request, context);
+    if (url.pathname.startsWith('/api/business/orders')) return await ordersHandler(request, runtime);
     if (url.pathname === '/api/business/snapshot') {
       if (request.method !== 'GET') return json({ error: 'method_not_allowed' }, 405);
       const actor = requireActor(await runtime.actor(request.headers));

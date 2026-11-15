@@ -25,7 +25,7 @@ En Next/Vercel los nuevos endpoints responden 503 porque todavía no hay un adap
 
 La rama de integración conecta el botón Google, la creación de tienda, los formularios de catálogo y las lecturas D1. Esa conexión todavía requiere aceptación completa de navegador. Ventas, cupones y configuración editable siguen usando módulos anteriores; no pueden considerarse migrados. El panel antiguo queda restringido por sesión/titularidad, salvo pruebas explícitas. No hay importación Redis/Blob ni compatibilidad de escritura de una tienda nueva D1 con esos documentos. Completar el mapeo de DTOs y las consultas de catálogo antes de conectar la creación desde el formulario.
 
-Catálogo y R2 tienen comandos implementados y la integración está en curso. Siguen checkout, comandos de pedidos, promociones, configuración y tareas. El plan vigente está en [`docs/plan-backend.md`](../docs/plan-backend.md).
+Catálogo y R2 tienen comandos implementados y la integración está en curso. Checkout y pedidos viven en `src/orders/` (migración `0004_orders.sql`): reserva de número idempotente, creación atómica con guard de stock, comandos del panel y disponibilidad en los snapshots. Siguen promociones/cupones, configuración editable y tareas. El plan vigente está en [`docs/plan-backend.md`](../docs/plan-backend.md).
 
 ## Catálogo y R2 · siguiente rama `feat/catalog`
 

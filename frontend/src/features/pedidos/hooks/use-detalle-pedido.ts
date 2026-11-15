@@ -2,7 +2,7 @@
 
 import { useCallback, useState } from "react";
 import type { DetallePedido, Pedido } from "../types";
-import { sincronizarPedido } from "../lib/acciones";
+import { comandoPedido, deshacerPedido, sincronizarPedido } from "../lib/acciones";
 import { ahoraIso } from "@/lib/reloj";
 import { aplicar, inicial, type AccionPedido } from "../lib/detalle";
 
@@ -19,10 +19,11 @@ const AVISO: Record<AccionPedido, string> = {
 };
 
 /**
- * Estado del detalle de un pedido en el cliente (hasta tener backend): aplica acciones, deja
- * deshacer la última durante unos segundos, salvo cancelar (irreversible), y avisa qué pasó.
+ * Estado del detalle de un pedido en el cliente: aplica acciones, deja deshacer la última durante
+ * unos segundos, salvo cancelar (irreversible), y avisa qué pasó. Con API, la acción se confirma
+ * con un comando del backend; si llegó tarde, la vista vuelve a lo que tiene el servidor.
  */
-export function useDetallePedido(p: Pedido, d: DetallePedido, ahora: string) {
+export function useDetallePedido(p: Pedido, d: DetallePedido, ahora: string, conApi = false) {
   const [estado, setEstado] = useState<Estado>(() => {
     const [pedido, detalle] = inicial(p, d, ahora);
     return { pedido, detalle };
@@ -34,25 +35,59 @@ export function useDetallePedido(p: Pedido, d: DetallePedido, ahora: string) {
 
   const ejecutar = useCallback(
     (accion: AccionPedido) => {
-      setAnterior(accion === "cancelar" || accion === "desmarcar-pago" ? null : estado);
-      const [pedido, detalle] = aplicar(estado.pedido, estado.detalle, accion, ahoraIso());
+      const previo = estado;
+      setAnterior(accion === "cancelar" || accion === "desmarcar-pago" ? null : previo);
+      const [pedido, detalle] = aplicar(previo.pedido, previo.detalle, accion, ahoraIso());
       setEstado({ pedido, detalle });
-      void sincronizarPedido(pedido, detalle); // pedidos de la vitrina: estado y stock en el almacén
       setAviso(`Pedido #${pedido.numero} ${AVISO[accion]}.`);
       setAvisoId((id) => id + 1);
+      if (conApi) {
+        void comandoPedido(pedido.id, accion, previo.pedido.version ?? 0).then((r) => {
+          if ("error" in r) {
+            setEstado(previo); // el comando no pasó: se muestra el pedido como está en el backend
+            setAviso(r.error);
+            setAvisoId((id) => id + 1);
+          } else {
+            // La respuesta trae la versión canónica: el siguiente comando parte de ella.
+            setEstado({ pedido: r.pedido, detalle: r.detalle });
+          }
+        }).catch(() => {
+          setEstado(previo);
+          setAviso("No se pudo guardar el cambio. Revisa tu conexión e inténtalo de nuevo.");
+          setAvisoId((id) => id + 1);
+        });
+      } else {
+        void sincronizarPedido(pedido, detalle); // pedidos de la vitrina: estado y stock en el almacén
+      }
     },
-    [estado],
+    [estado, conApi],
   );
 
   const deshacer = useCallback(() => {
-    if (anterior && estado.pedido.pago.estado !== "cancelado") {
-      setEstado(anterior);
-      void sincronizarPedido(anterior.pedido, anterior.detalle);
-    }
+    if (!anterior || estado.pedido.pago.estado === "cancelado") return;
+    const previo = estado;
+    const objetivo = anterior;
+    setEstado(objetivo);
     setAnterior(null);
     setAviso("");
-
-  }, [anterior, estado.pedido.pago.estado]);
+    if (conApi) {
+      void deshacerPedido(previo.pedido.id).then((r) => {
+        if ("error" in r) {
+          setEstado(previo);
+          setAviso(r.error);
+          setAvisoId((id) => id + 1);
+        } else {
+          setEstado({ pedido: r.pedido, detalle: r.detalle });
+        }
+      }).catch(() => {
+        setEstado(previo);
+        setAviso("No se pudo deshacer. Revisa tu conexión e inténtalo de nuevo.");
+        setAvisoId((id) => id + 1);
+      });
+    } else {
+      void sincronizarPedido(objetivo.pedido, objetivo.detalle);
+    }
+  }, [anterior, estado, conApi]);
 
   return { ...estado, ejecutar, deshacer, aviso, avisoId, cerrarAviso, puedeDeshacer: anterior !== null };
 }

@@ -1,7 +1,7 @@
 import { test } from 'node:test';
 import { conflictWinner } from './helpers/conflict-winner.ts';
 import assert from 'node:assert/strict';
-import { readFile } from 'node:fs/promises';
+import { readFile, readdir } from 'node:fs/promises';
 import { Miniflare, convertV4MiniflareOptions } from 'miniflare';
 import type { D1Database, R2Bucket } from '@cloudflare/workers-types';
 import { D1Stores } from '../src/stores/adapters/d1-stores.ts';
