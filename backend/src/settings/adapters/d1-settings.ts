@@ -1,8 +1,6 @@
 import type { D1Database } from '@cloudflare/workers-types';
-export type StoreConfiguration = {
- payments:{whatsappEnabled:boolean;automaticStatus:'inactive'|'review'|'active';cardEnabled:boolean;yapeEnabled:boolean};
- delivery:{enabled:boolean;freeShippingEnabled:boolean;freeShippingThresholdCents:number;pickupEnabled:boolean;pickupAddress:string;pickupDistrict:string;pickupHours:string;pickupNote:string;zones:{key:'lima'|'callao'|'provincias';enabled:boolean;costCents:number|null;estimate:string}[]};
-};
+import type { StoreConfiguration } from '@tiendly/contracts';
+export type { StoreConfiguration } from '@tiendly/contracts';
 export class D1Settings {
  private readonly db:D1Database;
  constructor(db:D1Database){this.db=db;}

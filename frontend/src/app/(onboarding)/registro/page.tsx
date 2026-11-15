@@ -1,3 +1,4 @@
+import { usingApi, apiSession, privateSnapshot, ApiError } from '@/lib/api-client';
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { testLoginAllowed } from "@tiendly/backend/rules";
@@ -13,7 +14,18 @@ export const metadata: Metadata = { title: "Crea tu tienda · Tiendly" };
 
 export default async function Registro() {
   let googleName: string | undefined;
-  if (await storeStorage()) {
+  if (usingApi()) {
+    try {
+      const session = await apiSession();
+      if (session) {
+        if (await privateSnapshot()) redirect('/panel');
+        googleName = session.user.name;
+      }
+    } catch (error) {
+      if (!(error instanceof ApiError)) throw error;
+      // Keep the existing Google retry flow available during an API outage.
+    }
+  } else if (await storeStorage()) {
     try {
       const { auth, runtime } = await businessRuntime();
       const session = await auth.api.getSession({ headers: await headers() });

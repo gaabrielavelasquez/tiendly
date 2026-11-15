@@ -54,3 +54,7 @@ src/components/motion/  Pressable (Motion)
 src/features/<módulo>/  components/ + hooks/ por módulo aprobado (ver features/README.md)
 src/lib/                utilidades (cn)
 ```
+
+## API separada (primer corte)
+
+`npm run dev:api` arranca Next en 3220 y conecta por HTTP a la API local en 3221. Gabi no necesita credenciales de infraestructura en el frontend. Identidad, tiendas, catálogo y fotos tienen adaptador HTTP; el resto de comercio sigue pendiente. El modo anterior continúa disponible sin `TIENDLY_API_URL`. Consulta el [procedimiento y los límites](../docs/backend/separacion-api.md).

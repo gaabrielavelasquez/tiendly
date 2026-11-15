@@ -1,7 +1,9 @@
+import { usingApi, proxyApi } from '@/lib/api-client';
 import { businessRuntime } from '@/lib/business-runtime';
 import { BusinessError } from '@tiendly/backend/rules';
 import { MAX_IMAGE_BYTES, uploadImage } from '@tiendly/backend/server';
 export async function POST(request:Request) {
+  if (usingApi()) return proxyApi(request);
   try {
     const { runtime, uploads }=await businessRuntime();
     const actor=await runtime.actor(request.headers);

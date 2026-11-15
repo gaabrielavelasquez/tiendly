@@ -1,22 +1,7 @@
 import { BusinessError } from "../../identity/domain/access.ts";
 
-export type Plan = "free" | "founder" | "pro";
-export type Capability = "unlimited_coupons" | "cover_banner";
-export type Appearance = {
-  theme: "neutral" | "editorial" | "soft";
-  accent: "theme" | "black" | "terracotta" | "pink" | "olive";
-  logo: string; cover: string; welcome: string; instagram: string; hours: string;
-};
-export type Store = {
-  id: string; slug: string; name: string; salesPhone: string;
-  categories: string[]; otherCategory: string; offerSectionName: string;
-  appearance: Appearance;
-  onboarding: { payments: boolean; delivery: boolean; share: boolean };
-  plan: Plan; founderUntil: string | null; founderSince: string | null;
-  measurementConsentAt: string | null; isDemo: boolean;
-  version: number; createdAt: string; updatedAt: string;
-};
-export type StoreInput = Pick<Store, "slug" | "name" | "salesPhone" | "categories" | "otherCategory">;
+import type { Plan, Capability, Appearance, Store, StoreInput } from '@tiendly/contracts';
+export type { Plan, Capability, Appearance, Store, StoreInput } from '@tiendly/contracts';
 export const CATEGORIES = ["accessories", "beauty", "footwear", "food", "home", "handmade", "clothing", "secondhand", "technology", "other"] as const;
 const RESERVED = new Set(["images", "api", "tienda", "moda", "zapatos", "belleza", "tiendly", "admin", "heather", "demo", "panel", "registro", "kit", "muna", "keyhaus", "glow-labo", "aurora"]);
 export const INITIAL_APPEARANCE: Appearance = { theme: "neutral", accent: "theme", logo: "", cover: "", welcome: "", instagram: "", hours: "" };

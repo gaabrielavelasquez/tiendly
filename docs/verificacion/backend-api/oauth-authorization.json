@@ -1,0 +1,9 @@
+{
+  "scope": "Authorization initiation only; no completed Google login",
+  "frontend": "http://localhost:3220",
+  "api": "http://127.0.0.1:3221",
+  "status": 200,
+  "redirectUri": "http://localhost:3220/api/auth/callback/google",
+  "stateCookies": 1,
+  "googleConsentCompleted": false
+}

@@ -1,3 +1,4 @@
+import { usingApi, apiJson } from '@/lib/api-client';
 import { headers } from "next/headers";
 import { businessRuntime } from "@/lib/business-runtime";
 import { storeStorage } from "@/lib/store-storage";
@@ -9,6 +10,12 @@ import { put } from "@vercel/blob";
 
 /** Sube las fotos nuevas (data URL) y devuelve las URL definitivas; las demás quedan igual. */
 export async function subirFotos(slug: string, urls: string[]): Promise<string[]> {
+  if (usingApi()) return Promise.all(urls.map(async url => {
+    if (!url.startsWith('data:')) return url;
+    const match = url.match(/^data:(image\/(?:jpeg|png|webp));base64,([A-Za-z0-9+/=]+)$/);
+    if (!match) throw new Error('Revisa el formato de la imagen.');
+    return (await apiJson<{ url: string }>('/api/business/images', { method: 'POST', headers: { 'content-type': match[1] }, body: Buffer.from(match[2], 'base64') })).url;
+  }));
   if (await storeStorage()) {
     const { runtime, uploads } = await businessRuntime();
     const actor = await runtime.actor(await headers());

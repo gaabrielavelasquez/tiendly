@@ -1,0 +1,11 @@
+{
+  "$schema": "../node_modules/wrangler/config-schema.json",
+  "name": "tiendly-api-local",
+  "main": "src/runtime/api.ts",
+  "compatibility_date": "2026-11-08",
+  "compatibility_flags": ["nodejs_compat"],
+  "dev": { "port": 3221, "ip": "127.0.0.1", "inspector_port": 9231 },
+  "vars": { "TIENDLY_ENTORNO": "local", "BETTER_AUTH_URL": "http://localhost:3220" },
+  "d1_databases": [{ "binding": "DB", "database_name": "tiendly-api-local", "database_id": "00000000-0000-4000-8000-000000003221", "migrations_dir": "db/migrations" }],
+  "r2_buckets": [{ "binding": "UPLOADS", "bucket_name": "tiendly-api-local-images" }]
+}

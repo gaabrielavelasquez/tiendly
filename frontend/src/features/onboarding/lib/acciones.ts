@@ -1,5 +1,7 @@
 "use server";
 
+import { usingApi, apiJson, privateSnapshot } from '@/lib/api-client';
+import type { Store } from '@tiendly/contracts';
 import { headers } from "next/headers";
 import { createStore, ownedStore } from "@tiendly/backend/server";
 import { businessRuntime } from "@/lib/business-runtime";
@@ -50,6 +52,13 @@ type NuevaTienda = { nombre: string; slug: string; celularVentas: string; celula
  * plan Free. Este navegador la recuerda (cookie): desde aquí el panel es el de esta tienda.
  */
 export async function crearTienda(t: NuevaTienda): Promise<{ slug: string } | { error: string }> {
+  if (usingApi()) {
+    const existing = await privateSnapshot();
+    if (existing) return { slug: existing.store.slug };
+    if (!validos(t.rubros)) return { error: 'Elige al menos una opción para armar tu tienda.' };
+    const { store } = await apiJson<{ store: Store }>('/api/business/stores', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ name: t.nombre, slug: await primeroLibre(aSlug(t.slug)), salesPhone: t.celularVentas, categories: t.rubros.map(id => CATEGORY_IDS[id]), otherCategory: t.rubroOtro ?? '' }) });
+    return { slug: store.slug };
+  }
   if (await storeStorage()) {
     const { runtime } = await businessRuntime();
     const actor = await runtime.actor(await headers());

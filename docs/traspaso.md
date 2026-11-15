@@ -1,3 +1,33 @@
+# Par QA en modo API · 15-nov-2026
+
+- `api-preview` publicado en https://api-preview.tiendly.workers.dev (versión `127dcf37`, revisión `44f381e`) con D1/R2 de QA. Secretos cargados desde la pareja privada del cliente Preview y un `BETTER_AUTH_SECRET` nuevo; no se imprimieron valores ni se copiaron a GitHub.
+- `preview` republicado en modo API (versión `2fd21f83`, revisión `0d1db3f`) con `TIENDLY_API_URL` opt-in. Sin la variable conserva el runtime anterior. Producción intacta.
+- Hallazgo: Cloudflare rechaza el fetch público entre Workers de la misma zona (error 1042); el subrequest no llegaba a la API y las páginas daban 500. Se corrigió con un **service binding** `API`; `api-client` lo usa cuando existe y mantiene `fetch` normal en local.
+- `verify:qa` PASS: `/registro` 200, `/muna` 200, `/api/auth/get-session` 200, `/api/business/stores` y `/api/business/catalog` 401, rutas privadas 404. `panchi-house` 200 a través del proxy y `/api/public/stores/panchi-house` 200. Sin escrituras de datos.
+- Las sesiones del runtime anterior quedan invalidadas por el secreto nuevo: falta repetir el ingreso Google real en el preview para cerrar la aceptación remota. Rollback de código a `e82b6aca` con `wrangler rollback`; no revierte datos. Sin migraciones remotas ni cambios de DNS.
+
+---
+
+# Ingreso Google real local · 15-nov-2026
+
+- Diego autorizó el origen y callback `http://localhost:3220` en el cliente OAuth **Tiendly Preview**; **Tiendly Prod** no se tocó. No se generaron credenciales nuevas: el runtime local siguió con la pareja privada de `.dev.vars`. Rama `feat/backend-api`, head `3110ed5`, tres commits sobre `dev` `8f2906f`; worktree intacto, sin cambios de código.
+- Ingreso real PASS en el par local Next 3220 + API 3221: cuenta `google`, sesión D1 con vencimiento a 7 días y tienda `Panch` (`panch`, versión 1) creada por el onboarding a través de la API separada. `/api/business/snapshot` autenticado 200; `sign-out` 200; la misma cookie pasa a 401 y `session` queda en 0; `/api/public/stores/panch` 200. 19 tests de backend y CI del head en verde. [Evidencia](verificacion/backend-api/google-local-20261115.json).
+- La prueba de revocación eliminó la sesión local: hay que volver a ingresar en el 3220 para seguir probando. No hubo escrituras remotas, migraciones ni despliegues; el 3100 de Gabi no se tocó.
+- Pendiente para cerrar #57: publicar y aceptar el par QA (`deploy:api:qa` + frontend con `TIENDLY_API_URL`), que requiere cargar los secretos del cliente Preview en el Worker `api-preview`. Después, revisión y merge a `dev` solo con aprobación de Gabi. Siguen fuera ventas/pedidos, checkout, cupones, ajustes editables, tareas y métricas.
+
+---
+
+# API HTTP separada · primer corte · 13-nov-2026
+
+- Diego aprobó separar backend para que Gabi pueda ajustar la interfaz y él mantenga reglas/datos/infraestructura. Rama `feat/backend-api`, worktree Orca persistente `/Users/diego/orca/workspaces/tiendly/backend-api`, desde `dev` `8f2906f`; checkout principal y servidor 3215 ajenos intactos.
+- [PR #57](https://github.com/gaabrielavelasquez/tiendly/pull/57), en borrador. Código funcional `563d414`: Worker autónomo de API, paquete `@tiendly/contracts`, conexión Next opt-in con `TIENDLY_API_URL`. Identidad/tiendas/catálogo/imágenes/vitrina conectados por HTTP; cálculos de oferta y escrituras/versiones en backend. Se conserva el runtime anterior mientras se completa la migración.
+- PASS local: tokens, tipos/builds Next-vinext-API, 19 tests backend, cinco de entornos y cuatro de manifiesto. Chromium/WebKit 390/1440/360: seis flujos, 42 checkpoints con tienda/producto/foto/guardado/recarga/error/reintento/conflicto/vitrina/logout y cookie revocada 401. Sesiones sintéticas; cero escrituras remotas. [Informe y capturas](verificacion/backend-api/README.md).
+- Pendientes reales: callback `http://localhost:3220/api/auth/callback/google` y aceptación Google real; despliegue/aceptación del par de servicios QA. `api-preview` solo tiene configuración preparada y dry-run. No presentar esto como Google/QA aceptados. El PR debe permanecer en borrador hasta resolverlo. [Arquitectura, responsabilidades y siguientes cortes](backend/separacion-api.md).
+- CI/Vercel de `b87a73f` verdes. El preview Vercel conserva el runtime anterior y está protegido; no se midió sin acceso. Google inicia autorización por el proxy local con 200 y callback correcto, pero no se completó el ingreso. Terminales propias «Next UI 3220» y «API local 3221» disponibles.
+- Sin cambios visuales ni tokens. Producción, datos, DNS y QA actual intactos. Ventas/checkout/reservas/cupones/ajustes/tareas/métricas pendientes. Ningún merge autorizado.
+
+---
+
 # Entornos local/QA · 13-nov-2026 · en revisión
 
 - Trabajo en `chore/environment-setup`, worktree Orca persistente `/Users/diego/orca/workspaces/tiendly/environment-setup`, desde `dev` `01ab186`. El worktree del chat es histórico y no se modifica.

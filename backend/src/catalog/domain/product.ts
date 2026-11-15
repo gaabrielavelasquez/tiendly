@@ -1,16 +1,7 @@
 import { BusinessError } from "../../identity/domain/access.ts";
 
-export type Option = { name: string; kind: "color" | "size" | "other"; values: string[] };
-export type Variant = { values: string[]; stock: number };
-export type Measurements = { columns: string[]; rows: Record<string, string[]> };
-export type ProductInput = {
-  name: string; description: string; sku: string; categories: string[]; status: "active" | "paused";
-  priceCents: number; compareAtCents: number | null; offer: { from?: string; until?: string } | null;
-  options: Option[]; variants: Variant[]; photoOption?: number;
-  primaryImage: string | null; photos: Record<string, string[]>;
-  measurements?: Measurements | null;
-};
-export type Product = ProductInput & { id: string; storeId: string; slug: string; version: number; createdAt: string; updatedAt: string };
+import type { Option, Variant, Measurements, ProductInput, Product } from '@tiendly/contracts';
+export type { Option, Variant, Measurements, ProductInput, Product } from '@tiendly/contracts';
 export const variantKey = (values: readonly string[]) => values.join("|");
 export const productSlug = (name: string) => name.normalize("NFD").replace(/\p{Diacritic}/gu, "").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
 const invalid = (): never => { throw new BusinessError("invalid"); };

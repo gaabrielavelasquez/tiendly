@@ -1,0 +1,216 @@
+{
+  "complete": true,
+  "scope": "Separate Next.js and API processes, synthetic signed sessions, real local D1/R2; does not verify Google OAuth or remote preview",
+  "results": [
+    {
+      "engine": "chromium",
+      "width": 390,
+      "pass": true,
+      "checks": [
+        {
+          "name": "tienda-creada",
+          "scrollWidth": 390
+        },
+        {
+          "name": "producto-guardado",
+          "scrollWidth": 390
+        },
+        {
+          "name": "producto-recargado",
+          "scrollWidth": 390
+        },
+        {
+          "name": "error-recuperable",
+          "scrollWidth": 390
+        },
+        {
+          "name": "conflicto-de-version",
+          "scrollWidth": 390
+        },
+        {
+          "name": "vitrina",
+          "scrollWidth": 390
+        },
+        {
+          "name": "sesion-cerrada",
+          "scrollWidth": 390
+        }
+      ]
+    },
+    {
+      "engine": "chromium",
+      "width": 1440,
+      "pass": true,
+      "checks": [
+        {
+          "name": "tienda-creada",
+          "scrollWidth": 1440
+        },
+        {
+          "name": "producto-guardado",
+          "scrollWidth": 1440
+        },
+        {
+          "name": "producto-recargado",
+          "scrollWidth": 1440
+        },
+        {
+          "name": "error-recuperable",
+          "scrollWidth": 1440
+        },
+        {
+          "name": "conflicto-de-version",
+          "scrollWidth": 1440
+        },
+        {
+          "name": "vitrina",
+          "scrollWidth": 1440
+        },
+        {
+          "name": "sesion-cerrada",
+          "scrollWidth": 1440
+        }
+      ]
+    },
+    {
+      "engine": "chromium",
+      "width": 360,
+      "pass": true,
+      "checks": [
+        {
+          "name": "tienda-creada",
+          "scrollWidth": 360
+        },
+        {
+          "name": "producto-guardado",
+          "scrollWidth": 360
+        },
+        {
+          "name": "producto-recargado",
+          "scrollWidth": 360
+        },
+        {
+          "name": "error-recuperable",
+          "scrollWidth": 360
+        },
+        {
+          "name": "conflicto-de-version",
+          "scrollWidth": 360
+        },
+        {
+          "name": "vitrina",
+          "scrollWidth": 360
+        },
+        {
+          "name": "sesion-cerrada",
+          "scrollWidth": 360
+        }
+      ]
+    },
+    {
+      "engine": "webkit",
+      "width": 390,
+      "pass": true,
+      "checks": [
+        {
+          "name": "tienda-creada",
+          "scrollWidth": 390
+        },
+        {
+          "name": "producto-guardado",
+          "scrollWidth": 390
+        },
+        {
+          "name": "producto-recargado",
+          "scrollWidth": 390
+        },
+        {
+          "name": "error-recuperable",
+          "scrollWidth": 390
+        },
+        {
+          "name": "conflicto-de-version",
+          "scrollWidth": 390
+        },
+        {
+          "name": "vitrina",
+          "scrollWidth": 390
+        },
+        {
+          "name": "sesion-cerrada",
+          "scrollWidth": 390
+        }
+      ]
+    },
+    {
+      "engine": "webkit",
+      "width": 1440,
+      "pass": true,
+      "checks": [
+        {
+          "name": "tienda-creada",
+          "scrollWidth": 1440
+        },
+        {
+          "name": "producto-guardado",
+          "scrollWidth": 1440
+        },
+        {
+          "name": "producto-recargado",
+          "scrollWidth": 1440
+        },
+        {
+          "name": "error-recuperable",
+          "scrollWidth": 1440
+        },
+        {
+          "name": "conflicto-de-version",
+          "scrollWidth": 1440
+        },
+        {
+          "name": "vitrina",
+          "scrollWidth": 1440
+        },
+        {
+          "name": "sesion-cerrada",
+          "scrollWidth": 1440
+        }
+      ]
+    },
+    {
+      "engine": "webkit",
+      "width": 360,
+      "pass": true,
+      "checks": [
+        {
+          "name": "tienda-creada",
+          "scrollWidth": 360
+        },
+        {
+          "name": "producto-guardado",
+          "scrollWidth": 360
+        },
+        {
+          "name": "producto-recargado",
+          "scrollWidth": 360
+        },
+        {
+          "name": "error-recuperable",
+          "scrollWidth": 360
+        },
+        {
+          "name": "conflicto-de-version",
+          "scrollWidth": 360
+        },
+        {
+          "name": "vitrina",
+          "scrollWidth": 360
+        },
+        {
+          "name": "sesion-cerrada",
+          "scrollWidth": 360
+        }
+      ]
+    }
+  ]
+}

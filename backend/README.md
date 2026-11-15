@@ -1,5 +1,7 @@
 # Backend de Tiendly
 
+> **Primer corte HTTP separado (13-nov):** `src/runtime/api.ts` permite compilar/publicar la API sin Next.js. La conexión frontend es opt-in mediante `TIENDLY_API_URL`; el camino anterior se conserva durante la migración. [Alcance, contrato, responsables y comandos](../docs/backend/separacion-api.md). La aceptación local no acredita el despliegue del par de servicios ni Google real con el callback nuevo.
+
 Un paquete por ahora, con módulos de negocio y dependencias construidas explícitamente en el runtime. Las reglas puras se exportan por `@tiendly/backend/rules`; los adaptadores y comandos, por `/server`; Better Auth, por `/auth`. Ninguna regla de dominio depende de Next.js, cookies o bindings.
 
 ## Implementado

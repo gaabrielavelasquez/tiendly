@@ -51,6 +51,7 @@ jobs:
           if [ -f ../backend/package.json ]; then
             npm --prefix ../backend run typecheck --if-present
             npm --prefix ../backend run test --if-present
+            npm --prefix ../backend run build:api --if-present
           fi
       - name: Compilar Cloudflare cuando exista
         run: |

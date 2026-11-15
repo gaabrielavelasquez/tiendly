@@ -11,6 +11,7 @@ export type Bindings = {
   DB: D1Database;
   UPLOADS?: R2Bucket;
   TIENDLY_ENTORNO?: string;
+  TIENDLY_REVISION?: string;
   BETTER_AUTH_URL?: string;
   BETTER_AUTH_SECRET?: string;
   GOOGLE_CLIENT_ID?: string;

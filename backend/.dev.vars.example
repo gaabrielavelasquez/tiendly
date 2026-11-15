@@ -1,0 +1,5 @@
+# Privado, solo local. Genera un secreto exclusivo para este worktree.
+BETTER_AUTH_SECRET=
+# Ambos valores del cliente Tiendly Preview, o ambos vacíos.
+GOOGLE_CLIENT_ID=
+GOOGLE_CLIENT_SECRET=

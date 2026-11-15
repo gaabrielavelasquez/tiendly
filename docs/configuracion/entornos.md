@@ -40,6 +40,20 @@ npm run release:qa
 
 Este comando ejecuta tests, tipos y builds Next/vinext en secuencia; verifica el artefacto, publica con `npx --no-install wrangler deploy --profile tiendly --config .wrangler/preview/wrangler.json` y comprueba el QA publicado. Si ya se completaron los checks Next/backend, `npm run deploy:cloudflare-preview` repite el build/tipos Cloudflare y la publicación/verificación. Solo toca el Worker existente `preview` y conserva los secretos. No ejecuta migraciones remotas.
 
+### Publicar QA en modo API
+
+El frontend puede consumir la API separada sin cambiar de Worker:
+
+```sh
+# Una vez: publicar la API de QA (nuevo Worker api-preview)
+npm --prefix ../backend run deploy:api:qa
+
+# Cada publicación del frontend en modo API
+TIENDLY_API_URL=https://api-preview.tiendly.workers.dev npm run release:qa
+```
+
+Sin la variable, el Worker `preview` conserva el runtime anterior. Con ella, el manifiesto exige exactamente `https://api-preview.tiendly.workers.dev`, y el frontend reenvía `/api/*` e `/images/*`. La API guarda sus propios secretos (`BETTER_AUTH_SECRET`, pareja Google del cliente Preview); no se copian al frontend ni a GitHub. La primera publicación en modo API invalida las sesiones del runtime anterior si el secreto de sesión de `api-preview` es nuevo: hay que volver a ingresar con Google. Para volver atrás, `npx wrangler rollback --profile tiendly --config .wrangler/preview/wrangler.json` con la versión anterior; el rollback no revierte datos.
+
 ### Automatización alojada, opcional
 
 El job `verify` de `.github/workflows/ci.yml` valida tokens, tests de entornos, builds Next/vinext, tipos, backend y manifiesto. Solo para `dev` guarda el artefacto compilado de ese SHA. GitHub no tiene acceso a la sesión local del perfil Wrangler. Por la preferencia de usar ese perfil, **el job `deploy-qa` queda desactivado**: requiere la variable `QA_AUTO_DEPLOY=true`, que no se configura en este módulo.
