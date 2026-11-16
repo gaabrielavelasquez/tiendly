@@ -5,8 +5,14 @@ export const STATUS = { unauthorized: 401, forbidden: 403, invalid: 400, conflic
 export const jsonReply = (body: unknown, status = 200): Response =>
   Response.json(body, { status, headers: { "Cache-Control": "private, no-store" } });
 
-export function errorReply(error: unknown): Response {
-  // Infrastructure failures never log request contents or authentication headers.
+export function errorReply(error: unknown, route?: string): Response {
+  // El BusinessError es respuesta esperada; la falla de infraestructura no se tragaba en silencio:
+  // una sola línea JSON sin contenido del request ni headers de autenticación (sigue devolviendo 503).
+  if (!(error instanceof BusinessError)) {
+    const name = error instanceof Error ? error.name : typeof error;
+    const message = (error instanceof Error ? error.message : String(error)).slice(0, 200);
+    console.error(JSON.stringify({ event: "request_error", route: route ?? null, name, message }));
+  }
   return error instanceof BusinessError
     ? jsonReply({ error: error.code }, STATUS[error.code])
     : jsonReply({ error: "unavailable" }, 503);

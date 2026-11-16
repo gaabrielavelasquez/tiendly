@@ -1,5 +1,6 @@
 import type { D1Database } from "@cloudflare/workers-types";
 import { BusinessError } from "../../identity/domain/access.ts";
+import { asConstraintConflict } from "../../shared/constraints.ts";
 import type { OrderDetail, OrderItem, OrderReceipt, OrderTotals, OrderView, OrderPaymentMethod } from '@tiendly/contracts';
 import type { AllocationEffect, CommandPlan, OrderEffect, OrderEvent, OrderPatch, OrderRow } from "../domain/commands.ts";
 export type { OrderDetail, OrderView, OrderReceipt, AllocationEffect, CommandPlan, OrderEffect, OrderEvent, OrderPatch, OrderRow };
@@ -56,7 +57,7 @@ export class D1Orders {
         this.db.prepare('DELETE FROM write_guards'),
       ]);
     } catch (error) {
-      if (/CHECK constraint failed|UNIQUE constraint failed/.test(String(error))) throw new BusinessError('conflict');
+      if (asConstraintConflict(error)) throw new BusinessError('conflict');
       throw error;
     }
     return (await this.db.prepare('SELECT numero FROM checkout_attempts WHERE token=? AND store_id=?').bind(token, storeId).first<{ numero: number }>())!.numero;
@@ -117,7 +118,7 @@ export class D1Orders {
       await this.db.batch(statements);
     } catch (error) {
       // El guard de disponible y los CHECK de estados son la misma falla de negocio: conflicto.
-      if (/CHECK constraint failed|guard/i.test(String(error))) throw new BusinessError('conflict');
+      if (asConstraintConflict(error)) throw new BusinessError('conflict');
       throw error;
     }
   }
@@ -180,7 +181,7 @@ export class D1Orders {
       return result[0].results[0] as unknown as OrderRow;
     } catch (error) {
       if (error instanceof BusinessError) throw error;
-      if (/CHECK constraint failed|guard/i.test(String(error))) throw new BusinessError('conflict');
+      if (asConstraintConflict(error)) throw new BusinessError('conflict');
       throw error;
     }
   }

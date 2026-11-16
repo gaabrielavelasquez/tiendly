@@ -1,20 +1,13 @@
 import { variantKey, priceOn, photoOptionIndex } from "../../catalog/domain/product.ts";
 import { limaDate } from "../../stores/domain/store.ts";
 import { BusinessError } from "../../identity/domain/access.ts";
+import { zoneOfDistrict } from '@tiendly/contracts';
 import type { Product } from '@tiendly/contracts';
 import type { CheckoutDelivery, CheckoutInput, OrderTotals, StoreConfiguration } from '@tiendly/contracts';
 export type { CheckoutDelivery, CheckoutInput, OrderTotals };
-export { limaDate };
-
-/** Misma geografía que checkout/lib/config.ts: el distrito define la zona y con ella el costo. */
-const LIMA = ["Barranco", "Breña", "Chorrillos", "Jesús María", "La Molina", "La Victoria", "Lince", "Magdalena del Mar", "Miraflores", "Pueblo Libre", "San Borja", "San Isidro", "San Miguel", "Santiago de Surco", "Surquillo"];
-const CALLAO = ["Callao", "Bellavista", "La Perla", "Ventanilla"];
-const ZONES: Record<string, 'lima' | 'callao' | 'provincias'> = {
-  ...Object.fromEntries(LIMA.map(name => [name, 'lima'])),
-  ...Object.fromEntries(CALLAO.map(name => [name, 'callao'])),
-  Cayma: 'provincias', Yanahuara: 'provincias', Cayaltí: 'provincias', Trujillo: 'provincias', Cusco: 'provincias', Piura: 'provincias',
-};
-export const zoneOfDistrict = (district: string) => ZONES[district] ?? null;
+// Geografía (decisión 0009): la única fuente es @tiendly/contracts. Se re-exporta porque rules.ts y
+// los tests la consumen desde acá; el distrito define la zona y con ella el costo.
+export { limaDate, zoneOfDistrict };
 
 /** Horas que se separan los productos de un pedido por WhatsApp (decisión 0010). */
 export const RESERVE_HOURS = 24;

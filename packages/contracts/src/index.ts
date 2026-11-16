@@ -46,6 +46,25 @@ export type CatalogCommand =
   | { kind: 'restore'; previous: Pick<Product, 'id' | 'status' | 'priceCents' | 'compareAtCents' | 'offer'>[]; versions: CatalogVersions };
 export type ApiErrorCode = 'unauthorized' | 'forbidden' | 'invalid' | 'conflict' | 'not_found' | 'unavailable' | 'method_not_allowed' | 'too_large';
 
+// ── Geografía de envío (única fuente para el checkout y la API) ─────────────────────────────────────
+export type ShippingZone = 'lima' | 'callao' | 'provincias';
+/** Distrito → zona (decisión 0009). El checkout solo ofrece estos distritos y la API solo acepta estos. */
+export const DISTRICT_ZONES = {
+  Barranco: 'lima', 'Breña': 'lima', Chorrillos: 'lima', 'Jesús María': 'lima', 'La Molina': 'lima',
+  'La Victoria': 'lima', Lince: 'lima', 'Magdalena del Mar': 'lima', Miraflores: 'lima',
+  'Pueblo Libre': 'lima', 'San Borja': 'lima', 'San Isidro': 'lima', 'San Miguel': 'lima',
+  'Santiago de Surco': 'lima', Surquillo: 'lima',
+  Callao: 'callao', Bellavista: 'callao', 'La Perla': 'callao', Ventanilla: 'callao',
+  Cayma: 'provincias', Yanahuara: 'provincias', 'Cayaltí': 'provincias', Trujillo: 'provincias',
+  Cusco: 'provincias', Piura: 'provincias',
+} satisfies Record<string, ShippingZone>;
+export function zoneOfDistrict(district: string): ShippingZone | null {
+  return (DISTRICT_ZONES as Record<string, ShippingZone>)[district] ?? null;
+}
+
+/** Cupón de checkout: el código se valida en el backend; el navegador nunca manda el descuento. */
+export type CheckoutCoupon = { code: string };
+
 // ── Orders (storefront checkout + panel) ─────────────────────────────────────────────────────────────
 export type OrderPaymentMethod = 'card' | 'yape' | 'whatsapp';
 export type OrderPaymentStatus = 'pending' | 'paid' | 'canceled';
@@ -63,6 +82,8 @@ export type CheckoutInput = {
   customer: { name: string; phone: string };
   delivery: CheckoutDelivery;
   payment: { method: OrderPaymentMethod };
+  /** Opcional y aún sin efecto: se valida en el backend al migrar cupones (decisión 0047). */
+  coupon?: CheckoutCoupon;
 };
 export type OrderTotals = { subtotalCents: number; discountCents: number; shippingCents: number | null; shippingPending: boolean; totalCents: number; units: number };
 /** Storefront receipt: everything the confirmation screen needs, nothing about the panel. */
