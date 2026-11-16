@@ -1,5 +1,6 @@
 import type { D1Database } from "@cloudflare/workers-types";
 import { BusinessError } from "../../identity/domain/access.ts";
+import { asConstraintConflict } from "../../shared/constraints.ts";
 import { variantKey, type Product, type Option } from "../domain/product.ts";
 import type { CatalogRepository } from "../application/catalog.ts";
 
@@ -65,7 +66,7 @@ export class D1Catalog implements CatalogRepository {
         return {...change.product,createdAt:row.created_at};
       });
     } catch(error) {
-      if(/CHECK constraint failed|UNIQUE constraint failed/.test(String(error))) throw new BusinessError('conflict');
+      if(asConstraintConflict(error)) throw new BusinessError('conflict');
       throw error;
     }
   }

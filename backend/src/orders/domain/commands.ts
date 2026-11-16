@@ -43,7 +43,8 @@ const liveReserveUntil = (row: OrderRow) => row.reserve_until ?? reserveUntil(ro
 export function planCommand(row: OrderRow, command: OrderCommand, now: string, actor: string, lastEvent: { kind: string; at: string } | null, newId: () => string): CommandPlan {
   const patch = (fields: OrderPatch, effects: OrderEffect[], events: OrderEvent[]): CommandPlan => ({ patch: { ...fields, version: row.version + 1 }, effects, events });
   if (command.kind === 'undo') {
-    if (!lastEvent || Date.now() - Date.parse(lastEvent.at) > UNDO_WINDOW_MS) throw new BusinessError('conflict');
+    // La ventana se mide con el reloj del comando (now inyectado), no con el del runtime.
+    if (!lastEvent || Date.parse(now) - Date.parse(lastEvent.at) > UNDO_WINDOW_MS) throw new BusinessError('conflict');
     const inverse = { paid: 'unpay', shipped: 'unship', delivered: 'undeliver' }[lastEvent.kind] as OrderCommand['kind'] | undefined;
     if (!inverse) throw new BusinessError('conflict');
     return planCommand(row, { kind: inverse, version: row.version }, now, actor, null, newId);

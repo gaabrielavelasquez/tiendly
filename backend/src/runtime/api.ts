@@ -18,12 +18,13 @@ import { errorReply, jsonReply } from './request-body.ts';
 function storeView(store: Store): StoreView {
   return { id: store.id, slug: store.slug, name: store.name, salesPhone: store.salesPhone, categories: store.categories, otherCategory: store.otherCategory, offerSectionName: store.offerSectionName, appearance: store.appearance, onboarding: store.onboarding, createdAt: store.createdAt, isDemo: store.isDemo, effectivePlan: effectivePlan(store.plan, store.founderUntil, limaDate()) === 'free' ? 'free' : 'pro' };
 }
-export async function storeSnapshot(bindings: Bindings, store: Store, publicOnly: boolean): Promise<StoreSnapshot> {
+export async function storeSnapshot(bindings: Bindings, store: Store, publicOnly: boolean, now: string = new Date().toISOString()): Promise<StoreSnapshot> {
   const [configuration, catalog, taken] = await Promise.all([
     new D1Settings(bindings.DB).read(store.id),
     new D1Catalog(bindings.DB).list(store.id),
     // El stock que se ve (vitrina y panel) es el disponible: base menos vendidos y reservas vigentes.
-    new D1Orders(bindings.DB).availability(store.id, new Date().toISOString()),
+    // El reloj lo inyecta el borde HTTP (despachador): la vigencia de reservas se evalúa con la hora del request.
+    new D1Orders(bindings.DB).availability(store.id, now),
   ]);
   const available = withAvailability(catalog, taken);
   // SKU is a private merchant reference. Paused products never leave the public API.
@@ -54,7 +55,7 @@ async function dispatch(request: Request, bindings: Bindings): Promise<Response>
       }
       if (request.method !== 'GET') return jsonReply({ error: 'method_not_allowed' }, 405);
       const store = await new D1Stores(bindings.DB).findBySlug(publicStore[1]);
-      return store ? jsonReply({ snapshot: await storeSnapshot(bindings, store, true) }) : jsonReply({ error: 'not_found' }, 404);
+      return store ? jsonReply({ snapshot: await storeSnapshot(bindings, store, true, new Date().toISOString()) }) : jsonReply({ error: 'not_found' }, 404);
     }
     if (!url.pathname.startsWith('/api/auth/') && !url.pathname.startsWith('/api/business/orders') && !['/api/business/stores', '/api/business/catalog', '/api/business/images', '/api/business/snapshot', '/api/business/catalog/commands'].includes(url.pathname)) return jsonReply({ error: 'not_found' }, 404);
     const context = createRuntime(bindings);
@@ -74,11 +75,11 @@ async function dispatch(request: Request, bindings: Bindings): Promise<Response>
       if (request.method !== 'GET') return jsonReply({ error: 'method_not_allowed' }, 405);
       const actor = requireActor(await runtime.actor(request.headers));
       const store = await runtime.stores.stores.findOwned(actor.userId);
-      return jsonReply({ snapshot: store ? await storeSnapshot(bindings, store, false) : null });
+      return jsonReply({ snapshot: store ? await storeSnapshot(bindings, store, false, new Date().toISOString()) : null });
     }
     return jsonReply({ error: 'not_found' }, 404);
   } catch (error) {
-    return errorReply(error);
+    return errorReply(error, url.pathname);
   }
 }
 export async function apiFetch(request: Request, bindings: Bindings): Promise<Response> {

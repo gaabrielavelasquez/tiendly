@@ -1,5 +1,6 @@
 import type { D1Database } from "@cloudflare/workers-types";
 import { BusinessError } from "../../identity/domain/access.ts";
+import { asConstraintConflict } from "../../shared/constraints.ts";
 import type { StoreRepository } from "../application/stores.ts";
 import type { Store } from "../domain/store.ts";
 
@@ -35,7 +36,7 @@ export class D1Stores implements StoreRepository {
         ...["lima", "callao", "provincias"].map((key, position) => this.db.prepare('INSERT INTO delivery_zones(store_id,zone_key,position) VALUES(?,?,?)').bind(s.id,key,position)),
       ]);
     } catch (error) {
-      if (String(error).includes('UNIQUE constraint failed')) throw new BusinessError('conflict');
+      if (asConstraintConflict(error)) throw new BusinessError('conflict');
       throw error;
     }
   }
@@ -48,7 +49,7 @@ export class D1Stores implements StoreRepository {
       ]);
       return fromRow(result[0].results[0] as StoreRow);
     } catch (error) {
-      if (String(error).includes('CHECK constraint failed')) throw new BusinessError('conflict');
+      if (asConstraintConflict(error)) throw new BusinessError('conflict');
       throw error;
     }
   }
