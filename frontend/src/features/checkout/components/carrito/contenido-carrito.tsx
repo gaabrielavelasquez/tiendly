@@ -64,7 +64,8 @@ export function ContenidoCarrito({ v, tienda, hayCupones, resaltar, vacio, onIr 
     <div className="flex flex-col gap-4">
       {lista(filas)}
       {aviso}
-      <EnvioGratis base={v.totales.productos - v.totales.descuento} desde={v.reglasEnvio} />
+      {/* El avance se cuenta sobre los productos, antes del cupón (decisión 0047). */}
+      <EnvioGratis base={v.totales.productos} desde={v.reglasEnvio} />
       {(hayCupones || v.cupon) && <Cupon cupon={v.cupon} descuento={v.totales.descuento} validar={v.validarCupon} onAplicar={v.setCupon} />}
     </div>
   );

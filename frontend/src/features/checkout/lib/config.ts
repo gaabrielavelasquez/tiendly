@@ -1,25 +1,33 @@
+import { DISTRICT_ZONES, type ShippingZone } from "@tiendly/contracts";
 import type { ConfigCompra, IdZona } from "@/features/configuracion/types";
 import type { Distrito, ReglasCompra } from "../types";
 
 // Reglas de compra que ve el cliente. Salen de lo que la tienda configuró en Configuración → Pagos y
-// Entregas (módulo 2): este archivo solo sabe de geografía y de cómo traducir esa configuración.
+// Entregas (módulo 2): la geografía vive en @tiendly/contracts y acá solo se traduce esa configuración.
 
 /** Horas que se separan los productos de un pedido por WhatsApp (decisión 0010). */
 export const HORAS_RESERVA = 24;
 
+// IdZona debe seguir siendo exactamente ShippingZone (la zona es un dato de contracts desde ahora):
+// si alguna de las dos cambia, este chequeo a nivel de tipos deja de compilar.
+type ZonaCoincide = [IdZona] extends [ShippingZone] ? ([ShippingZone] extends [IdZona] ? true : never) : never;
+const zonaCoincide: ZonaCoincide = true;
+
 type Lugar = { nombre: string; lugar: string; zona: IdZona };
-const lima = ["Barranco", "Breña", "Chorrillos", "Jesús María", "La Molina", "La Victoria", "Lince", "Magdalena del Mar", "Miraflores", "Pueblo Libre", "San Borja", "San Isidro", "San Miguel", "Santiago de Surco", "Surquillo"];
-const callao = ["Callao", "Bellavista", "La Perla", "Ventanilla"];
-const GEOGRAFIA: Lugar[] = [
-  ...lima.map((nombre) => ({ nombre, lugar: "Lima", zona: "lima" as const })),
-  ...callao.map((nombre) => ({ nombre, lugar: "Callao", zona: "callao" as const })),
-  { nombre: "Cayma", lugar: "Arequipa, Arequipa", zona: "provincias" },
-  { nombre: "Yanahuara", lugar: "Arequipa, Arequipa", zona: "provincias" },
-  { nombre: "Cayaltí", lugar: "Chiclayo, Lambayeque", zona: "provincias" },
-  { nombre: "Trujillo", lugar: "Trujillo, La Libertad", zona: "provincias" },
-  { nombre: "Cusco", lugar: "Cusco, Cusco", zona: "provincias" },
-  { nombre: "Piura", lugar: "Piura, Piura", zona: "provincias" },
-];
+/** Etiqueta visible por distrito; el distrito y su zona vienen de DISTRICT_ZONES en @tiendly/contracts. */
+const LUGARES: Record<keyof typeof DISTRICT_ZONES, string> = {
+  Barranco: "Lima", "Breña": "Lima", Chorrillos: "Lima", "Jesús María": "Lima", "La Molina": "Lima",
+  "La Victoria": "Lima", Lince: "Lima", "Magdalena del Mar": "Lima", Miraflores: "Lima",
+  "Pueblo Libre": "Lima", "San Borja": "Lima", "San Isidro": "Lima", "San Miguel": "Lima",
+  "Santiago de Surco": "Lima", Surquillo: "Lima",
+  Callao: "Callao", Bellavista: "Callao", "La Perla": "Callao", Ventanilla: "Callao",
+  Cayma: "Arequipa, Arequipa", Yanahuara: "Arequipa, Arequipa", "Cayaltí": "Chiclayo, Lambayeque",
+  Trujillo: "Trujillo, La Libertad", Cusco: "Cusco, Cusco", Piura: "Piura, Piura",
+};
+// El orden de DISTRICT_ZONES (lima, callao, provincias) es el orden que ve el cliente en el checkout.
+const GEOGRAFIA: Lugar[] = (Object.entries(DISTRICT_ZONES) as [keyof typeof DISTRICT_ZONES, ShippingZone][]).map(
+  ([nombre, zona]) => ({ nombre, lugar: LUGARES[nombre], zona }),
+);
 
 const monto = (s: string) => Number(s.replace(",", "."));
 

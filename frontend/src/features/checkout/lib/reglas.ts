@@ -20,7 +20,7 @@ export function resolverLineas(items: ItemCarrito[], catalogo: CatalogoCompra): 
 
 export const mismaLinea = (a: ItemCarrito, b: ItemCarrito) => a.id === b.id && a.variante === b.variante;
 
-/** Lo que falta para el envío gratis (0 si ya llegó). Se cuenta después del cupón. null: la tienda no lo ofrece. */
+/** Lo que falta para el envío gratis (0 si ya llegó). Se cuenta sobre los productos, antes del cupón (decisión 0047). null: la tienda no lo ofrece. */
 export const faltaEnvioGratis = (base: number, desde: number | null) => (desde === null ? null : Math.max(0, redondearSoles(desde - base)));
 
 /** Las tallas agotadas no suman: no se pueden comprar (el carrito pide quitarlas). */
@@ -30,7 +30,8 @@ export function calcularTotales(todas: Linea[], cupon: Cupon | null, entrega: En
   const unidades = lineas.reduce((s, l) => s + l.cantidad, 0);
   const descuento = cupon ? descuentoDe(cupon, productos) : 0;
   const base = redondearSoles(productos - descuento);
-  const envioGratis = cupon?.tipo === "envio" || faltaEnvioGratis(base, envioGratisDesde) === 0;
+  // El umbral mide el valor de la compra en productos: se cuenta antes del cupón (decisión 0047), igual que el backend.
+  const envioGratis = cupon?.tipo === "envio" || faltaEnvioGratis(productos, envioGratisDesde) === 0;
   if (entrega?.tipo === "coordinar") return { productos, unidades, descuento, envio: null, envioGratis: false, envioPorCoordinar: true, total: base };
   const envio = !entrega ? null : entrega.tipo === "recojo" || envioGratis ? 0 : entrega.distrito.costo;
   return { productos, unidades, descuento, envio, envioGratis, total: redondearSoles(base + (envio ?? 0)) };
